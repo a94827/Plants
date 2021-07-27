@@ -1,0 +1,1 @@
+%WINDIR%\Microsoft.NET\Framework\v2.0.50727\MSBuild.exe Plants.sln /p:Configuration=Release /v:q

@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using AgeyevAV;
-using AgeyevAV.ExtDB.Docs;
-using AgeyevAV.ExtForms;
-using AgeyevAV.ExtDB;
+using FreeLibSet.Data.Docs;
+using FreeLibSet.Forms;
+using FreeLibSet.Data;
+using FreeLibSet.Collections;
+using FreeLibSet.Core;
 
 namespace Plants
 {
@@ -276,11 +277,11 @@ namespace Plants
       dlg.Title = Name;
       dlg.CanBeEmpty = true;
       if (ItemValue != null)
-        dlg.Value = (string)ItemValue;
+        dlg.Text = (string)ItemValue;
       if (dlg.ShowDialog() != System.Windows.Forms.DialogResult.OK)
         return false;
 
-      string s = dlg.Value.Trim();
+      string s = dlg.Text.Trim();
       if (s.Length == 0)
         ItemValue = null;
       else
@@ -453,15 +454,15 @@ namespace Plants
       if (!String.IsNullOrEmpty(MeasureUnit))
         dlg.Title += ", " + MeasureUnit;
       dlg.CanBeEmpty = true;
-      dlg.NullableValue = (int?)ItemValue;
+      dlg.NValue = (int?)ItemValue;
       //dlg.ShowNoButton = true;
-      dlg.MinValue = Minimum;
-      dlg.MaxValue = Maximum;
+      dlg.Minimum = Minimum;
+      dlg.Maximum = Maximum;
 
       switch (dlg.ShowDialog())
       {
         case System.Windows.Forms.DialogResult.OK:
-          ItemValue = dlg.NullableValue;
+          ItemValue = dlg.NValue;
           return true;
         case System.Windows.Forms.DialogResult.No: // пока не бывает
           ItemValue = null;
@@ -595,29 +596,28 @@ namespace Plants
       if (ItemValue != null)
       {
         Range r = (Range)ItemValue;
-        dlg.NullableFirstValue = r.Min;
+        dlg.NFirstValue = r.Min;
         if (r.Max != r.Min)
-          dlg.NullableLastValue = r.Max;
+          dlg.NLastValue = r.Max;
         else
-          dlg.NullableLastValue = null;
+          dlg.NLastValue = null;
       }
       else
       {
-        dlg.NullableFirstValue = null;
-        dlg.NullableLastValue = null;
+        dlg.NFirstValue = null;
+        dlg.NLastValue = null;
       }
-      dlg.ShowNoButton = true;
-      dlg.MinValue = Minimum;
-      dlg.MaxValue = Maximum;
+      dlg.Minimum = Minimum;
+      dlg.Maximum = Maximum;
 
       switch (dlg.ShowDialog())
       {
         case System.Windows.Forms.DialogResult.OK:
-          if (dlg.NullableFirstValue.HasValue || dlg.NullableLastValue.HasValue)
+          if (dlg.NFirstValue.HasValue || dlg.NLastValue.HasValue)
           {
-            if (dlg.NullableFirstValue.HasValue && dlg.NullableLastValue.HasValue)
+            if (dlg.NFirstValue.HasValue && dlg.NLastValue.HasValue)
               ItemValue = new Range(dlg.FirstValue, dlg.LastValue);
-            else if (dlg.NullableFirstValue.HasValue)
+            else if (dlg.NFirstValue.HasValue)
               ItemValue = new Range(dlg.FirstValue, dlg.FirstValue);
             else
               ItemValue = new Range(dlg.LastValue, dlg.LastValue);

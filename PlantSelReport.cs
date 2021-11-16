@@ -5,11 +5,11 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using AgeyevAV.ExtForms;
-using AgeyevAV;
-using AgeyevAV.ExtDB;
-using AgeyevAV.ExtDB.Docs;
-using AgeyevAV.ExtForms.Docs;
+using FreeLibSet.Forms;
+using FreeLibSet.Data;
+using FreeLibSet.Data.Docs;
+using FreeLibSet.Forms.Docs;
+using FreeLibSet.Calendar;
 
 namespace Plants
 {
@@ -22,8 +22,8 @@ namespace Plants
       InitializeComponent();
 
       efpPeriod = new EFPDateRangeBox(base.FormProvider, edPeriod);
-      efpPeriod.FirstDate.CanBeEmpty = false;
-      efpPeriod.LastDate.CanBeEmpty = false;
+      efpPeriod.First.CanBeEmpty = false;
+      efpPeriod.Last.CanBeEmpty = false;
     }
 
     #endregion
@@ -80,19 +80,19 @@ namespace Plants
     public override void WriteFormValues(EFPReportExtParamsForm Form, EFPReportExtParamsPart Part)
     {
       PlantSelReportParamForm Form2 = (PlantSelReportParamForm)Form;
-      Form2.efpPeriod.FirstDate.Value = FirstDate;
-      Form2.efpPeriod.LastDate.Value = LastDate;
+      Form2.efpPeriod.First.Value = FirstDate;
+      Form2.efpPeriod.Last.Value = LastDate;
       Form2.FiltersControlProvider.Filters = Filters;
     }
 
     public override void ReadFormValues(EFPReportExtParamsForm Form, EFPReportExtParamsPart Part)
     {
       PlantSelReportParamForm Form2 = (PlantSelReportParamForm)Form;
-      FirstDate = Form2.efpPeriod.FirstDate.Value.Value;
-      LastDate = Form2.efpPeriod.LastDate.Value.Value;
+      FirstDate = Form2.efpPeriod.First.Value;
+      LastDate = Form2.efpPeriod.Last.Value;
     }
 
-    public override void WriteConfig(AgeyevAV.Config.CfgPart Config, EFPReportExtParamsPart Part)
+    public override void WriteConfig(FreeLibSet.Config.CfgPart Config, EFPReportExtParamsPart Part)
     {
       switch (Part)
       {
@@ -106,7 +106,7 @@ namespace Plants
       }
     }
 
-    public override void ReadConfig(AgeyevAV.Config.CfgPart Config, EFPReportExtParamsPart Part)
+    public override void ReadConfig(FreeLibSet.Config.CfgPart Config, EFPReportExtParamsPart Part)
     {
       switch (Part)
       {

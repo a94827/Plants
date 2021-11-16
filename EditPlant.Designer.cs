@@ -34,12 +34,12 @@ namespace Plants
       this.groupBox3 = new System.Windows.Forms.GroupBox();
       this.edComment = new System.Windows.Forms.TextBox();
       this.groupBox2 = new System.Windows.Forms.GroupBox();
-      this.cbGroup = new AgeyevAV.ExtForms.UserSelComboBox();
+      this.cbGroup = new FreeLibSet.Controls.UserSelComboBox();
       this.label5 = new System.Windows.Forms.Label();
-      this.edNumber = new AgeyevAV.ExtForms.ExtNumericUpDown();
+      this.edNumber = new FreeLibSet.Controls.IntEditBox();
       this.label4 = new System.Windows.Forms.Label();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
-      this.cbManufacturer = new AgeyevAV.ExtForms.UserSelComboBox();
+      this.cbManufacturer = new FreeLibSet.Controls.UserSelComboBox();
       this.label7 = new System.Windows.Forms.Label();
       this.edDescrName = new System.Windows.Forms.TextBox();
       this.label3 = new System.Windows.Forms.Label();
@@ -53,7 +53,7 @@ namespace Plants
       this.tabPage4 = new System.Windows.Forms.TabPage();
       this.tabPage5 = new System.Windows.Forms.TabPage();
       this.tabPage6 = new System.Windows.Forms.TabPage();
-      this.cbCare = new AgeyevAV.ExtForms.UserSelComboBox();
+      this.cbCare = new FreeLibSet.Controls.UserSelComboBox();
       this.label6 = new System.Windows.Forms.Label();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
@@ -156,22 +156,8 @@ namespace Plants
       // 
       // edNumber
       // 
-      this.edNumber.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+      this.edNumber.Increment = 1;
       this.edNumber.Location = new System.Drawing.Point(133, 19);
-      this.edNumber.Maximum = new decimal(new int[] {
-            32767,
-            0,
-            0,
-            0});
-      this.edNumber.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
       this.edNumber.Name = "edNumber";
       this.edNumber.Size = new System.Drawing.Size(98, 20);
       this.edNumber.TabIndex = 2;
@@ -383,7 +369,7 @@ namespace Plants
     private System.Windows.Forms.TabPage tabPage6;
     private System.Windows.Forms.GroupBox groupBox3;
     private System.Windows.Forms.GroupBox groupBox2;
-    private AgeyevAV.ExtForms.ExtNumericUpDown edNumber;
+    private FreeLibSet.Controls.IntEditBox edNumber;
     private System.Windows.Forms.Label label4;
     private System.Windows.Forms.GroupBox groupBox1;
     private System.Windows.Forms.TextBox edDescrName;
@@ -393,12 +379,12 @@ namespace Plants
     private System.Windows.Forms.TextBox edLocalName;
     private System.Windows.Forms.Label label1;
     private System.Windows.Forms.TextBox edComment;
-    private AgeyevAV.ExtForms.UserSelComboBox cbGroup;
+    private FreeLibSet.Controls.UserSelComboBox cbGroup;
     private System.Windows.Forms.Label label5;
     private System.Windows.Forms.Panel MainPanel2;
-    private AgeyevAV.ExtForms.UserSelComboBox cbManufacturer;
+    private FreeLibSet.Controls.UserSelComboBox cbManufacturer;
     private System.Windows.Forms.Label label7;
-    private AgeyevAV.ExtForms.UserSelComboBox cbCare;
+    private FreeLibSet.Controls.UserSelComboBox cbCare;
     private System.Windows.Forms.Label label6;
   }
 }

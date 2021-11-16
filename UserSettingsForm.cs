@@ -5,10 +5,10 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using AgeyevAV.ExtForms;
-using AgeyevAV.IO;
-using AgeyevAV.Config;
-using AgeyevAV.DependedValues;
+using FreeLibSet.Forms;
+using FreeLibSet.IO;
+using FreeLibSet.Config;
+using FreeLibSet.DependedValues;
 
 namespace Plants
 {
@@ -28,7 +28,7 @@ namespace Plants
 
       #region Каталог
 
-      efpNumberDigits = new EFPExtNumericUpDown(efpForm, edNumberDigits);
+      efpNumberDigits = new EFPIntEditBox(efpForm, edNumberDigits);
       efpNumberDigits.Minimum = 1;
       efpNumberDigits.Maximum = UserSettings.MaxNumberDigits;
 
@@ -73,7 +73,7 @@ namespace Plants
 
     #region Каталог
 
-    EFPExtNumericUpDown efpNumberDigits;
+    EFPIntEditBox efpNumberDigits;
 
     #endregion
 
@@ -97,7 +97,7 @@ namespace Plants
 
     public void ValueToForm(UserSettings Settings)
     {
-      efpNumberDigits.IntValue = Settings.NumberDigits;
+      efpNumberDigits.Value = Settings.NumberDigits;
 
       efpPhotoDir.Text = Settings.PhotoDir.SlashedPath;
       efpThumbnailSize.SelectedIndex = (int)(Settings.ThumbnailSizeCode);
@@ -108,7 +108,7 @@ namespace Plants
 
     public void ValueFromForm(UserSettings Settings)
     {
-      Settings.NumberDigits = efpNumberDigits.IntValue;
+      Settings.NumberDigits = efpNumberDigits.Value;
 
       Settings.PhotoDir = new AbsPath(efpPhotoDir.Text);
       Settings.ThumbnailSizeCode = (ThumbnailSizeCode)(efpThumbnailSize.SelectedIndex);

@@ -32,11 +32,11 @@ namespace Plants
       this.groupBox3 = new System.Windows.Forms.GroupBox();
       this.edComment = new System.Windows.Forms.TextBox();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
-      this.cbRemedy = new AgeyevAV.ExtForms.UserSelComboBox();
+      this.cbRemedy = new FreeLibSet.Controls.UserSelComboBox();
       this.label3 = new System.Windows.Forms.Label();
       this.edActionName = new System.Windows.Forms.TextBox();
       this.label2 = new System.Windows.Forms.Label();
-      this.cbDate = new AgeyevAV.ExtForms.UserMaskedComboBox();
+      this.cbDate = new FreeLibSet.Controls.UserMaskedComboBox();
       this.label4 = new System.Windows.Forms.Label();
       this.cbKind = new System.Windows.Forms.ComboBox();
       this.label1 = new System.Windows.Forms.Label();
@@ -191,11 +191,11 @@ namespace Plants
     private System.Windows.Forms.Label label1;
     private System.Windows.Forms.GroupBox groupBox3;
     private System.Windows.Forms.TextBox edComment;
-    private AgeyevAV.ExtForms.UserMaskedComboBox cbDate;
+    private FreeLibSet.Controls.UserMaskedComboBox cbDate;
     private System.Windows.Forms.Label label4;
     private System.Windows.Forms.TextBox edActionName;
     private System.Windows.Forms.Label label2;
-    private AgeyevAV.ExtForms.UserSelComboBox cbRemedy;
+    private FreeLibSet.Controls.UserSelComboBox cbRemedy;
     private System.Windows.Forms.Label label3;
   }
 }

@@ -32,11 +32,11 @@
       this.tabPage1 = new System.Windows.Forms.TabPage();
       this.MainPanel1 = new System.Windows.Forms.Panel();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
-      this.edValue = new AgeyevAV.ExtForms.UserMaskedComboBox();
+      this.edValue = new FreeLibSet.Controls.UserMaskedComboBox();
       this.label2 = new System.Windows.Forms.Label();
-      this.edDate = new AgeyevAV.ExtForms.DateBox();
+      this.edDate = new FreeLibSet.Controls.DateTimeBox();
       this.label1 = new System.Windows.Forms.Label();
-      this.cbAttrType = new AgeyevAV.ExtForms.UserSelComboBox();
+      this.cbAttrType = new FreeLibSet.Controls.UserSelComboBox();
       this.label3 = new System.Windows.Forms.Label();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
@@ -163,10 +163,10 @@
     private System.Windows.Forms.Panel MainPanel1;
     private System.Windows.Forms.GroupBox groupBox1;
     private System.Windows.Forms.Label label3;
-    private AgeyevAV.ExtForms.UserSelComboBox cbAttrType;
+    private FreeLibSet.Controls.UserSelComboBox cbAttrType;
     private System.Windows.Forms.Label label1;
-    private AgeyevAV.ExtForms.DateBox edDate;
-    private AgeyevAV.ExtForms.UserMaskedComboBox edValue;
+    private FreeLibSet.Controls.DateTimeBox edDate;
+    private FreeLibSet.Controls.UserMaskedComboBox edValue;
     private System.Windows.Forms.Label label2;
   }
 }

@@ -29,11 +29,11 @@ namespace Plants
     private void InitializeComponent()
     {
       this.groupBox2 = new System.Windows.Forms.GroupBox();
-      this.infoLabel1 = new AgeyevAV.ExtForms.InfoLabel();
+      this.infoLabel1 = new FreeLibSet.Controls.InfoLabel();
       this.edDay = new System.Windows.Forms.MaskedTextBox();
       this.label1 = new System.Windows.Forms.Label();
       this.grpPeriod = new System.Windows.Forms.GroupBox();
-      this.edPeriod = new AgeyevAV.ExtForms.DateRangeBox();
+      this.edPeriod = new FreeLibSet.Controls.DateRangeBox();
       this.MainTabPage.SuspendLayout();
       this.groupBox2.SuspendLayout();
       this.grpPeriod.SuspendLayout();
@@ -118,10 +118,10 @@ namespace Plants
     #endregion
 
     private System.Windows.Forms.GroupBox grpPeriod;
-    private AgeyevAV.ExtForms.DateRangeBox edPeriod;
+    private FreeLibSet.Controls.DateRangeBox edPeriod;
     private System.Windows.Forms.GroupBox groupBox2;
     private System.Windows.Forms.Label label1;
-    private AgeyevAV.ExtForms.InfoLabel infoLabel1;
+    private FreeLibSet.Controls.InfoLabel infoLabel1;
     private System.Windows.Forms.MaskedTextBox edDay;
 
 

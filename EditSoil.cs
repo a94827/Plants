@@ -5,12 +5,12 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using AgeyevAV.ExtForms;
-using AgeyevAV.ExtForms.Docs;
-using AgeyevAV.DependedValues;
-using AgeyevAV;
-using AgeyevAV.ExtDB;
-using AgeyevAV.ExtDB.Docs;
+using FreeLibSet.Forms;
+using FreeLibSet.Forms.Docs;
+using FreeLibSet.DependedValues;
+using FreeLibSet.Data;
+using FreeLibSet.Data.Docs;
+using FreeLibSet.UICore;
 
 namespace Plants
 {
@@ -77,7 +77,7 @@ namespace Plants
     #region Страница 1 (общие)
 
     private EFPTextBox efpName;
-    private EFPNumEditBox efppHmin, efppHmax;
+    private EFPSingleEditBox efppHmin, efppHmax;
 
     private void AddPage1(InitDocEditFormEventArgs Args)
     {
@@ -88,19 +88,19 @@ namespace Plants
       efpName.CanBeEmpty = false;
       Args.AddText(efpName, "Name", false);
 
-      efppHmin = new EFPNumEditBox(Page.BaseProvider, edpHmin);
+      efppHmin = new EFPSingleEditBox(Page.BaseProvider, edpHmin);
       efppHmin.Minimum = 0;
       efppHmin.Maximum = 13;
       Args.AddSingle(efppHmin, "pHmin", false);
 
-      efppHmax = new EFPNumEditBox(Page.BaseProvider, edpHmax);
+      efppHmax = new EFPSingleEditBox(Page.BaseProvider, edpHmax);
       efppHmax.Minimum = 0;
       efppHmax.Maximum = 13;
       Args.AddSingle(efppHmax, "pHmax", false);
-      efppHmin.Validating += new EFPValidatingEventHandler(efppH_Validating);
-      efppHmax.Validating += new EFPValidatingEventHandler(efppH_Validating);
-      efppHmin.SingleValueEx.ValueChanged += new EventHandler(efppHmax.Validate);
-      efppHmax.SingleValueEx.ValueChanged += new EventHandler(efppHmin.Validate);
+      efppHmin.Validating += new UIValidatingEventHandler(efppH_Validating);
+      efppHmax.Validating += new UIValidatingEventHandler(efppH_Validating);
+      efppHmin.ValueEx.ValueChanged += new EventHandler(efppHmax.Validate);
+      efppHmax.ValueEx.ValueChanged += new EventHandler(efppHmin.Validate);
 
       EFPDocComboBox efpManufacturer = new EFPDocComboBox(Page.BaseProvider, cbManufacturer, ProgramDBUI.TheUI.DocTypes["Companies"]);
       efpManufacturer.CanBeEmpty = true;
@@ -119,27 +119,27 @@ namespace Plants
       #endregion
     }
 
-    void efppH_Validating(object Sender, EFPValidatingEventArgs Args)
+    void efppH_Validating(object Sender, UIValidatingEventArgs Args)
     {
-      if (Args.ValidateState == EFPValidateState.Error)
+      if (Args.ValidateState == UIValidateState.Error)
         return;
 
-      EFPNumEditBox efp = (EFPNumEditBox)Sender;
-      if (efp.SingleValue != 0f && efp.SingleValue < 1f)
+      EFPSingleEditBox efp = (EFPSingleEditBox)Sender;
+      if (efp.Value != 0f && efp.Value < 1f)
       {
         Args.SetError("Допускаются значения pH от 1 до 13. 0 означает отсутствие данных");
         return;
       }
 
-      if (efppHmin.SingleValue == 0f && efppHmax.SingleValue == 0f)
+      if (efppHmin.Value == 0f && efppHmax.Value == 0f)
         return;
-      if (efppHmin.SingleValue == 0f || efppHmax.SingleValue == 0f)
+      if (efppHmin.Value == 0f || efppHmax.Value == 0f)
       {
         Args.SetError("Должно быть задано и минимально и максимальное значение");
         return;
       }
 
-      if (efppHmin.SingleValue > efppHmax.SingleValue)
+      if (efppHmin.Value > efppHmax.Value)
         Args.SetError("Неправильный диапазон");
     }
 

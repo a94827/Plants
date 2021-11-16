@@ -5,10 +5,11 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using AgeyevAV.ExtForms;
-using AgeyevAV.ExtForms.Docs;
-using AgeyevAV.ExtDB.Docs;
-using AgeyevAV;
+using FreeLibSet.Forms;
+using FreeLibSet.Forms.Docs;
+using FreeLibSet.Data.Docs;
+using FreeLibSet.Core;
+using FreeLibSet.UICore;
 
 namespace Plants
 {
@@ -30,10 +31,9 @@ namespace Plants
     {
       EFPFormProvider efpForm = new EFPFormProvider(this);
 
-      efpDate = new EFPDateBox(efpForm, edDate);
+      efpDate = new EFPDateTimeBox(efpForm, edDate);
       efpDate.ToolTipText = "Дата, с которой начинает действовать значение атрибута";
-      efpDate.CanBeEmpty = true;
-      efpDate.WarningIfEmpty = true;
+      efpDate.CanBeEmptyMode = UIValidateState.Warning;
 
 
       //efpAttrType = new EFPAttrTypeComboBox(efpForm, cbAttrType, mDocs.DocType.Name /* Нельзя ограничиваться только действительными атрибутами*/);
@@ -63,7 +63,7 @@ namespace Plants
 
     DocTypeUI _DocTypeUI;
 
-    EFPDateBox efpDate;
+    EFPDateTimeBox efpDate;
     EFPDocComboBox efpAttrType;
     EFPRadioButtons efpAction;
 
@@ -131,7 +131,7 @@ namespace Plants
           #endregion
 
           Form.efpAttrType.DocId = AttrTypeId;
-          Form.edDate.Value = EditAttrValueHelper.LastDate;
+          Form.efpDate.NValue = EditAttrValueHelper.LastDate;
           Form.efpAction.SelectedIndex = LastAction;
 
           if (EFPApp.ShowDialog(Form, true) == DialogResult.OK)
@@ -144,7 +144,7 @@ namespace Plants
               DocSet.ActionInfo = "Установка значений атрибута \"" + DataTools.GetString(Form.efpAttrType.GetColumnValue("Name")) + "\"";
               string sValue = PlantTools.ValueToSaveableString(Form.efpValue.Value, Form.efpValue.ValueType);
               int nAdded, nChanged;
-              DoSetValue(mDocs, Form.efpAttrType.DocId, sValue, Form.efpDate.Value, out nAdded, out nChanged);
+              DoSetValue(mDocs, Form.efpAttrType.DocId, sValue, Form.efpDate.NValue, out nAdded, out nChanged);
               if (nAdded == 0 && nChanged == 0)
                 EFPApp.MessageBox("Атрибуты уже имеют требуемое значени. Никаких действий не выполняется",
                   "Установка значений атрибутов", MessageBoxButtons.OK, MessageBoxIcon.Information);

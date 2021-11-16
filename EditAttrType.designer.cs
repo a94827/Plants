@@ -36,7 +36,7 @@
       this.groupBox1 = new System.Windows.Forms.GroupBox();
       this.edFormat = new System.Windows.Forms.TextBox();
       this.label7 = new System.Windows.Forms.Label();
-      this.infoLabel1 = new AgeyevAV.ExtForms.InfoLabel();
+      this.infoLabel1 = new FreeLibSet.Controls.InfoLabel();
       this.cbValueType = new System.Windows.Forms.ComboBox();
       this.label3 = new System.Windows.Forms.Label();
       this.tabPage2 = new System.Windows.Forms.TabPage();
@@ -356,7 +356,7 @@
     private System.Windows.Forms.GroupBox groupBox1;
     private System.Windows.Forms.GroupBox groupBox5;
     private System.Windows.Forms.TextBox edComment;
-    private AgeyevAV.ExtForms.InfoLabel infoLabel1;
+    private FreeLibSet.Controls.InfoLabel infoLabel1;
     private System.Windows.Forms.ComboBox cbValueType;
     private System.Windows.Forms.Label label3;
     private System.Windows.Forms.TabPage tabPage2;

@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using AgeyevAV.ExtForms.Docs;
+using FreeLibSet.Forms.Docs;
 using System.Data;
-using AgeyevAV;
-using AgeyevAV.ExtDB;
-using AgeyevAV.ExtDB.Docs;
+using FreeLibSet.Data;
+using FreeLibSet.Data.Docs;
+using FreeLibSet.Core;
 
 namespace Plants
 {
@@ -39,7 +39,8 @@ namespace Plants
 
       FiltNumberRange = new IntRangeGridFilter(ColumnNamePrefix + "Number");
       FiltNumberRange.DisplayName = "Диапазон номеров по каталогу";
-      FiltNumberRange.MinValue = 1;
+      FiltNumberRange.Minimum = 1;
+      FiltNumberRange.Increment = 1;
       Add(FiltNumberRange);
 
       FiltPlace = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Places"], "Place");

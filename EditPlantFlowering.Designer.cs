@@ -32,9 +32,9 @@ namespace Plants
       this.groupBox3 = new System.Windows.Forms.GroupBox();
       this.edComment = new System.Windows.Forms.TextBox();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
-      this.edCount = new AgeyevAV.ExtForms.ExtNumericUpDown();
+      this.edCount = new FreeLibSet.Controls.IntEditBox();
       this.label1 = new System.Windows.Forms.Label();
-      this.cbDate = new AgeyevAV.ExtForms.UserMaskedComboBox();
+      this.cbDate = new FreeLibSet.Controls.UserMaskedComboBox();
       this.label4 = new System.Windows.Forms.Label();
       this.MainPanel1.SuspendLayout();
       this.groupBox3.SuspendLayout();
@@ -88,22 +88,8 @@ namespace Plants
       // 
       // edCount
       // 
-      this.edCount.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+      this.edCount.Increment = 1;
       this.edCount.Location = new System.Drawing.Point(158, 45);
-      this.edCount.Maximum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-      this.edCount.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
       this.edCount.Name = "edCount";
       this.edCount.Size = new System.Drawing.Size(86, 20);
       this.edCount.TabIndex = 3;
@@ -155,9 +141,9 @@ namespace Plants
     private System.Windows.Forms.GroupBox groupBox1;
     private System.Windows.Forms.GroupBox groupBox3;
     private System.Windows.Forms.TextBox edComment;
-    private AgeyevAV.ExtForms.UserMaskedComboBox cbDate;
+    private FreeLibSet.Controls.UserMaskedComboBox cbDate;
     private System.Windows.Forms.Label label4;
-    private AgeyevAV.ExtForms.ExtNumericUpDown edCount;
+    private FreeLibSet.Controls.IntEditBox edCount;
     private System.Windows.Forms.Label label1;
   }
 }

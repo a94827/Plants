@@ -29,7 +29,7 @@ namespace Plants
     private void InitializeComponent()
     {
       this.grpPeriod = new System.Windows.Forms.GroupBox();
-      this.edPeriod = new AgeyevAV.ExtForms.DateRangeBox();
+      this.edPeriod = new FreeLibSet.Controls.DateRangeBox();
       this.MainTabPage.SuspendLayout();
       this.grpPeriod.SuspendLayout();
       this.SuspendLayout();
@@ -72,7 +72,7 @@ namespace Plants
     #endregion
 
     private System.Windows.Forms.GroupBox grpPeriod;
-    private AgeyevAV.ExtForms.DateRangeBox edPeriod;
+    private FreeLibSet.Controls.DateRangeBox edPeriod;
 
   }
 }

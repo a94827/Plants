@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using AgeyevAV.ExtDB;
+using FreeLibSet.Data;
 using System.Data;
 using System.Runtime.Serialization;
-using AgeyevAV;
+using FreeLibSet.Core;
 
 // Для переноса в ExtDBDocs.dll
 

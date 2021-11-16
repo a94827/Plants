@@ -5,11 +5,13 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using AgeyevAV.ExtForms.Docs;
-using AgeyevAV.ExtForms;
-using AgeyevAV.DependedValues;
-using AgeyevAV;
-using AgeyevAV.ExtDB.Docs;
+using FreeLibSet.Forms.Docs;
+using FreeLibSet.Forms;
+using FreeLibSet.DependedValues;
+using FreeLibSet.Data.Docs;
+using FreeLibSet.Collections;
+using FreeLibSet.UICore;
+using FreeLibSet.Core;
 
 namespace Plants
 {
@@ -52,21 +54,24 @@ namespace Plants
       EFPTextBox efpName = new EFPTextBox(Page.BaseProvider, edName);
       Args.AddText(efpName, "Name", false);
 
-      efpDay1.Validating += new EFPValidatingEventHandler(efpDay_Validating);
-      efpDay2.Validating += new EFPValidatingEventHandler(efpDay_Validating);
+      efpDay1.Validating += new UIValidatingEventHandler(efpDay_Validating);
+      efpDay2.Validating += new UIValidatingEventHandler(efpDay_Validating);
       efpDay1.ValueEx.ValueChanged += new EventHandler(efpDay2.Validate);
       efpDay2.ValueEx.ValueChanged += new EventHandler(efpDay1.Validate);
 
-      efpName.CanBeEmptyEx = new DepNot(efpDay1.IsNotEmptyEx);
+      efpName.CanBeEmpty = true;
+      efpName.Validators.AddError(efpName.IsNotEmptyEx, 
+        "Значение должно быть задано",
+        efpDay1.IsNotEmptyEx);
 
       EFPCareGridView ghItems=new EFPCareGridView(Page.BaseProvider, grItems);
       CareDocEditItem deiItems = new CareDocEditItem(Args.Values, ghItems);
       Args.AddDocEditItem(deiItems);
     }
 
-    void efpDay_Validating(object Sender, EFPValidatingEventArgs Args)
+    void efpDay_Validating(object Sender, UIValidatingEventArgs Args)
     {
-      if (Args.ValidateState == EFPValidateState.Error)
+      if (Args.ValidateState == UIValidateState.Error)
         return;
 
       if (efpDay1.Value.IsEmpty != efpDay2.Value.IsEmpty)

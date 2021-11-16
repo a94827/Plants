@@ -5,16 +5,18 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using AgeyevAV.ExtForms.Docs;
-using AgeyevAV.ExtForms;
-using AgeyevAV.IO;
-using AgeyevAV.ExtDB.Docs;
+using FreeLibSet.Forms.Docs;
+using FreeLibSet.Forms;
+using FreeLibSet.IO;
+using FreeLibSet.Data.Docs;
 using System.IO;
 using System.Drawing.Imaging;
-using AgeyevAV;
-using AgeyevAV.Caching;
+using FreeLibSet.Caching;
 using System.Diagnostics;
-using AgeyevAV.Logging;
+using FreeLibSet.Logging;
+using FreeLibSet.UICore;
+using FreeLibSet.Core;
+using FreeLibSet.Drawing;
 
 namespace Plants
 {
@@ -349,7 +351,7 @@ namespace Plants
 
     EFPTextBox efpLocalName, efpLatinName, efpDescrName;
 
-    EFPExtNumericUpDown efpNumber;
+    EFPIntEditBox efpNumber;
 
     private void AddPage1(InitDocEditFormEventArgs Args)
     {
@@ -370,11 +372,11 @@ namespace Plants
 
       if (!Args.Editor.MultiDocMode)
       {
-        efpLocalName.Validating += new EFPValidatingEventHandler(efpAnyName_Validating);
+        efpLocalName.Validating += new UIValidatingEventHandler(efpAnyName_Validating);
         efpLocalName.TextEx.ValueChanged += new EventHandler(efpAnyName_ValueChanged);
-        efpLatinName.Validating += new EFPValidatingEventHandler(efpAnyName_Validating);
+        efpLatinName.Validating += new UIValidatingEventHandler(efpAnyName_Validating);
         efpLatinName.TextEx.ValueChanged += new EventHandler(efpAnyName_ValueChanged);
-        efpDescrName.Validating += new EFPValidatingEventHandler(efpAnyName_Validating);
+        efpDescrName.Validating += new UIValidatingEventHandler(efpAnyName_Validating);
         efpDescrName.TextEx.ValueChanged += new EventHandler(efpAnyName_ValueChanged);
       }
 
@@ -386,8 +388,8 @@ namespace Plants
       efpCare.CanBeEmpty = true;
       Args.AddRef(efpCare, "Care", true);
 
-      efpNumber = new EFPExtNumericUpDown(Page.BaseProvider, edNumber);
-      efpNumber.Validating += new EFPValidatingEventHandler(efpNumber_Validating);
+      efpNumber = new EFPIntEditBox(Page.BaseProvider, edNumber);
+      efpNumber.Validating += new UIValidatingEventHandler(efpNumber_Validating);
       efpNumber.Minimum = 0;
       efpNumber.Maximum = Int16.MaxValue;
       Args.AddInt(efpNumber, "Number", false);
@@ -408,19 +410,19 @@ namespace Plants
       efpDescrName.Validate();
     }
 
-    void efpAnyName_Validating(object Sender, EFPValidatingEventArgs Args)
+    void efpAnyName_Validating(object Sender, UIValidatingEventArgs Args)
     {
-      if (Args.ValidateState == EFPValidateState.Error)
+      if (Args.ValidateState == UIValidateState.Error)
         return;
       if (efpLocalName.Text.Length + efpLatinName.Text.Length + efpDescrName.Text.Length == 0)
         Args.SetError("Какое-либо из названий должно быт заполнено");
     }
 
-    void efpNumber_Validating(object Sender, EFPValidatingEventArgs Args)
+    void efpNumber_Validating(object Sender, UIValidatingEventArgs Args)
     {
-      if (Args.ValidateState != EFPValidateState.Ok)
+      if (Args.ValidateState != UIValidateState.Ok)
         return;
-      if (efpNumber.IntValue == 0)
+      if (efpNumber.Value == 0)
         Args.SetWarning("Номер по каталогу не задан");
     }
 
@@ -602,12 +604,12 @@ namespace Plants
       MultiLineTextInputDialog dlg = new MultiLineTextInputDialog();
       dlg.Title = "Комментарий";
       dlg.Prompt = "Комментарий к снимку " + SubDoc.Values["FileName"].AsString;
-      dlg.Value = SubDoc.Values["Comment"].AsString;
+      dlg.Text = SubDoc.Values["Comment"].AsString;
       dlg.CanBeEmpty = true;
       if (dlg.ShowDialog() != DialogResult.OK)
         return;
 
-      SubDoc.Values["Comment"].SetString(dlg.Value);
+      SubDoc.Values["Comment"].SetString(dlg.Text);
 
       Args.MainEditor.SubDocsChangeInfo.Changed = true;
     }
@@ -906,7 +908,7 @@ namespace Plants
         Bitmap img = Image.FromStream(ms) as Bitmap;
         Size MaxSize = ProgramDBUI.Settings.ThumbnailSize;
         Size NewSize;
-        if (WinFormsTools.IsImageShrinkNeeded(img, MaxSize, out NewSize))
+        if (ImagingTools.IsImageShrinkNeeded(img, MaxSize, out NewSize))
           img = new Bitmap(img, NewSize);
         return img;
       }

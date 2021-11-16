@@ -5,11 +5,12 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using AgeyevAV.ExtForms;
-using AgeyevAV.ExtForms.Docs;
-using AgeyevAV.DependedValues;
-using AgeyevAV;
-using AgeyevAV.ExtDB.Docs;
+using FreeLibSet.Forms;
+using FreeLibSet.Forms.Docs;
+using FreeLibSet.DependedValues;
+using FreeLibSet.Data.Docs;
+using FreeLibSet.UICore;
+using FreeLibSet.Core;
 
 namespace Plants
 {
@@ -196,7 +197,7 @@ namespace Plants
       cbValueSourceType.Items.AddRange(PlantTools.AttrValueSourceTypeNames);
       efpValueSourceType = new EFPListComboBox(Page.BaseProvider, cbValueSourceType);
       Args.AddInt(efpValueSourceType, "Source", false);
-      efpValueSourceType.Validating += new EFPValidatingEventHandler(efpValueSourceType_Validating);
+      efpValueSourceType.Validating += new UIValidatingEventHandler(efpValueSourceType_Validating);
 
 
       tcVLView.ImageList = EFPApp.MainImages;
@@ -247,7 +248,7 @@ namespace Plants
       InitVLTableDataSource();
     }
 
-    void efpValueSourceType_Validating(object Sender, EFPValidatingEventArgs Args)
+    void efpValueSourceType_Validating(object Sender, UIValidatingEventArgs Args)
     {
       AttrValueSourceType SourceType = (AttrValueSourceType)(efpValueSourceType.SelectedIndex);
       ValueType ValueType = (ValueType)(efpValueType.SelectedIndex);

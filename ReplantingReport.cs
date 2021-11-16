@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using AgeyevAV.ExtForms;
-using AgeyevAV.ExtForms.Docs;
+using FreeLibSet.Forms;
+using FreeLibSet.Forms.Docs;
 using System.Windows.Forms;
-using AgeyevAV;
 using System.Data;
-using AgeyevAV.ExtDB;
-using AgeyevAV.ExtDB.Docs;
+using FreeLibSet.Data;
+using FreeLibSet.Data.Docs;
 using System.ComponentModel;
+using FreeLibSet.Core;
 
 namespace Plants
 {
@@ -119,7 +119,7 @@ namespace Plants
       ReplantingReportParamsForm Form2 = (ReplantingReportParamsForm)Form;
     }
 
-    public override void WriteConfig(AgeyevAV.Config.CfgPart Config, EFPReportExtParamsPart Part)
+    public override void WriteConfig(FreeLibSet.Config.CfgPart Config, EFPReportExtParamsPart Part)
     {
       switch (Part)
       {
@@ -129,7 +129,7 @@ namespace Plants
       }
     }
 
-    public override void ReadConfig(AgeyevAV.Config.CfgPart Config, EFPReportExtParamsPart Part)
+    public override void ReadConfig(FreeLibSet.Config.CfgPart Config, EFPReportExtParamsPart Part)
     {
       switch (Part)
       {

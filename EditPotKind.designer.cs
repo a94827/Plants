@@ -34,18 +34,18 @@
       this.groupBox5 = new System.Windows.Forms.GroupBox();
       this.edComment = new System.Windows.Forms.TextBox();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
-      this.cbManufacturer = new AgeyevAV.ExtForms.UserSelComboBox();
+      this.cbManufacturer = new FreeLibSet.Controls.UserSelComboBox();
       this.label7 = new System.Windows.Forms.Label();
       this.edColor = new System.Windows.Forms.TextBox();
       this.label6 = new System.Windows.Forms.Label();
-      this.edVolume = new AgeyevAV.ExtForms.NumEditBox();
+      this.edVolume = new FreeLibSet.Controls.SingleEditBox();
       this.label5 = new System.Windows.Forms.Label();
       this.groupBox2 = new System.Windows.Forms.GroupBox();
-      this.edH = new AgeyevAV.ExtForms.NumEditBox();
+      this.edH = new FreeLibSet.Controls.IntEditBox();
       this.label4 = new System.Windows.Forms.Label();
-      this.edD = new AgeyevAV.ExtForms.NumEditBox();
+      this.edD = new FreeLibSet.Controls.IntEditBox();
       this.label3 = new System.Windows.Forms.Label();
-      this.cbGroup = new AgeyevAV.ExtForms.UserSelComboBox();
+      this.cbGroup = new FreeLibSet.Controls.UserSelComboBox();
       this.label2 = new System.Windows.Forms.Label();
       this.edText = new System.Windows.Forms.TextBox();
       this.label1 = new System.Windows.Forms.Label();
@@ -298,18 +298,18 @@
     private System.Windows.Forms.Label label1;
     private System.Windows.Forms.GroupBox groupBox5;
     private System.Windows.Forms.TextBox edComment;
-    private AgeyevAV.ExtForms.UserSelComboBox cbGroup;
+    private FreeLibSet.Controls.UserSelComboBox cbGroup;
     private System.Windows.Forms.Label label2;
     private System.Windows.Forms.TextBox edColor;
     private System.Windows.Forms.Label label6;
-    private AgeyevAV.ExtForms.NumEditBox edVolume;
+    private FreeLibSet.Controls.SingleEditBox edVolume;
     private System.Windows.Forms.Label label5;
     private System.Windows.Forms.GroupBox groupBox2;
-    private AgeyevAV.ExtForms.NumEditBox edH;
+    private FreeLibSet.Controls.IntEditBox edH;
     private System.Windows.Forms.Label label4;
-    private AgeyevAV.ExtForms.NumEditBox edD;
+    private FreeLibSet.Controls.IntEditBox edD;
     private System.Windows.Forms.Label label3;
-    private AgeyevAV.ExtForms.UserSelComboBox cbManufacturer;
+    private FreeLibSet.Controls.UserSelComboBox cbManufacturer;
     private System.Windows.Forms.Label label7;
   }
 }

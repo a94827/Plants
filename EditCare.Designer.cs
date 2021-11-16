@@ -34,9 +34,9 @@ namespace Plants
       this.groupBox5 = new System.Windows.Forms.GroupBox();
       this.edComment = new System.Windows.Forms.TextBox();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
-      this.cbParent = new AgeyevAV.ExtForms.UserSelComboBox();
+      this.cbParent = new FreeLibSet.Controls.UserSelComboBox();
       this.label9 = new System.Windows.Forms.Label();
-      this.cbGroup = new AgeyevAV.ExtForms.UserSelComboBox();
+      this.cbGroup = new FreeLibSet.Controls.UserSelComboBox();
       this.label2 = new System.Windows.Forms.Label();
       this.edName = new System.Windows.Forms.TextBox();
       this.label1 = new System.Windows.Forms.Label();
@@ -198,11 +198,11 @@ namespace Plants
     private System.Windows.Forms.GroupBox groupBox5;
     private System.Windows.Forms.TextBox edComment;
     private System.Windows.Forms.GroupBox groupBox1;
-    private AgeyevAV.ExtForms.UserSelComboBox cbGroup;
+    private FreeLibSet.Controls.UserSelComboBox cbGroup;
     private System.Windows.Forms.Label label2;
     private System.Windows.Forms.TextBox edName;
     private System.Windows.Forms.Label label1;
-    private AgeyevAV.ExtForms.UserSelComboBox cbParent;
+    private FreeLibSet.Controls.UserSelComboBox cbParent;
     private System.Windows.Forms.Label label9;
 
   }

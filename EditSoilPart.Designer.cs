@@ -30,10 +30,10 @@ namespace Plants
     {
       this.MainPanel1 = new System.Windows.Forms.Panel();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
-      this.cbSoil = new AgeyevAV.ExtForms.UserSelComboBox();
+      this.cbSoil = new FreeLibSet.Controls.UserSelComboBox();
       this.label2 = new System.Windows.Forms.Label();
       this.label1 = new System.Windows.Forms.Label();
-      this.edPercent = new AgeyevAV.ExtForms.NumEditBox();
+      this.edPercent = new FreeLibSet.Controls.IntEditBox();
       this.MainPanel1.SuspendLayout();
       this.groupBox1.SuspendLayout();
       this.SuspendLayout();
@@ -113,9 +113,9 @@ namespace Plants
 
     private System.Windows.Forms.Panel MainPanel1;
     private System.Windows.Forms.GroupBox groupBox1;
-    private AgeyevAV.ExtForms.UserSelComboBox cbSoil;
+    private FreeLibSet.Controls.UserSelComboBox cbSoil;
     private System.Windows.Forms.Label label2;
-    private AgeyevAV.ExtForms.NumEditBox edPercent;
+    private FreeLibSet.Controls.IntEditBox edPercent;
     private System.Windows.Forms.Label label1;
   }
 }

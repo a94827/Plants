@@ -5,9 +5,9 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using AgeyevAV.ExtForms.Docs;
-using AgeyevAV.ExtForms;
-using AgeyevAV.DependedValues;
+using FreeLibSet.Forms.Docs;
+using FreeLibSet.Forms;
+using FreeLibSet.DependedValues;
 
 namespace Plants
 {
@@ -39,7 +39,7 @@ namespace Plants
       efpDate.CanBeEmpty = false;
       Args.AddDate(efpDate, "Date1", "Date2", false);
 
-      EFPExtNumericUpDown efpCount = new EFPExtNumericUpDown(Page.BaseProvider, edCount);
+      EFPIntEditBox efpCount = new EFPIntEditBox(Page.BaseProvider, edCount);
       efpCount.Minimum = 0; // если много цветков, которые неохота считать
       efpCount.Maximum = 100;
       Args.AddInt(efpCount, "FlowerCount", true);

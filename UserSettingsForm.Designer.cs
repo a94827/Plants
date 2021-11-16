@@ -33,7 +33,7 @@ namespace Plants
       this.btnOk = new System.Windows.Forms.Button();
       this.TheTabControl = new System.Windows.Forms.TabControl();
       this.tpPlants = new System.Windows.Forms.TabPage();
-      this.edNumberDigits = new AgeyevAV.ExtForms.ExtNumericUpDown();
+      this.edNumberDigits = new FreeLibSet.Controls.IntEditBox();
       this.label4 = new System.Windows.Forms.Label();
       this.tpPhoto = new System.Windows.Forms.TabPage();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -119,22 +119,8 @@ namespace Plants
       // 
       // edNumberDigits
       // 
-      this.edNumberDigits.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+      this.edNumberDigits.Increment = 1;
       this.edNumberDigits.Location = new System.Drawing.Point(278, 26);
-      this.edNumberDigits.Maximum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-      this.edNumberDigits.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
       this.edNumberDigits.Name = "edNumberDigits";
       this.edNumberDigits.Size = new System.Drawing.Size(46, 20);
       this.edNumberDigits.TabIndex = 1;
@@ -396,7 +382,7 @@ namespace Plants
     private System.Windows.Forms.Label label3;
     private System.Windows.Forms.Button btnExploreBackupDir;
     private System.Windows.Forms.TabPage tpPlants;
-    private AgeyevAV.ExtForms.ExtNumericUpDown edNumberDigits;
+    private FreeLibSet.Controls.IntEditBox edNumberDigits;
     private System.Windows.Forms.Label label4;
     private System.Windows.Forms.Label label5;
   }

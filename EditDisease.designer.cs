@@ -34,7 +34,7 @@
       this.groupBox5 = new System.Windows.Forms.GroupBox();
       this.edComment = new System.Windows.Forms.TextBox();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
-      this.cbGroup = new AgeyevAV.ExtForms.UserSelComboBox();
+      this.cbGroup = new FreeLibSet.Controls.UserSelComboBox();
       this.label2 = new System.Windows.Forms.Label();
       this.edName = new System.Windows.Forms.TextBox();
       this.label1 = new System.Windows.Forms.Label();
@@ -177,7 +177,7 @@
     private System.Windows.Forms.Label label1;
     private System.Windows.Forms.GroupBox groupBox5;
     private System.Windows.Forms.TextBox edComment;
-    private AgeyevAV.ExtForms.UserSelComboBox cbGroup;
+    private FreeLibSet.Controls.UserSelComboBox cbGroup;
     private System.Windows.Forms.Label label2;
   }
 }

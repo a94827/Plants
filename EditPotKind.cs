@@ -5,12 +5,11 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using AgeyevAV.ExtForms;
-using AgeyevAV.ExtForms.Docs;
-using AgeyevAV.DependedValues;
-using AgeyevAV;
-using AgeyevAV.ExtDB;
-using AgeyevAV.ExtDB.Docs;
+using FreeLibSet.Forms;
+using FreeLibSet.Forms.Docs;
+using FreeLibSet.DependedValues;
+using FreeLibSet.Data;
+using FreeLibSet.Data.Docs;
 
 namespace Plants
 {
@@ -62,9 +61,9 @@ namespace Plants
 
     private EFPTextBox efpText, efpColor;
 
-    private EFPNumEditBox efpD, efpH;
+    private EFPIntEditBox efpD, efpH;
 
-    private EFPNumEditBox efpVolume;
+    private EFPSingleEditBox efpVolume;
 
     private void AddPage1(InitDocEditFormEventArgs Args)
     {
@@ -75,13 +74,13 @@ namespace Plants
       efpText.CanBeEmpty = true;
       Args.AddText(efpText, "Text", true);
 
-      efpD = new EFPNumEditBox(Page.BaseProvider, edD);
+      efpD = new EFPIntEditBox(Page.BaseProvider, edD);
       Args.AddInt(efpD, "Diameter", false);
 
-      efpH = new EFPNumEditBox(Page.BaseProvider, edH);
+      efpH = new EFPIntEditBox(Page.BaseProvider, edH);
       Args.AddInt(efpH, "Height", false);
 
-      efpVolume = new EFPNumEditBox(Page.BaseProvider, edVolume);
+      efpVolume = new EFPSingleEditBox(Page.BaseProvider, edVolume);
       Args.AddSingle(efpVolume, "Volume", false);
 
       efpColor = new EFPTextBox(Page.BaseProvider, edColor);

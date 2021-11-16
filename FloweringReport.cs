@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using AgeyevAV.ExtForms;
-using AgeyevAV;
-using AgeyevAV.ExtForms.Docs;
+using FreeLibSet.Forms;
+using FreeLibSet.Forms.Docs;
 using System.Data;
-using AgeyevAV.ExtDB;
-using AgeyevAV.ExtDB.Docs;
+using FreeLibSet.Data;
+using FreeLibSet.Data.Docs;
+using FreeLibSet.Calendar;
+using FreeLibSet.Core;
 
 namespace Plants
 {
@@ -26,13 +27,13 @@ namespace Plants
       base.Title = "Цветение за " + DateRangeFormatter.Default.ToString(FirstDate, LastDate, false);
     }
 
-    public override void ReadConfig(AgeyevAV.Config.CfgPart Config)
+    public override void ReadConfig(FreeLibSet.Config.CfgPart Config)
     {
       FirstDate = Config.GetNullableDate("FirstDate");
       LastDate = Config.GetNullableDate("LastDate");
     }
 
-    public override void WriteConfig(AgeyevAV.Config.CfgPart Config)
+    public override void WriteConfig(FreeLibSet.Config.CfgPart Config)
     {
       Config.SetNullableDate("FirstDate", FirstDate);
       Config.SetNullableDate("LastDate", LastDate);
@@ -73,12 +74,12 @@ namespace Plants
       dlg.Title = "Цветение растений";
       dlg.Prompt = "За период";
       dlg.CanBeEmpty = true;
-      dlg.FirstDate = Params.FirstDate;
-      dlg.LastDate = Params.LastDate;
+      dlg.NFirstDate = Params.FirstDate;
+      dlg.NLastDate = Params.LastDate;
       if (dlg.ShowDialog() != System.Windows.Forms.DialogResult.OK)
         return false;
-      Params.FirstDate = dlg.FirstDate;
-      Params.LastDate = dlg.LastDate;
+      Params.FirstDate = dlg.NFirstDate;
+      Params.LastDate = dlg.NLastDate;
       return true;
     }
 

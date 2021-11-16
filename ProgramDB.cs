@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using AgeyevAV.IO;
-using AgeyevAV;
-using AgeyevAV.ExtDB.Docs;
-using AgeyevAV.Logging;
-using AgeyevAV.ExtDB;
+using FreeLibSet.IO;
+using FreeLibSet.Data.Docs;
+using FreeLibSet.Logging;
+using FreeLibSet.Data;
 using System.IO;
 using System.Data;
+using FreeLibSet.Core;
 
 namespace Plants
 {
@@ -26,7 +26,7 @@ namespace Plants
     {
       //SyncRoot = new object();
 
-      //AgeyevAV.Diagnostics.MemoryTools.LowMemorySizeMB = 200; // 24.04.2017 - так и раньше провер€л
+      //FreeLibSet.Diagnostics.MemoryTools.LowMemorySizeMB = 200; // 24.04.2017 - так и раньше провер€л
 
       //LogoutTools.LogoutProp += new LogoutPropEventHandler(LogoutTools_LogoutProp);
     }
@@ -250,7 +250,7 @@ namespace Plants
 
       dt.BeforeWrite += new ServerDocTypeBeforeWriteEventHandler(Plant_BeforeWrite);
       dt.DefaultOrder = new DBxOrder("Name");
-      dt.Struct.Indices.Add("Name");
+      dt.Struct.Indexes.Add("Name");
       _DocTypes.Add(dt);
 
       #endregion
@@ -1100,7 +1100,7 @@ namespace Plants
       ts.Columns.AddXmlConfig("Data");
       ts.Columns.AddDateTime("WriteTime", true); // ƒата последней записи
       //ts.Indices.Add("ѕользователь");
-      ts.Indices.Add("Name,Category,ConfigName");
+      ts.Indexes.Add("Name,Category,ConfigName");
 
       _DBConnectionHelper.MainDBStruct.Tables.Add(ts);
 

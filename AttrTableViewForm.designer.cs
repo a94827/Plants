@@ -32,10 +32,10 @@
       this.Panel3 = new System.Windows.Forms.Panel();
       this.PanSpb = new System.Windows.Forms.Panel();
       this.panel2 = new System.Windows.Forms.Panel();
-      this.edDate = new AgeyevAV.ExtForms.DateBox();
+      this.edDate = new FreeLibSet.Controls.DateTimeBox();
       this.label1 = new System.Windows.Forms.Label();
       this.panel4 = new System.Windows.Forms.Panel();
-      this.edStartDate = new AgeyevAV.ExtForms.DateBox();
+      this.edStartDate = new FreeLibSet.Controls.DateTimeBox();
       this.cbEnableInPlace = new System.Windows.Forms.CheckBox();
       this.TheGrid = new System.Windows.Forms.DataGridView();
       this.btnSetStartDate = new System.Windows.Forms.Button();
@@ -174,10 +174,10 @@
     private System.Windows.Forms.Panel Panel3;
     private System.Windows.Forms.Panel panel2;
     private System.Windows.Forms.Label label1;
-    private AgeyevAV.ExtForms.DateBox edDate;
+    private FreeLibSet.Controls.DateTimeBox edDate;
     private System.Windows.Forms.Panel PanSpb;
     private System.Windows.Forms.Panel panel4;
-    private AgeyevAV.ExtForms.DateBox edStartDate;
+    private FreeLibSet.Controls.DateTimeBox edStartDate;
     private System.Windows.Forms.CheckBox cbEnableInPlace;
     private System.Windows.Forms.DataGridView TheGrid;
     private System.Windows.Forms.Button btnSetStartDate;

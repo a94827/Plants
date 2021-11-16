@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.IO;
-using AgeyevAV;
 using System.Data;
-using AgeyevAV.Config;
-using AgeyevAV.ExtDB;
-using AgeyevAV.Remoting;
-using AgeyevAV.Caching;
-using AgeyevAV.ExtForms;
+using FreeLibSet.Config;
+using FreeLibSet.Data;
+using FreeLibSet.Remoting;
+using FreeLibSet.Caching;
+using FreeLibSet.Forms;
+using FreeLibSet.Core;
 namespace Plants
 {
 
@@ -645,7 +645,7 @@ namespace Plants
       #endregion
     }
 
-    IDisposable IEFPConfigManager.GetConfig(EFPConfigSectionInfo SectionInfo, EFPConfigMode Options, out AgeyevAV.Config.CfgPart Cfg)
+    IDisposable IEFPConfigManager.GetConfig(EFPConfigSectionInfo SectionInfo, EFPConfigMode Options, out FreeLibSet.Config.CfgPart Cfg)
     {
       //bool ThisComputer = EFPConfigCategories.IsMachineDepended(SectionInfo.Category);
 

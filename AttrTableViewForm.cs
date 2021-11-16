@@ -5,12 +5,13 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using AgeyevAV.ExtForms.Docs;
-using AgeyevAV.ExtForms;
-using AgeyevAV;
-using AgeyevAV.ExtDB.Docs;
-using AgeyevAV.ExtDB;
-using AgeyevAV.TextMasks;
+using FreeLibSet.Forms.Docs;
+using FreeLibSet.Forms;
+using FreeLibSet.Data.Docs;
+using FreeLibSet.Data;
+using FreeLibSet.Formatting;
+using FreeLibSet.Core;
+using FreeLibSet.UICore;
 
 namespace Plants
 {
@@ -64,7 +65,7 @@ namespace Plants
 
       #region Поле даты
 
-      efpDate = new EFPDateBox(efpForm, edDate);
+      efpDate = new EFPDateTimeBox(efpForm, edDate);
       efpDate.ToolTipText = "Дата, на которую выведены значения атрибутов";
       efpDate.CanBeEmpty = false;
       efpDate.Value = _LastDate;
@@ -189,14 +190,13 @@ namespace Plants
       #region Редактирование по месту
 
       efpEnableInPlace = new EFPCheckBox(efpForm, cbEnableInPlace);
-      efpStartDate = new EFPDateBox(efpForm, edStartDate);
+      efpStartDate = new EFPDateTimeBox(efpForm, edStartDate);
       efpStartDate.DisplayName = "Дата атрибута";
       efpStartDate.ToolTipText = "Дата начала действия атрибута, которая будет использована при редактировании атрибута \"по месту\"";
-      efpStartDate.CanBeEmpty = true;
-      efpStartDate.WarningIfEmpty = true;
+      efpStartDate.CanBeEmptyMode = UIValidateState.Warning;
       efpStartDate.EnabledEx = efpEnableInPlace.CheckedEx;
-      efpStartDate.Value = EditAttrValueHelper.LastDate;
-      efpStartDate.ValueEx.ValueChanged += new EventHandler(efpStartDate_ValueChanged);
+      efpStartDate.NValue = EditAttrValueHelper.LastDate;
+      efpStartDate.NValueEx.ValueChanged += new EventHandler(efpStartDate_NValueChanged);
       efpEnableInPlace.CheckedEx.ValueChanged += new EventHandler(efpEnableInPlace_ValueChanged);
 
       btnSetStartDate.Image = EFPApp.MainImages.Images["ArrowDownThenLeft"];
@@ -241,7 +241,7 @@ namespace Plants
 
     DocTypeUI _DocTypeUI;
 
-    EFPDateBox efpDate;
+    EFPDateTimeBox efpDate;
 
     private static DateTime _LastDate = DateTime.Today;
 
@@ -249,7 +249,7 @@ namespace Plants
 
     EFPCheckBox efpEnableInPlace;
 
-    EFPDateBox efpStartDate;
+    EFPDateTimeBox efpStartDate;
 
     #endregion
 
@@ -257,9 +257,9 @@ namespace Plants
 
     void efpDate_ValueChanged(object Sender, EventArgs Args)
     {
-      if (efpDate.Value.HasValue)
+      if (efpDate.NValue.HasValue)
       {
-        _LastDate = efpDate.Value.Value;
+        _LastDate = efpDate.NValue.Value;
         FillTable(gh.SourceAsDataTable);
       }
     }
@@ -410,7 +410,7 @@ namespace Plants
           DateTime? dt = DataTools.GetNullableDateTime(ValueRow, "Date");
           if (dt.HasValue)
           {
-            if (dt.Value > efpDate.Value.Value)
+            if (dt.Value > efpDate.Value)
               continue;
           }
 
@@ -447,9 +447,9 @@ namespace Plants
       gh.Control.ReadOnly = !efpEnableInPlace.Checked;
     }
 
-    void efpStartDate_ValueChanged(object Sender, EventArgs Args)
+    void efpStartDate_NValueChanged(object Sender, EventArgs Args)
     {
-      EditAttrValueHelper.LastDate = efpStartDate.Value;
+      EditAttrValueHelper.LastDate = efpStartDate.NValue;
     }
 
     void gh_CellFinished(object Sender, EFPDataGridViewCellFinishedEventArgs Args)

@@ -5,9 +5,10 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using AgeyevAV.ExtForms.Docs;
-using AgeyevAV.ExtForms;
-using AgeyevAV.DependedValues;
+using FreeLibSet.Forms.Docs;
+using FreeLibSet.Forms;
+using FreeLibSet.DependedValues;
+using FreeLibSet.UICore;
 
 namespace Plants
 {
@@ -72,8 +73,8 @@ namespace Plants
       dvForkPlant.UserEnabledEx = dvContra.UserEnabledEx;
       dvForkPlant.UserDisabledMode = DocValueUserDisabledMode.KeepOriginalIfGrayed;
 
-      efpContra.Validating += new EFPValidatingEventHandler(efpContraAndForkPlant_Validating);
-      efpForkPlant.Validating += new EFPValidatingEventHandler(efpContraAndForkPlant_Validating);
+      efpContra.Validating += new UIValidatingEventHandler(efpContraAndForkPlant_Validating);
+      efpForkPlant.Validating += new UIValidatingEventHandler(efpContraAndForkPlant_Validating);
       efpContra.DocIdEx.ValueChanged+=new EventHandler(efpForkPlant.Validate);
       efpForkPlant.DocIdEx.ValueChanged += new EventHandler(efpContra.Validate);
 
@@ -98,9 +99,9 @@ namespace Plants
       Args.AddText(efpComment, "Comment", true);
     }
 
-    void efpContraAndForkPlant_Validating(object Sender, EFPValidatingEventArgs Args)
+    void efpContraAndForkPlant_Validating(object Sender, UIValidatingEventArgs Args)
     {
-      if (Args.ValidateState == EFPValidateState.Error)
+      if (Args.ValidateState == UIValidateState.Error)
         return;
       if (efpContra.DocId != 0 && efpForkPlant.DocId != 0)
         Args.SetError("Нельзя одновременно заполнять поля \"От кого / кому\" и \"Отсажено / подсажено\"");

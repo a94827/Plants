@@ -5,11 +5,12 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using AgeyevAV.ExtForms;
-using AgeyevAV.ExtForms.Docs;
-using AgeyevAV.DependedValues;
-using AgeyevAV;
-using AgeyevAV.ExtDB.Docs;
+using FreeLibSet.Forms;
+using FreeLibSet.Forms.Docs;
+using FreeLibSet.DependedValues;
+using FreeLibSet.Data.Docs;
+using FreeLibSet.Controls;
+using FreeLibSet.UICore;
 
 namespace Plants
 {
@@ -116,7 +117,7 @@ namespace Plants
       efpAttrType.CanBeEmpty = false;
       Args.AddRef(efpAttrType, "AttrType", false);
 
-      EFPDateBox efpDate = new EFPDateBox(Page.BaseProvider, edDate);
+      EFPDateTimeBox efpDate = new EFPDateTimeBox(Page.BaseProvider, edDate);
       efpDate.CanBeEmpty = true;
       Args.AddDate(efpDate, "Date", false);
 
@@ -240,10 +241,8 @@ namespace Plants
     {
       if (_ValueEx == null)
       {
-        _ValueEx = new DepInput<object>();
+        _ValueEx = new DepInput<object>(Value, ValueEx_ValueChanged);
         _ValueEx.OwnerInfo = new DepOwnerInfo(this, "ValueEx");
-        _ValueEx.Value = Value;
-        _ValueEx.ValueChanged += new EventHandler(ValueEx_ValueChanged);
       }
     }
 
@@ -302,7 +301,7 @@ namespace Plants
     {
       _Value = null;
       base.OnValidate();
-      if (ValidateState == EFPValidateState.Error)
+      if (ValidateState == UIValidateState.Error)
         return;
 
       if (!PlantTools.TryParse(Control.Text, ValueType, out _Value))
@@ -515,10 +514,8 @@ namespace Plants
     {
       if (_AttrTypeIdEx == null)
       {
-        _AttrTypeIdEx = new DepInput<Int32>();
+        _AttrTypeIdEx = new DepInput<Int32>(AttrTypeId,AttrTypeIdEx_ValueChanged);
         _AttrTypeIdEx.OwnerInfo = new DepOwnerInfo(this, "AttrTypeIdEx");
-        _AttrTypeIdEx.Value = AttrTypeId;
-        _AttrTypeIdEx.ValueChanged += new EventHandler(AttrTypeIdEx_ValueChanged);
       }
     }
 
@@ -565,7 +562,7 @@ namespace Plants
     protected override void OnValidate()
     {
       base.OnValidate();
-      if (ValidateState != EFPValidateState.Ok)
+      if (ValidateState != UIValidateState.Ok)
         return;
       if (AttrType == null)
         return;

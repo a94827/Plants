@@ -634,7 +634,7 @@ namespace Plants
         SubDoc.Values["FileName"].SetString(Path.FileName);
         using (FileStream fs = new FileStream(Path.Path, FileMode.Open, FileAccess.Read, FileShare.Read))
         {
-          string md5 = DataTools.MD5Sum(fs);
+          string md5 = FileTools.MD5Sum(fs);
           SubDoc.Values["FileMD5"].SetString(md5);
           fs.Position = 0;
           using (Image img = Image.FromStream(fs))

@@ -258,7 +258,7 @@ namespace Plants
 
     public void WriteConfig()
     {
-      XmlCfgFile File = new XmlCfgFile(LocalConfigFilePath.Path);
+      XmlCfgFile File = new XmlCfgFile(LocalConfigFilePath);
 
       File.SetInt("NumberDigits", NumberDigits);
 
@@ -274,7 +274,7 @@ namespace Plants
     public void ReadConfig()
     {
 
-      XmlCfgFile File = new XmlCfgFile(LocalConfigFilePath.Path);
+      XmlCfgFile File = new XmlCfgFile(LocalConfigFilePath);
 
       int x = File.GetInt("NumberDigits");
       if (x >= 1 && x <= MaxNumberDigits)

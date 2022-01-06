@@ -161,11 +161,15 @@ namespace Plants
       sdt.GridProducer.Columns.LastAdded.CanIncSearch = true;
       sdt.GridProducer.Columns.AddDate("Date", "Начало действия");
       sdt.GridProducer.Columns.AddUserText("ValueText", "Value,LongValue,AttrType.Type", EditAttrValue.ValueColumnValueNeeded, "Значение", 20, 10);
+      sdt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
+
+      sdt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
 
       sdt.GridProducer.NewDefaultConfig(false);
       sdt.GridProducer.DefaultConfig.Columns.Add("AttrType.Name");
       sdt.GridProducer.DefaultConfig.Columns.Add("Date");
       sdt.GridProducer.DefaultConfig.Columns.AddFill("ValueText");
+      sdt.GridProducer.DefaultConfig.ToolTips.Add("Comment");
 
       sdt.InitEditForm += new InitSubDocEditFormEventHandler(EditAttrValue.InitSubDocEditForm);
       sdt.CanMultiEdit = false;

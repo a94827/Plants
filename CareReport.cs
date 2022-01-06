@@ -259,7 +259,7 @@ namespace Plants
 
       DBxDocSet CareSet = new DBxDocSet(ProgramDBUI.TheUI.DocProvider);
       DBxMultiDocs mCareDocs = CareSet["Care"];
-      Int32[] CareIds = DataTools.GetIdsFromField(PlantTable, "Care");
+      Int32[] CareIds = DataTools.GetIdsFromColumn(PlantTable, "Care");
       if (CareIds.Length > 0)
         mCareDocs.View(CareIds);
 

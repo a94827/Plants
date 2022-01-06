@@ -97,7 +97,7 @@ namespace Plants
 
       // Идентификаторы растений
       Table1.DefaultView.Sort = "DocId.Number"; // по номеру в каталоге
-      IdList PlantIds = IdList.FromField(Table1.DefaultView, "DocId");
+      IdList PlantIds = IdList.FromColumn(Table1.DefaultView, "DocId");
 
       DataTable MainTable = new DataTable();
       MainTable.Columns.Add("Date1", typeof(DateTime));

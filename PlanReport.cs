@@ -245,7 +245,7 @@ namespace Plants
 
     void MainPage_EditData(object Sender, EventArgs Args)
     {
-      Int32[] DocIds = DataTools.GetIdsFromField(MainPage.ControlProvider.SelectedDataRows, "DocId");
+      Int32[] DocIds = DataTools.GetIdsFromColumn(MainPage.ControlProvider.SelectedDataRows, "DocId");
       if (DocIds.Length == 0)
         EFPApp.ShowTempMessage("Нет выбранных растений");
       ProgramDBUI.TheUI.DocTypes["Plants"].PerformEditing(DocIds, MainPage.ControlProvider.State, false);

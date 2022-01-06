@@ -127,6 +127,14 @@ namespace Plants
       Args.AddDocEditItem(dvValue);
 
       efpAttrType.DocIdEx.ValueChanged += new EventHandler(efpAttrType_ValueChanged);
+
+      #region Комментарий
+
+      EFPTextBox efpComment = new EFPTextBox(Page.BaseProvider, edComment);
+      efpComment.CanBeEmpty = true;
+      Args.AddText(efpComment, "Comment", true);
+
+      #endregion
     }
 
     void efpAttrType_ValueChanged(object Sender, EventArgs Args)

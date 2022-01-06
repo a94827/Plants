@@ -38,10 +38,13 @@
       this.label1 = new System.Windows.Forms.Label();
       this.cbAttrType = new FreeLibSet.Controls.UserSelComboBox();
       this.label3 = new System.Windows.Forms.Label();
+      this.groupBox5 = new System.Windows.Forms.GroupBox();
+      this.edComment = new System.Windows.Forms.TextBox();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.MainPanel1.SuspendLayout();
       this.groupBox1.SuspendLayout();
+      this.groupBox5.SuspendLayout();
       this.SuspendLayout();
       // 
       // tabControl1
@@ -51,7 +54,7 @@
       this.tabControl1.Location = new System.Drawing.Point(0, 0);
       this.tabControl1.Name = "tabControl1";
       this.tabControl1.SelectedIndex = 0;
-      this.tabControl1.Size = new System.Drawing.Size(582, 168);
+      this.tabControl1.Size = new System.Drawing.Size(582, 273);
       this.tabControl1.TabIndex = 0;
       // 
       // tabPage1
@@ -60,18 +63,19 @@
       this.tabPage1.Location = new System.Drawing.Point(4, 22);
       this.tabPage1.Name = "tabPage1";
       this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPage1.Size = new System.Drawing.Size(574, 142);
+      this.tabPage1.Size = new System.Drawing.Size(574, 247);
       this.tabPage1.TabIndex = 0;
       this.tabPage1.Text = "Общие";
       this.tabPage1.UseVisualStyleBackColor = true;
       // 
       // MainPanel1
       // 
+      this.MainPanel1.Controls.Add(this.groupBox5);
       this.MainPanel1.Controls.Add(this.groupBox1);
       this.MainPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.MainPanel1.Location = new System.Drawing.Point(3, 3);
       this.MainPanel1.Name = "MainPanel1";
-      this.MainPanel1.Size = new System.Drawing.Size(568, 136);
+      this.MainPanel1.Size = new System.Drawing.Size(568, 241);
       this.MainPanel1.TabIndex = 0;
       // 
       // groupBox1
@@ -95,6 +99,7 @@
       this.edValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                   | System.Windows.Forms.AnchorStyles.Right)));
       this.edValue.ClearButtonEnabled = false;
+      this.edValue.Culture = new System.Globalization.CultureInfo("ru-RU");
       this.edValue.Location = new System.Drawing.Point(143, 99);
       this.edValue.Name = "edValue";
       this.edValue.Size = new System.Drawing.Size(419, 20);
@@ -141,17 +146,42 @@
       this.label3.Text = "&Атрибут";
       this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
+      // groupBox5
+      // 
+      this.groupBox5.Controls.Add(this.edComment);
+      this.groupBox5.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.groupBox5.Location = new System.Drawing.Point(0, 133);
+      this.groupBox5.Name = "groupBox5";
+      this.groupBox5.Size = new System.Drawing.Size(568, 108);
+      this.groupBox5.TabIndex = 2;
+      this.groupBox5.TabStop = false;
+      this.groupBox5.Text = "Комментари&й";
+      // 
+      // edComment
+      // 
+      this.edComment.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                  | System.Windows.Forms.AnchorStyles.Left)
+                  | System.Windows.Forms.AnchorStyles.Right)));
+      this.edComment.Location = new System.Drawing.Point(6, 19);
+      this.edComment.Multiline = true;
+      this.edComment.Name = "edComment";
+      this.edComment.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+      this.edComment.Size = new System.Drawing.Size(556, 83);
+      this.edComment.TabIndex = 0;
+      // 
       // EditAttrValue
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(582, 168);
+      this.ClientSize = new System.Drawing.Size(582, 273);
       this.Controls.Add(this.tabControl1);
       this.Name = "EditAttrValue";
       this.tabControl1.ResumeLayout(false);
       this.tabPage1.ResumeLayout(false);
       this.MainPanel1.ResumeLayout(false);
       this.groupBox1.ResumeLayout(false);
+      this.groupBox5.ResumeLayout(false);
+      this.groupBox5.PerformLayout();
       this.ResumeLayout(false);
 
     }
@@ -168,5 +198,7 @@
     private FreeLibSet.Controls.DateTimeBox edDate;
     private FreeLibSet.Controls.UserMaskedComboBox edValue;
     private System.Windows.Forms.Label label2;
+    private System.Windows.Forms.GroupBox groupBox5;
+    private System.Windows.Forms.TextBox edComment;
   }
 }

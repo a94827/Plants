@@ -24,20 +24,12 @@ namespace Plants
     /// </summary>
     public ProgramDB()
     {
-      //SyncRoot = new object();
-
-      //FreeLibSet.Diagnostics.MemoryTools.LowMemorySizeMB = 200; // 24.04.2017 - так и раньше проверял
-
-      //LogoutTools.LogoutProp += new LogoutPropEventHandler(LogoutTools_LogoutProp);
     }
 
     protected override void Dispose(bool Disposing)
     {
       if (Disposing)
       {
-        //if (FConfigSections != null)
-        //  FConfigSections.Flush();
-
         if (_GlobalDocData != null)
         {
           _GlobalDocData.DisposeDBs();
@@ -47,10 +39,7 @@ namespace Plants
       if (_DocTypes != null)
         _DocTypes = null;
 
-      //FUnlimitedSource = null;
       _GlobalDocData = null;
-
-      //BackupExecProc.ServerData = null;
 
       base.Dispose(Disposing);
     }
@@ -82,20 +71,17 @@ namespace Plants
 
       #region Создание / обновление баз данных документов
 
-      // DBxRealDocProviderGlobal.DefaultClearCacheBuffer = 30; // обновления могут переключаться не только по таймеру, но и при запуске процедур
       _DBConnectionHelper.Splash = Splash;
       _GlobalDocData = _DBConnectionHelper.CreateRealDocProviderGlobal();
       _DBConnectionHelper.Splash = null; // он скоро исчезнет
       if (_DBConnectionHelper.Errors.Count > 0)
       {
-        // 13.05.2017
         // Регистрируем сообщения в log-файле
         AbsPath LogFilePath = LogoutTools.GetLogFileName("DBChange", String.Empty);
         using (StreamWriter wrt = new StreamWriter(LogFilePath.Path, false, LogoutTools.LogEncoding))
         {
-          wrt.WriteLine("Изменение структуры баз данных CoProDev");
+          wrt.WriteLine("Изменение структуры баз данных Plants");
           wrt.WriteLine("Время: " + DateTime.Now.ToString());
-          // еще не инициализировано wrt.WriteLine("Сеанс работы сервера: " + this.ServerSessionId.ToString());
           DBx[] AllDBx = _GlobalDocData.GetDBs();
           if (AllDBx.Length > 0) // всегда выполняется
           {
@@ -123,10 +109,9 @@ namespace Plants
 
       _Source = new DBxRealDocProviderSource(GlobalDocData);
 
-      UserPermissionCreators upcs = new UserPermissionCreators();
-
-      UserPermissions ups = new UserPermissions(upcs);
-      _Source.UserPermissions = ups;
+      //UserPermissionCreators upcs = new UserPermissionCreators();
+      //UserPermissions ups = new UserPermissions(upcs);
+      //_Source.UserPermissions = ups;
 
       _Source.SetReadOnly();
 
@@ -281,6 +266,7 @@ namespace Plants
       sdt.Struct.Columns.AddDate("Date", true);
       sdt.Struct.Columns.AddString("Value", PlantTools.AttrValueShortMaxLength, true); // значение может быть пустым
       sdt.Struct.Columns.AddMemo("LongValue"); // используется, если не помещается в поле "Значение"
+      sdt.Struct.Columns.AddMemo("Comment"); // 06.02.2022
       sdt.DefaultOrder = new DBxOrder("Date");
       dt.SubDocs.Add(sdt);
 

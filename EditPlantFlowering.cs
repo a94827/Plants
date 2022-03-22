@@ -24,29 +24,29 @@ namespace Plants
 
     #region Редактор
 
-    public static void InitEditForm(object Sender, InitSubDocEditFormEventArgs Args)
+    public static void InitEditForm(object sender, InitSubDocEditFormEventArgs args)
     {
-      EditPlantFlowering Form = new EditPlantFlowering();
-      Form.AddPage1(Args);
+      EditPlantFlowering form = new EditPlantFlowering();
+      form.AddPage1(args);
     }
 
-    private void AddPage1(InitSubDocEditFormEventArgs Args)
+    private void AddPage1(InitSubDocEditFormEventArgs args)
     {
-      DocEditPage Page = Args.AddPage("Общие", MainPanel1);
-      Page.ImageKey = Args.Editor.SubDocTypeUI.ImageKey;
+      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      page.ImageKey = args.Editor.SubDocTypeUI.ImageKey;
 
-      EFPDateOrRangeBox efpDate = new EFPDateOrRangeBox(Page.BaseProvider, cbDate);
+      EFPDateOrRangeBox efpDate = new EFPDateOrRangeBox(page.BaseProvider, cbDate);
       efpDate.CanBeEmpty = false;
-      Args.AddDate(efpDate, "Date1", "Date2", false);
+      args.AddDate(efpDate, "Date1", "Date2", false);
 
-      EFPIntEditBox efpCount = new EFPIntEditBox(Page.BaseProvider, edCount);
+      EFPIntEditBox efpCount = new EFPIntEditBox(page.BaseProvider, edCount);
       efpCount.Minimum = 0; // если много цветков, которые неохота считать
       efpCount.Maximum = 100;
-      Args.AddInt(efpCount, "FlowerCount", true);
+      args.AddInt(efpCount, "FlowerCount", true);
 
-      EFPTextBox efpComment = new EFPTextBox(Page.BaseProvider, edComment);
+      EFPTextBox efpComment = new EFPTextBox(page.BaseProvider, edComment);
       efpComment.CanBeEmpty = true;
-      Args.AddText(efpComment, "Comment", true);
+      args.AddText(efpComment, "Comment", true);
     }
 
     #endregion

@@ -26,14 +26,14 @@ namespace Plants
 
     public static void ImageValueNeeded(object sender, DBxImageValueNeededEventArgs args)
     {
-      ActionKind Kind = (ActionKind)(args.GetInt("Kind"));
-      args.ImageKey = PlantTools.GetActionImageKey(Kind);
+      ActionKind kind = (ActionKind)(args.GetInt("Kind"));
+      args.ImageKey = PlantTools.GetActionImageKey(kind);
     }
 
     public static void ActionTextColumnValueNeeded(object sender, EFPGridProducerValueNeededEventArgs args)
     {
-      ActionKind Kind = args.GetEnum<ActionKind>("Kind");
-      switch (Kind)
+      ActionKind kind = args.GetEnum<ActionKind>("Kind");
+      switch (kind)
       {
         case ActionKind.Other:
           args.Value = args.GetString("ActionName");
@@ -41,12 +41,12 @@ namespace Plants
         case ActionKind.Treatment:
           Int32 RemedyId = args.GetInt("Remedy");
           if (RemedyId == 0)
-            args.Value = PlantTools.GetActionName(Kind);
+            args.Value = PlantTools.GetActionName(kind);
           else
             args.Value = "Обработка препаратом \"" + ProgramDBUI.TheUI.DocProvider.DBCache["Remedies"].GetString(RemedyId, "Name") + "\"";
           break;
         default:
-          args.Value = PlantTools.GetActionName(Kind);
+          args.Value = PlantTools.GetActionName(kind);
           break;
       }
     }
@@ -55,41 +55,41 @@ namespace Plants
 
     #region Редактор
 
-    public static void InitEditForm(object Sender, InitSubDocEditFormEventArgs Args)
+    public static void InitEditForm(object sender, InitSubDocEditFormEventArgs args)
     {
-      EditPlantPlan Form = new EditPlantPlan();
-      Form.AddPage1(Args);
+      EditPlantPlan form = new EditPlantPlan();
+      form.AddPage1(args);
     }
 
-    private void AddPage1(InitSubDocEditFormEventArgs Args)
+    private void AddPage1(InitSubDocEditFormEventArgs args)
     {
-      DocEditPage Page = Args.AddPage("Общие", MainPanel1);
-      Page.ImageKey = Args.Editor.SubDocTypeUI.ImageKey;
+      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      page.ImageKey = args.Editor.SubDocTypeUI.ImageKey;
 
       cbKind.Items.AddRange(PlantTools.ActionNames);
-      EFPListComboBox efpKind = new EFPListComboBox(Page.BaseProvider, cbKind);
+      EFPListComboBox efpKind = new EFPListComboBox(page.BaseProvider, cbKind);
       new ListControlImagePainter(cbKind, PlantTools.ActionImageKeys);
-      Args.AddInt(efpKind, "Kind", false);
+      args.AddInt(efpKind, "Kind", false);
 
-      EFPTextBox efpActionName = new EFPTextBox(Page.BaseProvider, edActionName);
+      EFPTextBox efpActionName = new EFPTextBox(page.BaseProvider, edActionName);
       efpActionName.CanBeEmpty = false;
-      DocValueTextBox dvActionName = Args.AddText(efpActionName, "ActionName", false);
+      DocValueTextBox dvActionName = args.AddText(efpActionName, "ActionName", false);
       dvActionName.UserEnabledEx = new DepEqual<int>(efpKind.SelectedIndexEx, (int)(ActionKind.Other));
       dvActionName.UserDisabledMode = DocValueUserDisabledMode.KeepOriginalIfGrayed;
 
-      EFPDocComboBox efpRemedy = new EFPDocComboBox(Page.BaseProvider, cbRemedy, ProgramDBUI.TheUI.DocTypes["Remedies"]);
+      EFPDocComboBox efpRemedy = new EFPDocComboBox(page.BaseProvider, cbRemedy, ProgramDBUI.TheUI.DocTypes["Remedies"]);
       efpRemedy.CanBeEmpty = false;
-      DocValueDocComboBox dvRemedy = Args.AddRef(efpRemedy, "Remedy", false);
+      DocValueDocComboBox dvRemedy = args.AddRef(efpRemedy, "Remedy", false);
       dvRemedy.UserEnabledEx = new DepEqual<int>(efpKind.SelectedIndexEx, (int)(ActionKind.Treatment));
       dvRemedy.UserDisabledMode = DocValueUserDisabledMode.KeepOriginalIfGrayed;
 
-      EFPDateOrRangeBox efpDate = new EFPDateOrRangeBox(Page.BaseProvider, cbDate);
+      EFPDateOrRangeBox efpDate = new EFPDateOrRangeBox(page.BaseProvider, cbDate);
       efpDate.CanBeEmpty = false;
-      Args.AddDate(efpDate, "Date1", "Date2", false);
+      args.AddDate(efpDate, "Date1", "Date2", false);
 
-      EFPTextBox efpComment = new EFPTextBox(Page.BaseProvider, edComment);
+      EFPTextBox efpComment = new EFPTextBox(page.BaseProvider, edComment);
       efpComment.CanBeEmpty = true;
-      Args.AddText(efpComment, "Comment", true);
+      args.AddText(efpComment, "Comment", true);
     }
 
     #endregion

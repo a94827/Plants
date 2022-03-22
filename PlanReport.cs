@@ -75,45 +75,45 @@ namespace Plants
       get { return EFPReportExtParamsPart.User | EFPReportExtParamsPart.NoHistory; }
     }
 
-    public override void WriteFormValues(EFPReportExtParamsForm Form, EFPReportExtParamsPart Part)
+    public override void WriteFormValues(EFPReportExtParamsForm form, EFPReportExtParamsPart part)
     {
-      PlanReportParamForm Form2 = (PlanReportParamForm)Form;
-      Form2.efpPeriod.First.NValue = FirstDate;
-      Form2.efpPeriod.Last.NValue = LastDate;
-      Form2.FiltersControlProvider.Filters = Filters;
+      PlanReportParamForm form2 = (PlanReportParamForm)form;
+      form2.efpPeriod.First.NValue = FirstDate;
+      form2.efpPeriod.Last.NValue = LastDate;
+      form2.FiltersControlProvider.Filters = Filters;
     }
 
-    public override void ReadFormValues(EFPReportExtParamsForm Form, EFPReportExtParamsPart Part)
+    public override void ReadFormValues(EFPReportExtParamsForm form, EFPReportExtParamsPart part)
     {
-      PlanReportParamForm Form2 = (PlanReportParamForm)Form;
-      FirstDate = Form2.efpPeriod.First.NValue;
-      LastDate = Form2.efpPeriod.Last.NValue;
+      PlanReportParamForm form2 = (PlanReportParamForm)form;
+      FirstDate = form2.efpPeriod.First.NValue;
+      LastDate = form2.efpPeriod.Last.NValue;
     }
 
-    public override void WriteConfig(FreeLibSet.Config.CfgPart Config, EFPReportExtParamsPart Part)
+    public override void WriteConfig(FreeLibSet.Config.CfgPart cfg, EFPReportExtParamsPart part)
     {
-      switch (Part)
+      switch (part)
       {
         case EFPReportExtParamsPart.User:
-          Filters.WriteConfig(Config);
+          Filters.WriteConfig(cfg);
           break;
         case EFPReportExtParamsPart.NoHistory:
-          Config.SetNullableDate("FirstDate", FirstDate);
-          Config.SetNullableDate("LastDate", LastDate);
+          cfg.SetNullableDate("FirstDate", FirstDate);
+          cfg.SetNullableDate("LastDate", LastDate);
           break;
       }
     }
 
-    public override void ReadConfig(FreeLibSet.Config.CfgPart Config, EFPReportExtParamsPart Part)
+    public override void ReadConfig(FreeLibSet.Config.CfgPart cfg, EFPReportExtParamsPart part)
     {
-      switch (Part)
+      switch (part)
       {
         case EFPReportExtParamsPart.User:
-          Filters.ReadConfig(Config);
+          Filters.ReadConfig(cfg);
           break;
         case EFPReportExtParamsPart.NoHistory:
-          FirstDate = Config.GetNullableDate("FirstDate");
-          LastDate = Config.GetNullableDate("LastDate");
+          FirstDate = cfg.GetNullableDate("FirstDate");
+          LastDate = cfg.GetNullableDate("LastDate");
           break;
       }
     }
@@ -130,10 +130,10 @@ namespace Plants
     {
       MainImageKey = "PlanReport";
 
-      MainPage = new EFPReportDBxGridPage(ProgramDBUI.TheUI);
-      MainPage.InitGrid += new EventHandler(MainPage_InitGrid);
-      MainPage.ShowToolBar = true;
-      Pages.Add(MainPage);
+      _MainPage = new EFPReportDBxGridPage(ProgramDBUI.TheUI);
+      _MainPage.InitGrid += new EventHandler(MainPage_InitGrid);
+      _MainPage.ShowToolBar = true;
+      Pages.Add(_MainPage);
     }
 
     #endregion
@@ -153,37 +153,37 @@ namespace Plants
 
     protected override void BuildReport()
     {
-      DataTable Table = CreateTable(Params.FirstDate, Params.LastDate, Params.Filters);
-      MainPage.DataSource = Table.DefaultView;
+      DataTable table = CreateTable(Params.FirstDate, Params.LastDate, Params.Filters);
+      _MainPage.DataSource = table.DefaultView;
     }
 
-    public static DataTable CreateTable(DateTime? FirstDate, DateTime? LastDate, PlantReportFilters ReportFilters)
+    public static DataTable CreateTable(DateTime? firstDate, DateTime? lastDate, PlantReportFilters reportFilters)
     {
-      List<DBxFilter> Filters = new List<DBxFilter>();
-      if (FirstDate.HasValue)
-        Filters.Add(new ValueFilter("Date2", FirstDate.Value, CompareKind.GreaterOrEqualThan));
-      if (LastDate.HasValue)
-        Filters.Add(new ValueFilter("Date1", LastDate.Value, CompareKind.LessOrEqualThan));
+      List<DBxFilter> filters = new List<DBxFilter>();
+      if (firstDate.HasValue)
+        filters.Add(new ValueFilter("Date2", firstDate.Value, CompareKind.GreaterOrEqualThan));
+      if (lastDate.HasValue)
+        filters.Add(new ValueFilter("Date1", lastDate.Value, CompareKind.LessOrEqualThan));
       if (ProgramDBUI.TheUI.DocProvider.DocTypes.UseDeleted)
       {
-        Filters.Add(DBSSubDocType.DeletedFalseFilter);
-        Filters.Add(DBSSubDocType.DocIdDeletedFalseFilter);
+        filters.Add(DBSSubDocType.DeletedFalseFilter);
+        filters.Add(DBSSubDocType.DocIdDeletedFalseFilter);
       }
-      if (ReportFilters != null)
+      if (reportFilters != null)
       {
-        DBxFilter Filters2 = ReportFilters.GetSqlFilter();
-        if (Filters2 != null)
-          Filters.Add(Filters2);
+        DBxFilter filters2 = reportFilters.GetSqlFilter();
+        if (filters2 != null)
+          filters.Add(filters2);
       }
 
-      DataTable Table = ProgramDBUI.TheUI.DocProvider.FillSelect("PlantPlans",
+      DataTable table = ProgramDBUI.TheUI.DocProvider.FillSelect("PlantPlans",
         new DBxColumns("Id,Kind,ActionName,Date1,Date2,Remedy.Name,Comment,DocId,DocId.Name,DocId.Number"),
-        AndFilter.FromList(Filters),
+        AndFilter.FromList(filters),
         DBxOrder.FromDataViewSort("DocId.Number,DocId.Name,DocId,Date1,Id"));
-      if (ReportFilters != null)
-        ReportFilters.PerformAuxFiltering(ref Table, FirstDate, LastDate);
+      if (reportFilters != null)
+        reportFilters.PerformAuxFiltering(ref table, firstDate, lastDate);
 
-      return Table;
+      return table;
 
     }
 
@@ -191,69 +191,69 @@ namespace Plants
 
     #region Страница отчета
 
-    EFPReportDBxGridPage MainPage;
+    EFPReportDBxGridPage _MainPage;
 
-    void MainPage_InitGrid(object Sender, EventArgs Args)
+    void MainPage_InitGrid(object sender, EventArgs args)
     {
-      MainPage.ControlProvider.Control.AutoGenerateColumns = false;
-      MainPage.ControlProvider.Columns.AddImage("ActionImage");
-      MainPage.ControlProvider.Columns.AddText("Period", false, "Период", 15, 10);
-      MainPage.ControlProvider.Columns.AddText("ActionText", false, "Действие", 30, 10);
+      _MainPage.ControlProvider.Control.AutoGenerateColumns = false;
+      _MainPage.ControlProvider.Columns.AddImage("ActionImage");
+      _MainPage.ControlProvider.Columns.AddText("Period", false, "Период", 15, 10);
+      _MainPage.ControlProvider.Columns.AddText("ActionText", false, "Действие", 30, 10);
 
-      MainPage.ControlProvider.Columns.AddText("DocId.Number", true, "№ по каталогу", 3, 3);
+      _MainPage.ControlProvider.Columns.AddText("DocId.Number", true, "№ по каталогу", 3, 3);
       //MainPage.ControlProvider.Columns.LastAdded.Format = PlantTools.NumberMask ;
-      MainPage.ControlProvider.Columns.LastAdded.CanIncSearch = true;
-      MainPage.ControlProvider.Columns.LastAdded.TextAlign = HorizontalAlignment.Center;
+      _MainPage.ControlProvider.Columns.LastAdded.CanIncSearch = true;
+      _MainPage.ControlProvider.Columns.LastAdded.TextAlign = HorizontalAlignment.Center;
 
-      MainPage.ControlProvider.Columns.AddTextFill("DocId.Name", true, "Название или описание", 100, 15);
-      MainPage.ControlProvider.Columns.LastAdded.CanIncSearch = true;
-      MainPage.ControlProvider.DisableOrdering();
+      _MainPage.ControlProvider.Columns.AddTextFill("DocId.Name", true, "Название или описание", 100, 15);
+      _MainPage.ControlProvider.Columns.LastAdded.CanIncSearch = true;
+      _MainPage.ControlProvider.DisableOrdering();
 
-      MainPage.ControlProvider.GetCellAttributes += new EFPDataGridViewCellAttributesEventHandler(MainPage_GetCellAttributes);
+      _MainPage.ControlProvider.GetCellAttributes += new EFPDataGridViewCellAttributesEventHandler(MainPage_GetCellAttributes);
 
-      MainPage.ControlProvider.ReadOnly = false;
-      MainPage.ControlProvider.Control.ReadOnly = true;
-      MainPage.ControlProvider.CanInsert = false;
-      MainPage.ControlProvider.CanDelete = false;
-      MainPage.ControlProvider.EditData += new EventHandler(MainPage_EditData);
+      _MainPage.ControlProvider.ReadOnly = false;
+      _MainPage.ControlProvider.Control.ReadOnly = true;
+      _MainPage.ControlProvider.CanInsert = false;
+      _MainPage.ControlProvider.CanDelete = false;
+      _MainPage.ControlProvider.EditData += new EventHandler(MainPage_EditData);
 
-      MainPage.ControlProvider.GetDocSel += new EFPDBxGridViewDocSelEventHandler(MainPage_GetDocSel);
+      _MainPage.ControlProvider.GetDocSel += new EFPDBxGridViewDocSelEventHandler(MainPage_GetDocSel);
     }
 
-    void MainPage_GetCellAttributes(object Sender, EFPDataGridViewCellAttributesEventArgs Args)
+    void MainPage_GetCellAttributes(object sender, EFPDataGridViewCellAttributesEventArgs args)
     {
-      ActionKind Kind;
-      switch (Args.ColumnName)
+      ActionKind kind;
+      switch (args.ColumnName)
       {
         case "Period":
-          DateTime dt1 = DataTools.GetDateTime(Args.DataRow, "Date1");
-          DateTime dt2 = DataTools.GetDateTime(Args.DataRow, "Date2");
-          Args.Value = DateRangeFormatter.Default.ToString(dt1, dt2, false);
+          DateTime dt1 = DataTools.GetDateTime(args.DataRow, "Date1");
+          DateTime dt2 = DataTools.GetDateTime(args.DataRow, "Date2");
+          args.Value = DateRangeFormatter.Default.ToString(dt1, dt2, false);
           break;
         case "ActionImage":
-          Kind = (ActionKind)DataTools.GetInt(Args.DataRow, "Kind");
-          Args.Value = EFPApp.MainImages.Images[PlantTools.GetActionImageKey(Kind)];
+          kind = (ActionKind)DataTools.GetInt(args.DataRow, "Kind");
+          args.Value = EFPApp.MainImages.Images[PlantTools.GetActionImageKey(kind)];
           break;
         case "ActionText":
-          Kind = (ActionKind)DataTools.GetInt(Args.DataRow, "Kind");
-          Args.Value = PlantTools.GetActionName(Kind,
-            DataTools.GetString(Args.DataRow, "ActionName"),
-            DataTools.GetString(Args.DataRow, "Remedy.Name"));
+          kind = (ActionKind)DataTools.GetInt(args.DataRow, "Kind");
+          args.Value = PlantTools.GetActionName(kind,
+            DataTools.GetString(args.DataRow, "ActionName"),
+            DataTools.GetString(args.DataRow, "Remedy.Name"));
           break;
       }
     }
 
-    void MainPage_EditData(object Sender, EventArgs Args)
+    void MainPage_EditData(object sender, EventArgs args)
     {
-      Int32[] DocIds = DataTools.GetIdsFromColumn(MainPage.ControlProvider.SelectedDataRows, "DocId");
-      if (DocIds.Length == 0)
+      Int32[] docIds = DataTools.GetIdsFromColumn(_MainPage.ControlProvider.SelectedDataRows, "DocId");
+      if (docIds.Length == 0)
         EFPApp.ShowTempMessage("Нет выбранных растений");
-      ProgramDBUI.TheUI.DocTypes["Plants"].PerformEditing(DocIds, MainPage.ControlProvider.State, false);
+      ProgramDBUI.TheUI.DocTypes["Plants"].PerformEditing(docIds, _MainPage.ControlProvider.State, false);
     }
 
-    void MainPage_GetDocSel(object Sender, EFPDBxGridViewDocSelEventArgs Args)
+    void MainPage_GetDocSel(object sender, EFPDBxGridViewDocSelEventArgs args)
     {
-      Args.AddFromColumn("Plants", "DocId");
+      args.AddFromColumn("Plants", "DocId");
     }
 
     #endregion
@@ -265,12 +265,12 @@ namespace Plants
       if (CreateTable(null, DateTime.Today, null).Rows.Count == 0)
         return;
 
-      PlanReportParams Params = new PlanReportParams();
-      Params.FirstDate = null;
-      Params.LastDate = DateTime.Today;
-      PlanReport Report = new PlanReport();
-      Report.ReportParams = Params;
-      Report.Run();
+      PlanReportParams reportParams = new PlanReportParams();
+      reportParams.FirstDate = null;
+      reportParams.LastDate = DateTime.Today;
+      PlanReport report = new PlanReport();
+      report.ReportParams = reportParams;
+      report.Run();
     }
 
     #endregion

@@ -66,9 +66,9 @@ namespace Plants
 
     #region Поля фильтров
 
-    RefGroupDocGridFilter FiltGroup;
+    public RefGroupDocGridFilter FiltGroup;
 
-    RefDocGridFilter FiltPlace;
+    public RefDocGridFilter FiltPlace;
 
     #endregion
   }
@@ -108,33 +108,33 @@ namespace Plants
       get { return EFPReportExtParamsPart.User; }
     }
 
-    public override void WriteFormValues(EFPReportExtParamsForm Form, EFPReportExtParamsPart Part)
+    public override void WriteFormValues(EFPReportExtParamsForm form, EFPReportExtParamsPart part)
     {
-      ReplantingReportParamsForm Form2 = (ReplantingReportParamsForm)Form;
-      Form2.FiltersControlProvider.Filters = Filters;
+      ReplantingReportParamsForm form2 = (ReplantingReportParamsForm)form;
+      form2.FiltersControlProvider.Filters = Filters;
     }
 
-    public override void ReadFormValues(EFPReportExtParamsForm Form, EFPReportExtParamsPart Part)
+    public override void ReadFormValues(EFPReportExtParamsForm form, EFPReportExtParamsPart part)
     {
-      ReplantingReportParamsForm Form2 = (ReplantingReportParamsForm)Form;
+      //ReplantingReportParamsForm form2 = (ReplantingReportParamsForm)form;
     }
 
-    public override void WriteConfig(FreeLibSet.Config.CfgPart Config, EFPReportExtParamsPart Part)
+    public override void WriteConfig(FreeLibSet.Config.CfgPart cfg, EFPReportExtParamsPart part)
     {
-      switch (Part)
+      switch (part)
       {
         case EFPReportExtParamsPart.User:
-          Filters.WriteConfig(Config);
+          Filters.WriteConfig(cfg);
           break;
       }
     }
 
-    public override void ReadConfig(FreeLibSet.Config.CfgPart Config, EFPReportExtParamsPart Part)
+    public override void ReadConfig(FreeLibSet.Config.CfgPart cfg, EFPReportExtParamsPart part)
     {
-      switch (Part)
+      switch (part)
       {
         case EFPReportExtParamsPart.User:
-          Filters.ReadConfig(Config);
+          Filters.ReadConfig(cfg);
           break;
       }
     }
@@ -151,10 +151,10 @@ namespace Plants
     {
       MainImageKey = "ReplantingReport";
 
-      MainPage = new EFPReportDBxGridPage(ProgramDBUI.TheUI);
-      MainPage.InitGrid += new EventHandler(MainPage_InitGrid);
-      MainPage.ShowToolBar = true;
-      Pages.Add(MainPage);
+      _MainPage = new EFPReportDBxGridPage(ProgramDBUI.TheUI);
+      _MainPage.InitGrid += new EventHandler(MainPage_InitGrid);
+      _MainPage.ShowToolBar = true;
+      Pages.Add(_MainPage);
     }
 
     #endregion
@@ -172,166 +172,166 @@ namespace Plants
 
     #region Построение отчета
 
-    const ActionKind ActionNone = (ActionKind) (-2);
+    const ActionKind ActionNone = (ActionKind)(-2);
     const ActionKind ActionAdd = (ActionKind)(-1); // операция "Приход"
 
     protected override void BuildReport()
     {
-      DataTable ResTable = new DataTable();
-      ResTable.Columns.Add("PlantId", typeof(Int32));
-      ResTable.Columns.Add("PlantNumber", typeof(int));
-      ResTable.Columns.Add("PlantName", typeof(string));
+      DataTable resTable = new DataTable();
+      resTable.Columns.Add("PlantId", typeof(Int32));
+      resTable.Columns.Add("PlantNumber", typeof(int));
+      resTable.Columns.Add("PlantName", typeof(string));
 
-      ResTable.Columns.Add("ActionKind", typeof(int));
-      ResTable.Columns.Add("ActionDate", typeof(DateTime));
-      ResTable.Columns.Add("SoilText", typeof(string));
-      ResTable.Columns.Add("PotKindText", typeof(string));
-      ResTable.Columns.Add("ActionComment", typeof(string));
+      resTable.Columns.Add("ActionKind", typeof(int));
+      resTable.Columns.Add("ActionDate", typeof(DateTime));
+      resTable.Columns.Add("SoilText", typeof(string));
+      resTable.Columns.Add("PotKindText", typeof(string));
+      resTable.Columns.Add("ActionComment", typeof(string));
 
-      DataTools.SetPrimaryKey(ResTable, "PlantId");
+      DataTools.SetPrimaryKey(resTable, "PlantId");
 
       #region Таблица растений
 
-      DBxFilter SqlFilter = Params.Filters.GetSqlFilter();
-      SqlFilter&=new ValueFilter("MovementState", (int)(PlantMovementState.Placed)); // только существующие
+      DBxFilter sqlFilter = Params.Filters.GetSqlFilter();
+      sqlFilter &= new ValueFilter("MovementState", (int)(PlantMovementState.Placed)); // только существующие
       if (ProgramDBUI.TheUI.DocProvider.DocTypes.UseDeleted)
-        SqlFilter &= DBSDocType.DeletedFalseFilter;
+        sqlFilter &= DBSDocType.DeletedFalseFilter;
 
-      DataTable PlantTable = ProgramDBUI.TheUI.DocProvider.FillSelect("Plants",
+      DataTable plantTable = ProgramDBUI.TheUI.DocProvider.FillSelect("Plants",
         new DBxColumns("Id,Number,Name"),
-        SqlFilter);
+        sqlFilter);
 
-      foreach (DataRow row in PlantTable.Rows)
-        ResTable.Rows.Add(row["Id"], row["Number"], row["Name"], (int)ActionNone);
+      foreach (DataRow row in plantTable.Rows)
+        resTable.Rows.Add(row["Id"], row["Number"], row["Name"], (int)ActionNone);
 
       #endregion
 
       #region Таблица действий
 
-      SqlFilter = new ValuesFilter("Kind", new int[] { 
+      sqlFilter = new ValuesFilter("Kind", new int[] { 
         (int)ActionKind.Planting, 
         (int)ActionKind.Replanting,
         (int)ActionKind.Transshipment,
         (int)ActionKind.SoilReplace});
       if (ProgramDBUI.TheUI.DocProvider.DocTypes.UseDeleted)
       {
-        SqlFilter &= DBSSubDocType.DeletedFalseFilter;
-        SqlFilter &= DBSSubDocType.DocIdDeletedFalseFilter;
+        sqlFilter &= DBSSubDocType.DeletedFalseFilter;
+        sqlFilter &= DBSSubDocType.DocIdDeletedFalseFilter;
       }
 
-      DataTable ActionTable = ProgramDBUI.TheUI.DocProvider.FillSelect("PlantActions",
+      DataTable actionTable = ProgramDBUI.TheUI.DocProvider.FillSelect("PlantActions",
         new DBxColumns("DocId,Kind,Date2,Soil,PotKind,Comment"),
-        SqlFilter,
+        sqlFilter,
         new DBxOrder("Date2", ListSortDirection.Descending));
 
-      foreach (DataRow row in ActionTable.Rows)
+      foreach (DataRow row in actionTable.Rows)
       {
-        Int32 PlantId = DataTools.GetInt(row, "DocId");
-        DataRow ResRow = ResTable.Rows.Find(PlantId);
-        if (ResRow == null)
+        Int32 plantId = DataTools.GetInt(row, "DocId");
+        DataRow resRow = resTable.Rows.Find(plantId);
+        if (resRow == null)
           continue; // растение не прошло фильтрацию
 
-        if (!ResRow.IsNull("ActionDate"))
+        if (!resRow.IsNull("ActionDate"))
           continue; // уже была более поздняя операция
 
-        ResRow["ActionKind"] = row["Kind"];
-        ResRow["ActionDate"] = row["Date2"];
+        resRow["ActionKind"] = row["Kind"];
+        resRow["ActionDate"] = row["Date2"];
         Int32 SoilId = DataTools.GetInt(row, "Soil");
         if (SoilId != 0)
-          ResRow["SoilText"] = ProgramDBUI.TheUI.DocTypes["Soils"].GetTextValue(SoilId);
+          resRow["SoilText"] = ProgramDBUI.TheUI.DocTypes["Soils"].GetTextValue(SoilId);
         Int32 PotKindId = DataTools.GetInt(row, "PotKind");
         if (PotKindId != 0)
-          ResRow["PotKindText"] = ProgramDBUI.TheUI.DocTypes["PotKinds"].GetTextValue(PotKindId);
-        ResRow["ActionComment"] = row["Comment"];
+          resRow["PotKindText"] = ProgramDBUI.TheUI.DocTypes["PotKinds"].GetTextValue(PotKindId);
+        resRow["ActionComment"] = row["Comment"];
       }
 
       #endregion
 
       #region Таблица движения
 
-      SqlFilter = new ValueFilter("Kind", (int)MovementKind.Add);
+      sqlFilter = new ValueFilter("Kind", (int)MovementKind.Add);
       if (ProgramDBUI.TheUI.DocProvider.DocTypes.UseDeleted)
       {
-        SqlFilter &= DBSSubDocType.DeletedFalseFilter;
-        SqlFilter &= DBSSubDocType.DocIdDeletedFalseFilter;
+        sqlFilter &= DBSSubDocType.DeletedFalseFilter;
+        sqlFilter &= DBSSubDocType.DocIdDeletedFalseFilter;
       }
 
-      DataTable MovementTable = ProgramDBUI.TheUI.DocProvider.FillSelect("PlantMovement",
+      DataTable movementTable = ProgramDBUI.TheUI.DocProvider.FillSelect("PlantMovement",
         new DBxColumns("DocId,Date2,Soil,PotKind,Comment"),
-        SqlFilter,
+        sqlFilter,
         new DBxOrder("Date2", ListSortDirection.Descending));
 
-      foreach (DataRow row in MovementTable.Rows)
+      foreach (DataRow row in movementTable.Rows)
       {
-        Int32 PlantId = DataTools.GetInt(row, "DocId");
-        DataRow ResRow = ResTable.Rows.Find(PlantId);
-        if (ResRow == null)
+        Int32 plantId = DataTools.GetInt(row, "DocId");
+        DataRow resRow = resTable.Rows.Find(plantId);
+        if (resRow == null)
           continue; // растение не прошло фильтрацию
 
-        if (!ResRow.IsNull("ActionDate"))
+        if (!resRow.IsNull("ActionDate"))
           continue; // уже была более какая-либо операция
 
-        ResRow["ActionKind"] = ActionAdd;
-        ResRow["ActionDate"] = row["Date2"];
-        Int32 SoilId = DataTools.GetInt(row, "Soil");
-        if (SoilId != 0)
-          ResRow["SoilText"] = ProgramDBUI.TheUI.DocTypes["Soils"].GetTextValue(SoilId);
-        Int32 PotKindId = DataTools.GetInt(row, "PotKind");
-        if (PotKindId != 0)
-          ResRow["PotKindText"] = ProgramDBUI.TheUI.DocTypes["PotKinds"].GetTextValue(PotKindId);
-        ResRow["ActionComment"] = row["Comment"];
+        resRow["ActionKind"] = ActionAdd;
+        resRow["ActionDate"] = row["Date2"];
+        Int32 soilId = DataTools.GetInt(row, "Soil");
+        if (soilId != 0)
+          resRow["SoilText"] = ProgramDBUI.TheUI.DocTypes["Soils"].GetTextValue(soilId);
+        Int32 potKindId = DataTools.GetInt(row, "PotKind");
+        if (potKindId != 0)
+          resRow["PotKindText"] = ProgramDBUI.TheUI.DocTypes["PotKinds"].GetTextValue(potKindId);
+        resRow["ActionComment"] = row["Comment"];
       }
 
       #endregion
 
-      MainPage.DataSource = ResTable.DefaultView;
+      _MainPage.DataSource = resTable.DefaultView;
     }
 
     #endregion
 
     #region Страница отчета
 
-    EFPReportDBxGridPage MainPage;
+    EFPReportDBxGridPage _MainPage;
 
-    void MainPage_InitGrid(object Sender, EventArgs Args)
+    void MainPage_InitGrid(object sender, EventArgs args)
     {
-      MainPage.ControlProvider.Control.AutoGenerateColumns = false;
-      MainPage.ControlProvider.Columns.AddInt("PlantNumber", true, "№ по каталогу", 3);
-      MainPage.ControlProvider.Columns.LastAdded.GridColumn.DefaultCellStyle.Format = ProgramDBUI.Settings.NumberMask;
-      MainPage.ControlProvider.Columns.LastAdded.CanIncSearch = true;
-      MainPage.ControlProvider.Columns.AddText("PlantName", true, "Наименование", 40, 20);
-      MainPage.ControlProvider.Columns.LastAdded.CanIncSearch = true;
-      MainPage.ControlProvider.Columns.AddImage("ActionImage");
-      MainPage.ControlProvider.Columns.AddDate("ActionDate", true, "Дата операции");
-      MainPage.ControlProvider.Columns.AddText("ActionName", false, "Действие", 20, 10);
-      MainPage.ControlProvider.Columns.AddText("SoilText", true, "Грунт", 20, 10);
-      MainPage.ControlProvider.Columns.AddText("PotKindText", true, "Горшок", 20, 10);
-      MainPage.ControlProvider.Columns.AddText("ActionComment", true, "Комментарий к операции", 40, 10);
-      MainPage.ControlProvider.DisableOrdering();
+      _MainPage.ControlProvider.Control.AutoGenerateColumns = false;
+      _MainPage.ControlProvider.Columns.AddInt("PlantNumber", true, "№ по каталогу", 3);
+      _MainPage.ControlProvider.Columns.LastAdded.GridColumn.DefaultCellStyle.Format = ProgramDBUI.Settings.NumberMask;
+      _MainPage.ControlProvider.Columns.LastAdded.CanIncSearch = true;
+      _MainPage.ControlProvider.Columns.AddText("PlantName", true, "Наименование", 40, 20);
+      _MainPage.ControlProvider.Columns.LastAdded.CanIncSearch = true;
+      _MainPage.ControlProvider.Columns.AddImage("ActionImage");
+      _MainPage.ControlProvider.Columns.AddDate("ActionDate", true, "Дата операции");
+      _MainPage.ControlProvider.Columns.AddText("ActionName", false, "Действие", 20, 10);
+      _MainPage.ControlProvider.Columns.AddText("SoilText", true, "Грунт", 20, 10);
+      _MainPage.ControlProvider.Columns.AddText("PotKindText", true, "Горшок", 20, 10);
+      _MainPage.ControlProvider.Columns.AddText("ActionComment", true, "Комментарий к операции", 40, 10);
+      _MainPage.ControlProvider.DisableOrdering();
 
-      MainPage.ControlProvider.Orders.Add("PlantNumber,PlantName", "По номеру");
-      MainPage.ControlProvider.Orders.Add("PlantName,PlantNumber", "По названию");
-      MainPage.ControlProvider.Orders.Add("ActionDate,PlantNumber,PlantName", "По дате пересадки (по возрастанию",new EFPDataGridViewSortInfo("ActionDate", ListSortDirection.Ascending));
-      MainPage.ControlProvider.Orders.Add("ActionDate DESC,PlantNumber,PlantName", "По дате пересадки (по убыванию", new EFPDataGridViewSortInfo("ActionDate", ListSortDirection.Descending));
-      MainPage.ControlProvider.AutoSort = true;
-      MainPage.ControlProvider.CurrentOrderIndex = 2;
+      _MainPage.ControlProvider.Orders.Add("PlantNumber,PlantName", "По номеру");
+      _MainPage.ControlProvider.Orders.Add("PlantName,PlantNumber", "По названию");
+      _MainPage.ControlProvider.Orders.Add("ActionDate,PlantNumber,PlantName", "По дате пересадки (по возрастанию", new EFPDataGridViewSortInfo("ActionDate", ListSortDirection.Ascending));
+      _MainPage.ControlProvider.Orders.Add("ActionDate DESC,PlantNumber,PlantName", "По дате пересадки (по убыванию", new EFPDataGridViewSortInfo("ActionDate", ListSortDirection.Descending));
+      _MainPage.ControlProvider.AutoSort = true;
+      _MainPage.ControlProvider.CurrentOrderIndex = 2;
 
-      MainPage.ControlProvider.GetCellAttributes += new EFPDataGridViewCellAttributesEventHandler(MainPage_GetCellAttributes);
+      _MainPage.ControlProvider.GetCellAttributes += new EFPDataGridViewCellAttributesEventHandler(MainPage_GetCellAttributes);
 
-      MainPage.ControlProvider.ReadOnly = false;
-      MainPage.ControlProvider.CanInsert = false;
-      MainPage.ControlProvider.CanDelete = false;
-      MainPage.ControlProvider.CanView = true;
-      MainPage.ControlProvider.Control.ReadOnly = true;
-      MainPage.ControlProvider.EditData += new EventHandler(MainPage_EditData);
-      MainPage.ControlProvider.GetDocSel += new EFPDBxGridViewDocSelEventHandler(MainPage_GetDocSel);
+      _MainPage.ControlProvider.ReadOnly = false;
+      _MainPage.ControlProvider.CanInsert = false;
+      _MainPage.ControlProvider.CanDelete = false;
+      _MainPage.ControlProvider.CanView = true;
+      _MainPage.ControlProvider.Control.ReadOnly = true;
+      _MainPage.ControlProvider.EditData += new EventHandler(MainPage_EditData);
+      _MainPage.ControlProvider.GetDocSel += new EFPDBxGridViewDocSelEventHandler(MainPage_GetDocSel);
     }
 
     private static void MainPage_GetCellAttributes(object sender, EFPDataGridViewCellAttributesEventArgs args)
     {
       ActionKind kind;
       switch (args.ColumnName)
-      { 
+      {
         case "ActionImage":
           kind = (ActionKind)DataTools.GetInt(args.DataRow, "ActionKind");
           if (kind == ActionNone)
@@ -351,17 +351,17 @@ namespace Plants
       }
     }
 
-    void MainPage_EditData(object Sender, EventArgs Args)
+    void MainPage_EditData(object sender, EventArgs args)
     {
-      if (!MainPage.ControlProvider.CheckSingleRow())
+      if (!_MainPage.ControlProvider.CheckSingleRow())
         return;
-      Int32 PlantId = DataTools.GetInt(MainPage.ControlProvider.CurrentDataRow, "PlantId");
-      ProgramDBUI.TheUI.DocTypes["Plants"].PerformEditing(PlantId, MainPage.ControlProvider.State == EFPDataGridViewState.View);
+      Int32 plantId = DataTools.GetInt(_MainPage.ControlProvider.CurrentDataRow, "PlantId");
+      ProgramDBUI.TheUI.DocTypes["Plants"].PerformEditing(plantId, _MainPage.ControlProvider.State == EFPDataGridViewState.View);
     }
 
-    void MainPage_GetDocSel(object Sender, EFPDBxGridViewDocSelEventArgs Args)
+    void MainPage_GetDocSel(object sender, EFPDBxGridViewDocSelEventArgs args)
     {
-      Args.AddFromColumn("Plants", "PlantId");
+      args.AddFromColumn("Plants", "PlantId");
     }
 
     #endregion

@@ -13,18 +13,18 @@ namespace Plants
   {
     #region Конструктор
 
-    public CareItem(string Group, string Code, string Name)
-      : base(Code)
+    public CareItem(string group, string code, string name)
+      : base(code)
     {
 #if DEBUG
-      if (String.IsNullOrEmpty(Group))
+      if (String.IsNullOrEmpty(group))
         throw new ArgumentNullException("Group");
-      if (String.IsNullOrEmpty(Name))
+      if (String.IsNullOrEmpty(name))
         throw new ArgumentNullException("Name");
 #endif
 
-      _Group = Group;
-      _Name = Name;
+      _Group = group;
+      _Name = name;
     }
 
     #endregion
@@ -44,19 +44,19 @@ namespace Plants
     // Тип для ItemValue зависит от класса.
     // Значение null означает незаполненное значение
 
-    public abstract object GetItemValue(IDBxDocValues DocValues);
+    public abstract object GetItemValue(IDBxDocValues docValues);
 
-    public abstract void SetItemValue(IDBxDocValues DocValues, object ItemValue);
+    public abstract void SetItemValue(IDBxDocValues docValues, object itemValue);
 
-    public abstract void AddColumns(DBxColumnStructList Columns);
+    public abstract void AddColumns(DBxColumnStructList columns);
 
     #endregion
 
     #region Другие методы
 
-    public abstract string GetTextValue(object ItemValue);
+    public abstract string GetTextValue(object itemValue);
 
-    public abstract bool Edit(ref object ItemValue);
+    public abstract bool Edit(ref object itemValue);
 
     #endregion
 
@@ -237,8 +237,8 @@ namespace Plants
   {
     #region Конструктор
 
-    public MemoCareItem(string Group, string Code, string Name)
-      : base(Group, Code , Name)
+    public MemoCareItem(string group, string code, string name)
+      : base(group, code, name)
     {
     }
 
@@ -246,46 +246,46 @@ namespace Plants
 
     #region Переопределенные методы
 
-    public override object GetItemValue(IDBxDocValues DocValues)
+    public override object GetItemValue(IDBxDocValues docValues)
     {
-      string s = DocValues[Code].AsString;
+      string s = docValues[Code].AsString;
       if (s.Length == 0)
         return null;
       else
         return s;
     }
 
-    public override void SetItemValue(IDBxDocValues DocValues, object ItemValue)
+    public override void SetItemValue(IDBxDocValues docValues, object itemValue)
     {
-      string s = ItemValue as string;
-      DocValues[Code].SetString(s);
+      string s = itemValue as string;
+      docValues[Code].SetString(s);
     }
 
-    public override void AddColumns(DBxColumnStructList Columns)
+    public override void AddColumns(DBxColumnStructList columns)
     {
-      Columns.AddMemo(Code);
+      columns.AddMemo(Code);
     }
 
-    public override string GetTextValue(object ItemValue)
+    public override string GetTextValue(object itemValue)
     {
-      return DataTools.GetString(ItemValue);
+      return DataTools.GetString(itemValue);
     }
 
-    public override bool Edit(ref object ItemValue)
+    public override bool Edit(ref object itemValue)
     {
       MultiLineTextInputDialog dlg = new MultiLineTextInputDialog();
       dlg.Title = Name;
       dlg.CanBeEmpty = true;
-      if (ItemValue != null)
-        dlg.Text = (string)ItemValue;
+      if (itemValue != null)
+        dlg.Text = (string)itemValue;
       if (dlg.ShowDialog() != System.Windows.Forms.DialogResult.OK)
         return false;
 
       string s = dlg.Text.Trim();
       if (s.Length == 0)
-        ItemValue = null;
+        itemValue = null;
       else
-        ItemValue = s;
+        itemValue = s;
       return true;
     }
 
@@ -296,71 +296,71 @@ namespace Plants
   {
     #region Конструктор
 
-    public EnumCareItem(string Group, string Code, string Name, string[] EnumCodes, string[] EnumValues)
-      : base(Group, Code , Name)
+    public EnumCareItem(string group, string code, string name, string[] enumCodes, string[] enumValues)
+      : base(group, code, name)
     {
-      if (EnumCodes.Length != EnumValues.Length)
+      if (enumCodes.Length != enumValues.Length)
         throw new ArgumentException("Длина массивов не совпадает");
 
-      FEnumCodes = EnumCodes;
+      _EnumCodes = enumCodes;
 
-      FEnumValues = EnumValues;
+      _EnumValues = enumValues;
 
-      FCodeIndexer = new StringArrayIndexer(EnumCodes, false);
+      _CodeIndexer = new StringArrayIndexer(enumCodes, false);
     }
 
     #endregion
 
     #region Свойства
 
-    public string[] EnumCodes { get { return FEnumCodes; } }
-    private string[] FEnumCodes;
+    public string[] EnumCodes { get { return _EnumCodes; } }
+    private string[] _EnumCodes;
 
-    private StringArrayIndexer FCodeIndexer;
+    private StringArrayIndexer _CodeIndexer;
 
-    public string[] EnumValues { get { return FEnumValues; } }
-    private string[] FEnumValues;
+    public string[] EnumValues { get { return _EnumValues; } }
+    private string[] _EnumValues;
 
     #endregion
 
     #region Переопределенные методы
 
-    public override void AddColumns(DBxColumnStructList Columns)
+    public override void AddColumns(DBxColumnStructList columns)
     {
-      int MaxLen = 1;
+      int maxLen = 1;
       for (int i = 0; i < EnumCodes.Length; i++)
-        MaxLen = Math.Max(MaxLen, EnumCodes[i].Length);
-      Columns.AddString(Code, MaxLen, true);
+        maxLen = Math.Max(maxLen, EnumCodes[i].Length);
+      columns.AddString(Code, maxLen, true);
     }
 
-    public override object GetItemValue(IDBxDocValues DocValues)
+    public override object GetItemValue(IDBxDocValues docValues)
     {
-      string EnumCode = DocValues[Code].AsString;
-      if (EnumCode.Length == 0)
+      string enumCode = docValues[Code].AsString;
+      if (enumCode.Length == 0)
         return null;
       else
-        return EnumCode;
+        return enumCode;
     }
 
-    public override void SetItemValue(IDBxDocValues DocValues, object ItemValue)
+    public override void SetItemValue(IDBxDocValues docValues, object itemValue)
     {
-      DocValues[Code].SetString((string)ItemValue);
+      docValues[Code].SetString((string)itemValue);
     }
 
-    public override string GetTextValue(object ItemValue)
+    public override string GetTextValue(object itemValue)
     {
-      string EnumCode = ItemValue as string;
-      if (String.IsNullOrEmpty(EnumCode))
+      string enumCode = itemValue as string;
+      if (String.IsNullOrEmpty(enumCode))
         return String.Empty;
 
-      int p = FCodeIndexer.IndexOf(EnumCode);
+      int p = _CodeIndexer.IndexOf(enumCode);
       if (p >= 0)
         return EnumValues[p];
       else
-        return "??? " + EnumCode;
+        return "??? " + enumCode;
     }
 
-    public override bool Edit(ref object ItemValue)
+    public override bool Edit(ref object itemValue)
     {
       ListSelectDialog dlg = new ListSelectDialog();
       dlg.Title = Name;
@@ -368,14 +368,14 @@ namespace Plants
       dlg.Items[0] = "[ Не задано ]";
       EnumValues.CopyTo(dlg.Items, 1);
 
-      dlg.SelectedIndex = FCodeIndexer.IndexOf(DataTools.GetString(ItemValue)) + 1;
+      dlg.SelectedIndex = _CodeIndexer.IndexOf(DataTools.GetString(itemValue)) + 1;
       if (dlg.ShowDialog() != System.Windows.Forms.DialogResult.OK)
         return false;
 
       if (dlg.SelectedIndex < 1)
-        ItemValue = null;
+        itemValue = null;
       else
-        ItemValue = EnumCodes[dlg.SelectedIndex - 1];
+        itemValue = EnumCodes[dlg.SelectedIndex - 1];
       return true;
     }
 
@@ -387,59 +387,59 @@ namespace Plants
   {
     #region Конструктор
 
-    public IntValueCareItem(string Group, string Code, string Name)
-      : base(Group, Code , Name)
+    public IntValueCareItem(string group, string code, string name)
+      : base(group, code, name)
     {
-      FMeasureUnit = String.Empty;
-      FMinimum = Int32.MinValue;
-      FMaximum = Int32.MaxValue;
+      _MeasureUnit = String.Empty;
+      _Minimum = Int32.MinValue;
+      _Maximum = Int32.MaxValue;
     }
 
     #endregion
 
     #region Свойства
 
-    public string MeasureUnit { get { return FMeasureUnit; } set { FMeasureUnit = value; } }
-    private string FMeasureUnit;
+    public string MeasureUnit { get { return _MeasureUnit; } set { _MeasureUnit = value; } }
+    private string _MeasureUnit;
 
-    public int Minimum { get { return FMinimum; } set { FMinimum = value; } }
-    private int FMinimum;
+    public int Minimum { get { return _Minimum; } set { _Minimum = value; } }
+    private int _Minimum;
 
-    public int Maximum { get { return FMaximum; } set { FMaximum = value; } }
-    private int FMaximum;
+    public int Maximum { get { return _Maximum; } set { _Maximum = value; } }
+    private int _Maximum;
 
     #endregion
 
     #region Переопределенные методы
 
-    public override void AddColumns(DBxColumnStructList Columns)
+    public override void AddColumns(DBxColumnStructList columns)
     {
-      Columns.AddInt(Code, Minimum, Maximum);
+      columns.AddInt(Code, Minimum, Maximum);
     }
 
-    public override object GetItemValue(IDBxDocValues DocValues)
+    public override object GetItemValue(IDBxDocValues docValues)
     {
-      if (DocValues[Code].IsNull)
+      if (docValues[Code].IsNull)
         return null;
       else
-        return DocValues[Code].AsInteger;
+        return docValues[Code].AsInteger;
     }
 
-    public override void SetItemValue(IDBxDocValues DocValues, object ItemValue)
+    public override void SetItemValue(IDBxDocValues docValues, object itemValue)
     {
-      if (ItemValue == null)
-        DocValues[Code].SetNull();
+      if (itemValue == null)
+        docValues[Code].SetNull();
       else
-        DocValues[Code].SetValue(ItemValue); // а не SetInt(), т.к. 0 это не null.
+        docValues[Code].SetValue(itemValue); // а не SetInt(), т.к. 0 это не null.
     }
 
-    public override string GetTextValue(object ItemValue)
+    public override string GetTextValue(object itemValue)
     {
-      if (ItemValue == null)
+      if (itemValue == null)
         return String.Empty;
       else
       {
-        int v = (int)ItemValue;
+        int v = (int)itemValue;
         if (String.IsNullOrEmpty(MeasureUnit))
           return v.ToString();
         else
@@ -447,14 +447,14 @@ namespace Plants
       }
     }
 
-    public override bool Edit(ref object ItemValue)
+    public override bool Edit(ref object itemValue)
     {
       IntInputDialog dlg = new IntInputDialog();
       dlg.Title = Name;
       if (!String.IsNullOrEmpty(MeasureUnit))
         dlg.Title += ", " + MeasureUnit;
       dlg.CanBeEmpty = true;
-      dlg.NValue = (int?)ItemValue;
+      dlg.NValue = (int?)itemValue;
       //dlg.ShowNoButton = true;
       dlg.Minimum = Minimum;
       dlg.Maximum = Maximum;
@@ -462,10 +462,10 @@ namespace Plants
       switch (dlg.ShowDialog())
       {
         case System.Windows.Forms.DialogResult.OK:
-          ItemValue = dlg.NValue;
+          itemValue = dlg.NValue;
           return true;
         case System.Windows.Forms.DialogResult.No: // пока не бывает
-          ItemValue = null;
+          itemValue = null;
           return true;
         default:
           return false;
@@ -483,28 +483,28 @@ namespace Plants
     {
       #region Конструктор
 
-      public Range(int Min, int Max)
+      public Range(int min, int max)
       {
-        FMin = Min;
-        FMax = Max;
+        _Min = min;
+        _Max = max;
       }
 
       #endregion
 
       #region Свойства
 
-      public int Min { get { return FMin; } }
-      private int FMin;
+      public int Min { get { return _Min; } }
+      private int _Min;
 
-      public int Max { get { return FMax; } }
-      private int FMax;
+      public int Max { get { return _Max; } }
+      private int _Max;
 
       public override string ToString()
       {
-        if (FMin == FMax)
-          return FMin.ToString();
+        if (_Min == _Max)
+          return _Min.ToString();
         else
-          return FMin.ToString() + " - " + FMax.ToString();
+          return _Min.ToString() + " - " + _Max.ToString();
       }
 
       #endregion
@@ -514,12 +514,12 @@ namespace Plants
 
     #region Конструктор
 
-    public IntRangeCareItem(string Group, string Code, string Name)
-      : base(Group, Code , Name)
+    public IntRangeCareItem(string group, string code, string name)
+      : base(group, code, name)
     {
-      FMeasureUnit = String.Empty;
-      FMinimum = Int32.MinValue;
-      FMaximum = Int32.MaxValue;
+      _MeasureUnit = String.Empty;
+      _Minimum = Int32.MinValue;
+      _Maximum = Int32.MaxValue;
     }
 
     #endregion
@@ -530,55 +530,55 @@ namespace Plants
 
     public string ColumnName2 { get { return Code + "2"; } }
 
-    public string MeasureUnit { get { return FMeasureUnit; } set { FMeasureUnit = value; } }
-    private string FMeasureUnit;
+    public string MeasureUnit { get { return _MeasureUnit; } set { _MeasureUnit = value; } }
+    private string _MeasureUnit;
 
-    public int Minimum { get { return FMinimum; } set { FMinimum = value; } }
-    private int FMinimum;
+    public int Minimum { get { return _Minimum; } set { _Minimum = value; } }
+    private int _Minimum;
 
-    public int Maximum { get { return FMaximum; } set { FMaximum = value; } }
-    private int FMaximum;
+    public int Maximum { get { return _Maximum; } set { _Maximum = value; } }
+    private int _Maximum;
 
     #endregion
 
     #region Переопределенные методы
 
-    public override void AddColumns(DBxColumnStructList Columns)
+    public override void AddColumns(DBxColumnStructList columns)
     {
-      Columns.AddInt(ColumnName1, Minimum, Maximum);
-      Columns.AddInt(ColumnName2, Minimum, Maximum);
+      columns.AddInt(ColumnName1, Minimum, Maximum);
+      columns.AddInt(ColumnName2, Minimum, Maximum);
     }
 
-    public override object GetItemValue(IDBxDocValues DocValues)
+    public override object GetItemValue(IDBxDocValues docValues)
     {
-      if (DocValues[ColumnName1].IsNull || DocValues[ColumnName2].IsNull)
+      if (docValues[ColumnName1].IsNull || docValues[ColumnName2].IsNull)
         return null;
       else
-        return new Range(DocValues[ColumnName1].AsInteger, DocValues[ColumnName2].AsInteger);
+        return new Range(docValues[ColumnName1].AsInteger, docValues[ColumnName2].AsInteger);
     }
 
-    public override void SetItemValue(IDBxDocValues DocValues, object ItemValue)
+    public override void SetItemValue(IDBxDocValues docValues, object itemValue)
     {
-      if (ItemValue == null)
+      if (itemValue == null)
       {
-        DocValues[ColumnName1].SetNull();
-        DocValues[ColumnName2].SetNull();
+        docValues[ColumnName1].SetNull();
+        docValues[ColumnName2].SetNull();
       }
       else
       {
-        Range r = (Range)ItemValue;
-        DocValues[ColumnName1].SetValue(r.Min); // а не SetInt(), т.к. 0 это не null.
-        DocValues[ColumnName2].SetValue(r.Max);
+        Range r = (Range)itemValue;
+        docValues[ColumnName1].SetValue(r.Min); // а не SetInt(), т.к. 0 это не null.
+        docValues[ColumnName2].SetValue(r.Max);
       }
     }
 
-    public override string GetTextValue(object ItemValue)
+    public override string GetTextValue(object itemValue)
     {
-      if (ItemValue == null)
+      if (itemValue == null)
         return String.Empty;
       else
       {
-        Range r = (Range)ItemValue;
+        Range r = (Range)itemValue;
         if (String.IsNullOrEmpty(MeasureUnit))
           return r.ToString();
         else
@@ -586,16 +586,16 @@ namespace Plants
       }
     }
 
-    public override bool Edit(ref object ItemValue)
+    public override bool Edit(ref object itemValue)
     {
       IntRangeDialog dlg = new IntRangeDialog();
       dlg.Title = Name;
       if (!String.IsNullOrEmpty(MeasureUnit))
         dlg.Title += ", " + MeasureUnit;
       dlg.CanBeEmpty = true;
-      if (ItemValue != null)
+      if (itemValue != null)
       {
-        Range r = (Range)ItemValue;
+        Range r = (Range)itemValue;
         dlg.NFirstValue = r.Min;
         if (r.Max != r.Min)
           dlg.NLastValue = r.Max;
@@ -616,18 +616,18 @@ namespace Plants
           if (dlg.NFirstValue.HasValue || dlg.NLastValue.HasValue)
           {
             if (dlg.NFirstValue.HasValue && dlg.NLastValue.HasValue)
-              ItemValue = new Range(dlg.FirstValue, dlg.LastValue);
+              itemValue = new Range(dlg.FirstValue, dlg.LastValue);
             else if (dlg.NFirstValue.HasValue)
-              ItemValue = new Range(dlg.FirstValue, dlg.FirstValue);
+              itemValue = new Range(dlg.FirstValue, dlg.FirstValue);
             else
-              ItemValue = new Range(dlg.LastValue, dlg.LastValue);
+              itemValue = new Range(dlg.LastValue, dlg.LastValue);
           }
           else
-            ItemValue = null;
+            itemValue = null;
 
           return true;
         case System.Windows.Forms.DialogResult.No:
-          ItemValue = null;
+          itemValue = null;
           return true;
         default:
           return false;
@@ -798,59 +798,59 @@ namespace Plants
     /// <summary>
     /// Конструктор
     /// </summary>
-    /// <param name="Group"></param>
-    /// <param name="Code"></param>
-    /// <param name="Name"></param>
-    /// <param name="ItemNames">Названия для флажков. Нельзя убирать и менять порядок следования элементов</param>
-    public FlagsCareItem(string Group, string Code, string Name, string[] ItemNames)
-      : base(Group, Code,Name)
+    /// <param name="group"></param>
+    /// <param name="code"></param>
+    /// <param name="name"></param>
+    /// <param name="itemNames">Названия для флажков. Нельзя убирать и менять порядок следования элементов</param>
+    public FlagsCareItem(string group, string code, string name, string[] itemNames)
+      : base(group, code, name)
     {
-      if (ItemNames.Length > 32)
+      if (itemNames.Length > 32)
         throw new ArgumentException("Максимум 32 флажка", "ItemNames");
-      FItemNames = ItemNames;
+      _ItemNames = itemNames;
     }
 
     #endregion
 
     #region Свойства
 
-    public string[] ItemNames { get { return FItemNames; } }
-    private string[] FItemNames;
+    public string[] ItemNames { get { return _ItemNames; } }
+    private string[] _ItemNames;
 
     #endregion
 
     #region Переопределенные методы
 
-    public override object GetItemValue(IDBxDocValues DocValues)
+    public override object GetItemValue(IDBxDocValues docValues)
     {
-      int v = DocValues[Code].AsInteger;
+      int v = docValues[Code].AsInteger;
       if (v == 0)
         return null;
       else
         return v;
     }
 
-    public override void SetItemValue(IDBxDocValues DocValues, object ItemValue)
+    public override void SetItemValue(IDBxDocValues docValues, object itemValue)
     {
-      DocValues[Code].SetValue(ItemValue);
+      docValues[Code].SetValue(itemValue);
     }
 
-    public override void AddColumns(DBxColumnStructList Columns)
+    public override void AddColumns(DBxColumnStructList columns)
     {
-      Columns.AddInt(Code);
+      columns.AddInt(Code);
     }
 
-    public override string GetTextValue(object ItemValue)
+    public override string GetTextValue(object itemValue)
     {
-      int v = DataTools.GetInt(ItemValue);
+      int v = DataTools.GetInt(itemValue);
       if (v == 0)
         return String.Empty;
 
       StringBuilder sb = new StringBuilder();
       for (int i = 0; i < ItemNames.Length; i++)
       {
-        int Mask = 1 << i;
-        if ((v & Mask) != 0)
+        int mask = 1 << i;
+        if ((v & mask) != 0)
         {
           if (sb.Length > 0)
             sb.Append(", ");
@@ -860,9 +860,9 @@ namespace Plants
       return sb.ToString();
     }
 
-    public override bool Edit(ref object ItemValue)
+    public override bool Edit(ref object itemValue)
     {
-      int v = DataTools.GetInt(ItemValue);
+      int v = DataTools.GetInt(itemValue);
 
       ListSelectDialog dlg = new ListSelectDialog();
       dlg.Title = Name;
@@ -871,8 +871,8 @@ namespace Plants
       dlg.Items = ItemNames;
       for (int i = 0; i < ItemNames.Length; i++)
       {
-        int Mask = 1 << i;
-        dlg.Selections[i] = ((v & Mask) != 0);
+        int mask = 1 << i;
+        dlg.Selections[i] = ((v & mask) != 0);
       }
 
       if (dlg.ShowDialog() != System.Windows.Forms.DialogResult.OK)
@@ -881,14 +881,14 @@ namespace Plants
       v = 0;
       for (int i = 0; i < ItemNames.Length; i++)
       {
-        int Mask = 1 << i;
+        int mask = 1 << i;
         if (dlg.Selections[i])
-          v |= Mask;
+          v |= mask;
       }
       if (v == 0)
-        ItemValue = null;
+        itemValue = null;
       else
-        ItemValue = v;
+        itemValue = v;
 
       return true;
     }
@@ -900,11 +900,11 @@ namespace Plants
   {
     #region Конструктор
 
-    public CareValueChangedEventArgs(CareValues CareValues, int ItemIndex, object OldValue)
+    public CareValueChangedEventArgs(CareValues careValues, int itemIndex, object oldValue)
     {
-      FCareValues = CareValues;
-      FItemIndex = ItemIndex;
-      FOldValue = OldValue;
+      _CareValues = careValues;
+      _ItemIndex = itemIndex;
+      _OldValue = oldValue;
     }
 
     #endregion
@@ -912,22 +912,22 @@ namespace Plants
     #region Свойства
 
     //    public CareValues CareValues { get { return FCareValues; } }
-    private CareValues FCareValues;
+    private CareValues _CareValues;
 
-    public CareItem Item { get { return FCareValues.Items[FItemIndex]; } }
+    public CareItem Item { get { return _CareValues.Items[_ItemIndex]; } }
 
-    public int ItemIndex { get { return FItemIndex; } }
-    private int FItemIndex;
+    public int ItemIndex { get { return _ItemIndex; } }
+    private int _ItemIndex;
 
-    public object NewValue { get { return FCareValues[FItemIndex]; } }
+    public object NewValue { get { return _CareValues[_ItemIndex]; } }
 
-    public object OldValue { get { return FOldValue; } }
-    private object FOldValue;
+    public object OldValue { get { return _OldValue; } }
+    private object _OldValue;
 
     #endregion
   }
 
-  public delegate void CareValueChangedEventHandler(object Sender, CareValueChangedEventArgs Args);
+  public delegate void CareValueChangedEventHandler(object sender, CareValueChangedEventArgs args);
 
   /// <summary>
   /// Массив значений типа object, в которых хранятся значения
@@ -936,39 +936,39 @@ namespace Plants
   {
     #region Конструктор
 
-    public CareValues(NamedList<CareItem> Items)
+    public CareValues(NamedList<CareItem> items)
     {
-      if (Items == null)
+      if (items == null)
         throw new ArgumentNullException("Items");
-      FItems = Items;
-      FValues = new object[FItems.Count];
+      _Items = items;
+      _Values = new object[_Items.Count];
     }
 
     #endregion
 
     #region Свойства
 
-    public NamedList<CareItem> Items { get { return FItems; } }
-    private NamedList<CareItem> FItems;
+    public NamedList<CareItem> Items { get { return _Items; } }
+    private NamedList<CareItem> _Items;
 
-    public object this[int Index]
+    public object this[int index]
     {
-      get { return FValues[Index]; }
+      get { return _Values[index]; }
       set
       {
-        object OldValue = FValues[Index];
-        if (object.Equals(OldValue, value))
+        object oldValue = _Values[index];
+        if (object.Equals(oldValue, value))
           return;
-        FValues[Index] = value;
+        _Values[index] = value;
 
         if (Changed != null)
         {
-          CareValueChangedEventArgs Args = new CareValueChangedEventArgs(this, Index, OldValue);
-          Changed(this, Args);
+          CareValueChangedEventArgs args = new CareValueChangedEventArgs(this, index, oldValue);
+          Changed(this, args);
         }
       }
     }
-    private object[] FValues;
+    private object[] _Values;
 
     public event CareValueChangedEventHandler Changed;
 
@@ -976,16 +976,16 @@ namespace Plants
 
     #region Чтение и запись
 
-    public void Read(IDBxDocValues DocValues)
+    public void Read(IDBxDocValues docValues)
     {
       for (int i = 0; i < Items.Count; i++)
-        this[i] = Items[i].GetItemValue(DocValues);
+        this[i] = Items[i].GetItemValue(docValues);
     }
 
-    public void Write(IDBxDocValues DocValues)
+    public void Write(IDBxDocValues docValues)
     {
       for (int i = 0; i < Items.Count; i++)
-        Items[i].SetItemValue(DocValues, this[i]);
+        Items[i].SetItemValue(docValues, this[i]);
     }
 
     #endregion

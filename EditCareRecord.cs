@@ -28,31 +28,31 @@ namespace Plants
 
     #region Редактор
 
-    public static void InitEditForm(object Sender, InitSubDocEditFormEventArgs Args)
+    public static void InitEditForm(object sender, InitSubDocEditFormEventArgs args)
     {
-      EditCareRecord Form = new EditCareRecord();
-      Form.AddPage1(Args);
+      EditCareRecord form = new EditCareRecord();
+      form.AddPage1(args);
     }
 
     EFPMonthDayTextBox efpDay1, efpDay2;
 
-    private void AddPage1(InitSubDocEditFormEventArgs Args)
+    private void AddPage1(InitSubDocEditFormEventArgs args)
     {
-      DocEditPage Page = Args.AddPage("Общие", MainPanel1);
-      Page.ImageKey = Args.Editor.SubDocTypeUI.ImageKey;
+      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      page.ImageKey = args.Editor.SubDocTypeUI.ImageKey;
 
-      efpDay1 = new EFPMonthDayTextBox(Page.BaseProvider, edDay1);
+      efpDay1 = new EFPMonthDayTextBox(page.BaseProvider, edDay1);
       efpDay1.DisplayName = "Начало периода";
       efpDay1.CanBeEmpty = true;
-      Args.AddInt(efpDay1, "Day1", false);
+      args.AddInt(efpDay1, "Day1", false);
 
-      efpDay2 = new EFPMonthDayTextBox(Page.BaseProvider, edDay2);
+      efpDay2 = new EFPMonthDayTextBox(page.BaseProvider, edDay2);
       efpDay2.DisplayName = "Конец периода";
       efpDay2.CanBeEmpty = true;
-      Args.AddInt(efpDay2, "Day2", false);
+      args.AddInt(efpDay2, "Day2", false);
 
-      EFPTextBox efpName = new EFPTextBox(Page.BaseProvider, edName);
-      Args.AddText(efpName, "Name", false);
+      EFPTextBox efpName = new EFPTextBox(page.BaseProvider, edName);
+      args.AddText(efpName, "Name", false);
 
       efpDay1.Validating += new UIValidatingEventHandler(efpDay_Validating);
       efpDay2.Validating += new UIValidatingEventHandler(efpDay_Validating);
@@ -60,22 +60,22 @@ namespace Plants
       efpDay2.ValueEx.ValueChanged += new EventHandler(efpDay1.Validate);
 
       efpName.CanBeEmpty = true;
-      efpName.Validators.AddError(efpName.IsNotEmptyEx, 
+      efpName.Validators.AddError(efpName.IsNotEmptyEx,
         "Значение должно быть задано",
         efpDay1.IsNotEmptyEx);
 
-      EFPCareGridView ghItems=new EFPCareGridView(Page.BaseProvider, grItems);
-      CareDocEditItem deiItems = new CareDocEditItem(Args.Values, ghItems);
-      Args.AddDocEditItem(deiItems);
+      EFPCareGridView ghItems = new EFPCareGridView(page.BaseProvider, grItems);
+      CareDocEditItem deiItems = new CareDocEditItem(args.Values, ghItems);
+      args.AddDocEditItem(deiItems);
     }
 
-    void efpDay_Validating(object Sender, UIValidatingEventArgs Args)
+    void efpDay_Validating(object sender, UIValidatingEventArgs args)
     {
-      if (Args.ValidateState == UIValidateState.Error)
+      if (args.ValidateState == UIValidateState.Error)
         return;
 
       if (efpDay1.Value.IsEmpty != efpDay2.Value.IsEmpty)
-        Args.SetError("Начало и конец периода должны быть заполнены одновременно");
+        args.SetError("Начало и конец периода должны быть заполнены одновременно");
     }
 
 
@@ -87,31 +87,31 @@ namespace Plants
     {
       #region Конструктор
 
-      public CareDocEditItem(IDBxDocValues DocValues, EFPCareGridView ControlProvider)
+      public CareDocEditItem(IDBxDocValues docValues, EFPCareGridView controlProvider)
       {
-        FDocValues = DocValues;
-        FControlProvider = ControlProvider;
+        _DocValues = docValues;
+        _ControlProvider = controlProvider;
 
-        FChangeInfo=new DepChangeInfoList();
-        FChangeInfoItems = new DepChangeInfoItem[ControlProvider.UsedItems.Count];
-        for (int i = 0; i < ControlProvider.UsedItems.Count; i++)
+        _ChangeInfo = new DepChangeInfoList();
+        _ChangeInfoItems = new DepChangeInfoItem[controlProvider.UsedItems.Count];
+        for (int i = 0; i < controlProvider.UsedItems.Count; i++)
         {
-          FChangeInfoItems[i] = new DepChangeInfoItem();
-          FChangeInfoItems[i].DisplayName = ControlProvider.UsedItems[i].Name;
-          FChangeInfo.Add(FChangeInfoItems[i]);
+          _ChangeInfoItems[i] = new DepChangeInfoItem();
+          _ChangeInfoItems[i].DisplayName = controlProvider.UsedItems[i].Name;
+          _ChangeInfo.Add(_ChangeInfoItems[i]);
         }
-        FControlProvider.Values.Changed += new CareValueChangedEventHandler(Values_Changed);
+        _ControlProvider.Values.Changed += new CareValueChangedEventHandler(Values_Changed);
       }
 
       #endregion
 
       #region Свойства
 
-      public IDBxDocValues DocValues { get { return FDocValues; } }
-      private IDBxDocValues FDocValues;
+      public IDBxDocValues DocValues { get { return _DocValues; } }
+      private IDBxDocValues _DocValues;
 
-      public EFPCareGridView ControlProvider { get { return FControlProvider; } }
-      private EFPCareGridView FControlProvider;
+      public EFPCareGridView ControlProvider { get { return _ControlProvider; } }
+      private EFPCareGridView _ControlProvider;
 
       private CareValues OrgValues;
 
@@ -143,20 +143,20 @@ namespace Plants
         ClearChangeInfo();
       }
 
-      public DepChangeInfo ChangeInfo { get { return FChangeInfo; } }
-      private DepChangeInfoList FChangeInfo;
+      public DepChangeInfo ChangeInfo { get { return _ChangeInfo; } }
+      private DepChangeInfoList _ChangeInfo;
 
-      private DepChangeInfoItem[] FChangeInfoItems;
+      private DepChangeInfoItem[] _ChangeInfoItems;
 
       private void ClearChangeInfo()
       {
-        for (int i = 0; i < FChangeInfoItems.Length; i++)
-          FChangeInfoItems[i].Changed = false;
+        for (int i = 0; i < _ChangeInfoItems.Length; i++)
+          _ChangeInfoItems[i].Changed = false;
       }
 
-      void Values_Changed(object Sender, CareValueChangedEventArgs Args)
+      void Values_Changed(object sender, CareValueChangedEventArgs args)
       {
-        FChangeInfoItems[Args.ItemIndex].Changed = !Object.Equals(OrgValues[Args.ItemIndex], Args.NewValue);
+        _ChangeInfoItems[args.ItemIndex].Changed = !Object.Equals(OrgValues[args.ItemIndex], args.NewValue);
       }
 
       #endregion
@@ -172,14 +172,14 @@ namespace Plants
   {
     #region Конструкторы
 
-    public EFPCareGridView(EFPBaseProvider BaseProvider, DataGridView Control)
-      : base(BaseProvider, Control)
+    public EFPCareGridView(EFPBaseProvider baseProvider, DataGridView control)
+      : base(baseProvider, control)
     {
       Init();
     }
 
-    public EFPCareGridView(EFPControlWithToolBar<DataGridView> ControlWithToolBar)
-      : base(ControlWithToolBar)
+    public EFPCareGridView(EFPControlWithToolBar<DataGridView> controlWithToolBar)
+      : base(controlWithToolBar)
     {
       Init();
     }
@@ -203,23 +203,23 @@ namespace Plants
       UsedItems = CareItem.TheList;
     }
 
-    protected override void OnGetRowAttributes(EFPDataGridViewRowAttributesEventArgs Args)
+    protected override void OnGetRowAttributes(EFPDataGridViewRowAttributesEventArgs args)
     {
-      if ((GroupIndexes[Args.RowIndex] % 2) == 0)
-        Args.ColorType = EFPDataGridViewColorType.Alter;
-      base.OnGetRowAttributes(Args);
+      if ((_GroupIndexes[args.RowIndex] % 2) == 0)
+        args.ColorType = EFPDataGridViewColorType.Alter;
+      base.OnGetRowAttributes(args);
     }
 
-    protected override void OnGetCellAttributes(EFPDataGridViewCellAttributesEventArgs Args)
+    protected override void OnGetCellAttributes(EFPDataGridViewCellAttributesEventArgs args)
     {
-      if (Args.ColumnIndex == 0)
+      if (args.ColumnIndex == 0)
       {
-        if (Values[Args.RowIndex] == null)
-          Args.Value = EFPApp.MainImages.Images["EmptyImage"];
+        if (Values[args.RowIndex] == null)
+          args.Value = EFPApp.MainImages.Images["EmptyImage"];
         else
-          Args.Value = EFPApp.MainImages.Images["Item"];
+          args.Value = EFPApp.MainImages.Images["Item"];
       }
-      base.OnGetCellAttributes(Args);
+      base.OnGetCellAttributes(args);
     }
 
     #endregion
@@ -234,32 +234,32 @@ namespace Plants
     /// </summary>
     public NamedList<CareItem> UsedItems
     {
-      get { return FValues.Items; }
+      get { return _Values.Items; }
       set
       {
         if (value == null)
           throw new ArgumentNullException();
 
-        FValues = new CareValues(value);
+        _Values = new CareValues(value);
         Control.RowCount = UsedItems.Count;
         for (int i = 0; i < UsedItems.Count; i++)
         {
           Control[1, i].Value = UsedItems[i].Name;
           Control[2, i].Value = String.Empty;
         }
-        FValues.Changed += new CareValueChangedEventHandler(FValues_Changed);
+        _Values.Changed += new CareValueChangedEventHandler(Values_Changed);
 
-        GroupIndexes = new int[UsedItems.Count];
+        _GroupIndexes = new int[UsedItems.Count];
         for (int i = 0; i < UsedItems.Count; i++)
         {
           if (i == 0)
-            GroupIndexes[i] = 1;
+            _GroupIndexes[i] = 1;
           else
           {
-            int GI = GroupIndexes[i - 1];
+            int gi = _GroupIndexes[i - 1];
             if (UsedItems[i].Group != UsedItems[i - 1].Group)
-              GI++;
-            GroupIndexes[i] = GI;
+              gi++;
+            _GroupIndexes[i] = gi;
           }
         }
       }
@@ -271,32 +271,32 @@ namespace Plants
     /// Содержит номера групп (1,2,...).
     /// Используется для полосатой раскраски
     /// </summary>
-    private int[] GroupIndexes;
+    private int[] _GroupIndexes;
 
     #endregion
 
     #region Список значений
 
-    public CareValues Values { get { return FValues; } }
-    private CareValues FValues;
+    public CareValues Values { get { return _Values; } }
+    private CareValues _Values;
 
-    void FValues_Changed(object Sender, CareValueChangedEventArgs Args)
+    void Values_Changed(object sender, CareValueChangedEventArgs args)
     {
-      if (Args.NewValue == null)
-        Control[2, Args.ItemIndex].Value = String.Empty;
+      if (args.NewValue == null)
+        Control[2, args.ItemIndex].Value = String.Empty;
       else
-        Control[2, Args.ItemIndex].Value = DataTools.GetString(Args.Item.GetTextValue(Args.NewValue)).Replace(Environment.NewLine, " ");
-      Control.InvalidateCell(0, Args.ItemIndex);
+        Control[2, args.ItemIndex].Value = DataTools.GetString(args.Item.GetTextValue(args.NewValue)).Replace(Environment.NewLine, " ");
+      Control.InvalidateCell(0, args.ItemIndex);
     }
 
     #endregion
 
     #region Редактирование
 
-    protected override bool OnEditData(EventArgs Args)
+    protected override bool OnEditData(EventArgs args)
     {
       switch (State)
-      { 
+      {
         case EFPDataGridViewState.Edit:
           if (!CheckSingleRow())
             return true;

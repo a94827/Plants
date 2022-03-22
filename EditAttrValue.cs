@@ -46,42 +46,42 @@ namespace Plants
       string s = args.GetString("Value");
       if (s.Length == 0)
         s = args.GetString("LongValue");
-      Int32 AttrTypeId = args.GetInt("AttrType");
-      if (ProgramDBUI.TheUI.DocProvider.IsRealDocId(AttrTypeId))
+      Int32 attrTypeId = args.GetInt("AttrType");
+      if (ProgramDBUI.TheUI.DocProvider.IsRealDocId(attrTypeId))
       {
-        AttrTypeDoc AttrType = new AttrTypeDoc(AttrTypeId);
-        object v = PlantTools.ValueFromSaveableString(s, AttrType.ValueType);
-        args.Value = PlantTools.ToString(v, AttrType.ValueType);
+        AttrTypeDoc attrType = new AttrTypeDoc(attrTypeId);
+        object v = PlantTools.ValueFromSaveableString(s, attrType.ValueType);
+        args.Value = PlantTools.ToString(v, attrType.ValueType);
       }
       else
         args.Value = s;
     }
 
-    public static void ImageValueNeeded(object Sender, DBxImageValueNeededEventArgs Args)
+    public static void ImageValueNeeded(object sender, DBxImageValueNeededEventArgs args)
     {
-      Int32 AttrTypeId = Args.GetInt("AttrType");
-      if (AttrTypeId == 0)
+      Int32 attrTypeId = args.GetInt("AttrType");
+      if (attrTypeId == 0)
         return; // не бывает
 
-      AttrTypeDoc AttrType = new AttrTypeDoc(AttrTypeId);
+      AttrTypeDoc attrType = new AttrTypeDoc(attrTypeId);
 
-      string s = Args.GetString("Value");
+      string s = args.GetString("Value");
       if (s.Length == 0)
-        s = Args.GetString("LongValue");
+        s = args.GetString("LongValue");
 
-      object v = PlantTools.ValueFromSaveableString(s, AttrType.ValueType);
+      object v = PlantTools.ValueFromSaveableString(s, attrType.ValueType);
 
-      string ErrorText;
-      if (!AttrType.TestValue(v, out ErrorText))
+      string errorText;
+      if (!attrType.TestValue(v, out errorText))
       {
-        Args.ColorType = EFPDataGridViewColorType.Warning;
-        Args.ToolTipText = ErrorText;
+        args.ColorType = EFPDataGridViewColorType.Warning;
+        args.ToolTipText = errorText;
       }
     }
 
-    public static void GetDocSel(object Sender, DocTypeDocSelEventArgs Args)
+    public static void GetDocSel(object sender, DocTypeDocSelEventArgs args)
     {
-      Args.AddFromColumn("AttrTypes", "AttrType");
+      args.AddFromColumn("AttrTypes", "AttrType");
     }
 
     #endregion
@@ -92,13 +92,11 @@ namespace Plants
 
     SubDocumentEditor _Editor;
 
-    public static void InitSubDocEditForm(object Sender, InitSubDocEditFormEventArgs Args)
+    public static void InitSubDocEditForm(object sender, InitSubDocEditFormEventArgs args)
     {
-      EditAttrValue Form = new EditAttrValue();
-
-      Form._Editor = Args.Editor;
-
-      Form.AddPage1(Args);
+      EditAttrValue form = new EditAttrValue();
+      form._Editor = args.Editor;
+      form.AddPage1(args);
     }
 
     #endregion
@@ -108,36 +106,36 @@ namespace Plants
     EFPDocComboBox efpAttrType;
     EFPAttrValueComboBox efpValue;
 
-    private void AddPage1(InitSubDocEditFormEventArgs Args)
+    private void AddPage1(InitSubDocEditFormEventArgs args)
     {
-      DocEditPage Page = Args.AddPage("Общие", MainPanel1);
-      Page.ImageKey = "Атрибут";
+      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      page.ImageKey = "Атрибут";
 
-      efpAttrType = new EFPDocComboBox(Page.BaseProvider, cbAttrType, ProgramDBUI.TheUI.DocTypes["AttrTypes"]);
+      efpAttrType = new EFPDocComboBox(page.BaseProvider, cbAttrType, ProgramDBUI.TheUI.DocTypes["AttrTypes"]);
       efpAttrType.CanBeEmpty = false;
-      Args.AddRef(efpAttrType, "AttrType", false);
+      args.AddRef(efpAttrType, "AttrType", false);
 
-      EFPDateTimeBox efpDate = new EFPDateTimeBox(Page.BaseProvider, edDate);
+      EFPDateTimeBox efpDate = new EFPDateTimeBox(page.BaseProvider, edDate);
       efpDate.CanBeEmpty = true;
-      Args.AddDate(efpDate, "Date", false);
+      args.AddDate(efpDate, "Date", false);
 
-      efpValue = new EFPAttrValueComboBox(Page.BaseProvider, edValue);
+      efpValue = new EFPAttrValueComboBox(page.BaseProvider, edValue);
       efpValue.ControlLabelText = true;
-      DocValueAnyValueBox dvValue = new DocValueAnyValueBox(Args.Values["Value"], Args.Values["LongValue"], efpValue, false);
-      Args.AddDocEditItem(dvValue);
+      DocValueAnyValueBox dvValue = new DocValueAnyValueBox(args.Values["Value"], args.Values["LongValue"], efpValue, false);
+      args.AddDocEditItem(dvValue);
 
       efpAttrType.DocIdEx.ValueChanged += new EventHandler(efpAttrType_ValueChanged);
 
       #region Комментарий
 
-      EFPTextBox efpComment = new EFPTextBox(Page.BaseProvider, edComment);
+      EFPTextBox efpComment = new EFPTextBox(page.BaseProvider, edComment);
       efpComment.CanBeEmpty = true;
-      Args.AddText(efpComment, "Comment", true);
+      args.AddText(efpComment, "Comment", true);
 
       #endregion
     }
 
-    void efpAttrType_ValueChanged(object Sender, EventArgs Args)
+    void efpAttrType_ValueChanged(object sender, EventArgs args)
     {
       efpValue.AttrTypeId = efpAttrType.DocId;
     }
@@ -155,14 +153,14 @@ namespace Plants
   {
     #region Конструктор
 
-    public EFPAnyValueBox(EFPBaseProvider BaseProvider, UserMaskedComboBox Control)
-      : base(BaseProvider, Control , true)
+    public EFPAnyValueBox(EFPBaseProvider baseProvider, UserMaskedComboBox control)
+      : base(baseProvider, control, true)
     {
       _MaxLength = Int16.MaxValue;
       _ValueType = ValueType.String;
-      Control.TextChanged += new EventHandler(Control_TextChanged);
+      control.TextChanged += new EventHandler(Control_TextChanged);
 
-      Control.PopupClick += new EventHandler(Control_PopupClick);
+      control.PopupClick += new EventHandler(Control_PopupClick);
     }
 
     #endregion
@@ -256,7 +254,7 @@ namespace Plants
 
     private bool _InsideValueChanged;
 
-    void Control_TextChanged(object Sender, EventArgs Args)
+    void Control_TextChanged(object sender, EventArgs args)
     {
       if (_InsideValueChanged)
         return;
@@ -273,7 +271,7 @@ namespace Plants
       }
     }
 
-    void ValueEx_ValueChanged(object Sender, EventArgs Args)
+    void ValueEx_ValueChanged(object sender, EventArgs args)
     {
       Value = _ValueEx.Value;
     }
@@ -359,7 +357,7 @@ namespace Plants
 
     #region Выпадающий список
 
-    protected virtual void Control_PopupClick(object Sender, EventArgs Args)
+    protected virtual void Control_PopupClick(object sender, EventArgs args)
     {
       //if (ValueType==ValueType.Boolean)
 
@@ -377,17 +375,17 @@ namespace Plants
   {
     #region Конструктор
 
-    public DocValueAnyValueBox(DBxDocValue ShortDocValue, DBxDocValue LongDocValue, EFPAnyValueBox ControlProvider , bool CanMultiEdit)
-      : base(ShortDocValue, LongDocValue , ControlProvider , true , CanMultiEdit)
+    public DocValueAnyValueBox(DBxDocValue shortDocValue, DBxDocValue longDocValue, EFPAnyValueBox controlProvider, bool canMultiEdit)
+      : base(shortDocValue, longDocValue, controlProvider, true, canMultiEdit)
     {
-      DepExpr1<string, object> F1 = new DepExpr1<string, object>(ControlProvider.ValueEx, CalcF1);
-      DepExpr1<string, object> F2 = new DepExpr1<string, object>(ControlProvider.ValueEx, CalcF2);
-      base.SetCurrentValueEx(F1, F2);
-      ControlProvider.ValueEx.ValueChanged += ControlChanged;
-      DepAnd.AttachInput(ControlProvider.EnabledEx, EnabledEx);
+      DepExpr1<string, object> f1 = new DepExpr1<string, object>(controlProvider.ValueEx, CalcF1);
+      DepExpr1<string, object> f2 = new DepExpr1<string, object>(controlProvider.ValueEx, CalcF2);
+      base.SetCurrentValueEx(f1, f2);
+      controlProvider.ValueEx.ValueChanged += ControlChanged;
+      DepAnd.AttachInput(controlProvider.EnabledEx, EnabledEx);
     }
 
-    private string CalcF1(object Value)
+    private string CalcF1(object value)
     {
       string s = PlantTools.ValueToSaveableString(ControlProvider.Value, ControlProvider.ValueType);
       if (String.IsNullOrEmpty(s))
@@ -398,7 +396,7 @@ namespace Plants
         return String.Empty;
     }
 
-    private string CalcF2(object Value)
+    private string CalcF2(object value)
     {
       string s = PlantTools.ValueToSaveableString(ControlProvider.Value, ControlProvider.ValueType);
       if (String.IsNullOrEmpty(s))
@@ -460,8 +458,8 @@ namespace Plants
   {
     #region Конструктор
 
-    public EFPAttrValueComboBox(EFPBaseProvider BaseProvider, UserMaskedComboBox Control)
-      : base(BaseProvider, Control)
+    public EFPAttrValueComboBox(EFPBaseProvider baseProvider, UserMaskedComboBox control)
+      : base(baseProvider, control)
     {
     }
 
@@ -497,7 +495,6 @@ namespace Plants
         Validate();
       }
     }
-
     private Int32 _AttrTypeId;
 
     /// <summary>
@@ -522,12 +519,12 @@ namespace Plants
     {
       if (_AttrTypeIdEx == null)
       {
-        _AttrTypeIdEx = new DepInput<Int32>(AttrTypeId,AttrTypeIdEx_ValueChanged);
+        _AttrTypeIdEx = new DepInput<Int32>(AttrTypeId, AttrTypeIdEx_ValueChanged);
         _AttrTypeIdEx.OwnerInfo = new DepOwnerInfo(this, "AttrTypeIdEx");
       }
     }
 
-    void AttrTypeIdEx_ValueChanged(object Sender, EventArgs Args)
+    void AttrTypeIdEx_ValueChanged(object sender, EventArgs args)
     {
       AttrTypeId = _AttrTypeIdEx.Value;
     }
@@ -550,7 +547,7 @@ namespace Plants
 
     #region Выпадающий список
 
-    protected override void Control_PopupClick(object Sender, EventArgs Args)
+    protected override void Control_PopupClick(object sender, EventArgs args)
     {
       if (AttrTypeId == 0)
       {
@@ -575,9 +572,9 @@ namespace Plants
       if (AttrType == null)
         return;
 
-      string ErrorText;
-      if (!AttrType.TestValue(Value, out ErrorText))
-        SetWarning(ErrorText);
+      string errorText;
+      if (!AttrType.TestValue(Value, out errorText))
+        SetWarning(errorText);
     }
 
     #endregion

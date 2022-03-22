@@ -25,86 +25,86 @@ namespace Plants
 
     #region Табличный просмотр
 
-    public static void ImageValueNeeded(object Sender, DBxImageValueNeededEventArgs Args)
+    public static void ImageValueNeeded(object sender, DBxImageValueNeededEventArgs args)
     {
-      MovementKind Kind = (MovementKind)(Args.GetInt("Kind"));
-      Args.ImageKey = PlantTools.GetMovementImageKey(Kind);
+      MovementKind kind = (MovementKind)(args.GetInt("Kind"));
+      args.ImageKey = PlantTools.GetMovementImageKey(kind);
     }
 
     #endregion
 
     #region Редактор
 
-    public static void InitEditForm(object Sender, InitSubDocEditFormEventArgs Args)
+    public static void InitEditForm(object sender, InitSubDocEditFormEventArgs args)
     {
-      EditPlantMovement Form = new EditPlantMovement();
-      Form.AddPage1(Args);
+      EditPlantMovement form = new EditPlantMovement();
+      form.AddPage1(args);
     }
 
     private EFPDocComboBox efpContra, efpForkPlant;
 
-    private void AddPage1(InitSubDocEditFormEventArgs Args)
+    private void AddPage1(InitSubDocEditFormEventArgs args)
     {
-      DocEditPage Page = Args.AddPage("Общие", MainPanel1);
-      Page.ImageKey = Args.Editor.SubDocTypeUI.ImageKey;
+      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      page.ImageKey = args.Editor.SubDocTypeUI.ImageKey;
 
       cbKind.Items.AddRange(PlantTools.MovementNames);
-      EFPListComboBox efpKind = new EFPListComboBox(Page.BaseProvider, cbKind);
+      EFPListComboBox efpKind = new EFPListComboBox(page.BaseProvider, cbKind);
       new ListControlImagePainter(cbKind, PlantTools.MovementImageKeys);
-      Args.AddInt(efpKind, "Kind", false);
+      args.AddInt(efpKind, "Kind", false);
 
-      EFPDocComboBox efpPlace = new EFPDocComboBox(Page.BaseProvider, cbPlace, ProgramDBUI.TheUI.DocTypes["Places"]);
+      EFPDocComboBox efpPlace = new EFPDocComboBox(page.BaseProvider, cbPlace, ProgramDBUI.TheUI.DocTypes["Places"]);
       efpPlace.CanBeEmpty = false;
-      DocValueDocComboBox dvPlace = Args.AddRef(efpPlace, "Place", false);
+      DocValueDocComboBox dvPlace = args.AddRef(efpPlace, "Place", false);
       dvPlace.UserEnabledEx = new DepInArray<int>(efpKind.SelectedIndexEx, new int[]{
         (int)MovementKind.Add, (int)MovementKind.Move});
       dvPlace.UserDisabledMode = DocValueUserDisabledMode.KeepOriginalIfGrayed;
 
-      efpContra = new EFPDocComboBox(Page.BaseProvider, cbContra, ProgramDBUI.TheUI.DocTypes["Contras"]);
+      efpContra = new EFPDocComboBox(page.BaseProvider, cbContra, ProgramDBUI.TheUI.DocTypes["Contras"]);
       efpContra.CanBeEmpty = true;
-      DocValueDocComboBox dvContra = Args.AddRef(efpContra, "Contra", false);
+      DocValueDocComboBox dvContra = args.AddRef(efpContra, "Contra", false);
       dvContra.UserEnabledEx = new DepInArray<int>(efpKind.SelectedIndexEx, new int[]{
         (int)MovementKind.Add, (int)MovementKind.Remove});
       dvContra.UserDisabledMode = DocValueUserDisabledMode.KeepOriginalIfGrayed;
 
-      efpForkPlant = new EFPDocComboBox(Page.BaseProvider, cbForkPlant, ProgramDBUI.TheUI.DocTypes["Plants"]);
+      efpForkPlant = new EFPDocComboBox(page.BaseProvider, cbForkPlant, ProgramDBUI.TheUI.DocTypes["Plants"]);
       efpForkPlant.CanBeEmpty = true;
-      DocValueDocComboBox dvForkPlant = Args.AddRef(efpForkPlant, "ForkPlant", false);
+      DocValueDocComboBox dvForkPlant = args.AddRef(efpForkPlant, "ForkPlant", false);
       dvForkPlant.UserEnabledEx = dvContra.UserEnabledEx;
       dvForkPlant.UserDisabledMode = DocValueUserDisabledMode.KeepOriginalIfGrayed;
 
       efpContra.Validating += new UIValidatingEventHandler(efpContraAndForkPlant_Validating);
       efpForkPlant.Validating += new UIValidatingEventHandler(efpContraAndForkPlant_Validating);
-      efpContra.DocIdEx.ValueChanged+=new EventHandler(efpForkPlant.Validate);
+      efpContra.DocIdEx.ValueChanged += new EventHandler(efpForkPlant.Validate);
       efpForkPlant.DocIdEx.ValueChanged += new EventHandler(efpContra.Validate);
 
-      EFPDocComboBox efpSoil = new EFPDocComboBox(Page.BaseProvider, cbSoil, ProgramDBUI.TheUI.DocTypes["Soils"]);
+      EFPDocComboBox efpSoil = new EFPDocComboBox(page.BaseProvider, cbSoil, ProgramDBUI.TheUI.DocTypes["Soils"]);
       efpSoil.CanBeEmpty = true;
-      DocValueDocComboBox dvSoil = Args.AddRef(efpSoil, "Soil", false);
+      DocValueDocComboBox dvSoil = args.AddRef(efpSoil, "Soil", false);
       dvSoil.UserEnabledEx = new DepEqual<int>(efpKind.SelectedIndexEx, (int)MovementKind.Add);
       dvSoil.UserDisabledMode = DocValueUserDisabledMode.KeepOriginalIfGrayed;
 
-      EFPDocComboBox efpPotKind = new EFPDocComboBox(Page.BaseProvider, cbPotKind, ProgramDBUI.TheUI.DocTypes["PotKinds"]);
+      EFPDocComboBox efpPotKind = new EFPDocComboBox(page.BaseProvider, cbPotKind, ProgramDBUI.TheUI.DocTypes["PotKinds"]);
       efpPotKind.CanBeEmpty = true;
-      DocValueDocComboBox dvPotKind = Args.AddRef(efpPotKind, "PotKind", false);
+      DocValueDocComboBox dvPotKind = args.AddRef(efpPotKind, "PotKind", false);
       dvPotKind.UserEnabledEx = new DepEqual<int>(efpKind.SelectedIndexEx, (int)MovementKind.Add);
       dvPotKind.UserDisabledMode = DocValueUserDisabledMode.KeepOriginalIfGrayed;
 
-      EFPDateOrRangeBox efpDate = new EFPDateOrRangeBox(Page.BaseProvider, cbDate);
+      EFPDateOrRangeBox efpDate = new EFPDateOrRangeBox(page.BaseProvider, cbDate);
       efpDate.CanBeEmpty = false;
-      Args.AddDate(efpDate, "Date1", "Date2", false);
+      args.AddDate(efpDate, "Date1", "Date2", false);
 
-      EFPTextBox efpComment = new EFPTextBox(Page.BaseProvider, edComment);
+      EFPTextBox efpComment = new EFPTextBox(page.BaseProvider, edComment);
       efpComment.CanBeEmpty = true;
-      Args.AddText(efpComment, "Comment", true);
+      args.AddText(efpComment, "Comment", true);
     }
 
-    void efpContraAndForkPlant_Validating(object Sender, UIValidatingEventArgs Args)
+    void efpContraAndForkPlant_Validating(object sender, UIValidatingEventArgs args)
     {
-      if (Args.ValidateState == UIValidateState.Error)
+      if (args.ValidateState == UIValidateState.Error)
         return;
       if (efpContra.DocId != 0 && efpForkPlant.DocId != 0)
-        Args.SetError("Нельзя одновременно заполнять поля \"От кого / кому\" и \"Отсажено / подсажено\"");
+        args.SetError("Нельзя одновременно заполнять поля \"От кого / кому\" и \"Отсажено / подсажено\"");
     }
 
     #endregion

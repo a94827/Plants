@@ -23,9 +23,9 @@ namespace Plants
 
       #region Файл
 
-      EFPCommandItem MenuFile = EFPApp.CommandItems.Add(EFPAppStdCommandItems.MenuFile, null);
+      EFPCommandItem menuFile = EFPApp.CommandItems.Add(EFPAppStdCommandItems.MenuFile, null);
 
-      ci = EFPApp.CommandItems.Add(EFPAppStdCommandItems.Exit, MenuFile);
+      ci = EFPApp.CommandItems.Add(EFPAppStdCommandItems.Exit, menuFile);
       ci.Click += new EventHandler(EFPApp.CommandItems.Exit_Click);
       ci.GroupBegin = true;
 
@@ -33,35 +33,35 @@ namespace Plants
 
       #region Правка
 
-      EFPCommandItem MenuEdit = EFPApp.CommandItems.Add(EFPAppStdCommandItems.MenuEdit, null);
+      EFPCommandItem menuEdit = EFPApp.CommandItems.Add(EFPAppStdCommandItems.MenuEdit, null);
 
-      ci = EFPApp.CommandItems.Add(EFPAppStdCommandItems.Cut, MenuEdit);
+      ci = EFPApp.CommandItems.Add(EFPAppStdCommandItems.Cut, menuEdit);
       ci.Enabled = false;
       ci.GroupBegin = true;
       //SpeedPanelStandard.Add(Cut);
 
-      ci = EFPApp.CommandItems.Add(EFPAppStdCommandItems.Copy, MenuEdit);
+      ci = EFPApp.CommandItems.Add(EFPAppStdCommandItems.Copy, menuEdit);
       ci.Enabled = false;
       //SpeedPanelStandard.Add(Copy);
 
-      ci = EFPApp.CommandItems.Add(EFPAppStdCommandItems.Paste, MenuEdit);
+      ci = EFPApp.CommandItems.Add(EFPAppStdCommandItems.Paste, menuEdit);
       ci.Enabled = false;
       //SpeedPanelStandard.Add(Paste);
 
-      ci = EFPApp.CommandItems.Add(EFPAppStdCommandItems.PasteSpecial, MenuEdit);
+      ci = EFPApp.CommandItems.Add(EFPAppStdCommandItems.PasteSpecial, menuEdit);
       ci.Enabled = false;
       ci.GroupEnd = true;
 
-      ci = EFPApp.CommandItems.Add(EFPAppStdCommandItems.Find, MenuEdit);
+      ci = EFPApp.CommandItems.Add(EFPAppStdCommandItems.Find, menuEdit);
       ci.Enabled = false;
       ci.GroupBegin = true;
       //SpeedPanelStandard.Add(Find);
 
-      ci = EFPApp.CommandItems.Add(EFPAppStdCommandItems.IncSearch, MenuEdit);
+      ci = EFPApp.CommandItems.Add(EFPAppStdCommandItems.IncSearch, menuEdit);
       ci.Enabled = false;
       //SpeedPanelStandard.Add(IncSearch);
 
-      ci = EFPApp.CommandItems.Add(EFPAppStdCommandItems.FindNext, MenuEdit);
+      ci = EFPApp.CommandItems.Add(EFPAppStdCommandItems.FindNext, menuEdit);
       ci.Enabled = false;
       //SpeedPanelStandard.Add(FindNext);
 
@@ -73,7 +73,7 @@ namespace Plants
       //ci.Enabled = false;
       //ci.GroupEnd = true;
 
-      ci = EFPApp.CommandItems.Add(EFPAppStdCommandItems.SelectAll, MenuEdit);
+      ci = EFPApp.CommandItems.Add(EFPAppStdCommandItems.SelectAll, menuEdit);
       ci.Enabled = false;
       ci.GroupBegin = true;
       ci.GroupEnd = true;
@@ -82,49 +82,49 @@ namespace Plants
 
       #region Вид
 
-      EFPCommandItem MenuView = EFPApp.CommandItems.Add(EFPAppStdCommandItems.MenuView, null);
+      EFPCommandItem menuView = EFPApp.CommandItems.Add(EFPAppStdCommandItems.MenuView, null);
 
-      EFPAppCommandItemHelpers Helpers = new EFPAppCommandItemHelpers();
+      EFPAppCommandItemHelpers helpers = new EFPAppCommandItemHelpers();
 
-      Helpers.AddViewMenuCommands(MenuView);
+      helpers.AddViewMenuCommands(menuView);
 
 
       #endregion
 
       #region Справочники
 
-      EFPCommandItem MenuRB = new EFPCommandItem(null, "Справочники");
-      MenuRB.MenuText = "Сп&равочники";
-      EFPApp.CommandItems.Add(MenuRB);
+      EFPCommandItem menuRB = new EFPCommandItem(null, "Справочники");
+      menuRB.MenuText = "Сп&равочники";
+      EFPApp.CommandItems.Add(menuRB);
 
-      ci = ProgramDBUI.TheUI.DocTypes["Plants"].CreateMainMenuItem(MenuRB);
+      ci = ProgramDBUI.TheUI.DocTypes["Plants"].CreateMainMenuItem(menuRB);
       SpeedPanelStandard.Add(ci);
 
-      ci = ProgramDBUI.TheUI.DocTypes["Care"].CreateMainMenuItem(MenuRB);
+      ci = ProgramDBUI.TheUI.DocTypes["Care"].CreateMainMenuItem(menuRB);
       SpeedPanelStandard.Add(ci);
 
-      ci = ProgramDBUI.TheUI.DocTypes["Places"].CreateMainMenuItem(MenuRB);
+      ci = ProgramDBUI.TheUI.DocTypes["Places"].CreateMainMenuItem(menuRB);
       SpeedPanelStandard.Add(ci);
 
-      ci = ProgramDBUI.TheUI.DocTypes["Contras"].CreateMainMenuItem(MenuRB);
+      ci = ProgramDBUI.TheUI.DocTypes["Contras"].CreateMainMenuItem(menuRB);
       SpeedPanelStandard.Add(ci);
 
-      ci = ProgramDBUI.TheUI.DocTypes["Companies"].CreateMainMenuItem(MenuRB);
+      ci = ProgramDBUI.TheUI.DocTypes["Companies"].CreateMainMenuItem(menuRB);
       SpeedPanelStandard.Add(ci);
 
-      ci = ProgramDBUI.TheUI.DocTypes["Diseases"].CreateMainMenuItem(MenuRB);
+      ci = ProgramDBUI.TheUI.DocTypes["Diseases"].CreateMainMenuItem(menuRB);
       SpeedPanelStandard.Add(ci);
 
-      ci = ProgramDBUI.TheUI.DocTypes["Remedies"].CreateMainMenuItem(MenuRB);
+      ci = ProgramDBUI.TheUI.DocTypes["Remedies"].CreateMainMenuItem(menuRB);
       SpeedPanelStandard.Add(ci);
 
-      ci = ProgramDBUI.TheUI.DocTypes["Soils"].CreateMainMenuItem(MenuRB);
+      ci = ProgramDBUI.TheUI.DocTypes["Soils"].CreateMainMenuItem(menuRB);
       SpeedPanelStandard.Add(ci);
 
-      ci = ProgramDBUI.TheUI.DocTypes["PotKinds"].CreateMainMenuItem(MenuRB);
+      ci = ProgramDBUI.TheUI.DocTypes["PotKinds"].CreateMainMenuItem(menuRB);
       SpeedPanelStandard.Add(ci);
 
-      ci = ProgramDBUI.TheUI.DocTypes["AttrTypes"].CreateMainMenuItem(MenuRB);
+      ci = ProgramDBUI.TheUI.DocTypes["AttrTypes"].CreateMainMenuItem(menuRB);
       SpeedPanelStandard.Add(ci);
 
 
@@ -132,12 +132,12 @@ namespace Plants
 
       #region Отчеты
 
-      EFPCommandItem MenuReports = new EFPCommandItem(null, "Reports");
-      MenuReports.MenuText = "Отчеты";
-      EFPApp.CommandItems.Add(MenuReports);
+      EFPCommandItem menuReports = new EFPCommandItem(null, "Reports");
+      menuReports.MenuText = "Отчеты";
+      EFPApp.CommandItems.Add(menuReports);
 
       ci = new EFPCommandItem("Reports", "PlantSelReport");
-      ci.Parent = MenuReports;
+      ci.Parent = menuReports;
       ci.MenuText = "Выборка из каталога растений";
       ci.ImageKey = "PlantSelReport";
       ci.Click += new EventHandler(ciPlantSelReport_Click);
@@ -146,7 +146,7 @@ namespace Plants
       SpeedPanelStandard.Add(ci);
 
       ci = new EFPCommandItem("Reports", "CareReport");
-      ci.Parent = MenuReports;
+      ci.Parent = menuReports;
       ci.MenuText = "Правила ухода за растениями";
       ci.ImageKey = "CareReport";
       ci.Click += new EventHandler(ciCareReport_Click);
@@ -154,7 +154,7 @@ namespace Plants
       SpeedPanelStandard.Add(ci);
 
       ci = new EFPCommandItem("Reports", "FloweringReport");
-      ci.Parent = MenuReports;
+      ci.Parent = menuReports;
       ci.MenuText = "Цветение растений";
       ci.ImageKey = "FloweringReport";
       ci.Click += new EventHandler(ciFloweringReport_Click);
@@ -162,7 +162,7 @@ namespace Plants
       SpeedPanelStandard.Add(ci);
 
       ci = new EFPCommandItem("Reports", "ReplantingReport");
-      ci.Parent = MenuReports;
+      ci.Parent = menuReports;
       ci.MenuText = "Пересадка";
       ci.ImageKey = "ReplantingReport";
       ci.Click += new EventHandler(ciReplantingReport_Click);
@@ -170,7 +170,7 @@ namespace Plants
       SpeedPanelStandard.Add(ci);
 
       ci = new EFPCommandItem("Reports", "PlanReport");
-      ci.Parent = MenuReports;
+      ci.Parent = menuReports;
       ci.MenuText = "Запланированные действия";
       ci.ImageKey = "PlanReport";
       ci.Click += new EventHandler(ciPlanReport_Click);
@@ -182,12 +182,12 @@ namespace Plants
 
       #region Сервис
 
-      EFPCommandItem MenuService = new EFPCommandItem(null, "Сервис");
-      MenuService.MenuText = "С&ервис";
-      EFPApp.CommandItems.Add(MenuService);
+      EFPCommandItem menuService = new EFPCommandItem(null, "Сервис");
+      menuService.MenuText = "С&ервис";
+      EFPApp.CommandItems.Add(menuService);
 
       ci = new EFPCommandItem("Сервис", "Настройки");
-      ci.Parent = MenuService;
+      ci.Parent = menuService;
       ci.MenuText = "Настройки";
       ci.ImageKey = "Settings";
       ci.Click += new EventHandler(ciSetting_Click);
@@ -195,7 +195,7 @@ namespace Plants
       SpeedPanelStandard.Add(ci);
 
       ci = new EFPCommandItem("Сервис", "ПросмотрДействийПользователя");
-      ci.Parent = MenuService;
+      ci.Parent = menuService;
       ci.MenuText = "Просмотр действий пользователя";
       ci.ImageKey = "UserActions";
       ci.Click += new EventHandler(ciUserActions_Click);
@@ -206,16 +206,16 @@ namespace Plants
 
       #region Отладка
 
-      EFPCommandItem MenuDebug = new EFPCommandItem(null, "Отладка");
-      MenuDebug.MenuText = "Отладка";
-      MenuDebug.ImageKey = "Debug";
-      MenuDebug.Parent = MenuService;
-      MenuDebug.GroupBegin = true;
-      MenuDebug.GroupEnd = true;
-      EFPApp.CommandItems.Add(MenuDebug);
+      EFPCommandItem menuDebug = new EFPCommandItem(null, "Отладка");
+      menuDebug.MenuText = "Отладка";
+      menuDebug.ImageKey = "Debug";
+      menuDebug.Parent = menuService;
+      menuDebug.GroupBegin = true;
+      menuDebug.GroupEnd = true;
+      EFPApp.CommandItems.Add(menuDebug);
 
       ci = new EFPCommandItem("Отладка", "ПоказыватьИдентификаторы");
-      ci.Parent = MenuDebug; 
+      ci.Parent = menuDebug;
       ci.MenuText = "Показывать идентификаторы";
       ci.ImageKey = "ПоказыватьИдентификаторы";
       ci.Click += new EventHandler(ShowIds_Click);
@@ -225,17 +225,17 @@ namespace Plants
 
       #region Окно
 
-      EFPCommandItem MenuWindow = EFPApp.CommandItems.Add(EFPAppStdCommandItems.MenuWindow, null);
-      Helpers.AddWindowMenuCommands(MenuWindow);
+      EFPCommandItem menuWindow = EFPApp.CommandItems.Add(EFPAppStdCommandItems.MenuWindow, null);
+      helpers.AddWindowMenuCommands(menuWindow);
 
       #endregion
 
       #region Справка
 
-      EFPCommandItem MenuHelp = EFPApp.CommandItems.Add(EFPAppStdCommandItems.MenuHelp, null);
+      EFPCommandItem menuHelp = EFPApp.CommandItems.Add(EFPAppStdCommandItems.MenuHelp, null);
 
       ci = EFPApp.CommandItems.CreateContext(EFPAppStdCommandItems.About);
-      ci.Parent = MenuHelp;
+      ci.Parent = menuHelp;
       ci.Click += new EventHandler(AboutClick);
       EFPApp.CommandItems.Add(ci);
 
@@ -258,13 +258,13 @@ namespace Plants
 
     #region Вид
 
-    static void RestoreBars_Click(object Sender, EventArgs Args)
+    static void RestoreBars_Click(object sender, EventArgs args)
     {
-      foreach (EFPAppToolBar ToolBar in EFPApp.AppToolBars)
+      foreach (EFPAppToolBar toolBar in EFPApp.AppToolBars)
       {
-        ToolBar.Reset();
-        if (ToolBar.Name == "Задачи")
-          ToolBar.Visible = false;
+        toolBar.Reset();
+        if (toolBar.Name == "Задачи")
+          toolBar.Visible = false;
       }
       EFPApp.AppToolBars.Attach();
 
@@ -275,27 +275,27 @@ namespace Plants
 
     #region Меню "Отчеты"
 
-    static void ciPlantSelReport_Click(object Sender, EventArgs Args)
+    static void ciPlantSelReport_Click(object sender, EventArgs args)
     {
       new PlantSelReport().Run();
     }
 
-    static void ciFloweringReport_Click(object Sender, EventArgs Args)
+    static void ciFloweringReport_Click(object sender, EventArgs args)
     {
       new FloweringReport().Run();
     }
 
-    static void ciReplantingReport_Click(object Sender, EventArgs Args)
+    static void ciReplantingReport_Click(object sender, EventArgs args)
     {
       new ReplantingReport().Run();
     }
 
-    static void ciCareReport_Click(object Sender, EventArgs Args)
+    static void ciCareReport_Click(object sender, EventArgs args)
     {
       new CareReport().Run();
     }
 
-    static void ciPlanReport_Click(object Sender, EventArgs Args)
+    static void ciPlanReport_Click(object sender, EventArgs args)
     {
       new PlanReport().Run();
     }
@@ -304,28 +304,14 @@ namespace Plants
 
     #region Меню "Сервис"
 
-    static void ciSetting_Click(object Sender, EventArgs Args)
+    static void ciSetting_Click(object sender, EventArgs args)
     {
-      UserSettingsForm Form = new UserSettingsForm();
-      Form.ValueToForm(ProgramDBUI.Settings);
-      if (EFPApp.ShowDialog(Form, true) != DialogResult.OK)
+      UserSettingsForm form = new UserSettingsForm();
+      form.ValueToForm(ProgramDBUI.Settings);
+      if (EFPApp.ShowDialog(form, true) != DialogResult.OK)
         return;
-      Form.ValueFromForm(ProgramDBUI.Settings);
+      form.ValueFromForm(ProgramDBUI.Settings);
       ProgramDBUI.Settings.WriteConfig();
-    }
-
-    static private void ShowIds_Cllick(object Sender, EventArgs Args)
-    {
-      EFPCommandItem ci = (EFPCommandItem)Sender;
-      ProgramDBUI.TheUI.DebugShowIds = !ProgramDBUI.TheUI.DebugShowIds;
-      ci.Checked = ProgramDBUI.TheUI.DebugShowIds;
-      // Также включаем другие отладочные флаги
-      EFPFormProvider.DebugFormProvider = ProgramDBUI.TheUI.DebugShowIds;
-      EFPPasteHandler.PasteSpecialDebugMode = ProgramDBUI.TheUI.DebugShowIds;
-
-//#if DEBUG
-//      ci.StatusBarText = Accoo2DBUI.TheUI.DebugShowIds ? "Вкл" : "Выкл";
-//#endif
     }
 
     //static void ciClearBuf_Click(object Sender, EventArgs Args)
@@ -337,7 +323,7 @@ namespace Plants
     //  Accoo2DBUI.Docs.Clear(); // 26.11.2015
     //}
 
-    static void ciUserActions_Click(object sender, EventArgs e)
+    static void ciUserActions_Click(object sender, EventArgs args)
     {
       ProgramDBUI.TheUI.ShowUserActions();
     }
@@ -346,9 +332,9 @@ namespace Plants
 
     #region Меню "Отладка"
 
-    static private void ShowIds_Click(object Sender, EventArgs Args)
+    static private void ShowIds_Click(object sender, EventArgs args)
     {
-      EFPCommandItem ci = (EFPCommandItem)Sender;
+      EFPCommandItem ci = (EFPCommandItem)sender;
       ProgramDBUI.TheUI.DebugShowIds = !ProgramDBUI.TheUI.DebugShowIds;
       ci.Checked = ProgramDBUI.TheUI.DebugShowIds;
       // Также включаем другие отладочные флаги
@@ -360,7 +346,7 @@ namespace Plants
 
     #region Меню "Инфо"
 
-    public static void AboutClick(object Sender, EventArgs Args)
+    public static void AboutClick(object sender, EventArgs args)
     {
       AboutDialog dlg = new AboutDialog(Assembly.GetExecutingAssembly());
       dlg.ShowDialog();

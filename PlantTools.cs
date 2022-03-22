@@ -215,12 +215,12 @@ namespace Plants
       "Выбытие",
     };
 
-    public static string GetMovementName(MovementKind Kind)
+    public static string GetMovementName(MovementKind kind)
     {
-      if ((int)Kind >= 0 && (int)Kind < MovementNames.Length)
-        return MovementNames[(int)Kind];
+      if ((int)kind >= 0 && (int)kind < MovementNames.Length)
+        return MovementNames[(int)kind];
       else
-        return "?? " + Kind.ToString();
+        return "?? " + kind.ToString();
     }
 
     public static readonly string[] MovementImageKeys = new string[] { 
@@ -229,10 +229,10 @@ namespace Plants
       "SignSubstract",
     };
 
-    public static string GetMovementImageKey(MovementKind Kind)
+    public static string GetMovementImageKey(MovementKind kind)
     {
-      if ((int)Kind >= 0 && (int)Kind < MovementImageKeys.Length)
-        return MovementImageKeys[(int)Kind];
+      if ((int)kind >= 0 && (int)kind < MovementImageKeys.Length)
+        return MovementImageKeys[(int)kind];
       else
         return "Error";
     }
@@ -257,28 +257,28 @@ namespace Plants
       "Отсаживание"
     };
 
-    public static string GetActionName(ActionKind Kind)
+    public static string GetActionName(ActionKind kind)
     {
-      if ((int)Kind >= 0 && (int)Kind < ActionNames.Length)
-        return ActionNames[(int)Kind];
+      if ((int)kind >= 0 && (int)kind < ActionNames.Length)
+        return ActionNames[(int)kind];
       else
-        return "?? " + Kind.ToString();
+        return "?? " + kind.ToString();
     }
 
-    public static string GetActionName(ActionKind Kind, string OtherActionName, string RemedyName)
+    public static string GetActionName(ActionKind kind, string otherActionName, string remedyName)
     {
-      switch (Kind)
+      switch (kind)
       {
         case ActionKind.Other:
-          if (!String.IsNullOrEmpty(OtherActionName))
-            return OtherActionName;
+          if (!String.IsNullOrEmpty(otherActionName))
+            return otherActionName;
           break;
         case ActionKind.Treatment:
-          if (!String.IsNullOrEmpty(RemedyName))
-            return "Обработка препаратом \"" + RemedyName + "\"";
+          if (!String.IsNullOrEmpty(remedyName))
+            return "Обработка препаратом \"" + remedyName + "\"";
           break;
       }
-      return GetActionName(Kind);
+      return GetActionName(kind);
     }
 
     /// <summary>
@@ -300,10 +300,10 @@ namespace Plants
       "ActionRemovePlant",
     };
 
-    public static string GetActionImageKey(ActionKind Kind)
+    public static string GetActionImageKey(ActionKind kind)
     {
-      if ((int)Kind >= 0 && (int)Kind < ActionImageKeys.Length)
-        return ActionImageKeys[(int)Kind];
+      if ((int)kind >= 0 && (int)kind < ActionImageKeys.Length)
+        return ActionImageKeys[(int)kind];
       else
         return "Error";
     }
@@ -327,22 +327,22 @@ namespace Plants
     /// </summary>
     /// <param name="ValueType">Тип значения</param>
     /// <returns>Текстовое представление</returns>
-    public static string GetValueTypeName(ValueType ValueType)
+    public static string GetValueTypeName(ValueType valueType)
     {
-      if ((int)ValueType >= 0 && (int)ValueType < ValueTypeNames.Length)
-        return ValueTypeNames[(int)ValueType];
+      if ((int)valueType >= 0 && (int)valueType < ValueTypeNames.Length)
+        return ValueTypeNames[(int)valueType];
       else
-        return "?? " + ValueType.ToString();
+        return "?? " + valueType.ToString();
     }
 
     /// <summary>
     /// Преобразование перечисления ValueType в тип Net framework
     /// </summary>
-    /// <param name="ValueType"></param>
+    /// <param name="valueType"></param>
     /// <returns></returns>
-    public static Type ValueTypeToType(ValueType ValueType)
+    public static Type ValueTypeToType(ValueType valueType)
     {
-      switch (ValueType)
+      switch (valueType)
       {
         case ValueType.Integer: return typeof(Int32);
         case ValueType.Double: return typeof(Double);
@@ -352,13 +352,13 @@ namespace Plants
         case ValueType.Date:
         case ValueType.DateTime: return typeof(DateTime);
         default:
-          throw new ArgumentException("Неизвестное значение ValueType=" + ValueType.ToString(), "ValueType");
+          throw new ArgumentException("Неизвестное значение ValueType=" + valueType.ToString(), "ValueType");
       }
     }
 
-    public static object GetDefaultValue(ValueType ValueType)
+    public static object GetDefaultValue(ValueType valueType)
     {
-      switch (ValueType)
+      switch (valueType)
       {
         case ValueType.Integer: return 0;
         case ValueType.Double: return 0.0;
@@ -368,119 +368,115 @@ namespace Plants
         case ValueType.Date: return null;
         case ValueType.DateTime: return null;
         default:
-          throw new ArgumentException("Неизвестное значение ValueType=" + ValueType.ToString());
+          throw new ArgumentException("Неизвестное значение ValueType=" + valueType.ToString());
       }
     }
 
     /// <summary>
     /// Возвращает true, если значение Value является значением по умолчанию
     /// </summary>
-    /// <param name="Value"></param>
-    /// <param name="ValueType"></param>
+    /// <param name="value"></param>
+    /// <param name="valueType"></param>
     /// <returns></returns>
-    public static bool IsDefaultValue(object Value, ValueType ValueType)
+    public static bool IsDefaultValue(object value, ValueType valueType)
     {
-      return Compare(Value, GetDefaultValue(ValueType), ValueType) == 0;
+      return Compare(value, GetDefaultValue(valueType), valueType) == 0;
     }
 
     /// <summary>
     /// Возврашает true, если значение имеет допустимый тип
     /// </summary>
-    /// <param name="Value">Значение</param>
+    /// <param name="value">Значение</param>
     /// <returns>true, если значение имеет допустимый тип</returns>
-    public static bool IsValidValue(object Value)
+    public static bool IsValidValue(object value)
     {
       ValueType ValueType;
-      return IsValidValue(Value, out ValueType);
+      return IsValidValue(value, out ValueType);
     }
 
-    public static bool IsValidValue(object Value, out ValueType ValueType)
+    public static bool IsValidValue(object value, out ValueType valueType)
     {
-      if (Value == null)
+      if (value == null)
       {
-        ValueType = ValueType.Date; // могло бы быть и DateTime
+        valueType = ValueType.Date; // могло бы быть и DateTime
         return true;
       }
 
-      if (Value is Int32)
+      if (value is Int32)
       {
-        ValueType = ValueType.Integer;
+        valueType = ValueType.Integer;
         return true;
       }
 
-      if (Value is Double)
+      if (value is Double)
       {
-        ValueType = ValueType.Double;
+        valueType = ValueType.Double;
         return true;
       }
 
-      if (Value is Decimal)
+      if (value is Decimal)
       {
-        ValueType = ValueType.Decimal;
+        valueType = ValueType.Decimal;
         return true;
       }
 
-      if (Value is Boolean)
+      if (value is Boolean)
       {
-        ValueType = ValueType.Boolean;
+        valueType = ValueType.Boolean;
         return true;
       }
 
-      if (Value is String)
+      if (value is String)
       {
-        ValueType = ValueType.String;
+        valueType = ValueType.String;
         return true;
       }
 
-      if (Value is DateTime)
+      if (value is DateTime)
       {
-        if (((DateTime)Value).TimeOfDay.Ticks == 0)
-          ValueType = ValueType.Date;
+        if (((DateTime)value).TimeOfDay.Ticks == 0)
+          valueType = ValueType.Date;
         else
-          ValueType = ValueType.DateTime;
+          valueType = ValueType.DateTime;
         return true;
       }
 
-      ValueType = (ValueType)(-1);
+      valueType = (ValueType)(-1);
       return false;
     }
 
     /// <summary>
     /// Функция сравнения значений
     /// </summary>
-    /// <param name="Value1"></param>
-    /// <param name="Value2"></param>
-    /// <param name="ValueType"></param>
-    /// <returns></returns>
-    public static int Compare(object Value1, object Value2, ValueType ValueType)
+    public static int Compare(object value1, object value2, ValueType valueType)
     {
-      switch (ValueType)
+      switch (valueType)
       {
         case ValueType.Integer:
-          return DataTools.GetInt(Value1).CompareTo(DataTools.GetInt(Value2));
+          return DataTools.GetInt(value1).CompareTo(DataTools.GetInt(value2));
         case ValueType.Double:
-          return DataTools.GetDouble(Value1).CompareTo(DataTools.GetDouble(Value2));
+          return DataTools.GetDouble(value1).CompareTo(DataTools.GetDouble(value2));
         case ValueType.Decimal:
-          return DataTools.GetDecimal(Value1).CompareTo(DataTools.GetDecimal(Value2));
+          return DataTools.GetDecimal(value1).CompareTo(DataTools.GetDecimal(value2));
         case ValueType.Boolean:
-          return DataTools.GetBool(Value1).CompareTo(DataTools.GetBool(Value2));
+          return DataTools.GetBool(value1).CompareTo(DataTools.GetBool(value2));
         case ValueType.String:
-          return DataTools.GetString(Value1).CompareTo(DataTools.GetString(Value2));
+          return DataTools.GetString(value1).CompareTo(DataTools.GetString(value2));
         case ValueType.Date:
         case ValueType.DateTime:
-          if (Value1 == null)
+          if (value1 == null)
           {
-            if (Value2 == null)
+            if (value2 == null)
               return 0;
             else
               return -1;
           }
           else
           {
-            if (Value2 == null)
+            if (value2 == null)
               return +1;
             else
-              return ((DateTime)Value1).CompareTo((DateTime)Value2);
+              return ((DateTime)value1).CompareTo((DateTime)value2);
           }
         default:
           throw new ArgumentException("Неизвестный ValueType");
@@ -488,62 +484,62 @@ namespace Plants
     }
 
 
-    public static int Compare(object Value1, object Value2)
+    public static int Compare(object value1, object value2)
     {
-      if (Value1 == null)
+      if (value1 == null)
       {
-        if (Value2 == null)
+        if (value2 == null)
           return 0;
         else
-          Value1 = DataTools.GetEmptyValue(Value2.GetType());
+          value1 = DataTools.GetEmptyValue(value2.GetType());
       }
-      else if (Value2 == null)
-        Value2 = DataTools.GetEmptyValue(Value1.GetType());
+      else if (value2 == null)
+        value2 = DataTools.GetEmptyValue(value1.GetType());
 
-      if (Value1 is DateTime)
+      if (value1 is DateTime)
       {
-        if (Value2 == null)
+        if (value2 == null)
           return +1;
         else
-          return ((DateTime)Value1).CompareTo((DateTime)Value2);
+          return ((DateTime)value1).CompareTo((DateTime)value2);
       }
-      if (Value2 is DateTime)
+      if (value2 is DateTime)
       {
-        if (Value1 == null)
+        if (value1 == null)
           return -1;
       }
 
 #if DEBUG
-      if (Value1 == null || Value2 == null)
+      if (value1 == null || value2 == null)
         throw new BugException("Значений null быть не должно");
 #endif
 
       ValueType vt1, vt2;
-      if (!IsValidValue(Value1, out vt1))
-        throw new ArgumentException("Значение 1 имеет недопустимый тип " + Value1.GetType().ToString(), "Value1");
-      if (!IsValidValue(Value2, out vt2))
-        throw new ArgumentException("Значение 2 имеет недопустимый тип " + Value2.GetType().ToString(), "Value2");
+      if (!IsValidValue(value1, out vt1))
+        throw new ArgumentException("Значение 1 имеет недопустимый тип " + value1.GetType().ToString(), "Value1");
+      if (!IsValidValue(value2, out vt2))
+        throw new ArgumentException("Значение 2 имеет недопустимый тип " + value2.GetType().ToString(), "Value2");
 
       if (vt1 == ValueType.DateTime || vt2 == ValueType.DateTime)
-        return Compare(Value1, Value2, ValueType.DateTime);
+        return Compare(value1, value2, ValueType.DateTime);
 
       if (vt1 == ValueType.Date || vt2 == ValueType.Date)
-        return Compare(Value1, Value2, ValueType.Date);
+        return Compare(value1, value2, ValueType.Date);
 
       if (vt1 == ValueType.String || vt2 == ValueType.String)
-        return Compare(Value1, Value2, ValueType.String);
+        return Compare(value1, value2, ValueType.String);
 
       if (vt1 == ValueType.Decimal || vt2 == ValueType.Decimal)
-        return Compare(Value1, Value2, ValueType.Decimal);
+        return Compare(value1, value2, ValueType.Decimal);
 
       if (vt1 == ValueType.Double || vt2 == ValueType.Double)
-        return Compare(Value1, Value2, ValueType.Double);
+        return Compare(value1, value2, ValueType.Double);
 
       if (vt1 == ValueType.Integer || vt2 == ValueType.Integer)
-        return Compare(Value1, Value2, ValueType.Integer);
+        return Compare(value1, value2, ValueType.Integer);
 
       if (vt1 == ValueType.Boolean || vt2 == ValueType.Boolean)
-        return Compare(Value1, Value2, ValueType.Boolean);
+        return Compare(value1, value2, ValueType.Boolean);
 
       throw new BugException("Необрабатываемый тип значений. ValueType1=" + vt1.ToString() + ", ValueType2=" + vt2.ToString());
     }
@@ -552,11 +548,11 @@ namespace Plants
     /// Возвращает true, если для заданного типа данных можно выполнять суммирование значений
     /// (Integer, Double и Decimal)
     /// </summary>
-    /// <param name="ValueType">Тип значения</param>
+    /// <param name="valueType">Тип значения</param>
     /// <returns>true, если можно суммировать значения</returns>
-    public static bool IsSummableValueType(ValueType ValueType)
+    public static bool IsSummableValueType(ValueType valueType)
     {
-      switch (ValueType)
+      switch (valueType)
       {
         case ValueType.Integer:
         case ValueType.Double:
@@ -567,7 +563,6 @@ namespace Plants
       }
     }
 
-
     #endregion
 
     #region Список значений для атрибута
@@ -577,12 +572,12 @@ namespace Plants
       "Фиксированный список значений",
     };
 
-    public static string GetAttrValueSourceTypeName(AttrValueSourceType Type)
+    public static string GetAttrValueSourceTypeName(AttrValueSourceType sourceType)
     {
-      if ((int)Type >= 0 && (int)Type < AttrValueSourceTypeNames.Length)
-        return AttrValueSourceTypeNames[(int)Type];
+      if ((int)sourceType >= 0 && (int)sourceType < AttrValueSourceTypeNames.Length)
+        return AttrValueSourceTypeNames[(int)sourceType];
       else
-        return "?? " + Type.ToString();
+        return "?? " + sourceType.ToString();
     }
 
     #endregion
@@ -597,12 +592,12 @@ namespace Plants
       "Подсажено",
     };
 
-    public static string GetPlantMovementStateName(PlantMovementState State)
+    public static string GetPlantMovementStateName(PlantMovementState state)
     {
-      if ((int)State >= 0 && (int)State < PlantMovementStateNames.Length)
-        return PlantMovementStateNames[(int)State];
+      if ((int)state >= 0 && (int)state < PlantMovementStateNames.Length)
+        return PlantMovementStateNames[(int)state];
       else
-        return "?? " + State.ToString();
+        return "?? " + state.ToString();
     }
 
     public static readonly string[] PlantMovementStateImageKeys = new string[] { 
@@ -613,10 +608,10 @@ namespace Plants
       "ArrowDownThenRight",
     };
 
-    public static string GetPlantMovementStateImageKey(PlantMovementState State)
+    public static string GetPlantMovementStateImageKey(PlantMovementState state)
     {
-      if ((int)State >= 0 && (int)State < PlantMovementStateImageKeys.Length)
-        return PlantMovementStateImageKeys[(int)State];
+      if ((int)state >= 0 && (int)state < PlantMovementStateImageKeys.Length)
+        return PlantMovementStateImageKeys[(int)state];
       else
         return "Error";
     }
@@ -631,12 +626,12 @@ namespace Plants
     /// Преобразование значение заданного типа в строку.
     /// Эта версия не позволяет указать формат данных
     /// </summary>
-    /// <param name="Value">Значение</param>
-    /// <param name="ValueType">Тип данных</param>
+    /// <param name="value">Значение</param>
+    /// <param name="valueType">Тип данных</param>
     /// <returns>Строковое представление</returns>
-    public static string ToString(object Value, ValueType ValueType)
+    public static string ToString(object value, ValueType valueType)
     {
-      return ToString(Value, ValueType, String.Empty);
+      return ToString(value, valueType, String.Empty);
     }
 
     /// <summary>
@@ -644,52 +639,52 @@ namespace Plants
     /// Для чисел используется разделитель дробной части запятая (зависит от настроек ОС).
     /// Для преобразования значений в машинно-независимый формат используйте методы класса Accoo2StdConvert.
     /// </summary>
-    /// <param name="Value">Значение</param>
-    /// <param name="ValueType">Тип данных</param>
-    /// <param name="Format">Формат</param>
+    /// <param name="value">Значение</param>
+    /// <param name="valueType">Тип данных</param>
+    /// <param name="format">Формат</param>
     /// <returns>Строковое представление</returns>
-    public static string ToString(object Value, ValueType ValueType, string Format)
+    public static string ToString(object value, ValueType valueType, string format)
     {
-      if (Value == null)
-        Value = PlantTools.GetDefaultValue(ValueType);
+      if (value == null)
+        value = PlantTools.GetDefaultValue(valueType);
       try
       {
-        switch (ValueType)
+        switch (valueType)
         {
           case ValueType.Date:
-            if (Value == null)
+            if (value == null)
               return String.Empty;
-            else if (String.IsNullOrEmpty(Format))
-              return ((DateTime)Value).ToString("dd/MM/yyyy"); // 03.07.2017
+            else if (String.IsNullOrEmpty(format))
+              return ((DateTime)value).ToString("dd/MM/yyyy"); // 03.07.2017
             else
-              return ((DateTime)Value).ToString(Format);
+              return ((DateTime)value).ToString(format);
           case ValueType.DateTime:
-            if (Value == null)
+            if (value == null)
               return String.Empty;
-            else if (String.IsNullOrEmpty(Format))
-              return ((DateTime)Value).ToString("dd/MM/yyyy HH:mm:ss"); // 14.03.2018
+            else if (String.IsNullOrEmpty(format))
+              return ((DateTime)value).ToString("dd/MM/yyyy HH:mm:ss"); // 14.03.2018
             else
-              return ((DateTime)Value).ToString(Format);
+              return ((DateTime)value).ToString(format);
           case ValueType.String:
-            return (string)Value;
+            return (string)value;
           case ValueType.Boolean:
-            return Convert.ToBoolean(Value) ? "1" : "0";
+            return Convert.ToBoolean(value) ? "1" : "0";
           case ValueType.Integer:
-            return Convert.ToInt32(Value).ToString(Format);
+            return Convert.ToInt32(value).ToString(format);
           case ValueType.Double:
-            return Convert.ToDouble(Value).ToString(Format);
+            return Convert.ToDouble(value).ToString(format);
           case ValueType.Decimal:
-            return Convert.ToDecimal(Value).ToString(Format);
+            return Convert.ToDecimal(value).ToString(format);
           default:
-            return Value.ToString();
+            return value.ToString();
         }
       }
       catch
       {
-        if (Value == null)
+        if (value == null)
           return String.Empty;
         else
-          return Value.ToString();
+          return value.ToString();
       }
     }
 
@@ -700,16 +695,16 @@ namespace Plants
     /// Для чисел используется разделитель дробной части запятая (зависит от настроек ОС).
     /// Для преобразования значений из машинно-независимого формата используйте методы класса Accoo2StdConvert.
     /// </summary>
-    /// <param name="Text">Преобразуемый текст</param>
-    /// <param name="ValueType">Требуемый тип данных</param>
+    /// <param name="text">Преобразуемый текст</param>
+    /// <param name="valueType">Требуемый тип данных</param>
     /// <returns>Значение требуемого типа</returns>
-    public static object Parse(string Text, ValueType ValueType)
+    public static object Parse(string text, ValueType valueType)
     {
-      object Res;
-      if (TryParse(Text, ValueType, out Res))
-        return Res;
+      object res;
+      if (TryParse(text, valueType, out res))
+        return res;
       else
-        throw new InvalidCastException("Строку \"" + Text + "\" нельзя преобразовать к типу \"" + PlantTools.GetValueTypeName(ValueType) + "\"");
+        throw new InvalidCastException("Строку \"" + text + "\" нельзя преобразовать к типу \"" + PlantTools.GetValueTypeName(valueType) + "\"");
     }
 
     /// <summary>
@@ -719,27 +714,27 @@ namespace Plants
     /// Для чисел используется разделитель дробной части запятая (зависит от настроек ОС).
     /// Для преобразования значений из машинно-независимого формата используйте методы класса Accoo2StdConvert.
     /// </summary>
-    /// <param name="Text">Преобразуемый текст</param>
-    /// <param name="ValueType">Требуемый тип данных</param>
-    /// <param name="Res">Сюда записывается значение требуемого типа или null в случае ошибки</param>
+    /// <param name="text">Преобразуемый текст</param>
+    /// <param name="valueType">Требуемый тип данных</param>
+    /// <param name="value">Сюда записывается значение требуемого типа или null в случае ошибки</param>
     /// <returns>true, если преобразование успешно выполнено</returns>
-    public static bool TryParse(string Text, ValueType ValueType, out object Res)
+    public static bool TryParse(string text, ValueType valueType, out object value)
     {
-      if (String.IsNullOrEmpty(Text))
+      if (String.IsNullOrEmpty(text))
       {
-        Res = PlantTools.GetDefaultValue(ValueType);
+        value = PlantTools.GetDefaultValue(valueType);
         return true;
       }
 
-      Res = null;
+      value = null;
 
-      switch (ValueType)
+      switch (valueType)
       {
         case ValueType.Integer:
           int iv;
-          if (int.TryParse(Text, out iv))
+          if (int.TryParse(text, out iv))
           {
-            Res = iv;
+            value = iv;
             return true;
           }
           else
@@ -747,9 +742,9 @@ namespace Plants
 
         case ValueType.Double:
           double dv;
-          if (double.TryParse(Text, out dv))
+          if (double.TryParse(text, out dv))
           {
-            Res = dv;
+            value = dv;
             return true;
           }
           else
@@ -757,47 +752,47 @@ namespace Plants
 
         case ValueType.Decimal:
           decimal mv;
-          if (decimal.TryParse(Text, out mv))
+          if (decimal.TryParse(text, out mv))
           {
-            Res = mv;
+            value = mv;
             return true;
           }
           else
             return false;
 
         case ValueType.Boolean:
-          if (Text == "1")
+          if (text == "1")
           {
-            Res = true;
+            value = true;
             return true;
           }
-          if (Text == "0")
+          if (text == "0")
           {
-            Res = false;
+            value = false;
             return true;
           }
 
           bool bv;
-          if (bool.TryParse(Text, out bv))
+          if (bool.TryParse(text, out bv))
           {
-            Res = bv;
+            value = bv;
             return true;
           }
           else
             return false;
 
         case ValueType.String:
-          Res = Text;
+          value = text;
           return true;
 
         case ValueType.Date:
         case ValueType.DateTime:
           DateTime dtv;
-          if (DateTime.TryParse(Text, out dtv))
+          if (DateTime.TryParse(text, out dtv))
           {
-            if (ValueType == ValueType.DateTime)
+            if (valueType == ValueType.DateTime)
               dtv = dtv.Date;
-            Res = dtv;
+            value = dtv;
             return true;
           }
           else
@@ -821,20 +816,20 @@ namespace Plants
     /// <summary>
     /// Проверяет соответствие типа источника значений для атрибута и типа данных
     /// </summary>
-    /// <param name="SourceType">Тип источника данных для значений атрибута</param>
-    /// <param name="ValueType">Тип данных атрибута</param>
+    /// <param name="sourceType">Тип источника данных для значений атрибута</param>
+    /// <param name="valueType">Тип данных атрибута</param>
     /// <returns>true, если типы могут использоваться для одного атрибута</returns>
-    public static bool IsValidAttrSourceType(AttrValueSourceType SourceType, ValueType ValueType)
+    public static bool IsValidAttrSourceType(AttrValueSourceType sourceType, ValueType valueType)
     {
-      if (SourceType == AttrValueSourceType.None)
+      if (sourceType == AttrValueSourceType.None)
         return true;
 
-      switch (ValueType)
+      switch (valueType)
       {
         case ValueType.String:
           return true;
         case ValueType.Integer:
-          switch (SourceType)
+          switch (sourceType)
           {
             case AttrValueSourceType.List:
               return true;
@@ -844,7 +839,7 @@ namespace Plants
         case ValueType.Boolean:
           return false;
         default:
-          return SourceType == AttrValueSourceType.List;
+          return sourceType == AttrValueSourceType.List;
       }
     }
 
@@ -853,40 +848,40 @@ namespace Plants
     /// <summary>
     /// Преобразование значения в текстовую строку для хранения в базе данных
     /// </summary>
-    /// <param name="Value">Значение</param>
-    /// <param name="ValueType">Тип значения</param>
+    /// <param name="value">Значение</param>
+    /// <param name="valueType">Тип значения</param>
     /// <returns>Строковое представление</returns>
-    public static string ValueToSaveableString(object Value, ValueType ValueType)
+    public static string ValueToSaveableString(object value, ValueType valueType)
     {
-      switch (ValueType)
+      switch (valueType)
       {
         case ValueType.String:
-          return DataTools.GetString(Value);
+          return DataTools.GetString(value);
         case ValueType.Integer:
-          return StdConvert.ToString(DataTools.GetInt(Value));
+          return StdConvert.ToString(DataTools.GetInt(value));
         case ValueType.Double:
-          return StdConvert.ToString(DataTools.GetDouble(Value));
+          return StdConvert.ToString(DataTools.GetDouble(value));
         case ValueType.Decimal:
-          return StdConvert.ToString(DataTools.GetDecimal(Value));
+          return StdConvert.ToString(DataTools.GetDecimal(value));
         case ValueType.Boolean:
-          return DataTools.GetBool(Value) ? "1" : "0";
+          return DataTools.GetBool(value) ? "1" : "0";
 
         case ValueType.Date:
-          DateTime? dt1 = DataTools.GetNullableDateTime(Value);
+          DateTime? dt1 = DataTools.GetNullableDateTime(value);
           if (dt1.HasValue)
             return StdConvert.ToString(dt1.Value, false);
           else
             return String.Empty;
 
         case ValueType.DateTime:
-          DateTime? dt2 = DataTools.GetNullableDateTime(Value);
+          DateTime? dt2 = DataTools.GetNullableDateTime(value);
           if (dt2.HasValue)
             return StdConvert.ToString(dt2.Value, true);
           else
             return String.Empty;
 
         default:
-          throw new ArgumentException("Неизвестный ValueType=" + ValueType.ToString(), "ValueType");
+          throw new ArgumentException("Неизвестный ValueType=" + valueType.ToString(), "ValueType");
       }
     }
 
@@ -895,14 +890,14 @@ namespace Plants
     /// в значение заданного типа
     /// </summary>
     /// <param name="s">Хранимое строковое значение атрибута</param>
-    /// <param name="ValueType">Тип данных атрибута</param>
+    /// <param name="valueType">Тип данных атрибута</param>
     /// <returns>Значение атрибута, приведенное к требуемому типу</returns>
-    public static object ValueFromSaveableString(string s, ValueType ValueType)
+    public static object ValueFromSaveableString(string s, ValueType valueType)
     {
       if (String.IsNullOrEmpty(s))
-        return PlantTools.GetDefaultValue(ValueType);
+        return PlantTools.GetDefaultValue(valueType);
 
-      switch (ValueType)
+      switch (valueType)
       {
         case ValueType.String:
           return s;
@@ -921,7 +916,7 @@ namespace Plants
           return StdConvert.ToDateTime(s, true);
 
         default:
-          throw new ArgumentException("Неизвестный ValueType=" + ValueType.ToString(), "ValueType");
+          throw new ArgumentException("Неизвестный ValueType=" + valueType.ToString(), "ValueType");
       }
     }
 
@@ -941,15 +936,15 @@ namespace Plants
     #region Фильтры
 
     /// <summary>
-    /// Добавляет в список <paramref name="Filters"/> фильтр по интервау дат.
+    /// Добавляет в список <paramref name="filters"/> фильтр по интервау дат.
     /// Если бы дата была одним полем, можно было бы использовать обычный DateRangeFilter.
     /// В программе даты задаются в виде интервала из двух полей Date1 и Date2, 
     /// требуется более сложный фильтр
     /// </summary>
-    /// <param name="Filters">Список для добавления фильтров</param>
-    /// <param name="FirstDate">Начальная дата фильтра</param>
-    /// <param name="LastDate">Конечная дата фильтра</param>
-    public static void AddDateRangeFilter(List<DBxFilter> Filters, DateTime? FirstDate, DateTime? LastDate)
+    /// <param name="filters">Список для добавления фильтров</param>
+    /// <param name="firstDate">Начальная дата фильтра</param>
+    /// <param name="lastDate">Конечная дата фильтра</param>
+    public static void AddDateRangeFilter(List<DBxFilter> filters, DateTime? firstDate, DateTime? lastDate)
     {
       //if (FirstDate.HasValue)
       //  Filters.Add(new ValueFilter("Date1", FirstDate.Value, ValueFilterKind.GreaterOrEqualThan));
@@ -957,10 +952,10 @@ namespace Plants
       //  Filters.Add(new ValueFilter("Date2", LastDate.Value, ValueFilterKind.LessOrEqualThan));
 
       // 21.05.2019
-      if (FirstDate.HasValue)
-        Filters.Add(new ValueFilter("Date2", FirstDate.Value, CompareKind.GreaterOrEqualThan));
-      if (LastDate.HasValue)
-        Filters.Add(new ValueFilter("Date1", LastDate.Value, CompareKind.LessOrEqualThan));
+      if (firstDate.HasValue)
+        filters.Add(new ValueFilter("Date2", firstDate.Value, CompareKind.GreaterOrEqualThan));
+      if (lastDate.HasValue)
+        filters.Add(new ValueFilter("Date1", lastDate.Value, CompareKind.LessOrEqualThan));
     }
 
     #endregion
@@ -970,13 +965,13 @@ namespace Plants
     /// <summary>
     /// Возвращает true, если для действия может быть задан грунт
     /// </summary>
-    /// <param name="Kind">Действие</param>
-    /// <param name="ForFinal">True, если запрашивается финальное состояние.
+    /// <param name="kind">Действие</param>
+    /// <param name="forFinal">True, если запрашивается финальное состояние.
     /// В этом режиме частичная замена грунта не учитывается SoilReplace</param>
     /// <returns>true, если грунт применим к действию</returns>
-    public static bool IsSoilAppliable(ActionKind Kind, bool ForFinal)
+    public static bool IsSoilAppliable(ActionKind kind, bool forFinal)
     {
-      switch (Kind)
+      switch (kind)
       {
         case ActionKind.Planting:
         case ActionKind.Replanting:
@@ -984,7 +979,7 @@ namespace Plants
         case ActionKind.Other:
           return true;
         case ActionKind.SoilReplace:
-          return !ForFinal;
+          return !forFinal;
         default:
           return false;
       }
@@ -993,13 +988,13 @@ namespace Plants
     /// <summary>
     /// Возвращает true, если для действия может быть задан горшок
     /// </summary>
-    /// <param name="Kind">Действие</param>
-    /// <param name="ForFinal">True, если запрашивается финальное состояние.
+    /// <param name="kind">Действие</param>
+    /// <param name="forFinal">True, если запрашивается финальное состояние.
     /// Не учитывается</param>
     /// <returns>true, если грунт применим к действию</returns>
-    public static bool IsPotKindAppliable(ActionKind Kind, bool ForFinal)
+    public static bool IsPotKindAppliable(ActionKind kind, bool forFinal)
     {
-      switch (Kind)
+      switch (kind)
       {
         case ActionKind.Planting:
         case ActionKind.Replanting:
@@ -1017,10 +1012,10 @@ namespace Plants
     public static int[] GetSoilAppliableIntArray()
     {
       List<int> lst = new List<int>();
-      for (ActionKind Kind = ActionKind.MinValue; Kind <= ActionKind.MaxValue; Kind++)
+      for (ActionKind kind = ActionKind.MinValue; kind <= ActionKind.MaxValue; kind++)
       {
-        if (IsSoilAppliable(Kind, false))
-          lst.Add((int)Kind);
+        if (IsSoilAppliable(kind, false))
+          lst.Add((int)kind);
       }
       return lst.ToArray();
     }
@@ -1031,10 +1026,10 @@ namespace Plants
     public static int[] GetPotKindAppliableIntArray()
     {
       List<int> lst = new List<int>();
-      for (ActionKind Kind = ActionKind.MinValue; Kind <= ActionKind.MaxValue; Kind++)
+      for (ActionKind kind = ActionKind.MinValue; kind <= ActionKind.MaxValue; kind++)
       {
-        if (IsPotKindAppliable(Kind, false))
-          lst.Add((int)Kind);
+        if (IsPotKindAppliable(kind, false))
+          lst.Add((int)kind);
       }
       return lst.ToArray();
     }
@@ -1051,121 +1046,121 @@ namespace Plants
   {
     #region Функции преобразования
 
-    public static string ToString(object Value, ValueType ValueType)
+    public static string ToString(object value, ValueType valueType)
     {
-      switch (ValueType)
+      switch (valueType)
       {
         case ValueType.Integer:
-          return StdConvert.ToString(DataTools.GetInt(Value));
+          return StdConvert.ToString(DataTools.GetInt(value));
         case ValueType.Double:
-          return StdConvert.ToString(DataTools.GetDouble(Value));
+          return StdConvert.ToString(DataTools.GetDouble(value));
         case ValueType.Decimal:
-          return StdConvert.ToString(DataTools.GetDecimal(Value));
+          return StdConvert.ToString(DataTools.GetDecimal(value));
         case ValueType.Boolean:
-          return DataTools.GetBool(Value) ? "1" : "0";
+          return DataTools.GetBool(value) ? "1" : "0";
         case ValueType.String:
-          return DataTools.GetString(Value);
+          return DataTools.GetString(value);
         case ValueType.Date:
         case ValueType.DateTime:
-          DateTime? dt = DataTools.GetNullableDateTime(Value);
+          DateTime? dt = DataTools.GetNullableDateTime(value);
           if (dt.HasValue)
-            return StdConvert.ToString(dt.Value, ValueType == ValueType.DateTime);
+            return StdConvert.ToString(dt.Value, valueType == ValueType.DateTime);
           else
             return string.Empty;
         default:
-          throw new ArgumentException("Неправильный ValueType=" + ValueType.ToString(), "ValueType");
+          throw new ArgumentException("Неправильный ValueType=" + valueType.ToString(), "ValueType");
       }
     }
 
-    public static bool TryParse(string Text, ValueType ValueType, out object Value)
+    public static bool TryParse(string text, ValueType valueType, out object value)
     {
-      if (String.IsNullOrEmpty(Text))
+      if (String.IsNullOrEmpty(text))
       {
-        Value = PlantTools.GetDefaultValue(ValueType);
+        value = PlantTools.GetDefaultValue(valueType);
         return true;
       }
 
-      switch (ValueType)
+      switch (valueType)
       {
         case ValueType.Integer:
           int vi;
-          if (StdConvert.TryParse(Text, out vi))
+          if (StdConvert.TryParse(text, out vi))
           {
-            Value = vi;
+            value = vi;
             return true;
           }
           else
           {
             decimal vdc2;
-            if (StdConvert.TryParse(Text, out vdc2))
+            if (StdConvert.TryParse(text, out vdc2))
             {
               vi = (int)Math.Round(vdc2, 0, MidpointRounding.AwayFromZero);
-              Value = vi;
+              value = vi;
               return true;
             }
 
-            Value = 0;
+            value = 0;
             return false;
           }
 
         case ValueType.Double:
           double vd;
-          if (StdConvert.TryParse(Text, out vd))
+          if (StdConvert.TryParse(text, out vd))
           {
-            Value = vd;
+            value = vd;
             return true;
           }
           else
           {
-            Value = 0.0;
+            value = 0.0;
             return false;
           }
 
         case ValueType.Decimal:
           decimal vdс;
-          if (StdConvert.TryParse(Text, out vdс))
+          if (StdConvert.TryParse(text, out vdс))
           {
-            Value = vdс;
+            value = vdс;
             return true;
           }
           else
           {
-            Value = 0m;
+            value = 0m;
             return false;
           }
 
         case ValueType.Boolean:
           int vb;
-          if (StdConvert.TryParse(Text, out vb))
+          if (StdConvert.TryParse(text, out vb))
           {
-            Value = vb != 0;
+            value = vb != 0;
             return true;
           }
           else
           {
-            Value = false;
+            value = false;
             return false;
           }
 
         case ValueType.String:
-          Value = Text;
+          value = text;
           return true;
 
         case ValueType.Date:
         case ValueType.DateTime:
           DateTime dt;
-          if (StdConvert.TryParse(Text, out dt, ValueType == ValueType.DateTime))
+          if (StdConvert.TryParse(text, out dt, valueType == ValueType.DateTime))
           {
-            Value = dt;
+            value = dt;
             return true;
           }
           else
           {
-            Value = null;
+            value = null;
             return false;
           }
         default:
-          throw new ArgumentException("Неправильный ValueType=" + ValueType.ToString(), "ValueType");
+          throw new ArgumentException("Неправильный ValueType=" + valueType.ToString(), "ValueType");
       }
     }
 

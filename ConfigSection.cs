@@ -21,27 +21,27 @@ namespace Plants
   {
     #region Конструкторы
 
-    public ConfigSectionKey(string SectionName, string Category, string ConfigName)
+    public ConfigSectionKey(string sectionName, string category, string configName)
     {
-      if (String.IsNullOrEmpty(SectionName))
+      if (String.IsNullOrEmpty(sectionName))
         throw new ArgumentNullException("SectionName");
-      if (SectionName.Length > ConfigSection.MaxSectionNameLength)
-        throw new ArgumentException("Слишком длинное название секции", "SectionName");
-      _SectionName = SectionName;
+      if (sectionName.Length > ConfigSection.MaxSectionNameLength)
+        throw new ArgumentException("Слишком длинное название секции", "sectionName");
+      _SectionName = sectionName;
 
-      if (String.IsNullOrEmpty(Category))
+      if (String.IsNullOrEmpty(category))
         throw new ArgumentNullException("Category");
-      if (Category.Length > ConfigSection.MaxCategoryLength)
-        throw new ArgumentException("Слишком длинное название конфигурации", "Category");
-      _Category = Category;
+      if (category.Length > ConfigSection.MaxCategoryLength)
+        throw new ArgumentException("Слишком длинное название конфигурации", "category");
+      _Category = category;
 
-      if (ConfigName == null)
+      if (configName == null)
         _ConfigName = String.Empty;
       else
       {
-        if (ConfigName.Length > ConfigSection.MaxConfigNameLength)
-          throw new ArgumentException("Слишком длинное пользовательское название конфигурации", "ConfigName");
-        _ConfigName = ConfigName;
+        if (configName.Length > ConfigSection.MaxConfigNameLength)
+          throw new ArgumentException("Слишком длинное пользовательское название конфигурации", "configName");
+        _ConfigName = configName;
       }
     }
 
@@ -105,10 +105,10 @@ namespace Plants
 
     public override bool Equals(object obj)
     {
-      ConfigSectionKey Key2 = obj as ConfigSectionKey;
-      if (Key2 == null)
+      ConfigSectionKey key2 = obj as ConfigSectionKey;
+      if (key2 == null)
         return false;
-      return this == Key2;
+      return this == key2;
     }
 
     #endregion
@@ -141,16 +141,16 @@ namespace Plants
 
     #region Конструкторы
 
-    public ConfigSection(ConfigSections Owner, ConfigSectionKey Key)
+    public ConfigSection(ConfigSections owner, ConfigSectionKey key)
       : base(CfgConverter.Default)
     {
-      if (Owner == null)
+      if (owner == null)
         throw new ArgumentNullException("Owner");
-      _Owner = Owner;
+      _Owner = owner;
 
-      if (Key == null)
+      if (key == null)
         throw new ArgumentNullException("Key");
-      _Key = Key;
+      _Key = key;
     }
 
     /// <summary>
@@ -190,7 +190,6 @@ namespace Plants
       else
         return Key.ToString();
     }
-
 
     #endregion
 
@@ -241,7 +240,6 @@ namespace Plants
       OrgXmlText = "?";
     }
 
-
     #endregion
 
     #region Запись
@@ -276,9 +274,9 @@ namespace Plants
 
     #region Абстрактные методы для чтения / записи
 
-    protected abstract ConfigSection DoGetConfigSection(ConfigSectionKey Key);
+    protected abstract ConfigSection DoGetConfigSection(ConfigSectionKey key);
 
-    protected abstract void DoWriteSect(ConfigSection Sect);
+    protected abstract void DoWriteSect(ConfigSection sect);
 
     // protected abstract DataTable DoLoadTable(DBxFilter Filter);
 
@@ -286,39 +284,37 @@ namespace Plants
 
     #region Базовое свойство доступа к секциям
 
-    public ConfigSection this[string SectionName, string Category]
+    public ConfigSection this[string sectionName, string category]
     {
-      get { return this[SectionName, Category, String.Empty]; }
+      get { return this[sectionName, category, String.Empty]; }
     }
 
     /// <summary>
     /// Основной метод доступа к секциям с заданием всех идентификаторов
     /// </summary>
-    /// <param name="SectionName">Название секции</param>
-    /// <param name="Category">Категория</param>
-    /// <param name="UserId">Идентификатор пользователя или 0, если секция общая для всех пользователей</param>
-    /// <param name="ComputerName">Имя компьютера, возврашщаемое ConfigSections.ComputerName или null, если секция не зависит от компьютера если секция не предусматривает нескольких конфигураций</param>
+    /// <param name="sectionName">Название секции</param>
+    /// <param name="category">Категория</param>
+    /// <param name="configName"></param>
     /// <returns>Секция конфигурации для доступа к значениям в XML-формате</returns>                                
-    public ConfigSection this[string SectionName, string Category, string ConfigName]
+    public ConfigSection this[string sectionName, string category, string configName]
     {
       get
       {
-        ConfigSectionKey Key = new ConfigSectionKey(SectionName, Category, ConfigName);
+        ConfigSectionKey key = new ConfigSectionKey(sectionName, category, configName);
 
-        return DoGetConfigSection(Key);
+        return DoGetConfigSection(key);
       }
     }
 
     /// <summary>
     /// Этот метод реально выполняется при вызове ConfigSection.Save()
     /// </summary>
-    /// <param name="Sect"></param>
-    internal void WriteSect(ConfigSection Sect)
+    internal void WriteSect(ConfigSection sect)
     {
       // Выполняем сравнение
-      if (Sect.AsXmlText == Sect.OrgXmlText)
+      if (sect.AsXmlText == sect.OrgXmlText)
         return;
-      DoWriteSect(Sect);
+      DoWriteSect(sect);
     }
 
     #endregion
@@ -370,9 +366,9 @@ namespace Plants
   {
     #region Конструктор
 
-    internal ClientConfigSections(ProgramDB DB)
+    internal ClientConfigSections(ProgramDB db)
     {
-      this._DB = DB;
+      this._DB = db;
     }
 
     private ProgramDB _DB;
@@ -381,47 +377,47 @@ namespace Plants
 
     #region Чтение и запись
 
-    protected override ConfigSection DoGetConfigSection(ConfigSectionKey Key)
+    protected override ConfigSection DoGetConfigSection(ConfigSectionKey key)
     {
-      string s = GetConfigSectionString(Key);
-      ConfigSection Sect = new ConfigSection(this, Key);
-      Sect.AsXmlText = s;
-      return Sect;
+      string s = GetConfigSectionString(key);
+      ConfigSection sect = new ConfigSection(this, key);
+      sect.AsXmlText = s;
+      return sect;
     }
 
-    public string GetConfigSectionString(ConfigSectionKey Key)
+    public string GetConfigSectionString(ConfigSectionKey key)
     {
       #region Загрузка из БД
 
-      Int32 CfgSectId = GetCfgSectId(Key);
+      Int32 cfgSectId = GetCfgSectId(key);
 
-      if (CfgSectId == 0)
+      if (cfgSectId == 0)
         return String.Empty;
       else
       {
-        using (DBxCon Con = new DBxCon(_DB.MainEntry))
+        using (DBxCon con = new DBxCon(_DB.MainEntry))
         {
-          return DataTools.GetString(Con.GetValue("UserSettings", CfgSectId, "Data"));
+          return DataTools.GetString(con.GetValue("UserSettings", cfgSectId, "Data"));
         }
       }
 
       #endregion
     }
 
-    protected override void DoWriteSect(ConfigSection Sect)
+    protected override void DoWriteSect(ConfigSection sect)
     {
-      string s = Sect.AsXmlText;
-      WriteConfigSectionString(Sect.Key, s);
+      string s = sect.AsXmlText;
+      WriteConfigSectionString(sect.Key, s);
     }
 
-    public void WriteConfigSectionString(ConfigSectionKey Key, string Value)
+    public void WriteConfigSectionString(ConfigSectionKey key, string value)
     {
-      if (Value == null)
-        Value = String.Empty;
+      if (value == null)
+        value = String.Empty;
 
-      using (DBxCon Con = new DBxCon(_DB.MainEntry))
+      using (DBxCon con = new DBxCon(_DB.MainEntry))
       {
-        DoRealWrite(Con, Key, Value);
+        DoRealWrite(con, key, value);
       }
 
       // Очищаем загруженные таблицы пользователей, по которым были обновления
@@ -429,30 +425,30 @@ namespace Plants
       Cache.Clear<UserTableCache>(new string[] {  });
     }
 
-    private bool DoRealWrite(DBxCon Con, ConfigSectionKey Key, string Value)
+    private bool DoRealWrite(DBxCon con, ConfigSectionKey key, string value)
     {
-      if (String.IsNullOrEmpty(Value))
-        Value = null;
+      if (String.IsNullOrEmpty(value))
+        value = null;
 
-      Int32 CfgSectId = GetCfgSectId(Key);
-      if (CfgSectId == 0)
+      Int32 cfgSectId = GetCfgSectId(key);
+      if (cfgSectId == 0)
       {
         //                                     0     1         2       3      4
-        DBxColumns Columns = new DBxColumns("Name,Category,ConfigName,Data,WriteTime");
-        object[] Values = new object[5];
-        Values[0] = Key.SectionName;
-        Values[1] = Key.Category;
-        if (!String.IsNullOrEmpty(Key.ConfigName))
-          Values[2] = Key.ConfigName;
-        Values[3] = Value;
-        Values[4] = DateTime.Now;
-        Con.AddRecord("UserSettings", Columns, Values);
+        DBxColumns columns = new DBxColumns("Name,Category,ConfigName,Data,WriteTime");
+        object[] values = new object[5];
+        values[0] = key.SectionName;
+        values[1] = key.Category;
+        if (!String.IsNullOrEmpty(key.ConfigName))
+          values[2] = key.ConfigName;
+        values[3] = value;
+        values[4] = DateTime.Now;
+        con.AddRecord("UserSettings", columns, values);
 
         return true;
       }
       else
       {
-        Con.SetValues("UserSettings", CfgSectId, new DBxColumns("Data,WriteTime"), new object[] { Value, DateTime.Now });
+        con.SetValues("UserSettings", cfgSectId, new DBxColumns("Data,WriteTime"), new object[] { value, DateTime.Now });
         return false;
       }
     }
@@ -474,17 +470,17 @@ namespace Plants
     {
       #region Конструктор
 
-      public UserTableCache(DataTable Table)
+      public UserTableCache(DataTable table)
       {
-        FTable = Table;
+        _Table = table;
       }
 
       #endregion
 
       #region Свойства
 
-      public DataTable Table { get { return FTable; } }
-      private DataTable FTable;
+      public DataTable Table { get { return _Table; } }
+      private DataTable _Table;
 
       #endregion
     }
@@ -493,37 +489,36 @@ namespace Plants
     /// Возвращает таблицу секций для выбранного пользователя
     /// Таблица содержит все поля, кроме поля "Данные"
     /// </summary>
-    /// <param name="UserId"></param>
     /// <returns></returns>
     public DataTable GetUserTable()
     {
-      DataTable Table = Cache.GetItem<UserTableCache>(new string[] { "0"}, CachePersistance.MemoryAndTempDir, this).Table;
+      DataTable table = Cache.GetItem<UserTableCache>(new string[] { "0"}, CachePersistance.MemoryAndTempDir, this).Table;
 
       // Свойство Table.DefaultView не поддерживает сериализацию
       // Поэтому, его нужно устанавливать здесь, а не в фабрике UserTableCache.
       // Можно было бы переделать десериализацию UserTableCache
 
-      lock (Table)
+      lock (table)
       {
-        if (String.IsNullOrEmpty(Table.DefaultView.Sort))
-          Table.DefaultView.Sort = "Name,Category,ConfigName";
+        if (String.IsNullOrEmpty(table.DefaultView.Sort))
+          table.DefaultView.Sort = "Name,Category,ConfigName";
       }
 
-      return Table;
+      return table;
     }
 
     #region ICacheFactory<UserTableCache> Members
 
-    public ClientConfigSections.UserTableCache CreateCacheItem(string[] Keys)
+    public ClientConfigSections.UserTableCache CreateCacheItem(string[] keys)
     {
-      using (DBxCon Con = new DBxCon(_DB.MainEntry))
+      using (DBxCon con = new DBxCon(_DB.MainEntry))
       {
-        DataTable Table = Con.FillSelect("UserSettings", new DBxColumns(
+        DataTable table = con.FillSelect("UserSettings", new DBxColumns(
           "Id,Name,Category,ConfigName"),
           null, null);
 
         // Table.DefaultView.Sort = "Название,Категория,Компьютер,Конфигурация";
-        return new UserTableCache(Table);
+        return new UserTableCache(table);
       }
     }
 
@@ -532,23 +527,23 @@ namespace Plants
     /// Если такой секции нет, возвращает 0
     /// Использует буферизацию таблиц для пользователя
     /// </summary>
-    private Int32 GetCfgSectId(ConfigSectionKey Key)
+    private Int32 GetCfgSectId(ConfigSectionKey key)
     {
-      DataTable UserTable = GetUserTable();
+      DataTable userTable = GetUserTable();
 
-      object[] Keys = new object[3];
-      Keys[0] = Key.SectionName;
-      Keys[1] = Key.Category;
+      object[] searchKeys = new object[3];
+      searchKeys[0] = key.SectionName;
+      searchKeys[1] = key.Category;
 
-      if (String.IsNullOrEmpty(Key.ConfigName))
-        Keys[2] = DBNull.Value;
+      if (String.IsNullOrEmpty(key.ConfigName))
+        searchKeys[2] = DBNull.Value;
       else
-        Keys[2] = Key.ConfigName;
+        searchKeys[2] = key.ConfigName;
 
 
-      int p = UserTable.DefaultView.Find(Keys);
+      int p = userTable.DefaultView.Find(searchKeys);
       if (p >= 0)
-        return DataTools.GetInt(UserTable.DefaultView[p].Row, "Id");
+        return DataTools.GetInt(userTable.DefaultView[p].Row, "Id");
       else
         return 0;
     }
@@ -568,26 +563,26 @@ namespace Plants
     {
       #region Конструктор и Dispose
 
-      public SectDisposer(ConfigSection Sect, bool Write)
+      public SectDisposer(ConfigSection sect, bool write)
       {
-        if (Write)
-          FSect = Sect;
+        if (write)
+          _Sect = sect;
 
 #if DEBUG
-        this.DebugString = Sect.ToString() + (Write ? " (Write)" : " (Read)");
-        this.FStackTrace = Environment.StackTrace;
+        this._DebugString = sect.ToString() + (write ? " (Write)" : " (Read)");
+        this._StackTrace = Environment.StackTrace;
 #endif
       }
 
-      protected override void Dispose(bool Disposing)
+      protected override void Dispose(bool disposing)
       {
-        if (Disposing)
+        if (disposing)
         {
-          if (FSect != null)
+          if (_Sect != null)
           {
             try
             {
-              FSect.Save();
+              _Sect.Save();
             }
             catch (Exception e)
             {
@@ -597,24 +592,24 @@ namespace Plants
                 EFPApp.ErrorMessageBox("Нельзя сохранить данные после вызова Logout", "Ошибка записи секции конфигурации");
               else
               {
-                e.Data["ConfigSection"] = FSect.ToString();
+                e.Data["ConfigSection"] = _Sect.ToString();
                 e.Data["StackTrace"] = Environment.StackTrace;
                 EFPApp.ShowException(e, "Ошибка записи секции конфигурации");
               }
             }
 #pragma warning restore 0162
 
-            FSect = null;
+            _Sect = null;
           }
         }
-        base.Dispose(Disposing);
+        base.Dispose(disposing);
       }
 
       #endregion
 
       #region Поля
 
-      private ConfigSection FSect;
+      private ConfigSection _Sect;
 
       #endregion
 
@@ -625,14 +620,14 @@ namespace Plants
       // 02.06.2017
       // Отладка на случай невозможности записи секции
 
-      private string DebugString;
+      private string _DebugString;
 
-      public string StackTrace { get { return FStackTrace; } }
-      private string FStackTrace;
+      public string StackTrace { get { return _StackTrace; } }
+      private string _StackTrace;
 
       public override string ToString()
       {
-        return DebugString;
+        return _DebugString;
       }
 
       SectDisposer()
@@ -645,16 +640,16 @@ namespace Plants
       #endregion
     }
 
-    IDisposable IEFPConfigManager.GetConfig(EFPConfigSectionInfo SectionInfo, EFPConfigMode Options, out FreeLibSet.Config.CfgPart Cfg)
+    IDisposable IEFPConfigManager.GetConfig(EFPConfigSectionInfo sectionInfo, EFPConfigMode options, out FreeLibSet.Config.CfgPart cfg)
     {
       //bool ThisComputer = EFPConfigCategories.IsMachineDepended(SectionInfo.Category);
 
-      ConfigSection Sect = this[SectionInfo.ConfigSectionName, SectionInfo.Category, SectionInfo.UserSetName];
-      Cfg = Sect;
-      if (Options == EFPConfigMode.Write)
-        return new SectDisposer(Sect, true);
+      ConfigSection sect = this[sectionInfo.ConfigSectionName, sectionInfo.Category, sectionInfo.UserSetName];
+      cfg = sect;
+      if (options == EFPConfigMode.Write)
+        return new SectDisposer(sect, true);
       else
-        return new SectDisposer(Sect, false);
+        return new SectDisposer(sect, false);
     }
 
     EFPConfigPersistence IEFPConfigManager.Persistence
@@ -662,7 +657,7 @@ namespace Plants
       get { return EFPConfigPersistence.Machine; }
     }
 
-    void IEFPConfigManager.Preload(EFPConfigSectionInfo[] ConfigInfos, EFPConfigMode Mode)
+    void IEFPConfigManager.Preload(EFPConfigSectionInfo[] configInfos, EFPConfigMode mode)
     { 
     }
 

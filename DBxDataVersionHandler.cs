@@ -20,20 +20,20 @@ namespace Plants
   {
     #region Конструктор
 
-    public DBxDataVersionHandler(Guid AppGuid, int CurrentVersion, int MinVersion)
+    public DBxDataVersionHandler(Guid appGuid, int currentVersion, int minVersion)
     {
-      if (AppGuid == Guid.Empty)
-        throw new ArgumentException("Не задан AppGuid");
-      if (CurrentVersion < 1)
-        throw new ArgumentException("Версия должна быть не меньше 1", "CurrentVersion");
-      if (MinVersion < 1)
-        throw new ArgumentException("Минимальная версия должна быть не меньше 1", "MinVersion");
-      if (MinVersion > CurrentVersion)
-        throw new ArgumentException("Минимальная версия не может быть больше основной версии", "MinVersion");
+      if (appGuid == Guid.Empty)
+        throw new ArgumentException("Не задан AppGuid", "appGuid");
+      if (currentVersion < 1)
+        throw new ArgumentException("Версия должна быть не меньше 1", "currentVersion");
+      if (minVersion < 1)
+        throw new ArgumentException("Минимальная версия должна быть не меньше 1", "minVersion");
+      if (minVersion > currentVersion)
+        throw new ArgumentException("Минимальная версия не может быть больше основной версии", "minVersion");
 
-      _AppGuid = AppGuid;
-      _CurrentVersion = CurrentVersion;
-      _MinVersion = CurrentVersion;
+      _AppGuid = appGuid;
+      _CurrentVersion = currentVersion;
+      _MinVersion = currentVersion;
     }
 
     #endregion
@@ -53,7 +53,7 @@ namespace Plants
 
     #region Объявление структуры таблицы
 
-    public DBxTableStruct AddTableStruct(DBxStruct DBStruct)
+    public DBxTableStruct AddTableStruct(DBxStruct dbStruct)
     {
       DBxTableStruct ts = new DBxTableStruct("DataVersion");
       ts.Columns.AddId(); // не используется
@@ -61,7 +61,7 @@ namespace Plants
       ts.Columns.AddString("DataGUID", 36, false);
       ts.Columns.AddInt("CurrentVersion", 1, Int32.MaxValue);
       ts.Columns.AddInt("MinVersion", 1, Int32.MaxValue);
-      DBStruct.Tables.Add(ts);
+      dbStruct.Tables.Add(ts);
       return ts;
     }
 
@@ -69,45 +69,45 @@ namespace Plants
 
     #region Инициализация
 
-    public Guid DataGuid { get { return FDataGuid; } }
-    private Guid FDataGuid;
+    public Guid DataGuid { get { return _DataGuid; } }
+    private Guid _DataGuid;
 
-    public int PrevVersion { get { return FPrevVersion; } }
-    private int FPrevVersion;
+    public int PrevVersion { get { return _PrevVersion; } }
+    private int _PrevVersion;
 
-    public void InitTableRow(DBxCon Con)
+    public void InitTableRow(DBxCon con)
     {
-      DataTable Table = Con.FillSelect("DataVersion");
-      if (Table.Rows.Count == 0)
+      DataTable table = con.FillSelect("DataVersion");
+      if (table.Rows.Count == 0)
       {
         // Первый запуск
 
-        FDataGuid = Guid.NewGuid();
-        Con.AddRecord("DataVersion", new DBxColumns("AppGUID,DataGUID,CurrentVersion,MinVersion"),
-          new object[] { AppGuid.ToString(), FDataGuid.ToString(), CurrentVersion, MinVersion });
+        _DataGuid = Guid.NewGuid();
+        con.AddRecord("DataVersion", new DBxColumns("AppGUID,DataGUID,CurrentVersion,MinVersion"),
+          new object[] { AppGuid.ToString(), _DataGuid.ToString(), CurrentVersion, MinVersion });
       }
-      else if (Table.Rows.Count > 1)
-        throw new DBxDataVersionHandlerException("Таблица DataVersion содержит недопустимое число строк: " + Table.Rows.Count.ToString());
+      else if (table.Rows.Count > 1)
+        throw new DBxDataVersionHandlerException("Таблица DataVersion содержит недопустимое число строк: " + table.Rows.Count.ToString());
       else
       {
         // Проверяем версию
 
-        DataRow Row = Table.Rows[0];
-        Guid OldAppGuid = new Guid(DataTools.GetString(Row, "AppGUID"));
-        if (OldAppGuid != AppGuid)
+        DataRow row = table.Rows[0];
+        Guid oldAppGuid = new Guid(DataTools.GetString(row, "AppGUID"));
+        if (oldAppGuid != AppGuid)
           throw new DBxDataVersionHandlerException("База данных предназначена для работы с другой программой");
 
-        FDataGuid = new Guid(DataTools.GetString(Row, "DataGUID"));
-        FPrevVersion = DataTools.GetInt(Row, "CurrentVersion");
+        _DataGuid = new Guid(DataTools.GetString(row, "DataGUID"));
+        _PrevVersion = DataTools.GetInt(row, "CurrentVersion");
 
-        int OldMinVersion = DataTools.GetInt(Row, "MinVersion");
-        if (CurrentVersion < OldMinVersion)
+        int oldMinVersion = DataTools.GetInt(row, "MinVersion");
+        if (CurrentVersion < oldMinVersion)
           throw new DBxDataVersionHandlerException("База данных была обновлена в более новой версии программы. Откат до текущей версии невозможен");
 
-        if (CurrentVersion != FPrevVersion)
+        if (CurrentVersion != _PrevVersion)
         {
-          Int32 DummyId = DataTools.GetInt(Row, "Id");
-          Con.SetValues("DataVersion", DummyId, new DBxColumns("CurrentVesrion,MinVersion"),
+          Int32 dummyId = DataTools.GetInt(row, "Id");
+          con.SetValues("DataVersion", dummyId, new DBxColumns("CurrentVesrion,MinVersion"),
             new object[] { CurrentVersion, MinVersion });
         }
       }
@@ -121,8 +121,8 @@ namespace Plants
   {
     #region Конструктор
 
-    public DBxDataVersionHandlerException(string Message)
-      : base(Message)
+    public DBxDataVersionHandlerException(string message)
+      : base(message)
     {
     }
 

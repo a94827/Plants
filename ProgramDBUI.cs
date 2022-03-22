@@ -690,10 +690,10 @@ namespace Plants
       base.EndInit();
     }
 
-    private static void DateColumn_DefaultValueNeeded(object Sender, EventArgs Args)
+    private static void DateColumn_DefaultValueNeeded(object sender, EventArgs args)
     {
-      ColumnUI ColUI = (ColumnUI)Sender;
-      ColUI.DefaultValue = DateTime.Today;
+      ColumnUI colUI = (ColumnUI)sender;
+      colUI.DefaultValue = DateTime.Today;
     }
 
     #endregion
@@ -703,59 +703,59 @@ namespace Plants
     /// <summary>
     /// Диалог выбора значения атрибута
     /// </summary>
-    /// <param name="Value">Вход-выход: выбираемое значение</param>
-    /// <param name="Title">Заголовок блока диалога</param>
-    /// <param name="AttrType">Документ "Вид атрибута"</param>
+    /// <param name="value">Вход-выход: выбираемое значение</param>
+    /// <param name="title">Заголовок блока диалога</param>
+    /// <param name="attrType">Документ "Вид атрибута"</param>
     /// <returns>true, если значение было выбрано</returns>
-    public static bool SelectAttrValue(ref object Value, string Title, AttrTypeDoc AttrType)
+    public static bool SelectAttrValue(ref object value, string title, AttrTypeDoc attrType)
     {
-      switch (AttrType.SourceType)
+      switch (attrType.SourceType)
       {
         case AttrValueSourceType.List:
-          return SelectAttrValueList(ref Value, Title, AttrType);
+          return SelectAttrValueList(ref value, title, attrType);
         default:
-          if (AttrType.ValueType == ValueType.Boolean)
-            return SelectAttrValueBoolean(ref Value, Title, AttrType);
-          EFPApp.ShowTempMessage("Для атрибута \"" + AttrType.Name + "\" предусмотрен только ручной ввод значений");
+          if (attrType.ValueType == ValueType.Boolean)
+            return SelectAttrValueBoolean(ref value, title, attrType);
+          EFPApp.ShowTempMessage("Для атрибута \"" + attrType.Name + "\" предусмотрен только ручной ввод значений");
           return false;
       }
     }
 
-    private static bool SelectAttrValueList(ref object Value, string Title, AttrTypeDoc AttrType)
+    private static bool SelectAttrValueList(ref object value, string title, AttrTypeDoc attrType)
     {
-      if (AttrType.ValueList.Length == 0)
+      if (attrType.ValueList.Length == 0)
       {
-        EFPApp.ShowTempMessage("У вида атрибута \"" + AttrType.Name + "\" нет списка значений для выбора");
+        EFPApp.ShowTempMessage("У вида атрибута \"" + attrType.Name + "\" нет списка значений для выбора");
         return false;
       }
 
       ListSelectDialog dlg = new ListSelectDialog();
-      dlg.Title = Title;
-      dlg.ListTitle = "Значение атрибута \"" + AttrType.Name + "\"";
-      string[] a = new string[AttrType.ValueList.Length];
-      for (int i = 0; i < AttrType.ValueList.Length; i++)
-        a[i] = PlantTools.ToString(AttrType.ValueList[i], AttrType.ValueType);
+      dlg.Title = title;
+      dlg.ListTitle = "Значение атрибута \"" + attrType.Name + "\"";
+      string[] a = new string[attrType.ValueList.Length];
+      for (int i = 0; i < attrType.ValueList.Length; i++)
+        a[i] = PlantTools.ToString(attrType.ValueList[i], attrType.ValueType);
       dlg.Items = a;
-      dlg.SelectedIndex = Array.IndexOf(AttrType.ValueList, Value);
+      dlg.SelectedIndex = Array.IndexOf(attrType.ValueList, value);
       if (dlg.ShowDialog() != DialogResult.OK)
         return false;
 
-      Value = AttrType.ValueList[dlg.SelectedIndex];
+      value = attrType.ValueList[dlg.SelectedIndex];
       return true;
     }
 
-    private static bool SelectAttrValueBoolean(ref object Value, string Title, AttrTypeDoc AttrType)
+    private static bool SelectAttrValueBoolean(ref object value, string title, AttrTypeDoc attrType)
     {
       RadioSelectDialog dlg = new RadioSelectDialog();
-      dlg.Title = Title;
+      dlg.Title = title;
       //dlg.ImageKey = "Атрибут";
-      dlg.GroupTitle = "Значение атрибута \"" + AttrType.Name + "\"";
+      dlg.GroupTitle = "Значение атрибута \"" + attrType.Name + "\"";
       dlg.Items = new string[] { "&1 - Да", "&0 - Нет" };
-      dlg.SelectedIndex = DataTools.GetBool(Value) ? 0 : 1;
+      dlg.SelectedIndex = DataTools.GetBool(value) ? 0 : 1;
       if (dlg.ShowDialog() != DialogResult.OK)
         return false;
 
-      Value = (dlg.SelectedIndex == 0);
+      value = (dlg.SelectedIndex == 0);
       return true;
     }
 
@@ -766,41 +766,38 @@ namespace Plants
     /// <summary>
     /// Добавить в GridProducer обычный столбец, связанный с полем данных, для указанного типа данных
     /// </summary>
-    /// <param name="Producer"></param>
-    /// <param name="ValueType"></param>
-    /// <param name="ColumnName"></param>
-    public static void AddValueTypeColumn(EFPGridProducer Producer, ValueType ValueType, string ColumnName, string HeaderText)
+    public static void AddValueTypeColumn(EFPGridProducer producer, ValueType valueType, string columnName, string headerText)
     {
-      switch (ValueType)
+      switch (valueType)
       {
         case ValueType.String:
-          Producer.Columns.AddText(ColumnName, HeaderText, 10, 5);
+          producer.Columns.AddText(columnName, headerText, 10, 5);
           break;
         case ValueType.Integer:
-          Producer.Columns.AddInt(ColumnName, HeaderText, 5);
-          Producer.Columns.LastAdded.TextAlign = HorizontalAlignment.Right;
+          producer.Columns.AddInt(columnName, headerText, 5);
+          producer.Columns.LastAdded.TextAlign = HorizontalAlignment.Right;
           break;
         case ValueType.Double:
-          Producer.Columns.AddText(ColumnName, HeaderText, 10, 5);
-          Producer.Columns.LastAdded.SizeGroup = "Double";
-          Producer.Columns.LastAdded.TextAlign = HorizontalAlignment.Right;
+          producer.Columns.AddText(columnName, headerText, 10, 5);
+          producer.Columns.LastAdded.SizeGroup = "Double";
+          producer.Columns.LastAdded.TextAlign = HorizontalAlignment.Right;
           break;
         case ValueType.Decimal:
-          Producer.Columns.AddText(ColumnName, HeaderText, 10, 5);
-          Producer.Columns.LastAdded.SizeGroup = "Decimal";
-          Producer.Columns.LastAdded.TextAlign = HorizontalAlignment.Right;
+          producer.Columns.AddText(columnName, headerText, 10, 5);
+          producer.Columns.LastAdded.SizeGroup = "Decimal";
+          producer.Columns.LastAdded.TextAlign = HorizontalAlignment.Right;
           break;
         case ValueType.Boolean:
-          Producer.Columns.AddBool(ColumnName, HeaderText);
+          producer.Columns.AddBool(columnName, headerText);
           break;
         case ValueType.Date:
-          Producer.Columns.AddDate(ColumnName, HeaderText);
+          producer.Columns.AddDate(columnName, headerText);
           break;
         case ValueType.DateTime:
-          Producer.Columns.AddDateTime(ColumnName, HeaderText);
+          producer.Columns.AddDateTime(columnName, headerText);
           break;
         default:
-          throw new ArgumentException("Неизвестный тип данных: " + ValueType.ToString() + " для столбца \"" + ColumnName + "\"", "ValueType");
+          throw new ArgumentException("Неизвестный тип данных: " + valueType.ToString() + " для столбца \"" + columnName + "\"", "ValueType");
       }
     }
 
@@ -809,11 +806,11 @@ namespace Plants
     /// <summary>
     /// Возвращает горизонтальное выравнивание по умолчанию для значения заданного типа
     /// </summary>
-    /// <param name="ValueType">Тип значения</param>
+    /// <param name="valueType">Тип значения</param>
     /// <returns>Выравнивание</returns>
-    public static HorizontalAlignment GetAlignment(ValueType ValueType)
+    public static HorizontalAlignment GetAlignment(ValueType valueType)
     {
-      switch (ValueType)
+      switch (valueType)
       {
         case ValueType.String:
           return HorizontalAlignment.Left;

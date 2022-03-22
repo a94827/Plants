@@ -95,26 +95,26 @@ namespace Plants
 
     #region Чтение и запись полей
 
-    public void ValueToForm(UserSettings Settings)
+    public void ValueToForm(UserSettings settings)
     {
-      efpNumberDigits.Value = Settings.NumberDigits;
+      efpNumberDigits.Value = settings.NumberDigits;
 
-      efpPhotoDir.Text = Settings.PhotoDir.SlashedPath;
-      efpThumbnailSize.SelectedIndex = (int)(Settings.ThumbnailSizeCode);
+      efpPhotoDir.Text = settings.PhotoDir.SlashedPath;
+      efpThumbnailSize.SelectedIndex = (int)(settings.ThumbnailSizeCode);
 
-      efpBackupMode.SelectedIndex = (int)(Settings.BackupMode);
-      efpBackupDir.Text = Settings.BackupDir;
+      efpBackupMode.SelectedIndex = (int)(settings.BackupMode);
+      efpBackupDir.Text = settings.BackupDir;
     }
 
-    public void ValueFromForm(UserSettings Settings)
+    public void ValueFromForm(UserSettings settings)
     {
-      Settings.NumberDigits = efpNumberDigits.Value;
+      settings.NumberDigits = efpNumberDigits.Value;
 
-      Settings.PhotoDir = new AbsPath(efpPhotoDir.Text);
-      Settings.ThumbnailSizeCode = (ThumbnailSizeCode)(efpThumbnailSize.SelectedIndex);
+      settings.PhotoDir = new AbsPath(efpPhotoDir.Text);
+      settings.ThumbnailSizeCode = (ThumbnailSizeCode)(efpThumbnailSize.SelectedIndex);
 
-      Settings.BackupMode = (UserSettings.BackupModes)(efpBackupMode.SelectedIndex);
-      Settings.BackupDir = efpBackupDir.Text;
+      settings.BackupMode = (UserSettings.BackupModes)(efpBackupMode.SelectedIndex);
+      settings.BackupDir = efpBackupDir.Text;
     }
 
     #endregion
@@ -126,16 +126,16 @@ namespace Plants
     /// </summary>
     private static int _LastSelectedPageIndex = 0;
 
-    protected override void OnLoad(EventArgs e)
+    protected override void OnLoad(EventArgs args)
     {
-      base.OnLoad(e);
+      base.OnLoad(args);
       TheTabControl.SelectedIndex = _LastSelectedPageIndex;
     }
 
-    protected override void OnClosing(CancelEventArgs e)
+    protected override void OnClosing(CancelEventArgs args)
     {
       _LastSelectedPageIndex = TheTabControl.SelectedIndex;
-      base.OnClosing(e);
+      base.OnClosing(args);
     }
 
     #endregion
@@ -258,34 +258,34 @@ namespace Plants
 
     public void WriteConfig()
     {
-      XmlCfgFile File = new XmlCfgFile(LocalConfigFilePath);
+      XmlCfgFile cfg = new XmlCfgFile(LocalConfigFilePath);
 
-      File.SetInt("NumberDigits", NumberDigits);
+      cfg.SetInt("NumberDigits", NumberDigits);
 
-      File.SetString("PhotoDir", PhotoDir.Path);
-      File.SetEnum<ThumbnailSizeCode>("ThumbnailSize", ThumbnailSizeCode);
+      cfg.SetString("PhotoDir", PhotoDir.Path);
+      cfg.SetEnum<ThumbnailSizeCode>("ThumbnailSize", ThumbnailSizeCode);
 
-      File.SetEnum<BackupModes>("BackupMode", BackupMode);
-      File.SetString("BackupDir", BackupDir);
+      cfg.SetEnum<BackupModes>("BackupMode", BackupMode);
+      cfg.SetString("BackupDir", BackupDir);
 
-      File.Save();
+      cfg.Save();
     }
 
     public void ReadConfig()
     {
 
-      XmlCfgFile File = new XmlCfgFile(LocalConfigFilePath);
+      XmlCfgFile cfg = new XmlCfgFile(LocalConfigFilePath);
 
-      int x = File.GetInt("NumberDigits");
+      int x = cfg.GetInt("NumberDigits");
       if (x >= 1 && x <= MaxNumberDigits)
         NumberDigits = x;
 
 
-      PhotoDir = new AbsPath(File.GetString("PhotoDir"));
-      File.GetEnum<ThumbnailSizeCode>("ThumbnailSize", ref ThumbnailSizeCode);
+      PhotoDir = new AbsPath(cfg.GetString("PhotoDir"));
+      cfg.GetEnum<ThumbnailSizeCode>("ThumbnailSize", ref ThumbnailSizeCode);
 
-      File.GetEnum<BackupModes>("BackupMode", ref BackupMode);
-      BackupDir = File.GetString("BackupDir");
+      cfg.GetEnum<BackupModes>("BackupMode", ref BackupMode);
+      BackupDir = cfg.GetString("BackupDir");
     }
 
     #endregion

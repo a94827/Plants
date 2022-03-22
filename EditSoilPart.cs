@@ -24,25 +24,25 @@ namespace Plants
 
     #region Редактор
 
-    public static void InitEditForm(object Sender, InitSubDocEditFormEventArgs Args)
+    public static void InitEditForm(object sender, InitSubDocEditFormEventArgs args)
     {
-      EditSoilPart Form = new EditSoilPart();
-      Form.AddPage1(Args);
+      EditSoilPart form = new EditSoilPart();
+      form.AddPage1(args);
     }
 
-    private void AddPage1(InitSubDocEditFormEventArgs Args)
+    private void AddPage1(InitSubDocEditFormEventArgs args)
     {
-      DocEditPage Page = Args.AddPage("Общие", MainPanel1);
-      Page.ImageKey = Args.Editor.SubDocTypeUI.ImageKey;
+      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      page.ImageKey = args.Editor.SubDocTypeUI.ImageKey;
 
-      EFPDocComboBox efpSoil = new EFPDocComboBox(Page.BaseProvider, cbSoil, ProgramDBUI.TheUI.DocTypes["Soils"]);
+      EFPDocComboBox efpSoil = new EFPDocComboBox(page.BaseProvider, cbSoil, ProgramDBUI.TheUI.DocTypes["Soils"]);
       efpSoil.CanBeEmpty = false;
-      Args.AddRef(efpSoil, "Soil", false);
+      args.AddRef(efpSoil, "Soil", false);
 
-      EFPIntEditBox efpPercent = new EFPIntEditBox(Page.BaseProvider, edPercent);
+      EFPIntEditBox efpPercent = new EFPIntEditBox(page.BaseProvider, edPercent);
       efpPercent.Minimum = 0;
       efpPercent.Maximum = 100;
-      Args.AddInt(efpPercent, "Percent", false);
+      args.AddInt(efpPercent, "Percent", false);
     }
 
     #endregion

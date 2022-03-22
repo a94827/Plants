@@ -24,20 +24,20 @@ namespace Plants
 
     #region Редактор
 
-    public static void InitEditForm(object Sender, InitSubDocEditFormEventArgs Args)
+    public static void InitEditForm(object sender, InitSubDocEditFormEventArgs args)
     {
-      EditRemedyUsage Form = new EditRemedyUsage();
-      Form.AddPage1(Args);
+      EditRemedyUsage form = new EditRemedyUsage();
+      form.AddPage1(args);
     }
 
-    private void AddPage1(InitSubDocEditFormEventArgs Args)
+    private void AddPage1(InitSubDocEditFormEventArgs args)
     {
-      DocEditPage Page = Args.AddPage("Общие", MainPanel1);
-      Page.ImageKey = Args.Editor.SubDocTypeUI.ImageKey;
+      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      page.ImageKey = args.Editor.SubDocTypeUI.ImageKey;
 
-      EFPTextBox efpName = new EFPTextBox(Page.BaseProvider, edName);
+      EFPTextBox efpName = new EFPTextBox(page.BaseProvider, edName);
       efpName.CanBeEmpty = false;
-      Args.AddText(efpName, "Name", false);
+      args.AddText(efpName, "Name", false);
     }
 
     #endregion

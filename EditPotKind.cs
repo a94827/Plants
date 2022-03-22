@@ -26,14 +26,14 @@ namespace Plants
 
     #region Табличный просмотр
 
-    public static void InitView(object Sender, InitEFPDBxViewEventArgs Args)
+    public static void InitView(object sender, InitEFPDBxViewEventArgs args)
     {
       #region Фильтры
 
-      RefDocGridFilter FiltManufacturer = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Companies"], "Manufacturer");
-      FiltManufacturer.DisplayName = "Изготовитель";
-      FiltManufacturer.Nullable = true;
-      Args.ControlProvider.Filters.Add(FiltManufacturer);
+      RefDocGridFilter filtManufacturer = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Companies"], "Manufacturer");
+      filtManufacturer.DisplayName = "Изготовитель";
+      filtManufacturer.Nullable = true;
+      args.ControlProvider.Filters.Add(filtManufacturer);
 
       #endregion
     }
@@ -46,13 +46,11 @@ namespace Plants
 
     DocumentEditor _Editor;
 
-    public static void InitDocEditForm(object Sender, InitDocEditFormEventArgs Args)
+    public static void InitDocEditForm(object sender, InitDocEditFormEventArgs args)
     {
-      EditPotKind Form = new EditPotKind();
-
-      Form._Editor = Args.Editor;
-
-      Form.AddPage1(Args);
+      EditPotKind form = new EditPotKind();
+      form._Editor = args.Editor;
+      form.AddPage1(args);
     }
 
     #endregion
@@ -65,41 +63,41 @@ namespace Plants
 
     private EFPSingleEditBox efpVolume;
 
-    private void AddPage1(InitDocEditFormEventArgs Args)
+    private void AddPage1(InitDocEditFormEventArgs args)
     {
-      DocEditPage Page = Args.AddPage("Общие", MainPanel1);
-      Page.ImageKey = "PotKind";
+      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      page.ImageKey = "PotKind";
 
-      efpText = new EFPTextBox(Page.BaseProvider, edText);
+      efpText = new EFPTextBox(page.BaseProvider, edText);
       efpText.CanBeEmpty = true;
-      Args.AddText(efpText, "Text", true);
+      args.AddText(efpText, "Text", true);
 
-      efpD = new EFPIntEditBox(Page.BaseProvider, edD);
-      Args.AddInt(efpD, "Diameter", false);
+      efpD = new EFPIntEditBox(page.BaseProvider, edD);
+      args.AddInt(efpD, "Diameter", false);
 
-      efpH = new EFPIntEditBox(Page.BaseProvider, edH);
-      Args.AddInt(efpH, "Height", false);
+      efpH = new EFPIntEditBox(page.BaseProvider, edH);
+      args.AddInt(efpH, "Height", false);
 
-      efpVolume = new EFPSingleEditBox(Page.BaseProvider, edVolume);
-      Args.AddSingle(efpVolume, "Volume", false);
+      efpVolume = new EFPSingleEditBox(page.BaseProvider, edVolume);
+      args.AddSingle(efpVolume, "Volume", false);
 
-      efpColor = new EFPTextBox(Page.BaseProvider, edColor);
+      efpColor = new EFPTextBox(page.BaseProvider, edColor);
       efpColor.CanBeEmpty = true;
-      Args.AddText(efpColor, "Color", true);
+      args.AddText(efpColor, "Color", true);
 
-      EFPDocComboBox efpManufacturer = new EFPDocComboBox(Page.BaseProvider, cbManufacturer, ProgramDBUI.TheUI.DocTypes["Companies"]);
+      EFPDocComboBox efpManufacturer = new EFPDocComboBox(page.BaseProvider, cbManufacturer, ProgramDBUI.TheUI.DocTypes["Companies"]);
       efpManufacturer.CanBeEmpty = true;
-      Args.AddRef(efpManufacturer, "Manufacturer", true);
+      args.AddRef(efpManufacturer, "Manufacturer", true);
 
-      EFPDocComboBox efpGroup = new EFPDocComboBox(Page.BaseProvider, cbGroup, ProgramDBUI.TheUI.DocTypes["PotKindGroups"]);
+      EFPDocComboBox efpGroup = new EFPDocComboBox(page.BaseProvider, cbGroup, ProgramDBUI.TheUI.DocTypes["PotKindGroups"]);
       efpGroup.CanBeEmpty = true;
-      Args.AddRef(efpGroup, "GroupId", true);
+      args.AddRef(efpGroup, "GroupId", true);
 
       #region Комментарий
 
-      EFPTextBox efpComment = new EFPTextBox(Page.BaseProvider, edComment);
+      EFPTextBox efpComment = new EFPTextBox(page.BaseProvider, edComment);
       efpComment.CanBeEmpty = true;
-      Args.AddText(efpComment, "Comment", true);
+      args.AddText(efpComment, "Comment", true);
 
       #endregion
     }

@@ -21,23 +21,23 @@ namespace Plants
     /// Создает фильтры
     /// </summary>
     /// <param name="ColumnNamePrefix">Префикс перед именами полей, например, "DocId."</param>
-    public PlantReportFilters(string ColumnNamePrefix)
+    public PlantReportFilters(string columnNamePrefix)
     {
-      if (ColumnNamePrefix == null)
-        ColumnNamePrefix = String.Empty;
-      _ColumnNamePrefix = ColumnNamePrefix;
+      if (columnNamePrefix == null)
+        columnNamePrefix = String.Empty;
+      _ColumnNamePrefix = columnNamePrefix;
 
-      FiltGroup = new RefGroupDocGridFilter(ProgramDBUI.TheUI, "PlantGroups", ColumnNamePrefix + "GroupId");
+      FiltGroup = new RefGroupDocGridFilter(ProgramDBUI.TheUI, "PlantGroups", columnNamePrefix + "GroupId");
       Add(FiltGroup);
 
-      FiltHasNumber = new NullNotNullGridFilter(ColumnNamePrefix + "Number", typeof(int));
+      FiltHasNumber = new NullNotNullGridFilter(columnNamePrefix + "Number", typeof(int));
       FiltHasNumber.Code = "HasNumber";
       FiltHasNumber.DisplayName = "Наличие номера по каталогу";
       FiltHasNumber.FilterTextNull = "Нет";
       FiltHasNumber.FilterTextNotNull = "Есть";
       Add(FiltHasNumber);
 
-      FiltNumberRange = new IntRangeGridFilter(ColumnNamePrefix + "Number");
+      FiltNumberRange = new IntRangeGridFilter(columnNamePrefix + "Number");
       FiltNumberRange.DisplayName = "Диапазон номеров по каталогу";
       FiltNumberRange.Minimum = 1;
       FiltNumberRange.Increment = 1;
@@ -146,12 +146,12 @@ namespace Plants
 
     #region Взаимная блокировка фильтров
 
-    protected override void OnChanged(DBxCommonFilter Filter)
+    protected override void OnChanged(DBxCommonFilter filter)
     {
-      base.OnChanged(Filter);
-      if (Filter.IsEmpty)
+      base.OnChanged(filter);
+      if (filter.IsEmpty)
         return;
-      switch (Filter.Code)
+      switch (filter.Code)
       {
         case "HasNumber": this["Number"].Clear(); break;
         case "Number": this["HasNumber"].Clear(); break;
@@ -175,47 +175,46 @@ namespace Plants
     private DataTable _TableDiseases;
 
 
-    public void PerformAuxFiltering(ref DataTable Table, DateTime? FirstDate, DateTime? LastDate)
+    public void PerformAuxFiltering(ref DataTable table, DateTime? firstDate, DateTime? lastDate)
     {
-      string IdColumnName = "Id";
+      string idColumnName = "Id";
       if (_ColumnNamePrefix.Length > 0)
-        IdColumnName = _ColumnNamePrefix.Substring(0, _ColumnNamePrefix.Length - 1); // без точки
-      int pId = Table.Columns.IndexOf(IdColumnName);
+        idColumnName = _ColumnNamePrefix.Substring(0, _ColumnNamePrefix.Length - 1); // без точки
+      int pId = table.Columns.IndexOf(idColumnName);
       if (pId < 0)
-        throw new BugException("Таблица должна содержать поле \"" + IdColumnName + "\"");
+        throw new BugException("Таблица должна содержать поле \"" + idColumnName + "\"");
 
       if (this.IsNonSqlEmpty)
         return; // Никаких ручных фильтров нет
 
-
-      bool UseDeleted = ProgramDBUI.TheUI.DocProvider.DocTypes.UseDeleted;
+      bool useDeleted = ProgramDBUI.TheUI.DocProvider.DocTypes.UseDeleted;
 
       #region Создание TableMovement
 
       if (!(FiltPlace.IsEmpty && FiltHasAdd.IsEmpty && FiltHasRemove.IsEmpty && FiltFromContra.IsEmpty && FiltToContra.IsEmpty
         && FiltSoil.IsEmpty && FiltPotKind.IsEmpty))
       {
-        List<DBxFilter> Filters = new List<DBxFilter>();
-        DBxColumnList Columns = new DBxColumnList();
-        Columns.Add("Id,DocId,Kind,Date1,Date2");
+        List<DBxFilter> filters = new List<DBxFilter>();
+        DBxColumnList columns = new DBxColumnList();
+        columns.Add("Id,DocId,Kind,Date1,Date2");
         if (!(FiltPlace.IsEmpty &&
           FiltHasAdd.IsEmpty && FiltHasRemove.IsEmpty /* 16.10.2019 */))
-          Columns.Add("Place");
+          columns.Add("Place");
         if (!(FiltFromContra.IsEmpty && FiltToContra.IsEmpty))
-          Columns.Add("Contra");
+          columns.Add("Contra");
         if (!FiltSoil.IsEmpty)
-          Columns.Add("Soil");
+          columns.Add("Soil");
         if (!FiltPotKind.IsEmpty)
-          Columns.Add("PotKind");
+          columns.Add("PotKind");
 
-        Filters.Add(new DateRangeCrossFilter("Date1", "Date2", null, LastDate)); // учитываются все даты с начала времен
-        if (UseDeleted)
+        filters.Add(new DateRangeCrossFilter("Date1", "Date2", null, lastDate)); // учитываются все даты с начала времен
+        if (useDeleted)
         {
-          Filters.Add(DBSSubDocType.DeletedFalseFilter);
-          Filters.Add(DBSSubDocType.DocIdDeletedFalseFilter);
+          filters.Add(DBSSubDocType.DeletedFalseFilter);
+          filters.Add(DBSSubDocType.DocIdDeletedFalseFilter);
         }
-        _TableMovement = ProgramDBUI.TheUI.DocProvider.FillSelect("PlantMovement", new DBxColumns(Columns),
-          AndFilter.FromList(Filters), null);
+        _TableMovement = ProgramDBUI.TheUI.DocProvider.FillSelect("PlantMovement", new DBxColumns(columns),
+          AndFilter.FromList(filters), null);
         _TableMovement.DefaultView.Sort = "Date1";
       }
 
@@ -225,37 +224,37 @@ namespace Plants
 
       if (!(FiltAction.IsEmpty && FiltRemedy.IsEmpty && FiltSoil.IsEmpty && FiltPotKind.IsEmpty))
       {
-        List<DBxFilter> Filters = new List<DBxFilter>();
-        DBxColumnList Columns = new DBxColumnList();
-        Columns.Add("Id,DocId,Date1,Date2,Kind");
+        List<DBxFilter> filters = new List<DBxFilter>();
+        DBxColumnList columns = new DBxColumnList();
+        columns.Add("Id,DocId,Date1,Date2,Kind");
 
         if (FiltRemedy.IsEmpty && FiltSoil.IsEmpty && FiltPotKind.IsEmpty)
         {
           // Если есть только фильтр по виду действия
-          Filters.Add(new DateRangeCrossFilter("Date1", "Date2", FirstDate, LastDate));// учитываются только даты в диапазоне
-          Filters.Add(FiltAction.GetSqlFilter()); 
+          filters.Add(new DateRangeCrossFilter("Date1", "Date2", firstDate, lastDate));// учитываются только даты в диапазоне
+          filters.Add(FiltAction.GetSqlFilter());
         }
         else
         {
-          Filters.Add(new DateRangeCrossFilter("Date1", "Date2", null, LastDate));// учитываются все даты с начала времен
+          filters.Add(new DateRangeCrossFilter("Date1", "Date2", null, lastDate));// учитываются все даты с начала времен
           //Filters.Add(FiltAction.GetSqlFilter()); // придется фильтровать руками, т.к. грунт и горшок могут относиться к другим действиям
           if (!FiltSoil.IsEmpty)
-            Columns.Add("Soil");
+            columns.Add("Soil");
           if (!FiltPotKind.IsEmpty)
-            Columns.Add("PotKind");
+            columns.Add("PotKind");
           if (!FiltRemedy.IsEmpty)
-            Columns.Add("Remedy");
+            columns.Add("Remedy");
         }
 
-        if (UseDeleted)
+        if (useDeleted)
         {
-          Filters.Add(DBSSubDocType.DeletedFalseFilter);
-          Filters.Add(DBSSubDocType.DocIdDeletedFalseFilter);
+          filters.Add(DBSSubDocType.DeletedFalseFilter);
+          filters.Add(DBSSubDocType.DocIdDeletedFalseFilter);
         }
 
 
-        _TableActions = ProgramDBUI.TheUI.DocProvider.FillSelect("PlantActions", new DBxColumns(Columns),
-          AndFilter.FromList(Filters), null);
+        _TableActions = ProgramDBUI.TheUI.DocProvider.FillSelect("PlantActions", new DBxColumns(columns),
+          AndFilter.FromList(filters), null);
         _TableActions.DefaultView.Sort = "Date1";
       }
 
@@ -265,22 +264,22 @@ namespace Plants
 
       if (!(FiltDisease.IsEmpty))
       {
-        List<DBxFilter> Filters = new List<DBxFilter>();
-        DBxColumnList Columns = new DBxColumnList();
-        Columns.Add("Id,DocId,Date1,Date2,Disease");
+        List<DBxFilter> filters = new List<DBxFilter>();
+        DBxColumnList columns = new DBxColumnList();
+        columns.Add("Id,DocId,Date1,Date2,Disease");
 
-        Filters.Add(new DateRangeCrossFilter("Date1", "Date2", FirstDate, LastDate));// учитываются только даты в диапазоне
-        Filters.Add(FiltDisease.GetSqlFilter());
+        filters.Add(new DateRangeCrossFilter("Date1", "Date2", firstDate, lastDate));// учитываются только даты в диапазоне
+        filters.Add(FiltDisease.GetSqlFilter());
 
-        if (UseDeleted)
+        if (useDeleted)
         {
-          Filters.Add(DBSSubDocType.DeletedFalseFilter);
-          Filters.Add(DBSSubDocType.DocIdDeletedFalseFilter);
+          filters.Add(DBSSubDocType.DeletedFalseFilter);
+          filters.Add(DBSSubDocType.DocIdDeletedFalseFilter);
         }
 
 
-        _TableDiseases = ProgramDBUI.TheUI.DocProvider.FillSelect("PlantDiseases", new DBxColumns(Columns),
-          AndFilter.FromList(Filters), null);
+        _TableDiseases = ProgramDBUI.TheUI.DocProvider.FillSelect("PlantDiseases", new DBxColumns(columns),
+          AndFilter.FromList(filters), null);
         _TableDiseases.DefaultView.Sort = "Date1";
       }
 
@@ -303,18 +302,18 @@ namespace Plants
 
       #region Фильтрация записей
 
-      bool DelFlag = false;
-      for (int i = Table.Rows.Count - 1; i >= 0; i--)
+      bool delFlag = false;
+      for (int i = table.Rows.Count - 1; i >= 0; i--)
       {
-        Int32 Id = DataTools.GetInt(Table.Rows[i][pId]);
-        if (!TestPlantFilter(Id, FirstDate, LastDate))
+        Int32 id = DataTools.GetInt(table.Rows[i][pId]);
+        if (!TestPlantFilter(id, firstDate, lastDate))
         {
-          Table.Rows[i].Delete();
-          DelFlag = true;
+          table.Rows[i].Delete();
+          delFlag = true;
         }
       }
-      if (DelFlag)
-        Table.AcceptChanges();
+      if (delFlag)
+        table.AcceptChanges();
 
       #endregion
     }
@@ -323,50 +322,50 @@ namespace Plants
 
     #region Проверка одного растения
 
-    private bool TestPlantFilter(Int32 DocId, DateTime? FirstDate, DateTime? LastDate)
+    private bool TestPlantFilter(Int32 docId, DateTime? firstDate, DateTime? lastDate)
     {
       if (_TableMovement != null)
       {
-        _TableMovement.DefaultView.RowFilter = new ValueFilter("DocId", DocId).ToString();
+        _TableMovement.DefaultView.RowFilter = new ValueFilter("DocId", docId).ToString();
         if (!FiltPlace.IsEmpty)
         {
-          if (!TestPlaceFilter(_TableMovement.DefaultView, FirstDate ?? DateTime.MinValue))
+          if (!TestPlaceFilter(_TableMovement.DefaultView, firstDate ?? DateTime.MinValue))
             return false;
         }
         if (!FiltHasAdd.IsEmpty)
         {
-          if (!TestHasAddFilter(_TableMovement.DefaultView, FirstDate ?? DateTime.MinValue))
+          if (!TestHasAddFilter(_TableMovement.DefaultView, firstDate ?? DateTime.MinValue))
             return false;
         }
         if (!FiltHasRemove.IsEmpty)
         {
-          if (!TestHasRemoveFilter(_TableMovement.DefaultView, FirstDate ?? DateTime.MinValue))
+          if (!TestHasRemoveFilter(_TableMovement.DefaultView, firstDate ?? DateTime.MinValue))
             return false;
         }
         if (!FiltFromContra.IsEmpty)
         {
-          if (!TestContraFilter(_TableMovement.DefaultView, FirstDate ?? DateTime.MinValue, true))
+          if (!TestContraFilter(_TableMovement.DefaultView, firstDate ?? DateTime.MinValue, true))
             return false;
         }
         if (!FiltToContra.IsEmpty)
         {
-          if (!TestContraFilter(_TableMovement.DefaultView, FirstDate ?? DateTime.MinValue, false))
+          if (!TestContraFilter(_TableMovement.DefaultView, firstDate ?? DateTime.MinValue, false))
             return false;
         }
       }
 
       if (_TableActions != null)
       {
-        _TableActions.DefaultView.RowFilter = new ValueFilter("DocId", DocId).ToString();
+        _TableActions.DefaultView.RowFilter = new ValueFilter("DocId", docId).ToString();
         if (!FiltAction.IsEmpty)
         {
-          if (!TestActionFilter(_TableActions.DefaultView, FirstDate ?? DateTime.MinValue))
+          if (!TestActionFilter(_TableActions.DefaultView, firstDate ?? DateTime.MinValue))
             return false;
         }
 
         if (!FiltRemedy.IsEmpty)
         {
-          if (!TestRemedyFilter(_TableActions.DefaultView, FirstDate ?? DateTime.MinValue))
+          if (!TestRemedyFilter(_TableActions.DefaultView, firstDate ?? DateTime.MinValue))
             return false;
         }
       }
@@ -374,22 +373,22 @@ namespace Plants
 
       if (!FiltSoil.IsEmpty)
       {
-        if (!TestSoilOrPotKind(_TableMovement.DefaultView, _TableActions.DefaultView, FiltSoil, FirstDate ?? DateTime.MinValue))
+        if (!TestSoilOrPotKind(_TableMovement.DefaultView, _TableActions.DefaultView, FiltSoil, firstDate ?? DateTime.MinValue))
           return false;
       }
 
       if (!FiltPotKind.IsEmpty)
       {
-        if (!TestSoilOrPotKind(_TableMovement.DefaultView, _TableActions.DefaultView, FiltPotKind, FirstDate ?? DateTime.MinValue))
+        if (!TestSoilOrPotKind(_TableMovement.DefaultView, _TableActions.DefaultView, FiltPotKind, firstDate ?? DateTime.MinValue))
           return false;
       }
 
       if (_TableDiseases != null)
       {
-        _TableDiseases.DefaultView.RowFilter = new ValueFilter("DocId", DocId).ToString();
+        _TableDiseases.DefaultView.RowFilter = new ValueFilter("DocId", docId).ToString();
         if (!FiltDisease.IsEmpty)
         {
-          if (!TestDiseaseFilter(_TableDiseases.DefaultView, FirstDate ?? DateTime.MinValue))
+          if (!TestDiseaseFilter(_TableDiseases.DefaultView, firstDate ?? DateTime.MinValue))
             return false;
         }
       }
@@ -397,55 +396,55 @@ namespace Plants
       return true;
     }
 
-    private bool TestPlaceFilter(DataView dv, DateTime FirstDate)
+    private bool TestPlaceFilter(DataView dv, DateTime firstDate)
     {
-      Int32 LastPlaceId = 0;
+      Int32 lastPlaceId = 0;
       foreach (DataRowView drv in dv)
       {
-        MovementKind Kind = (MovementKind)DataTools.GetInt(drv.Row, "Kind");
-        Int32 PlaceId = DataTools.GetInt(drv.Row, "Place");
+        MovementKind kind = (MovementKind)DataTools.GetInt(drv.Row, "Kind");
+        Int32 placeId = DataTools.GetInt(drv.Row, "Place");
         DateTime dt1 = DataTools.GetDateTime(drv.Row, "Date1");
 
-        if (dt1 > FirstDate && LastPlaceId != 0 && FiltPlace.TestValue(LastPlaceId))
+        if (dt1 > firstDate && lastPlaceId != 0 && FiltPlace.TestValue(lastPlaceId))
           return true;
 
-        if (Kind == MovementKind.Add || Kind == MovementKind.Move)
-          LastPlaceId = PlaceId;
+        if (kind == MovementKind.Add || kind == MovementKind.Move)
+          lastPlaceId = placeId;
         else
-          LastPlaceId = 0;
+          lastPlaceId = 0;
       }
-      if (LastPlaceId != 0 && FiltPlace.TestValue(LastPlaceId))
+      if (lastPlaceId != 0 && FiltPlace.TestValue(lastPlaceId))
         return true;
 
       return false;
     }
 
-    private bool TestHasAddFilter(DataView dv, DateTime FirstDate)
+    private bool TestHasAddFilter(DataView dv, DateTime firstDate)
     {
-      bool LastInPlace = false;
+      bool lastInPlace = false;
       foreach (DataRowView drv in dv)
       {
-        MovementKind Kind = (MovementKind)DataTools.GetInt(drv.Row, "Kind");
+        MovementKind kind = (MovementKind)DataTools.GetInt(drv.Row, "Kind");
         DateTime dt1 = DataTools.GetDateTime(drv.Row, "Date1");
-        Int32 PlaceId = DataTools.GetInt(drv.Row, "Place");
-        bool InPlace = true;
+        Int32 placeId = DataTools.GetInt(drv.Row, "Place");
+        bool inPlace = true;
         if (!FiltPlace.IsEmpty)
-          InPlace = FiltPlace.TestValue(PlaceId);
+          inPlace = FiltPlace.TestValue(placeId);
 
-        switch (Kind)
+        switch (kind)
         {
           case MovementKind.Add:
-            if (dt1 >= FirstDate && InPlace)
+            if (dt1 >= firstDate && inPlace)
               return true;
-            LastInPlace = InPlace;
+            lastInPlace = inPlace;
             break;
           case MovementKind.Move:
-            if (dt1 >= FirstDate && InPlace && (!LastInPlace))
+            if (dt1 >= firstDate && inPlace && (!lastInPlace))
               return true;
-            LastInPlace = InPlace;
+            lastInPlace = inPlace;
             break;
           case MovementKind.Remove:
-            LastInPlace = false;
+            lastInPlace = false;
             break;
         }
       }
@@ -453,32 +452,32 @@ namespace Plants
       return false;
     }
 
-    private bool TestHasRemoveFilter(DataView dv, DateTime FirstDate)
+    private bool TestHasRemoveFilter(DataView dv, DateTime firstDate)
     {
-      bool LastInPlace = false;
+      bool lastInPlace = false;
       foreach (DataRowView drv in dv)
       {
-        MovementKind Kind = (MovementKind)DataTools.GetInt(drv.Row, "Kind");
+        MovementKind kind = (MovementKind)DataTools.GetInt(drv.Row, "Kind");
         DateTime dt1 = DataTools.GetDateTime(drv.Row, "Date1");
-        Int32 PlaceId = DataTools.GetInt(drv.Row, "Place");
-        bool InPlace = true;
+        Int32 placeId = DataTools.GetInt(drv.Row, "Place");
+        bool inPlace = true;
         if (!FiltPlace.IsEmpty)
-          InPlace = FiltPlace.TestValue(PlaceId);
+          inPlace = FiltPlace.TestValue(placeId);
 
-        switch (Kind)
+        switch (kind)
         {
           case MovementKind.Add:
-            LastInPlace = InPlace;
+            lastInPlace = inPlace;
             break;
           case MovementKind.Move:
-            if (dt1 >= FirstDate && (!InPlace) && LastInPlace)
+            if (dt1 >= firstDate && (!inPlace) && lastInPlace)
               return true;
-            LastInPlace = InPlace;
+            lastInPlace = inPlace;
             break;
           case MovementKind.Remove:
-            if (dt1 >= FirstDate && LastInPlace)
+            if (dt1 >= firstDate && lastInPlace)
               return true;
-            LastInPlace = false;
+            lastInPlace = false;
             break;
         }
       }
@@ -486,31 +485,31 @@ namespace Plants
       return false;
     }
 
-    private bool TestContraFilter(DataView dv, DateTime FirstDate, bool IsFromContra)
+    private bool TestContraFilter(DataView dv, DateTime firstDate, bool isFromContra)
     {
       // Проверяем только операции прихода или выбытия в периоде
 
       foreach (DataRowView drv in dv)
       {
         DateTime dt1 = DataTools.GetDateTime(drv.Row, "Date1");
-        if (dt1 < FirstDate)
+        if (dt1 < firstDate)
           continue;
-        MovementKind Kind = (MovementKind)DataTools.GetInt(drv.Row, "Kind");
-        Int32 ContraId = DataTools.GetInt(drv.Row, "Contra");
+        MovementKind kind = (MovementKind)DataTools.GetInt(drv.Row, "Kind");
+        Int32 contraId = DataTools.GetInt(drv.Row, "Contra");
 
-        switch (Kind)
+        switch (kind)
         {
           case MovementKind.Add:
-            if (IsFromContra)
+            if (isFromContra)
             {
-              if (FiltFromContra.TestValue(ContraId))
+              if (FiltFromContra.TestValue(contraId))
                 return true;
             }
             break;
           case MovementKind.Remove:
-            if (!IsFromContra)
+            if (!isFromContra)
             {
-              if (FiltToContra.TestValue(ContraId))
+              if (FiltToContra.TestValue(contraId))
                 return true;
             }
             break;
@@ -520,87 +519,87 @@ namespace Plants
       return false;
     }
 
-    private bool TestActionFilter(DataView dv, DateTime FirstDate)
+    private bool TestActionFilter(DataView dv, DateTime firstDate)
     {
       foreach (DataRowView drv in dv)
       {
         DateTime dt1 = DataTools.GetDateTime(drv.Row, "Date1");
-        if (dt1 < FirstDate)
+        if (dt1 < firstDate)
           continue;
-        ActionKind Kind = (ActionKind)DataTools.GetInt(drv.Row, "Kind");
-        if (FiltAction.TestValue((int)Kind))
+        ActionKind kind = (ActionKind)DataTools.GetInt(drv.Row, "Kind");
+        if (FiltAction.TestValue((int)kind))
           return true;
       }
       return false;
     }
 
-    private bool TestRemedyFilter(DataView dv, DateTime FirstDate)
+    private bool TestRemedyFilter(DataView dv, DateTime firstDate)
     {
       foreach (DataRowView drv in dv)
       {
         DateTime dt1 = DataTools.GetDateTime(drv.Row, "Date1");
-        if (dt1 < FirstDate)
+        if (dt1 < firstDate)
           continue;
-        ActionKind Kind = (ActionKind)DataTools.GetInt(drv.Row, "Kind");
-        Int32 RemedyId = DataTools.GetInt(drv.Row, "Remedy");
-        if (Kind == ActionKind.Treatment)
+        ActionKind kind = (ActionKind)DataTools.GetInt(drv.Row, "Kind");
+        Int32 remedyId = DataTools.GetInt(drv.Row, "Remedy");
+        if (kind == ActionKind.Treatment)
         {
-          if (FiltRemedy.TestValue(RemedyId))
+          if (FiltRemedy.TestValue(remedyId))
             return true;
         }
       }
       return false;
     }
 
-    private bool TestDiseaseFilter(DataView dv, DateTime FirstDate)
+    private bool TestDiseaseFilter(DataView dv, DateTime firstDate)
     {
       foreach (DataRowView drv in dv)
       {
         DateTime dt1 = DataTools.GetDateTime(drv.Row, "Date1");
-        if (dt1 < FirstDate)
+        if (dt1 < firstDate)
           continue;
-        Int32 DiseaseId = DataTools.GetInt(drv.Row, "Disease");
-        if (FiltDisease.TestValue(DiseaseId))
+        Int32 diseaseId = DataTools.GetInt(drv.Row, "Disease");
+        if (FiltDisease.TestValue(diseaseId))
           return true;
       }
       return false;
     }
 
-    private bool TestSoilOrPotKind(DataView dvMovement, DataView dvActions, RefDocGridFilter Filt, DateTime FirstDate)
+    private bool TestSoilOrPotKind(DataView dvMovement, DataView dvActions, RefDocGridFilter gridFilter, DateTime firstDate)
     {
       #region Требуется таблица для объединения значений
 
       _TempTableSoilAndPotKind.Rows.Clear();
       foreach (DataRowView drv in dvMovement)
       {
-        MovementKind Kind = (MovementKind)DataTools.GetInt(drv.Row, "Kind");
-        if (Kind == MovementKind.Add)
+        MovementKind kind = (MovementKind)DataTools.GetInt(drv.Row, "Kind");
+        if (kind == MovementKind.Add)
         {
-          DataRow TempRow = _TempTableSoilAndPotKind.Rows.Add(drv.Row["Date1"], drv.Row["Date2"]);
-          TempRow[Filt.ColumnName] = drv.Row[Filt.ColumnName];
+          DataRow tempRow = _TempTableSoilAndPotKind.Rows.Add(drv.Row["Date1"], drv.Row["Date2"]);
+          tempRow[gridFilter.ColumnName] = drv.Row[gridFilter.ColumnName];
         }
       }
       foreach (DataRowView drv in dvActions)
       {
-        ActionKind Kind = (ActionKind)DataTools.GetInt(drv.Row, "Kind");
-        switch (Filt.ColumnName)
+        ActionKind kind = (ActionKind)DataTools.GetInt(drv.Row, "Kind");
+        switch (gridFilter.ColumnName)
         {
           case "Soil":
-            if (!PlantTools.IsSoilAppliable(Kind, true))
+            if (!PlantTools.IsSoilAppliable(kind, true))
               continue;
             break;
           case "PotKind":
-            if (!PlantTools.IsPotKindAppliable(Kind, true))
+            if (!PlantTools.IsPotKindAppliable(kind, true))
               continue;
             break;
           default:
-            throw new ArgumentException("Неизвестный фильтр " + Filt.ColumnName, "Filt");
+            throw new ArgumentException("Неизвестный фильтр " + gridFilter.ColumnName, "Filt");
         }
-        object Id = drv.Row[Filt.ColumnName];
-        if (Id != null)
+        object id = drv.Row[gridFilter.ColumnName];
+        if (id != null)
         {
-          DataRow TempRow = _TempTableSoilAndPotKind.Rows.Add(drv.Row["Date1"], drv.Row["Date2"]);
-          TempRow[Filt.ColumnName] = Id;
+          DataRow tempRow = _TempTableSoilAndPotKind.Rows.Add(drv.Row["Date1"], drv.Row["Date2"]);
+          tempRow[gridFilter.ColumnName] = id;
         }
       }
 
@@ -608,22 +607,22 @@ namespace Plants
 
       #region Теперь перебираем объединенные записи
 
-      Int32 PrevId = 0;
-      bool NeedsTestPrev = false;
+      Int32 prevId = 0;
+      bool needsTestPrev = false;
 
       foreach (DataRowView drv in _TempTableSoilAndPotKind.DefaultView)
       {
-        Int32 Id = DataTools.GetInt(drv.Row, Filt.ColumnName);
+        Int32 id = DataTools.GetInt(drv.Row, gridFilter.ColumnName);
         DateTime dt1 = DataTools.GetDateTime(drv.Row, "Date1");
-        if (dt1 >= FirstDate)
+        if (dt1 >= firstDate)
         {
-          if (Filt.TestValue(Id))
+          if (gridFilter.TestValue(id))
             return true;
         }
         else
         {
-          PrevId = Id;
-          NeedsTestPrev = true;
+          prevId = id;
+          needsTestPrev = true;
         }
       }
 
@@ -631,8 +630,8 @@ namespace Plants
 
       #region Проверка первоначального значения
 
-      if (NeedsTestPrev)
-        return Filt.TestValue(PrevId);
+      if (needsTestPrev)
+        return gridFilter.TestValue(prevId);
       else
         return false;
 

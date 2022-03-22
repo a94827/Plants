@@ -26,14 +26,14 @@ namespace Plants
 
     #region Табличный просмотр
 
-    public static void InitView(object Sender, InitEFPDBxViewEventArgs Args)
+    public static void InitView(object sender, InitEFPDBxViewEventArgs args)
     {
       #region Фильтры
 
-      RefDocGridFilter FiltManufacturer = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Companies"], "Manufacturer");
-      FiltManufacturer.DisplayName = "Изготовитель";
-      FiltManufacturer.Nullable = true;
-      Args.ControlProvider.Filters.Add(FiltManufacturer);
+      RefDocGridFilter filtManufacturer = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Companies"], "Manufacturer");
+      filtManufacturer.DisplayName = "Изготовитель";
+      filtManufacturer.Nullable = true;
+      args.ControlProvider.Filters.Add(filtManufacturer);
 
       #endregion
     }
@@ -46,15 +46,13 @@ namespace Plants
 
     DocumentEditor _Editor;
 
-    public static void InitDocEditForm(object Sender, InitDocEditFormEventArgs Args)
+    public static void InitDocEditForm(object sender, InitDocEditFormEventArgs args)
     {
-      EditRemedy Form = new EditRemedy();
+      EditRemedy form = new EditRemedy();
+      form._Editor = args.Editor;
+      form.AddPage1(args);
 
-      Form._Editor = Args.Editor;
-
-      Form.AddPage1(Args);
-
-      Args.AddSubDocsPage("RemedyUsage");
+      args.AddSubDocsPage("RemedyUsage");
     }
 
     #endregion
@@ -63,28 +61,28 @@ namespace Plants
 
     private EFPTextBox efpName;
 
-    private void AddPage1(InitDocEditFormEventArgs Args)
+    private void AddPage1(InitDocEditFormEventArgs args)
     {
-      DocEditPage Page = Args.AddPage("Общие", MainPanel1);
-      Page.ImageKey = "Remedy";
+      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      page.ImageKey = "Remedy";
 
-      efpName = new EFPTextBox(Page.BaseProvider, edName);
+      efpName = new EFPTextBox(page.BaseProvider, edName);
       efpName.CanBeEmpty = false;
-      Args.AddText(efpName, "Name", false);
+      args.AddText(efpName, "Name", false);
 
-      EFPDocComboBox efpManufacturer = new EFPDocComboBox(Page.BaseProvider, cbManufacturer, ProgramDBUI.TheUI.DocTypes["Companies"]);
+      EFPDocComboBox efpManufacturer = new EFPDocComboBox(page.BaseProvider, cbManufacturer, ProgramDBUI.TheUI.DocTypes["Companies"]);
       efpManufacturer.CanBeEmpty = true;
-      Args.AddRef(efpManufacturer, "Manufacturer", true);
+      args.AddRef(efpManufacturer, "Manufacturer", true);
 
-      EFPDocComboBox efpGroup = new EFPDocComboBox(Page.BaseProvider, cbGroup, ProgramDBUI.TheUI.DocTypes["RemedyGroups"]);
+      EFPDocComboBox efpGroup = new EFPDocComboBox(page.BaseProvider, cbGroup, ProgramDBUI.TheUI.DocTypes["RemedyGroups"]);
       efpGroup.CanBeEmpty = true;
-      Args.AddRef(efpGroup, "GroupId", true);
+      args.AddRef(efpGroup, "GroupId", true);
 
       #region Комментарий
 
-      EFPTextBox efpComment = new EFPTextBox(Page.BaseProvider, edComment);
+      EFPTextBox efpComment = new EFPTextBox(page.BaseProvider, edComment);
       efpComment.CanBeEmpty = true;
-      Args.AddText(efpComment, "Comment", true);
+      args.AddText(efpComment, "Comment", true);
 
       #endregion
     }

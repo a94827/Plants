@@ -96,61 +96,61 @@ namespace Plants
       get { return EFPReportExtParamsPart.User | EFPReportExtParamsPart.NoHistory; }
     }
 
-    public override void WriteFormValues(EFPReportExtParamsForm Form, EFPReportExtParamsPart Part)
+    public override void WriteFormValues(EFPReportExtParamsForm form, EFPReportExtParamsPart part)
     {
-      CareReportParamForm Form2 = (CareReportParamForm)Form;
-      switch (Part)
+      CareReportParamForm form2 = (CareReportParamForm)form;
+      switch (part)
       {
         case EFPReportExtParamsPart.User:
-          Form2.FiltersControlProvider.Filters = Filters;
+          form2.FiltersControlProvider.Filters = Filters;
           break;
         case EFPReportExtParamsPart.NoHistory:
-          Form2.efpDay.Value = Day;
-          Form2.efpPeriod.First.Value = FirstDate;
-          Form2.efpPeriod.Last.Value = LastDate;
+          form2.efpDay.Value = Day;
+          form2.efpPeriod.First.Value = FirstDate;
+          form2.efpPeriod.Last.Value = LastDate;
           break;
       }
     }
 
-    public override void ReadFormValues(EFPReportExtParamsForm Form, EFPReportExtParamsPart Part)
+    public override void ReadFormValues(EFPReportExtParamsForm form, EFPReportExtParamsPart part)
     {
-      CareReportParamForm Form2 = (CareReportParamForm)Form;
-      switch (Part)
+      CareReportParamForm form2 = (CareReportParamForm)form;
+      switch (part)
       {
         case EFPReportExtParamsPart.NoHistory:
-          Day = Form2.efpDay.Value;
-          FirstDate = Form2.efpPeriod.First.Value;
-          LastDate = Form2.efpPeriod.Last.Value;
+          Day = form2.efpDay.Value;
+          FirstDate = form2.efpPeriod.First.Value;
+          LastDate = form2.efpPeriod.Last.Value;
           break;
       }
     }
 
-    public override void WriteConfig(FreeLibSet.Config.CfgPart Config, EFPReportExtParamsPart Part)
+    public override void WriteConfig(FreeLibSet.Config.CfgPart cfg, EFPReportExtParamsPart part)
     {
-      switch (Part)
+      switch (part)
       {
         case EFPReportExtParamsPart.User:
-          Filters.WriteConfig(Config);
+          Filters.WriteConfig(cfg);
           break;
         case EFPReportExtParamsPart.NoHistory:
-          Config.SetInt("Day", Day.DayOfYear);
-          Config.SetNullableDate("FirstDate", FirstDate);
-          Config.SetNullableDate("LastDate", LastDate);
+          cfg.SetInt("Day", Day.DayOfYear);
+          cfg.SetNullableDate("FirstDate", FirstDate);
+          cfg.SetNullableDate("LastDate", LastDate);
           break;
       }
     }
 
-    public override void ReadConfig(FreeLibSet.Config.CfgPart Config, EFPReportExtParamsPart Part)
+    public override void ReadConfig(FreeLibSet.Config.CfgPart cfg, EFPReportExtParamsPart part)
     {
-      switch (Part)
+      switch (part)
       {
         case EFPReportExtParamsPart.User:
-          Filters.ReadConfig(Config);
+          Filters.ReadConfig(cfg);
           break;
         case EFPReportExtParamsPart.NoHistory:
-          Day = new MonthDay(Config.GetIntDef("Day", Day.DayOfYear));
-          Config.GetDate("FirstDate", ref FirstDate);
-          Config.GetDate("LastDate", ref LastDate);
+          Day = new MonthDay(cfg.GetIntDef("Day", Day.DayOfYear));
+          cfg.GetDate("FirstDate", ref FirstDate);
+          cfg.GetDate("LastDate", ref LastDate);
           break;
       }
     }
@@ -167,10 +167,10 @@ namespace Plants
     {
       MainImageKey = "CareReport";
 
-      MainPage = new EFPReportDBxGridPage(ProgramDBUI.TheUI);
-      MainPage.InitGrid += new EventHandler(MainPage_InitGrid);
-      MainPage.ShowToolBar = true;
-      Pages.Add(MainPage);
+      _MainPage = new EFPReportDBxGridPage(ProgramDBUI.TheUI);
+      _MainPage.InitGrid += new EventHandler(MainPage_InitGrid);
+      _MainPage.ShowToolBar = true;
+      Pages.Add(_MainPage);
     }
 
     #endregion
@@ -241,81 +241,80 @@ namespace Plants
 
     protected override void BuildReport()
     {
-      DBxFilter SqlFilter = Params.Filters.GetSqlFilter();
+      DBxFilter sqlFilter = Params.Filters.GetSqlFilter();
       if (ProgramDBUI.TheUI.DocProvider.DocTypes.UseDeleted)
-        SqlFilter &= DBSDocType.DeletedFalseFilter;
+        sqlFilter &= DBSDocType.DeletedFalseFilter;
 
-      DBxColumnList ColNames = new DBxColumnList();
-      ColNames.Add("Id,Care");
-      ProgramDBUI.TheUI.DocTypes["Plants"].GridProducer.GetColumnNames("Plants", "", ColNames);
+      DBxColumnList colNames = new DBxColumnList();
+      colNames.Add("Id,Care");
+      ProgramDBUI.TheUI.DocTypes["Plants"].GridProducer.GetColumnNames("Plants", "", colNames);
 
-      DataTable PlantTable = ProgramDBUI.TheUI.DocProvider.FillSelect("Plants",
-        new DBxColumns(ColNames),
-        SqlFilter,
+      DataTable plantTable = ProgramDBUI.TheUI.DocProvider.FillSelect("Plants",
+        new DBxColumns(colNames),
+        sqlFilter,
         DBxOrder.FromDataViewSort("Number,Name,Id"));
 
-      Params.Filters.PerformAuxFiltering(ref PlantTable, Params.FirstDate, Params.LastDate);
+      Params.Filters.PerformAuxFiltering(ref plantTable, Params.FirstDate, Params.LastDate);
       // Порядок строк правильный
 
-      DBxDocSet CareSet = new DBxDocSet(ProgramDBUI.TheUI.DocProvider);
-      DBxMultiDocs mCareDocs = CareSet["Care"];
-      Int32[] CareIds = DataTools.GetIdsFromColumn(PlantTable, "Care");
-      if (CareIds.Length > 0)
-        mCareDocs.View(CareIds);
+      DBxDocSet careSet = new DBxDocSet(ProgramDBUI.TheUI.DocProvider);
+      DBxMultiDocs mCareDocs = careSet["Care"];
+      Int32[] careIds = DataTools.GetIdsFromColumn(plantTable, "Care");
+      if (careIds.Length > 0)
+        mCareDocs.View(careIds);
 
+      DataTable resTable = new DataTable();
+      resTable.Columns.Add("PlantId", typeof(Int32));
+      resTable.Columns.Add("PlantNumber", typeof(int));
+      resTable.Columns.Add("PlantName", typeof(string));
+      resTable.Columns.Add("CareId", typeof(Int32)); // к которому относится запись
+      resTable.Columns.Add("CareRecordId", typeof(Int32)); // Id записи
+      resTable.Columns.Add("PeriodText", typeof(string));
+      resTable.Columns.Add("PeriodName", typeof(string));
+      resTable.Columns.Add("ItemName", typeof(string));
+      resTable.Columns.Add("ItemTextValue", typeof(string));
+      resTable.Columns.Add("PlantOrder", typeof(int)); // Порядок растения в отчете
 
-      DataTable ResTable = new DataTable();
-      ResTable.Columns.Add("PlantId", typeof(Int32));
-      ResTable.Columns.Add("PlantNumber", typeof(int));
-      ResTable.Columns.Add("PlantName", typeof(string));
-      ResTable.Columns.Add("CareId", typeof(Int32)); // к которому относится запись
-      ResTable.Columns.Add("CareRecordId", typeof(Int32)); // Id записи
-      ResTable.Columns.Add("PeriodText", typeof(string));
-      ResTable.Columns.Add("PeriodName", typeof(string));
-      ResTable.Columns.Add("ItemName", typeof(string));
-      ResTable.Columns.Add("ItemTextValue", typeof(string));
-      ResTable.Columns.Add("PlantOrder", typeof(int)); // Порядок растения в отчете
-
-      int PlantCount = 0;
-      foreach (DataRow PlantRow in PlantTable.Rows)
+      int plantCount = 0;
+      foreach (DataRow plantRow in plantTable.Rows)
       {
         // Одна строка добавляется, даже если для растения нет ухода
-        DataRow ResRow1 = ResTable.Rows.Add();
-        ResRow1["PlantId"] = PlantRow["Id"];
-        ResRow1["PlantName"] = PlantRow["Name"];
-        ResRow1["PlantNumber"] = PlantRow["Number"];
-        PlantCount++;
-        ResRow1["PlantOrder"] = PlantCount;
+        DataRow resRow1 = resTable.Rows.Add();
+        resRow1["PlantId"] = plantRow["Id"];
+        resRow1["PlantName"] = plantRow["Name"];
+        resRow1["PlantNumber"] = plantRow["Number"];
+        plantCount++;
+        resRow1["PlantOrder"] = plantCount;
 
-        DBxSingleDoc[] CareDocs = GetCareDocs(mCareDocs, DataTools.GetInt(PlantRow, "Care"));
-        if (CareDocs.Length == 0)
+        DBxSingleDoc[] careDocs = GetCareDocs(mCareDocs, DataTools.GetInt(plantRow, "Care"));
+        if (careDocs.Length == 0)
           continue; // не задана ссылка "Care"
 
-        SortedList<RecordSortInfo, CareValues> RecList = new SortedList<RecordSortInfo, CareValues>();
+        SortedList<RecordSortInfo, CareValues> recList = new SortedList<RecordSortInfo, CareValues>();
 
-        for (int i = 0; i < CareDocs.Length; i++)
+        for (int i = 0; i < careDocs.Length; i++)
         {
-          foreach (DBxSubDoc SubDoc in CareDocs[i].SubDocs["CareRecords"])
+          foreach (DBxSubDoc subDoc in careDocs[i].SubDocs["CareRecords"])
           {
-            MonthDay md1 = new MonthDay(SubDoc.Values["Day1"].AsInteger);
-            MonthDay md2 = new MonthDay(SubDoc.Values["Day2"].AsInteger);
-            MonthDayRange ThisRange = new MonthDayRange(md1, md2);
-            if ((!Params.Day.IsEmpty) && (!ThisRange.IsEmpty))
+            MonthDay md1 = new MonthDay(subDoc.Values["Day1"].AsInteger);
+            MonthDay md2 = new MonthDay(subDoc.Values["Day2"].AsInteger);
+            MonthDayRange thisRange = new MonthDayRange(md1, md2);
+            if ((!Params.Day.IsEmpty) && (!thisRange.IsEmpty))
             {
-              if (!ThisRange.Contains(Params.Day))
+              if (!thisRange.Contains(Params.Day))
                 continue;
             }
 
-            CareValues Values = new CareValues(CareItem.TheList);
-            Values.Read(SubDoc.Values);
+            CareValues values = new CareValues(CareItem.TheList);
+            values.Read(subDoc.Values);
 
             RecordSortInfo si = new RecordSortInfo();
-            si.CareDocId = CareDocs[i].DocId;
+            si.CareDocId = careDocs[i].DocId;
             si.CareDocHieIndex = i;
-            si.CareRecordId = SubDoc.SubDocId;
-            si.Range = ThisRange;
-            si.PeriodName = SubDoc.Values["Name"].AsString;
-            RecList.Add(si, Values);
+            si.CareRecordId = subDoc.SubDocId;
+            si.Range = thisRange;
+            si.PeriodName = subDoc.Values["Name"].AsString;
+            recList.Add(si, values);
           }
         }
 
@@ -327,62 +326,62 @@ namespace Plants
           if (Params.Day.IsEmpty)
           {
             // Добавляем по одной строке, если есть заданное значение
-            foreach (KeyValuePair<RecordSortInfo, CareValues> Pair in RecList)
+            foreach (KeyValuePair<RecordSortInfo, CareValues> pair in recList)
             {
-              if (Pair.Value[j] != null)
-                AddReportRow(ResTable, Pair.Key, Pair.Value, j);
+              if (pair.Value[j] != null)
+                AddReportRow(resTable, pair.Key, pair.Value, j);
             }
           }
           else
           {
             // Находим последнюю действующую запись
-            KeyValuePair<RecordSortInfo, CareValues> UsedPair = new KeyValuePair<RecordSortInfo, CareValues>(); // неинициализированная структура
-            foreach (KeyValuePair<RecordSortInfo, CareValues> Pair in RecList)
+            KeyValuePair<RecordSortInfo, CareValues> usedPair = new KeyValuePair<RecordSortInfo, CareValues>(); // неинициализированная структура
+            foreach (KeyValuePair<RecordSortInfo, CareValues> pair in recList)
             {
-              if (Pair.Value[j] != null)
-                UsedPair = Pair;
+              if (pair.Value[j] != null)
+                usedPair = pair;
             }
 
-            if (UsedPair.Key != null)
-              AddReportRow(ResTable, UsedPair.Key, UsedPair.Value, j);
+            if (usedPair.Key != null)
+              AddReportRow(resTable, usedPair.Key, usedPair.Value, j);
           }
         }
       }
 
-      MainPage.DataSource = ResTable.DefaultView;
+      _MainPage.DataSource = resTable.DefaultView;
     }
 
-    private static readonly DBxSingleDoc[] EmptyDocs = new DBxSingleDoc[0];
+    private static readonly DBxSingleDoc[] _EmptyDocs = new DBxSingleDoc[0];
 
     /// <summary>
     /// Возвращает массив документов об уходе, которые должны быть просмотрены, с учетом иерархии.
-    /// Первым в массиве идет родительский документ, затем дочерний, ... Последним идет документ с идентификатором <paramref name="CareId"/>.
-    /// Если <paramref name="CareId"/>=0, возвращается пустой массив
+    /// Первым в массиве идет родительский документ, затем дочерний, ... Последним идет документ с идентификатором <paramref name="careId"/>.
+    /// Если <paramref name="careId"/>=0, возвращается пустой массив
     /// </summary>
     /// <param name="mCareDocs">Документы "Care"</param>
-    /// <param name="CareId">Идентификатор записи об уходе, заданной у растения</param>
+    /// <param name="careId">Идентификатор записи об уходе, заданной у растения</param>
     /// <returns></returns>
-    private static DBxSingleDoc[] GetCareDocs(DBxMultiDocs mCareDocs, Int32 CareId)
+    private static DBxSingleDoc[] GetCareDocs(DBxMultiDocs mCareDocs, Int32 careId)
     {
-      if (CareId == 0)
-        return EmptyDocs;
+      if (careId == 0)
+        return _EmptyDocs;
 
       List<DBxSingleDoc> lst = new List<DBxSingleDoc>();
-      IdList Ids = new IdList();
-      while (CareId != 0)
+      IdList ids = new IdList();
+      while (careId != 0)
       {
-        DBxSingleDoc Doc;
-        if (!mCareDocs.TryGetDocById(CareId, out Doc))
-          Doc = mCareDocs.View(CareId); // догружаем недостающего родителя
+        DBxSingleDoc doc;
+        if (!mCareDocs.TryGetDocById(careId, out doc))
+          doc = mCareDocs.View(careId); // догружаем недостающего родителя
 
-        if (Ids.Contains(CareId))
+        if (ids.Contains(careId))
         {
-          EFPApp.ErrorMessageBox("Цепочка документов об уходе зациклена для DocId=" + CareId + ": " + Doc.TextValue);
+          EFPApp.ErrorMessageBox("Цепочка документов об уходе зациклена для DocId=" + careId + ": " + doc.TextValue);
           break;
         }
-        Ids.Add(CareId);
-        lst.Insert(0, Doc);
-        CareId = Doc.Values["ParentId"].AsInteger;
+        ids.Add(careId);
+        lst.Insert(0, doc);
+        careId = doc.Values["ParentId"].AsInteger;
       }
 
       return lst.ToArray();
@@ -392,90 +391,88 @@ namespace Plants
     /// Заполнение строки отчета.
     /// Добавляет новую строку или заполняет первую строку для растения
     /// </summary>
-    /// <param name="ResTable">Таблица</param>
-    /// <param name="Pair"></param>
-    private void AddReportRow(DataTable ResTable, RecordSortInfo Info, CareValues Values, int ItemIndex)
+    private void AddReportRow(DataTable resTable, RecordSortInfo sortInfo, CareValues values, int itemIndex)
     {
-      DataRow LastRow = ResTable.Rows[ResTable.Rows.Count - 1];
-      DataRow ResRow;
-      if (LastRow.IsNull("CareId"))
-        ResRow = LastRow; // первая строка для растения
+      DataRow lastRow = resTable.Rows[resTable.Rows.Count - 1];
+      DataRow resRow;
+      if (lastRow.IsNull("CareId"))
+        resRow = lastRow; // первая строка для растения
       else
       {
-        ResRow = ResTable.Rows.Add();
-        ResRow["PlantId"] = LastRow["PlantId"];
-        ResRow["PlantOrder"] = LastRow["PlantOrder"];
+        resRow = resTable.Rows.Add();
+        resRow["PlantId"] = lastRow["PlantId"];
+        resRow["PlantOrder"] = lastRow["PlantOrder"];
       }
 
-      ResRow["CareId"] = Info.CareDocId;
-      ResRow["CareRecordId"] = Info.CareRecordId;
-      ResRow["PeriodText"] = DateRangeFormatter.Default.ToString(Info.Range, false);
-      ResRow["PeriodName"] = Info.PeriodName;
-      ResRow["ItemName"] = Values.Items[ItemIndex].Name;
-      ResRow["ItemTextValue"] = Values.Items[ItemIndex].GetTextValue(Values[ItemIndex]);
+      resRow["CareId"] = sortInfo.CareDocId;
+      resRow["CareRecordId"] = sortInfo.CareRecordId;
+      resRow["PeriodText"] = DateRangeFormatter.Default.ToString(sortInfo.Range, false);
+      resRow["PeriodName"] = sortInfo.PeriodName;
+      resRow["ItemName"] = values.Items[itemIndex].Name;
+      resRow["ItemTextValue"] = values.Items[itemIndex].GetTextValue(values[itemIndex]);
     }
 
     #endregion
 
     #region Страница отчета
 
-    EFPReportDBxGridPage MainPage;
+    EFPReportDBxGridPage _MainPage;
 
-    void MainPage_InitGrid(object Sender, EventArgs Args)
+    void MainPage_InitGrid(object sender, EventArgs args)
     {
-      MainPage.ControlProvider.Control.AutoGenerateColumns = false;
-      MainPage.ControlProvider.Columns.AddInt("PlantNumber", true, "№ по каталогу", 3);
-      MainPage.ControlProvider.Columns.LastAdded.GridColumn.DefaultCellStyle.Format = ProgramDBUI.Settings.NumberMask;
-      MainPage.ControlProvider.Columns.LastAdded.CanIncSearch = true;
-      MainPage.ControlProvider.Columns.AddTextFill("PlantName", true, "Наименование", 50, 20);
-      MainPage.ControlProvider.Columns.LastAdded.CanIncSearch = true;
-      MainPage.ControlProvider.Columns.AddText("PeriodText", true, "Период записи", DateRangeFormatter.Default.MonthDayRangeShortTextLength, DateRangeFormatter.Default.MonthDayRangeShortTextLength);
-      MainPage.ControlProvider.Columns.LastAdded.TextAlign = HorizontalAlignment.Center;
+      _MainPage.ControlProvider.Control.AutoGenerateColumns = false;
+      _MainPage.ControlProvider.Columns.AddInt("PlantNumber", true, "№ по каталогу", 3);
+      _MainPage.ControlProvider.Columns.LastAdded.GridColumn.DefaultCellStyle.Format = ProgramDBUI.Settings.NumberMask;
+      _MainPage.ControlProvider.Columns.LastAdded.CanIncSearch = true;
+      _MainPage.ControlProvider.Columns.AddTextFill("PlantName", true, "Наименование", 50, 20);
+      _MainPage.ControlProvider.Columns.LastAdded.CanIncSearch = true;
+      _MainPage.ControlProvider.Columns.AddText("PeriodText", true, "Период записи", DateRangeFormatter.Default.MonthDayRangeShortTextLength, DateRangeFormatter.Default.MonthDayRangeShortTextLength);
+      _MainPage.ControlProvider.Columns.LastAdded.TextAlign = HorizontalAlignment.Center;
       //MainPage.ControlProvider.Columns.AddText("PeriodName", true, "Название периода", 20, 10);
-      MainPage.ControlProvider.Columns.AddText("ItemName", true, "Параметр", 20, 10);
-      MainPage.ControlProvider.Columns.AddTextFill("ItemTextValue", true, "Значение", 50, 20);
-      MainPage.ControlProvider.DisableOrdering();
+      _MainPage.ControlProvider.Columns.AddText("ItemName", true, "Параметр", 20, 10);
+      _MainPage.ControlProvider.Columns.AddTextFill("ItemTextValue", true, "Значение", 50, 20);
+      _MainPage.ControlProvider.DisableOrdering();
 
-      MainPage.ControlProvider.GetRowAttributes += new EFPDataGridViewRowAttributesEventHandler(MainPage_GetRowAttributes);
+      _MainPage.ControlProvider.GetRowAttributes += new EFPDataGridViewRowAttributesEventHandler(MainPage_GetRowAttributes);
 
-      MainPage.ControlProvider.ReadOnly = false;
-      MainPage.ControlProvider.CanInsert = false;
-      MainPage.ControlProvider.CanDelete = false;
-      MainPage.ControlProvider.CanView = true;
-      MainPage.ControlProvider.Control.ReadOnly = true;
-      MainPage.ControlProvider.EditData += new EventHandler(MainPage_EditData);
-      MainPage.ControlProvider.GetDocSel += new EFPDBxGridViewDocSelEventHandler(MainPage_GetDocSel);
+      _MainPage.ControlProvider.ReadOnly = false;
+      _MainPage.ControlProvider.CanInsert = false;
+      _MainPage.ControlProvider.CanDelete = false;
+      _MainPage.ControlProvider.CanView = true;
+      _MainPage.ControlProvider.Control.ReadOnly = true;
+      _MainPage.ControlProvider.EditData += new EventHandler(MainPage_EditData);
+      _MainPage.ControlProvider.GetDocSel += new EFPDBxGridViewDocSelEventHandler(MainPage_GetDocSel);
     }
 
-    void MainPage_GetRowAttributes(object Sender, EFPDataGridViewRowAttributesEventArgs Args)
+    void MainPage_GetRowAttributes(object sender, EFPDataGridViewRowAttributesEventArgs args)
     {
-      int PlantOrder = DataTools.GetInt(Args.DataRow, "PlantOrder");
-      if ((PlantOrder % 2) == 0)
-        Args.ColorType = EFPDataGridViewColorType.Alter;
-      if (DataTools.GetInt(Args.DataRow, "CareId") == 0)
-        Args.Grayed = true;
+      int plantOrder = DataTools.GetInt(args.DataRow, "PlantOrder");
+      if ((plantOrder % 2) == 0)
+        args.ColorType = EFPDataGridViewColorType.Alter;
+      if (DataTools.GetInt(args.DataRow, "CareId") == 0)
+        args.Grayed = true;
     }
 
-    void MainPage_EditData(object Sender, EventArgs Args)
+    void MainPage_EditData(object sender, EventArgs args)
     {
-      if (!MainPage.ControlProvider.CheckSingleRow())
+      if (!_MainPage.ControlProvider.CheckSingleRow())
         return;
-      switch (MainPage.ControlProvider.CurrentColumnName)
+      switch (_MainPage.ControlProvider.CurrentColumnName)
       {
         case "PlantNumber":
         case "PlantName":
-          Int32 PlantId = DataTools.GetInt(MainPage.ControlProvider.CurrentDataRow, "PlantId");
-          ProgramDBUI.TheUI.DocTypes["Plants"].PerformEditing(PlantId, MainPage.ControlProvider.State == EFPDataGridViewState.View);
+          Int32 plantId = DataTools.GetInt(_MainPage.ControlProvider.CurrentDataRow, "PlantId");
+          ProgramDBUI.TheUI.DocTypes["Plants"].PerformEditing(plantId, _MainPage.ControlProvider.State == EFPDataGridViewState.View);
           break;
         case "PeriodText":
         case "PeriodName":
         case "ItemName":
         case "ItemTextValue":
-          Int32 CareId = DataTools.GetInt(MainPage.ControlProvider.CurrentDataRow, "CareId");
-          if (CareId == 0)
+          Int32 careId = DataTools.GetInt(_MainPage.ControlProvider.CurrentDataRow, "CareId");
+          if (careId == 0)
             EFPApp.ShowTempMessage("Выбранная строка не ссылается на документ по уходу за растениями");
           else
-            ProgramDBUI.TheUI.DocTypes["Care"].PerformEditing(CareId, MainPage.ControlProvider.State == EFPDataGridViewState.View);
+            ProgramDBUI.TheUI.DocTypes["Care"].PerformEditing(careId, _MainPage.ControlProvider.State == EFPDataGridViewState.View);
           break;
         default:
           EFPApp.ShowTempMessage("Нет выбранного столбца");
@@ -483,12 +480,11 @@ namespace Plants
       }
     }
 
-    void MainPage_GetDocSel(object Sender, EFPDBxGridViewDocSelEventArgs Args)
+    void MainPage_GetDocSel(object sender, EFPDBxGridViewDocSelEventArgs args)
     {
-      Args.AddFromColumn("Plants", "PlantId");
-      Args.AddFromColumn("Care", "CareId");
+      args.AddFromColumn("Plants", "PlantId");
+      args.AddFromColumn("Care", "CareId");
     }
-
 
     #endregion
   }

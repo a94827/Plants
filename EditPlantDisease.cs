@@ -24,28 +24,28 @@ namespace Plants
 
     #region Редактор
 
-    public static void InitEditForm(object Sender, InitSubDocEditFormEventArgs Args)
+    public static void InitEditForm(object sender, InitSubDocEditFormEventArgs args)
     {
-      EditPlantDisease Form = new EditPlantDisease();
-      Form.AddPage1(Args);
+      EditPlantDisease form = new EditPlantDisease();
+      form.AddPage1(args);
     }
 
-    private void AddPage1(InitSubDocEditFormEventArgs Args)
+    private void AddPage1(InitSubDocEditFormEventArgs args)
     {
-      DocEditPage Page = Args.AddPage("Общие", MainPanel1);
-      Page.ImageKey = Args.Editor.SubDocTypeUI.ImageKey;
+      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      page.ImageKey = args.Editor.SubDocTypeUI.ImageKey;
 
-      EFPDocComboBox efpDisease = new EFPDocComboBox(Page.BaseProvider, cbDisease, ProgramDBUI.TheUI.DocTypes["Diseases"]);
+      EFPDocComboBox efpDisease = new EFPDocComboBox(page.BaseProvider, cbDisease, ProgramDBUI.TheUI.DocTypes["Diseases"]);
       efpDisease.CanBeEmpty = false;
-      Args.AddRef(efpDisease, "Disease", false);
+      args.AddRef(efpDisease, "Disease", false);
 
-      EFPDateOrRangeBox efpDate = new EFPDateOrRangeBox(Page.BaseProvider, cbDate);
+      EFPDateOrRangeBox efpDate = new EFPDateOrRangeBox(page.BaseProvider, cbDate);
       efpDate.CanBeEmpty = false;
-      Args.AddDate(efpDate, "Date1", "Date2", false);
+      args.AddDate(efpDate, "Date1", "Date2", false);
 
-      EFPTextBox efpComment = new EFPTextBox(Page.BaseProvider, edComment);
+      EFPTextBox efpComment = new EFPTextBox(page.BaseProvider, edComment);
       efpComment.CanBeEmpty = true;
-      Args.AddText(efpComment, "Comment", true);
+      args.AddText(efpComment, "Comment", true);
     }
 
     #endregion

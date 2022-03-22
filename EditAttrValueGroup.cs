@@ -50,9 +50,9 @@ namespace Plants
       efpAttrType.DocIdEx.ValueChanged += new EventHandler(AttrTypeChanged);
     }
 
-    protected override void OnLoad(EventArgs e)
+    protected override void OnLoad(EventArgs args)
     {
-      base.OnLoad(e);
+      base.OnLoad(args);
 
       base.ActiveControl = efpValue.Control;
     }
@@ -77,7 +77,7 @@ namespace Plants
 
     #region Обработчики
 
-    private void AttrTypeChanged(object Sender, EventArgs Args)
+    private void AttrTypeChanged(object sender, EventArgs args)
     {
       efpValue.AttrTypeId = efpAttrType.DocId;
       efpValue.Enabled = efpAction.SelectedIndex == 0;
@@ -87,64 +87,64 @@ namespace Plants
 
     #region Статический метод
 
-    private static int LastAction = 0;
+    private static int _LastAction = 0;
 
-    public static bool PerformEdit(DocTypeUI DocTypeUI, Int32[] DocIds, Int32 AttrTypeId)
+    public static bool PerformEdit(DocTypeUI docTypeUI, Int32[] docIds, Int32 attrTypeId)
     {
-      if (DocIds.Length == 0)
+      if (docIds.Length == 0)
       {
         EFPApp.ErrorMessageBox("Документы не выбраны");
         return false;
       }
 
-      bool Res = false;
+      bool res = false;
       try
       {
-        DBxDocSet DocSet = new DBxDocSet(ProgramDBUI.TheUI.DocProvider);
-        DBxMultiDocs mDocs = DocSet[DocTypeUI.DocType.Name];
-        mDocs.Edit(DocIds);
+        DBxDocSet docSet = new DBxDocSet(ProgramDBUI.TheUI.DocProvider);
+        DBxMultiDocs mDocs = docSet[docTypeUI.DocType.Name];
+        mDocs.Edit(docIds);
         // Держим блокировку на все время показа диалога
-        Guid LockGuid = DocSet.AddLongLock();
+        Guid lockGuid = docSet.AddLongLock();
         try
         {
-          EditAttrValueGroup Form = new EditAttrValueGroup();
-          Form._DocTypeUI = DocTypeUI;
-          Form.InitForm(mDocs);
+          EditAttrValueGroup form = new EditAttrValueGroup();
+          form._DocTypeUI = docTypeUI;
+          form.InitForm(mDocs);
 
           #region Группа "Выбранные документы"
 
-          Form.lblDocTypeName.ImageList = EFPApp.MainImages;
-          Form.lblDocTypeName.ImageAlign = ContentAlignment.MiddleRight;
-          if (DocIds.Length == 1)
+          form.lblDocTypeName.ImageList = EFPApp.MainImages;
+          form.lblDocTypeName.ImageAlign = ContentAlignment.MiddleRight;
+          if (docIds.Length == 1)
           {
-            Form.lblDocTypeName.Text = DocTypeUI.DocType.SingularTitle;
-            Form.lblDocTypeName.Image = DocTypeUI.GetImageValue(DocIds[0]);
-            Form.lblDocInfo.Text = DocTypeUI.GetTextValue(DocIds[0]);
+            form.lblDocTypeName.Text = docTypeUI.DocType.SingularTitle;
+            form.lblDocTypeName.Image = docTypeUI.GetImageValue(docIds[0]);
+            form.lblDocInfo.Text = docTypeUI.GetTextValue(docIds[0]);
           }
           else
           {
-            Form.lblDocTypeName.Text = DocTypeUI.DocType.PluralTitle;
-            Form.lblDocTypeName.ImageKey = DocTypeUI.ImageKey;
-            Form.lblDocInfo.Text = DocIds.Length.ToString() + " документа(ов)";
+            form.lblDocTypeName.Text = docTypeUI.DocType.PluralTitle;
+            form.lblDocTypeName.ImageKey = docTypeUI.ImageKey;
+            form.lblDocInfo.Text = docIds.Length.ToString() + " документа(ов)";
           }
 
           #endregion
 
-          Form.efpAttrType.DocId = AttrTypeId;
-          Form.efpDate.NValue = EditAttrValueHelper.LastDate;
-          Form.efpAction.SelectedIndex = LastAction;
+          form.efpAttrType.DocId = attrTypeId;
+          form.efpDate.NValue = EditAttrValueHelper.LastDate;
+          form.efpAction.SelectedIndex = _LastAction;
 
-          if (EFPApp.ShowDialog(Form, true) == DialogResult.OK)
+          if (EFPApp.ShowDialog(form, true) == DialogResult.OK)
           {
-            EditAttrValueHelper.LastDate = Form.efpDate.Value;
-            LastAction = Form.efpAction.SelectedIndex;
+            EditAttrValueHelper.LastDate = form.efpDate.Value;
+            _LastAction = form.efpAction.SelectedIndex;
 
-            if (Form.efpAction.SelectedIndex == 0)
+            if (form.efpAction.SelectedIndex == 0)
             {
-              DocSet.ActionInfo = "Установка значений атрибута \"" + DataTools.GetString(Form.efpAttrType.GetColumnValue("Name")) + "\"";
-              string sValue = PlantTools.ValueToSaveableString(Form.efpValue.Value, Form.efpValue.ValueType);
+              docSet.ActionInfo = "Установка значений атрибута \"" + DataTools.GetString(form.efpAttrType.GetColumnValue("Name")) + "\"";
+              string sValue = PlantTools.ValueToSaveableString(form.efpValue.Value, form.efpValue.ValueType);
               int nAdded, nChanged;
-              DoSetValue(mDocs, Form.efpAttrType.DocId, sValue, Form.efpDate.NValue, out nAdded, out nChanged);
+              DoSetValue(mDocs, form.efpAttrType.DocId, sValue, form.efpDate.NValue, out nAdded, out nChanged);
               if (nAdded == 0 && nChanged == 0)
                 EFPApp.MessageBox("Атрибуты уже имеют требуемое значени. Никаких действий не выполняется",
                   "Установка значений атрибутов", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -152,14 +152,14 @@ namespace Plants
               {
                 if (EFPApp.MessageBox("Будет добавлено значений атрибутов: " + nAdded.ToString() + ", изменено: " + nChanged.ToString(),
                   "Установка значений атрибутов", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
-                  Res = true;
+                  res = true;
               }
             }
             else
             {
-              DocSet.ActionInfo = "Удаление значений атрибута \"" + DataTools.GetString(Form.efpAttrType.GetColumnValue("Name")) + "\"";
+              docSet.ActionInfo = "Удаление значений атрибута \"" + DataTools.GetString(form.efpAttrType.GetColumnValue("Name")) + "\"";
               int nDel;
-              DoDelValue(mDocs, Form.efpAttrType.DocId, Form.efpDate.Value, out nDel);
+              DoDelValue(mDocs, form.efpAttrType.DocId, form.efpDate.Value, out nDel);
               if (nDel == 0)
                 EFPApp.MessageBox("Не найдено ни одного значения атрибута для удаления. Никаких действий не выполняется",
                   "Удаление значений атрибутов", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -167,63 +167,63 @@ namespace Plants
               {
                 if (EFPApp.MessageBox("Будет удалено значений атрибутов: " + nDel.ToString(),
                   "Удаление значений атрибутов", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
-                  Res = true;
+                  res = true;
               }
             }
 
-            if (Res)
-              DocSet.ApplyChanges(false);
+            if (res)
+              docSet.ApplyChanges(false);
           }
         }
         finally
         {
-          DocSet.RemoveLongLock(LockGuid);
+          docSet.RemoveLongLock(lockGuid);
         }
       }
       catch (Exception e)
       {
         EFPApp.ShowException(e, "Ошибка групповой установки значений атрибутов");
       }
-      return Res;
+      return res;
     }
 
     #endregion
 
     #region Модификация набора
 
-    private static void DoSetValue(DBxMultiDocs mDocs, Int32 AttrTypeId, string sValue, DateTime? Date, out int nAdded, out int nChanged)
+    private static void DoSetValue(DBxMultiDocs mDocs, Int32 attrTypeId, string sValue, DateTime? date, out int nAdded, out int nChanged)
     {
       nAdded = 0;
       nChanged = 0;
 
-      DBxMultiSubDocs SubDocs = mDocs.SubDocs["PlantAttributes"];
-      DataTable Table = SubDocs.CreateSubDocsData(); // копия таблицы для поиска, менять надо поддокументы
-      Table.DefaultView.RowFilter = "AttrType=" + AttrTypeId.ToString();
-      Table.DefaultView.Sort = "DocId,Date";
+      DBxMultiSubDocs subDocs = mDocs.SubDocs["PlantAttributes"];
+      DataTable table = subDocs.CreateSubDocsData(); // копия таблицы для поиска, менять надо поддокументы
+      table.DefaultView.RowFilter = "AttrType=" + attrTypeId.ToString();
+      table.DefaultView.Sort = "DocId,Date";
 
-      foreach (DBxSingleDoc Doc in mDocs)
+      foreach (DBxSingleDoc doc in mDocs)
       {
-        object[] Keys = new object[2];
-        Keys[0] = Doc.DocId;
-        if (Date.HasValue)
-          Keys[1] = Date.Value;
+        object[] keys = new object[2];
+        keys[0] = doc.DocId;
+        if (date.HasValue)
+          keys[1] = date.Value;
         else
-          Keys[1] = DBNull.Value;
+          keys[1] = DBNull.Value;
 
         string sValue1, sValue2;
         EditAttrValueHelper.SplitAttrValue(sValue, out sValue1, out sValue2);
 
-        int p = Table.DefaultView.Find(Keys);
+        int p = table.DefaultView.Find(keys);
         if (p >= 0)
         {
           // Заменяем поддокумент
 
-          Int32 SubDocId = DataTools.GetInt(Table.DefaultView[p].Row, "Id");
-          DBxSubDoc SubDoc = SubDocs.GetSubDocById(SubDocId);
-          if (SubDoc.Values["Value"].AsString != sValue1 || SubDoc.Values["LongValue"].AsString != sValue2)
+          Int32 subDocId = DataTools.GetInt(table.DefaultView[p].Row, "Id");
+          DBxSubDoc subDoc = subDocs.GetSubDocById(subDocId);
+          if (subDoc.Values["Value"].AsString != sValue1 || subDoc.Values["LongValue"].AsString != sValue2)
           {
-            SubDoc.Values["Value"].SetString(sValue1);
-            SubDoc.Values["LongValue"].SetString(sValue2);
+            subDoc.Values["Value"].SetString(sValue1);
+            subDoc.Values["LongValue"].SetString(sValue2);
             nChanged++;
           }
         }
@@ -231,26 +231,26 @@ namespace Plants
         {
           // Добавляем поддокумент
 
-          DBxSubDoc SubDoc = Doc.SubDocs[SubDocs.SubDocType.Name].Insert();
-          SubDoc.Values["AttrType"].SetInteger(AttrTypeId);
-          SubDoc.Values["Date"].SetNullableDateTime(Date);
-          SubDoc.Values["Value"].SetString(sValue1);
-          SubDoc.Values["LongValue"].SetString(sValue2);
+          DBxSubDoc subDoc = doc.SubDocs[subDocs.SubDocType.Name].Insert();
+          subDoc.Values["AttrType"].SetInteger(attrTypeId);
+          subDoc.Values["Date"].SetNullableDateTime(date);
+          subDoc.Values["Value"].SetString(sValue1);
+          subDoc.Values["LongValue"].SetString(sValue2);
           nAdded++;
         }
       }
     }
 
-    private static void DoDelValue(DBxMultiDocs mDocs, Int32 AttrTypeId, DateTime? Date, out int nDel)
+    private static void DoDelValue(DBxMultiDocs mDocs, Int32 attrTypeId, DateTime? date, out int nDel)
     {
       nDel = 0;
-      DBxMultiSubDocs SubDocs = mDocs.SubDocs["PlantAttributes"];
-      for (int i = SubDocs.SubDocCount - 1; i >= 0; i--)
+      DBxMultiSubDocs subDocs = mDocs.SubDocs["PlantAttributes"];
+      for (int i = subDocs.SubDocCount - 1; i >= 0; i--)
       {
-        if (SubDocs[i].Values["AttrType"].AsInteger == AttrTypeId &&
-          SubDocs[i].Values["Date"].AsNullableDateTime == Date)
+        if (subDocs[i].Values["AttrType"].AsInteger == attrTypeId &&
+          subDocs[i].Values["Date"].AsNullableDateTime == date)
         {
-          SubDocs[i].Delete();
+          subDocs[i].Delete();
           nDel++;
         }
       }

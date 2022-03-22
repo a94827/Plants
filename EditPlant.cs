@@ -35,81 +35,81 @@ namespace Plants
 
     #region Вычисляемые столбцы
 
-    public static void ImageValueNeeded(object Sender, DBxImageValueNeededEventArgs Args)
+    public static void ImageValueNeeded(object sender, DBxImageValueNeededEventArgs args)
     {
-      PlantMovementState State = (PlantMovementState)(Args.GetInt("MovementState"));
-      Args.ImageKey = PlantTools.GetPlantMovementStateImageKey(State);
-      if (State != PlantMovementState.Placed)
-        Args.Grayed = true;
-      switch (State)
+      PlantMovementState movementState = (PlantMovementState)(args.GetInt("MovementState"));
+      args.ImageKey = PlantTools.GetPlantMovementStateImageKey(movementState);
+      if (movementState != PlantMovementState.Placed)
+        args.Grayed = true;
+      switch (movementState)
       {
         case PlantMovementState.Draft:
-          Args.ColorType = EFPDataGridViewColorType.Special;
+          args.ColorType = EFPDataGridViewColorType.Special;
           break;
       }
     }
 
     public static void ContraNameColumnValueNeeded(object sender, EFPGridProducerValueNeededEventArgs args)
     {
-      Int32 Id;
+      Int32 id;
 
-      Id = args.GetInt("ToContra");
-      if (Id != 0)
+      id = args.GetInt("ToContra");
+      if (id != 0)
       {
-        args.Value = ProgramDBUI.TheUI.DocTypes["Contras"].GetTextValue(Id);
+        args.Value = ProgramDBUI.TheUI.DocTypes["Contras"].GetTextValue(id);
         return;
       }
 
-      Id = args.GetInt("ToPlant");
-      if (Id != 0)
+      id = args.GetInt("ToPlant");
+      if (id != 0)
       {
-        args.Value = ProgramDBUI.TheUI.DocTypes["Plants"].GetTextValue(Id);
+        args.Value = ProgramDBUI.TheUI.DocTypes["Plants"].GetTextValue(id);
         return;
       }
 
-      Id = args.GetInt("FromContra");
-      if (Id != 0)
+      id = args.GetInt("FromContra");
+      if (id != 0)
       {
-        args.Value = ProgramDBUI.TheUI.DocTypes["Contras"].GetTextValue(Id);
+        args.Value = ProgramDBUI.TheUI.DocTypes["Contras"].GetTextValue(id);
         return;
       }
 
-      Id = args.GetInt("FromPlant");
-      if (Id != 0)
+      id = args.GetInt("FromPlant");
+      if (id != 0)
       {
-        args.Value = ProgramDBUI.TheUI.DocTypes["Plants"].GetTextValue(Id);
+        args.Value = ProgramDBUI.TheUI.DocTypes["Plants"].GetTextValue(id);
         return;
       }
     }
 
-    public static void FirstPlannedActionTextColumnValueNeeded(object Sender, EFPGridProducerValueNeededEventArgs Args)
+    public static void FirstPlannedActionTextColumnValueNeeded(object sender, EFPGridProducerValueNeededEventArgs args)
     {
-      ActionKind Kind = (ActionKind)(Args.GetInt("FirstPlannedAction.Kind"));
-      if (Kind == ActionKind.Other)
-        Args.Value = Args.GetString("FirstPlannedAction.ActionName");
+      ActionKind kind = (ActionKind)(args.GetInt("FirstPlannedAction.Kind"));
+      if (kind == ActionKind.Other)
+        args.Value = args.GetString("FirstPlannedAction.ActionName");
       else
-        Args.Value = PlantTools.GetActionName(Kind);
+        args.Value = PlantTools.GetActionName(kind);
     }
 
-    public static void FirstPlannedActionImageColumnValueNeeded(object Sender, EFPGridProducerValueNeededEventArgs Args)
+    public static void FirstPlannedActionImageColumnValueNeeded(object sender, EFPGridProducerValueNeededEventArgs args)
     {
       // TODO: Хорошо бы еще и раскрашивать просроченные действия
 
-      DateTime? Date1 = Args.GetNullableDateTime("FirstPlannedAction.Date1");
-      DateTime? Date2 = Args.GetNullableDateTime("FirstPlannedAction.Date2");
-      ActionKind Kind = (ActionKind)(Args.GetInt("FirstPlannedAction.Kind"));
+      DateTime? date1 = args.GetNullableDateTime("FirstPlannedAction.Date1");
+      DateTime? date2 = args.GetNullableDateTime("FirstPlannedAction.Date2");
+      ActionKind kind = (ActionKind)(args.GetInt("FirstPlannedAction.Kind"));
 
-      if (Date1.HasValue && Date2.HasValue)
+      if (date1.HasValue && date2.HasValue)
       {
-        if (Date2.Value < DateTime.Today)
-          Args.Value = EFPApp.MainImages.Images["Warning"];
+        if (date2.Value < DateTime.Today)
+          args.Value = EFPApp.MainImages.Images["Warning"];
         else
-          Args.Value = EFPApp.MainImages.Images[PlantTools.GetActionImageKey(Kind)];
+          args.Value = EFPApp.MainImages.Images[PlantTools.GetActionImageKey(kind)];
       }
-      else if (Date1.HasValue || Date2.HasValue)
-        Args.Value = EFPApp.MainImages.Images["Error"]; // ошибка - не может такого быть
+      else if (date1.HasValue || date2.HasValue)
+        args.Value = EFPApp.MainImages.Images["Error"]; // ошибка - не может такого быть
       else
-        Args.Value = EFPApp.MainImages.Images["EmptyImage"];
+        args.Value = EFPApp.MainImages.Images["EmptyImage"];
     }
 
     public static void StateText_Column_ToolTipText_ValueNeeded(object sender, EFPGridProducerValueNeededEventArgs args)
@@ -137,74 +137,72 @@ namespace Plants
     /// Дополнительная инициализация табличного просмотра справочника документов для
     /// добавления команды локального меню
     /// </summary>
-    /// <param name="Sender"></param>
-    /// <param name="Args"></param>
-    public static void InitView(object Sender, InitEFPDBxViewEventArgs Args)
+    public static void InitView(object sender, InitEFPDBxViewEventArgs args)
     {
-      EFPDataGridView ControlProvider = (EFPDataGridView)(Args.ControlProvider);
+      EFPDataGridView controlProvider = (EFPDataGridView)(args.ControlProvider);
       //((EFPDataGridView)(Args.ControlProvider)).Control.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-      ControlProvider.Control.RowHeightInfoNeeded += PlantThumbnailColumn.RowHeightInfoNeeded;
+      controlProvider.Control.RowHeightInfoNeeded += PlantThumbnailColumn.RowHeightInfoNeeded;
 
-      ControlProvider.Idle += new EventHandler(ControlProvider_Idle);
+      controlProvider.Idle += new EventHandler(ControlProvider_Idle);
 
       #region Фильтры
 
-      NullNotNullGridFilter FiltHasNumber = new NullNotNullGridFilter("Number", typeof(int));
-      FiltHasNumber.DisplayName = "Номер по каталогу";
-      FiltHasNumber.FilterTextNull = "Нет";
-      FiltHasNumber.FilterTextNotNull = "Есть";
-      Args.ControlProvider.Filters.Add(FiltHasNumber);
+      NullNotNullGridFilter filtHasNumber = new NullNotNullGridFilter("Number", typeof(int));
+      filtHasNumber.DisplayName = "Номер по каталогу";
+      filtHasNumber.FilterTextNull = "Нет";
+      filtHasNumber.FilterTextNotNull = "Есть";
+      args.ControlProvider.Filters.Add(filtHasNumber);
 
-      NullNotNullGridFilter FiltHasPhoto = new NullNotNullGridFilter("Photo", typeof(Int32));
-      FiltHasPhoto.DisplayName = "Фото";
-      FiltHasPhoto.FilterTextNull = "Нет";
-      FiltHasPhoto.FilterTextNotNull = "Есть";
-      Args.ControlProvider.Filters.Add(FiltHasPhoto);
+      NullNotNullGridFilter filtHasPhoto = new NullNotNullGridFilter("Photo", typeof(Int32));
+      filtHasPhoto.DisplayName = "Фото";
+      filtHasPhoto.FilterTextNull = "Нет";
+      filtHasPhoto.FilterTextNotNull = "Есть";
+      args.ControlProvider.Filters.Add(filtHasPhoto);
 
-      EnumGridFilter FiltState = new EnumGridFilter("MovementState", PlantTools.PlantMovementStateNames);
-      FiltState.DisplayName = "Состояние";
-      FiltState.ImageKeys = PlantTools.PlantMovementStateImageKeys;
-      Args.ControlProvider.Filters.Add(FiltState);
+      EnumGridFilter filtState = new EnumGridFilter("MovementState", PlantTools.PlantMovementStateNames);
+      filtState.DisplayName = "Состояние";
+      filtState.ImageKeys = PlantTools.PlantMovementStateImageKeys;
+      args.ControlProvider.Filters.Add(filtState);
 
-      RefDocGridFilterSet FiltPlace = new RefDocGridFilterSet(ProgramDBUI.TheUI.DocTypes["Places"], "Place");
-      FiltPlace.DisplayName = "Текущее место расположения";
-      FiltPlace.Nullable = true;
-      Args.ControlProvider.Filters.Add(FiltPlace);
+      RefDocGridFilterSet filtPlace = new RefDocGridFilterSet(ProgramDBUI.TheUI.DocTypes["Places"], "Place");
+      filtPlace.DisplayName = "Текущее место расположения";
+      filtPlace.Nullable = true;
+      args.ControlProvider.Filters.Add(filtPlace);
 
-      EnumGridFilter FiltLastAction = new EnumGridFilter("LastActionKind", PlantTools.ActionNames);
-      FiltLastAction.DisplayName = "Последнее действие";
-      FiltLastAction.ImageKeys = PlantTools.ActionImageKeys;
-      Args.ControlProvider.Filters.Add(FiltLastAction);
+      EnumGridFilter filtLastAction = new EnumGridFilter("LastActionKind", PlantTools.ActionNames);
+      filtLastAction.DisplayName = "Последнее действие";
+      filtLastAction.ImageKeys = PlantTools.ActionImageKeys;
+      args.ControlProvider.Filters.Add(filtLastAction);
 
-      RefDocGridFilterSet FiltFromContra = new RefDocGridFilterSet(ProgramDBUI.TheUI.DocTypes["Contras"], "FromContra");
-      FiltFromContra.DisplayName = "От кого получено";
-      FiltFromContra.Nullable = true;
-      Args.ControlProvider.Filters.Add(FiltFromContra);
+      RefDocGridFilterSet filtFromContra = new RefDocGridFilterSet(ProgramDBUI.TheUI.DocTypes["Contras"], "FromContra");
+      filtFromContra.DisplayName = "От кого получено";
+      filtFromContra.Nullable = true;
+      args.ControlProvider.Filters.Add(filtFromContra);
 
-      RefDocGridFilterSet FiltToContra = new RefDocGridFilterSet(ProgramDBUI.TheUI.DocTypes["Contras"], "ToContra");
-      FiltToContra.DisplayName = "Кому передано";
-      FiltToContra.Nullable = true;
-      Args.ControlProvider.Filters.Add(FiltToContra);
+      RefDocGridFilterSet filtToContra = new RefDocGridFilterSet(ProgramDBUI.TheUI.DocTypes["Contras"], "ToContra");
+      filtToContra.DisplayName = "Кому передано";
+      filtToContra.Nullable = true;
+      args.ControlProvider.Filters.Add(filtToContra);
 
-      RefDocGridFilterSet FiltSoil = new RefDocGridFilterSet(ProgramDBUI.TheUI.DocTypes["Soils"], "Soil");
-      FiltSoil.DisplayName = "Грунт";
-      FiltSoil.Nullable = true;
-      Args.ControlProvider.Filters.Add(FiltSoil);
+      RefDocGridFilterSet filtSoil = new RefDocGridFilterSet(ProgramDBUI.TheUI.DocTypes["Soils"], "Soil");
+      filtSoil.DisplayName = "Грунт";
+      filtSoil.Nullable = true;
+      args.ControlProvider.Filters.Add(filtSoil);
 
-      RefDocGridFilterSet FiltPotKind = new RefDocGridFilterSet(ProgramDBUI.TheUI.DocTypes["PotKinds"], "PotKind");
-      FiltPotKind.DisplayName = "Горшок";
-      FiltPotKind.Nullable = true;
-      Args.ControlProvider.Filters.Add(FiltPotKind);
+      RefDocGridFilterSet filtPotKind = new RefDocGridFilterSet(ProgramDBUI.TheUI.DocTypes["PotKinds"], "PotKind");
+      filtPotKind.DisplayName = "Горшок";
+      filtPotKind.Nullable = true;
+      args.ControlProvider.Filters.Add(filtPotKind);
 
-      RefDocGridFilter FiltManufacturer = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Companies"], "Manufacturer");
-      FiltManufacturer.DisplayName = "Изготовитель";
-      FiltManufacturer.Nullable = true;
-      Args.ControlProvider.Filters.Add(FiltManufacturer);
+      RefDocGridFilter filtManufacturer = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Companies"], "Manufacturer");
+      filtManufacturer.DisplayName = "Изготовитель";
+      filtManufacturer.Nullable = true;
+      args.ControlProvider.Filters.Add(filtManufacturer);
 
-      RefDocGridFilter FiltCare = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Care"], "Care");
-      FiltCare.DisplayName = "Уход";
-      FiltCare.Nullable = true;
-      Args.ControlProvider.Filters.Add(FiltCare);
+      RefDocGridFilter filtCare = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Care"], "Care");
+      filtCare.DisplayName = "Уход";
+      filtCare.Nullable = true;
+      args.ControlProvider.Filters.Add(filtCare);
 
       #endregion
 
@@ -216,29 +214,29 @@ namespace Plants
       ci.ImageKey = "AttributeTable";
       ci.GroupBegin = true;
       ci.GroupEnd = true;
-      ci.Tag = Args.ControlProvider;
+      ci.Tag = args.ControlProvider;
       ci.Click += new EventHandler(ciRB_AttrTable_Click);
-      Args.ControlProvider.CommandItems.Add(ci);
+      args.ControlProvider.CommandItems.Add(ci);
 
-      EFPFileAssociationsCommandItemsHandler ViewHandler = new EFPFileAssociationsCommandItemsHandler(Args.ControlProvider.CommandItems, ".jpg");
-      ViewHandler.FileNeeded += new CancelEventHandler(Doc_ViewHandler_FileNeeded);
-      ViewHandler.Tag = Args.ControlProvider;
+      EFPFileAssociationsCommandItemsHandler viewHandler = new EFPFileAssociationsCommandItemsHandler(args.ControlProvider.CommandItems, ".jpg");
+      viewHandler.FileNeeded += new CancelEventHandler(Doc_ViewHandler_FileNeeded);
+      viewHandler.Tag = args.ControlProvider;
 
       #endregion
     }
 
-    static void ControlProvider_Idle(object Sender, EventArgs Args)
+    static void ControlProvider_Idle(object sender, EventArgs args)
     {
       try
       {
-        EFPDataGridView Control = (EFPDataGridView)Sender;
+        EFPDataGridView controlProvider = (EFPDataGridView)sender;
 
-        EFPDataGridViewColumn Col = Control.Columns["Thumbnail"];
-        if (Col != null)
+        EFPDataGridViewColumn col = controlProvider.Columns["Thumbnail"];
+        if (col != null)
         {
           int w = PlantThumbnailColumn.DoGetWidth();
-          Col.GridColumn.MinimumWidth = w;
-          Col.GridColumn.Width = w;
+          col.GridColumn.MinimumWidth = w;
+          col.GridColumn.Width = w;
         }
       }
       catch (Exception e)
@@ -250,56 +248,55 @@ namespace Plants
 
     #region Команды локального меню
 
-    static void ciRB_AttrTable_Click(object Sender, EventArgs Args)
+    static void ciRB_AttrTable_Click(object sender, EventArgs args)
     {
-      EFPCommandItem ci = (EFPCommandItem)Sender;
-      IEFPDocView ControlProvider = (IEFPDocView)(ci.Tag);
-      Int32[] DocIds = ControlProvider.SelectedIds;
+      EFPCommandItem ci = (EFPCommandItem)sender;
+      IEFPDocView controlProvider = (IEFPDocView)(ci.Tag);
+      Int32[] docIds = controlProvider.SelectedIds;
 
-      AttrTableViewForm Form = new AttrTableViewForm(DocIds);
-      EFPApp.ShowFormOrDialog(Form);
+      AttrTableViewForm form = new AttrTableViewForm(docIds);
+      EFPApp.ShowFormOrDialog(form);
 
     }
 
-    static void Doc_ViewHandler_FileNeeded(object Sender, CancelEventArgs Args)
+    static void Doc_ViewHandler_FileNeeded(object sender, CancelEventArgs args)
     {
-      EFPFileAssociationsCommandItemsHandler ViewHandler = (EFPFileAssociationsCommandItemsHandler)Sender;
-      EFPDocGridView ControlProvider = (EFPDocGridView)(ViewHandler.Tag);
+      EFPFileAssociationsCommandItemsHandler ViewHandler = (EFPFileAssociationsCommandItemsHandler)sender;
+      EFPDocGridView controlProvider = (EFPDocGridView)(ViewHandler.Tag);
 
       ViewHandler.FilePath = AbsPath.Empty;
 
       if (ProgramDBUI.Settings.PhotoDir.IsEmpty)
       {
         EFPApp.ErrorMessageBox("Каталог со снимками не указан");
-        Args.Cancel = true;
+        args.Cancel = true;
         return;
       }
 
-      if (!ControlProvider.CheckSingleRow())
+      if (!controlProvider.CheckSingleRow())
       {
-        Args.Cancel = true;
+        args.Cancel = true;
         return;
       }
 
 
-      string FileName = ControlProvider.DocTypeUI.TableCache.GetString(ControlProvider.CurrentId, "Photo.FileName");
-      if (String.IsNullOrEmpty(FileName))
+      string fileName = controlProvider.DocTypeUI.TableCache.GetString(controlProvider.CurrentId, "Photo.FileName");
+      if (String.IsNullOrEmpty(fileName))
       {
         EFPApp.ErrorMessageBox("Для выбранного растения не задано изображение");
-        Args.Cancel = true;
+        args.Cancel = true;
         return;
       }
 
-      AbsPath Path = new AbsPath(ProgramDBUI.Settings.PhotoDir, FileName);
-      if (!EFPApp.FileExists(Path))
+      AbsPath path = new AbsPath(ProgramDBUI.Settings.PhotoDir, fileName);
+      if (!EFPApp.FileExists(path))
       {
-        EFPApp.ErrorMessageBox("Файл не найден: " + Path.ToString());
-        Args.Cancel = true;
+        EFPApp.ErrorMessageBox("Файл не найден: " + path.ToString());
+        args.Cancel = true;
         return;
       }
-      ViewHandler.FilePath = Path;
+      ViewHandler.FilePath = path;
     }
-
 
     #endregion
 
@@ -307,43 +304,43 @@ namespace Plants
 
     #region Редактор документа
 
-    public static void BeforeEditDoc(object Sender, BeforeDocEditEventArgs Args)
+    public static void BeforeEditDoc(object sender, BeforeDocEditEventArgs args)
     {
-      switch (Args.Editor.State)
+      switch (args.Editor.State)
       {
         case EFPDataGridViewState.Edit:
         case EFPDataGridViewState.View:
-          if (Args.CurrentColumnName == "Thumbnail" && (!Args.Editor.MultiDocMode))
+          if (args.CurrentColumnName == "Thumbnail" && (!args.Editor.MultiDocMode))
           {
-            Args.Cancel = true;
-            Int32 SubDocId = Args.Editor.MainValues["Photo"].AsInteger;
-            if (SubDocId == 0)
+            args.Cancel = true;
+            Int32 subDocId = args.Editor.MainValues["Photo"].AsInteger;
+            if (subDocId == 0)
             {
               EFPApp.ShowTempMessage("Нет фото растения");
               return;
             }
-            DBxSubDoc sd = Args.Editor.Documents[0][0].SubDocs["PlantPhotos"].GetSubDocById(SubDocId);
-            string FileName = sd.Values["FileName"].AsString;
-            ViewFile(FileName);
+            DBxSubDoc sd = args.Editor.Documents[0][0].SubDocs["PlantPhotos"].GetSubDocById(subDocId);
+            string fileName = sd.Values["FileName"].AsString;
+            ViewFile(fileName);
             return;
           }
           break;
       }
     }
 
-    public static void InitDocEditForm(object Sender, InitDocEditFormEventArgs Args)
+    public static void InitDocEditForm(object sender, InitDocEditFormEventArgs args)
     {
-      EditPlant Form = new EditPlant();
-      Form.AddPage1(Args);
-      if (!Args.Editor.MultiDocMode)
+      EditPlant form = new EditPlant();
+      form.AddPage1(args);
+      if (!args.Editor.MultiDocMode)
       {
-        Form.AddPage2(Args);
-        Args.AddSubDocsPage("PlantAttributes");
-        Args.AddSubDocsPage("PlantMovement").Title = "Движение";
-        Args.AddSubDocsPage("PlantActions").Title = "Действия";
-        Args.AddSubDocsPage("PlantFlowering").Title = "Цветение";
-        Args.AddSubDocsPage("PlantDiseases").Title = "Заболевания";
-        Args.AddSubDocsPage("PlantPlans").Title = "План";
+        form.AddPage2(args);
+        args.AddSubDocsPage("PlantAttributes");
+        args.AddSubDocsPage("PlantMovement").Title = "Движение";
+        args.AddSubDocsPage("PlantActions").Title = "Действия";
+        args.AddSubDocsPage("PlantFlowering").Title = "Цветение";
+        args.AddSubDocsPage("PlantDiseases").Title = "Заболевания";
+        args.AddSubDocsPage("PlantPlans").Title = "План";
       }
     }
 
@@ -353,24 +350,24 @@ namespace Plants
 
     EFPIntEditBox efpNumber;
 
-    private void AddPage1(InitDocEditFormEventArgs Args)
+    private void AddPage1(InitDocEditFormEventArgs args)
     {
-      DocEditPage Page = Args.AddPage("Общие", MainPanel1);
-      Page.ImageKey = "Properties";
+      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      page.ImageKey = "Properties";
 
-      efpLocalName = new EFPTextBox(Page.BaseProvider, edLocalName);
+      efpLocalName = new EFPTextBox(page.BaseProvider, edLocalName);
       efpLocalName.CanBeEmpty = true;
-      Args.AddText(efpLocalName, "LocalName", true);
+      args.AddText(efpLocalName, "LocalName", true);
 
-      efpLatinName = new EFPTextBox(Page.BaseProvider, edLatinName);
+      efpLatinName = new EFPTextBox(page.BaseProvider, edLatinName);
       efpLatinName.CanBeEmpty = true;
-      Args.AddText(efpLatinName, "LatinName", true);
+      args.AddText(efpLatinName, "LatinName", true);
 
-      efpDescrName = new EFPTextBox(Page.BaseProvider, edDescrName);
+      efpDescrName = new EFPTextBox(page.BaseProvider, edDescrName);
       efpDescrName.CanBeEmpty = true;
-      Args.AddText(efpDescrName, "Description", true);
+      args.AddText(efpDescrName, "Description", true);
 
-      if (!Args.Editor.MultiDocMode)
+      if (!args.Editor.MultiDocMode)
       {
         efpLocalName.Validating += new UIValidatingEventHandler(efpAnyName_Validating);
         efpLocalName.TextEx.ValueChanged += new EventHandler(efpAnyName_ValueChanged);
@@ -380,50 +377,50 @@ namespace Plants
         efpDescrName.TextEx.ValueChanged += new EventHandler(efpAnyName_ValueChanged);
       }
 
-      EFPDocComboBox efpManufacturer = new EFPDocComboBox(Page.BaseProvider, cbManufacturer, ProgramDBUI.TheUI.DocTypes["Companies"]);
+      EFPDocComboBox efpManufacturer = new EFPDocComboBox(page.BaseProvider, cbManufacturer, ProgramDBUI.TheUI.DocTypes["Companies"]);
       efpManufacturer.CanBeEmpty = true;
-      Args.AddRef(efpManufacturer, "Manufacturer", true);
+      args.AddRef(efpManufacturer, "Manufacturer", true);
 
-      EFPDocComboBox efpCare = new EFPDocComboBox(Page.BaseProvider, cbCare, ProgramDBUI.TheUI.DocTypes["Care"]);
+      EFPDocComboBox efpCare = new EFPDocComboBox(page.BaseProvider, cbCare, ProgramDBUI.TheUI.DocTypes["Care"]);
       efpCare.CanBeEmpty = true;
-      Args.AddRef(efpCare, "Care", true);
+      args.AddRef(efpCare, "Care", true);
 
-      efpNumber = new EFPIntEditBox(Page.BaseProvider, edNumber);
+      efpNumber = new EFPIntEditBox(page.BaseProvider, edNumber);
       efpNumber.Validating += new UIValidatingEventHandler(efpNumber_Validating);
       efpNumber.Minimum = 0;
       efpNumber.Maximum = Int16.MaxValue;
-      Args.AddInt(efpNumber, "Number", false);
+      args.AddInt(efpNumber, "Number", false);
 
-      EFPDocComboBox efpGroup = new EFPDocComboBox(Page.BaseProvider, cbGroup, ProgramDBUI.TheUI.DocTypes["PlantGroups"]);
+      EFPDocComboBox efpGroup = new EFPDocComboBox(page.BaseProvider, cbGroup, ProgramDBUI.TheUI.DocTypes["PlantGroups"]);
       efpGroup.CanBeEmpty = true;
-      Args.AddRef(efpGroup, "GroupId", true);
+      args.AddRef(efpGroup, "GroupId", true);
 
-      EFPTextBox efpComment = new EFPTextBox(Page.BaseProvider, edComment);
+      EFPTextBox efpComment = new EFPTextBox(page.BaseProvider, edComment);
       efpComment.CanBeEmpty = true;
-      Args.AddText(efpComment, "Comment", true);
+      args.AddText(efpComment, "Comment", true);
     }
 
-    void efpAnyName_ValueChanged(object Sender, EventArgs Args)
+    void efpAnyName_ValueChanged(object sender, EventArgs args)
     {
       efpLocalName.Validate();
       efpLatinName.Validate();
       efpDescrName.Validate();
     }
 
-    void efpAnyName_Validating(object Sender, UIValidatingEventArgs Args)
+    void efpAnyName_Validating(object sender, UIValidatingEventArgs args)
     {
-      if (Args.ValidateState == UIValidateState.Error)
+      if (args.ValidateState == UIValidateState.Error)
         return;
       if (efpLocalName.Text.Length + efpLatinName.Text.Length + efpDescrName.Text.Length == 0)
-        Args.SetError("Какое-либо из названий должно быт заполнено");
+        args.SetError("Какое-либо из названий должно быт заполнено");
     }
 
-    void efpNumber_Validating(object Sender, UIValidatingEventArgs Args)
+    void efpNumber_Validating(object sender, UIValidatingEventArgs args)
     {
-      if (Args.ValidateState != UIValidateState.Ok)
+      if (args.ValidateState != UIValidateState.Ok)
         return;
       if (efpNumber.Value == 0)
-        Args.SetWarning("Номер по каталогу не задан");
+        args.SetWarning("Номер по каталогу не задан");
     }
 
     #endregion
@@ -433,19 +430,19 @@ namespace Plants
     /// <summary>
     /// Идентификатор поддокумента фото, которое будет использоваться в каталог
     /// </summary>
-    private Int32 MainPhotoSubDocId;
+    private Int32 _MainPhotoSubDocId;
 
-    private void AddPage2(InitDocEditFormEventArgs Args)
+    private void AddPage2(InitDocEditFormEventArgs args)
     {
-      Args.Editor.AfterReadValues += new DocEditEventHandler(Editor_AfterReadValues);
-      Args.Editor.BeforeWrite += new DocEditCancelEventHandler(Editor_BeforeWrite);
-      Args.Editor.AfterWrite += new DocEditEventHandler(Editor_AfterWrite);
+      args.Editor.AfterReadValues += new DocEditEventHandler(Editor_AfterReadValues);
+      args.Editor.BeforeWrite += new DocEditCancelEventHandler(Editor_BeforeWrite);
+      args.Editor.AfterWrite += new DocEditEventHandler(Editor_AfterWrite);
 
-      DocEditPage Page = Args.AddPage("Фото", MainPanel2);
-      Page.ImageKey = "Picture";
+      DocEditPage page = args.AddPage("Фото", MainPanel2);
+      page.ImageKey = "Picture";
 
-      EFPControlWithToolBar<DataGridView> cwt = new EFPControlWithToolBar<DataGridView>(Page.BaseProvider, MainPanel2);
-      EFPSubDocGridView sdgPhotos = new EFPSubDocGridView(cwt, Args.Editor, Args.MultiDocs.SubDocs["PlantPhotos"]);
+      EFPControlWithToolBar<DataGridView> cwt = new EFPControlWithToolBar<DataGridView>(page.BaseProvider, MainPanel2);
+      EFPSubDocGridView sdgPhotos = new EFPSubDocGridView(cwt, args.Editor, args.MultiDocs.SubDocs["PlantPhotos"]);
       sdgPhotos.GridProducerPostInit += new EventHandler(sdgPhotos_GridProducerPostInit);
 
       if (ProgramDBUI.Settings.PhotoDir.IsEmpty)
@@ -457,62 +454,62 @@ namespace Plants
       ci.ImageKey = "Ok";
       ci.ShortCut = Keys.F4;
       ci.Click += new EventHandler(ciSelectDefault_Click);
-      ci.Enabled = !Args.Editor.IsReadOnly;
+      ci.Enabled = !args.Editor.IsReadOnly;
       ci.Tag = sdgPhotos;
       ci.GroupBegin = true;
       ci.GroupEnd = true;
       sdgPhotos.CommandItems.Add(ci);
     }
 
-    void sdgPhotos_GridProducerPostInit(object Sender, EventArgs Args)
+    void sdgPhotos_GridProducerPostInit(object sender, EventArgs args)
     {
-      EFPSubDocGridView sdgPhotos = (EFPSubDocGridView)Sender;
+      EFPSubDocGridView sdgPhotos = (EFPSubDocGridView)sender;
       //sdgPhotos.GetRowAttributes += new EFPDataGridViewRowAttributesEventHandler(sdgPhotos_GetRowAttributes);
       sdgPhotos.GetCellAttributes += new EFPDataGridViewCellAttributesEventHandler(sdgPhotos_GetCellAttributes);
 
     }
 
-    void Editor_AfterReadValues(object Sender, DocEditEventArgs Args)
+    void Editor_AfterReadValues(object sender, DocEditEventArgs args)
     {
-      MainPhotoSubDocId = Args.Editor.Documents[0].Values["Photo"].AsInteger;
+      _MainPhotoSubDocId = args.Editor.Documents[0].Values["Photo"].AsInteger;
     }
 
-    void Editor_BeforeWrite(object Sender, DocEditCancelEventArgs Args)
+    void Editor_BeforeWrite(object sender, DocEditCancelEventArgs args)
     {
-      DataTable Table = Args.Editor.Documents[0].SubDocs["PlantPhotos"].CreateSubDocsData();
-      if (Table.Rows.Count == 0)
-        Args.Editor.Documents[0].Values["Photo"].SetNull();
+      DataTable table = args.Editor.Documents[0].SubDocs["PlantPhotos"].CreateSubDocsData();
+      if (table.Rows.Count == 0)
+        args.Editor.Documents[0].Values["Photo"].SetNull();
       else
       {
-        Table.DefaultView.Sort = "ShootingTime";
-        foreach (DataRowView drv in Table.DefaultView)
+        table.DefaultView.Sort = "ShootingTime";
+        foreach (DataRowView drv in table.DefaultView)
         {
-          if (DataTools.GetInt(drv.Row, "Id") == MainPhotoSubDocId)
+          if (DataTools.GetInt(drv.Row, "Id") == _MainPhotoSubDocId)
           {
-            Args.Editor.Documents[0].Values["Photo"].SetInteger(MainPhotoSubDocId);
+            args.Editor.Documents[0].Values["Photo"].SetInteger(_MainPhotoSubDocId);
             return;
           }
         }
         // Берем первое изображение
-        MainPhotoSubDocId = DataTools.GetInt(Table.DefaultView[0].Row, "Id");
-        Args.Editor.Documents[0].Values["Photo"].SetInteger(MainPhotoSubDocId);
+        _MainPhotoSubDocId = DataTools.GetInt(table.DefaultView[0].Row, "Id");
+        args.Editor.Documents[0].Values["Photo"].SetInteger(_MainPhotoSubDocId);
       }
     }
 
-    void Editor_AfterWrite(object Sender, DocEditEventArgs Args)
+    void Editor_AfterWrite(object sender, DocEditEventArgs args)
     {
       // Нужно после нажатия кнопки "Запись", если основным было сделано новое фото
-      MainPhotoSubDocId = Args.Editor.Documents[0].Values["Photo"].AsInteger;
+      _MainPhotoSubDocId = args.Editor.Documents[0].Values["Photo"].AsInteger;
     }
 
-    void ciSelectDefault_Click(object Sender, EventArgs Args)
+    void ciSelectDefault_Click(object sender, EventArgs args)
     {
-      EFPCommandItem ci = (EFPCommandItem)Sender;
+      EFPCommandItem ci = (EFPCommandItem)sender;
       EFPSubDocGridView sdgPhotos = (EFPSubDocGridView)(ci.Tag);
       if (!sdgPhotos.CheckSingleRow())
         return;
 
-      MainPhotoSubDocId = sdgPhotos.CurrentId;
+      _MainPhotoSubDocId = sdgPhotos.CurrentId;
       sdgPhotos.Control.InvalidateColumn(0); // требуется перерисовка значков всех строк
       sdgPhotos.MainEditor.SubDocsChangeInfo.Changed = true;
     }
@@ -527,15 +524,15 @@ namespace Plants
     //}
 
     // Не работает, т.к. после этого вызывается обработчик SubDocTypeUI.ControlProvider_GetCellAttributes
-    void sdgPhotos_GetCellAttributes(object Sender, EFPDataGridViewCellAttributesEventArgs Args)
+    void sdgPhotos_GetCellAttributes(object sender, EFPDataGridViewCellAttributesEventArgs args)
     {
-      if (Args.DataRow == null)
+      if (args.DataRow == null)
         return;
-      if (Args.ColumnIndex == 0) // значок
+      if (args.ColumnIndex == 0) // значок
       {
-        Int32 Id = DataTools.GetInt(Args.DataRow, "Id");
-        if (Id == MainPhotoSubDocId)
-          Args.Value = EFPApp.MainImages.Images["Ok"];
+        Int32 id = DataTools.GetInt(args.DataRow, "Id");
+        if (id == _MainPhotoSubDocId)
+          args.Value = EFPApp.MainImages.Images["Ok"];
       }
     }
 
@@ -545,16 +542,16 @@ namespace Plants
 
     #region Табличный просмотр поддокументов "Фото"
 
-    public static void SubDocPhoto_InitView(object Sender, InitEFPDBxViewEventArgs Args)
+    public static void SubDocPhoto_InitView(object sender, InitEFPDBxViewEventArgs args)
     {
       if (ProgramDBUI.Settings.PhotoDir.IsEmpty)
-        Args.ControlProvider.ReadOnly = true;
+        args.ControlProvider.ReadOnly = true;
       // ((EFPDataGridView)(Args.ControlProvider)).Control.RowHeightInfoNeeded += new DataGridViewRowHeightInfoNeededEventHandler(Control_RowHeightInfoNeeded);
-      ((EFPDataGridView)(Args.ControlProvider)).Control.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+      ((EFPDataGridView)(args.ControlProvider)).Control.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 
-      EFPFileAssociationsCommandItemsHandler ViewHandler = new EFPFileAssociationsCommandItemsHandler(Args.ControlProvider.CommandItems, ".jpg");
-      ViewHandler.FileNeeded += new CancelEventHandler(SubDocPhoto_ViewHandler_FileNeeded);
-      ViewHandler.Tag = Args.ControlProvider;
+      EFPFileAssociationsCommandItemsHandler viewHandler = new EFPFileAssociationsCommandItemsHandler(args.ControlProvider.CommandItems, ".jpg");
+      viewHandler.FileNeeded += new CancelEventHandler(SubDocPhoto_ViewHandler_FileNeeded);
+      viewHandler.Tag = args.ControlProvider;
     }
 
     //static void Control_RowHeightInfoNeeded(object Sender, DataGridViewRowHeightInfoNeededEventArgs Args)
@@ -566,55 +563,55 @@ namespace Plants
 
     #region Редактор документа "Фото"
 
-    public static void SubDocPhoto_BeforeEdit(object Sender, BeforeSubDocEditEventArgs Args)
+    public static void SubDocPhoto_BeforeEdit(object sender, BeforeSubDocEditEventArgs args)
     {
-      Args.ShowEditor = false;
-      switch (Args.Editor.State)
+      args.ShowEditor = false;
+      switch (args.Editor.State)
       {
         case EFPDataGridViewState.Insert:
           try
           {
-            Args.Cancel = true;
-            if (InsertFiles(Args.MainEditor.Documents[0][0].SubDocs["PlantPhotos"]))
-              Args.MainEditor.SubDocsChangeInfo.Changed = true;
+            args.Cancel = true;
+            if (InsertFiles(args.MainEditor.Documents[0][0].SubDocs["PlantPhotos"]))
+              args.MainEditor.SubDocsChangeInfo.Changed = true;
           }
           catch (Exception e)
           {
             EFPApp.ShowException(e, "Ошибка добавления фото");
-            Args.Cancel = true;
+            args.Cancel = true;
           }
           break;
         case EFPDataGridViewState.Edit:
           // TODO: Определять, что текущий столбец - "Comment", иначе показывать изображение
-          SubDocPhoto_EditComment(Args);
+          SubDocPhoto_EditComment(args);
           break;
 
         case EFPDataGridViewState.View:
-          DBxSubDoc SubDoc = Args.Editor.SubDocs[0];
-          ViewFile(SubDoc.Values["FileName"].AsString);
-          Args.Cancel = true;
+          DBxSubDoc subDoc = args.Editor.SubDocs[0];
+          ViewFile(subDoc.Values["FileName"].AsString);
+          args.Cancel = true;
           break;
       }
     }
 
-    private static void SubDocPhoto_EditComment(BeforeSubDocEditEventArgs Args)
+    private static void SubDocPhoto_EditComment(BeforeSubDocEditEventArgs args)
     {
-      DBxSubDoc SubDoc = Args.Editor.SubDocs[0];
+      DBxSubDoc subDoc = args.Editor.SubDocs[0];
 
       MultiLineTextInputDialog dlg = new MultiLineTextInputDialog();
       dlg.Title = "Комментарий";
-      dlg.Prompt = "Комментарий к снимку " + SubDoc.Values["FileName"].AsString;
-      dlg.Text = SubDoc.Values["Comment"].AsString;
+      dlg.Prompt = "Комментарий к снимку " + subDoc.Values["FileName"].AsString;
+      dlg.Text = subDoc.Values["Comment"].AsString;
       dlg.CanBeEmpty = true;
       if (dlg.ShowDialog() != DialogResult.OK)
         return;
 
-      SubDoc.Values["Comment"].SetString(dlg.Text);
+      subDoc.Values["Comment"].SetString(dlg.Text);
 
-      Args.MainEditor.SubDocsChangeInfo.Changed = true;
+      args.MainEditor.SubDocsChangeInfo.Changed = true;
     }
 
-    private static bool InsertFiles(DBxSingleSubDocs SubDocs)
+    private static bool InsertFiles(DBxSingleSubDocs subDocs)
     {
       OpenFileDialog dlg = new OpenFileDialog();
       dlg.InitialDirectory = ProgramDBUI.Settings.PhotoDir.Path;
@@ -624,32 +621,32 @@ namespace Plants
         return false;
       for (int i = 0; i < dlg.FileNames.Length; i++)
       {
-        AbsPath Path = new AbsPath(dlg.FileNames[i]);
-        if (Path.ParentDir != ProgramDBUI.Settings.PhotoDir)
+        AbsPath path = new AbsPath(dlg.FileNames[i]);
+        if (path.ParentDir != ProgramDBUI.Settings.PhotoDir)
         {
           EFPApp.ErrorMessageBox("Файл должен располагаться в каталоге \"" + ProgramDBUI.Settings.PhotoDir.Path + "\"");
           return false;
         }
 
-        DBxSubDoc SubDoc = SubDocs.Insert();
+        DBxSubDoc subDoc = subDocs.Insert();
 
-        SubDoc.Values["FileName"].SetString(Path.FileName);
-        using (FileStream fs = new FileStream(Path.Path, FileMode.Open, FileAccess.Read, FileShare.Read))
+        subDoc.Values["FileName"].SetString(path.FileName);
+        using (FileStream fs = new FileStream(path.Path, FileMode.Open, FileAccess.Read, FileShare.Read))
         {
           string md5 = FileTools.MD5Sum(fs);
-          SubDoc.Values["FileMD5"].SetString(md5);
+          subDoc.Values["FileMD5"].SetString(md5);
           fs.Position = 0;
           using (Image img = Image.FromStream(fs))
           {
-            using (Bitmap Thumbnail = WinFormsTools.CreateThumbnailImage(img, PlantTools.ThumbnailSize))
+            using (Bitmap thumbnail = WinFormsTools.CreateThumbnailImage(img, PlantTools.ThumbnailSize))
             {
               // 22.09.2019
-              RotateThumbnail(Thumbnail, img);
+              RotateThumbnail(thumbnail, img);
 
               using (MemoryStream ms = new MemoryStream())
               {
-                Thumbnail.Save(ms, ImageFormat.Bmp);
-                SubDoc.Values["ThumbnailData"].SetBinData(ms.GetBuffer());
+                thumbnail.Save(ms, ImageFormat.Bmp);
+                subDoc.Values["ThumbnailData"].SetBinData(ms.GetBuffer());
               }
             }
 
@@ -672,7 +669,7 @@ namespace Plants
                 if (DateTime.TryParseExact(s, "yyyyMMddHHmmss", System.Globalization.CultureInfo.InvariantCulture,
                   System.Globalization.DateTimeStyles.None, out dt))
 
-                  SubDoc.Values["ShootingTime"].SetNullableDateTime(dt);
+                  subDoc.Values["ShootingTime"].SetNullableDateTime(dt);
               }
             }
           }
@@ -711,7 +708,7 @@ namespace Plants
     /// </summary>
     /// <param name="Thumbnail">Миниатюра</param>
     /// <param name="img">Исходное изображение для извлечения свойств</param>
-    public static void RotateThumbnail(Bitmap Thumbnail, Image img)
+    public static void RotateThumbnail(Bitmap thumbnail, Image img)
     {
       // См. документацию GDI+
       // https://docs.microsoft.com/ru-ru/windows/desktop/gdiplus/-gdiplus-constant-property-item-descriptions
@@ -727,13 +724,13 @@ namespace Plants
       // https://stackoverrun.com/ru/q/11817698
       switch (v)
       {
-        case 2: Thumbnail.RotateFlip(RotateFlipType.RotateNoneFlipX); break;
-        case 3: Thumbnail.RotateFlip(RotateFlipType.RotateNoneFlipXY); break;
-        case 4: Thumbnail.RotateFlip(RotateFlipType.RotateNoneFlipY); break;
-        case 5: Thumbnail.RotateFlip(RotateFlipType.Rotate90FlipX); break;
-        case 6: Thumbnail.RotateFlip(RotateFlipType.Rotate90FlipNone); break;
-        case 7: Thumbnail.RotateFlip(RotateFlipType.Rotate90FlipY); break;
-        case 8: Thumbnail.RotateFlip(RotateFlipType.Rotate90FlipXY); break;
+        case 2: thumbnail.RotateFlip(RotateFlipType.RotateNoneFlipX); break;
+        case 3: thumbnail.RotateFlip(RotateFlipType.RotateNoneFlipXY); break;
+        case 4: thumbnail.RotateFlip(RotateFlipType.RotateNoneFlipY); break;
+        case 5: thumbnail.RotateFlip(RotateFlipType.Rotate90FlipX); break;
+        case 6: thumbnail.RotateFlip(RotateFlipType.Rotate90FlipNone); break;
+        case 7: thumbnail.RotateFlip(RotateFlipType.Rotate90FlipY); break;
+        case 8: thumbnail.RotateFlip(RotateFlipType.Rotate90FlipXY); break;
       }
     }
 
@@ -745,8 +742,8 @@ namespace Plants
     /// <summary>
     /// Открывает на просмотр файл фото
     /// </summary>
-    /// <param name="FileName">Имя файла с расширением но без пути</param>
-    public static void ViewFile(string FileName)
+    /// <param name="fileName">Имя файла с расширением но без пути</param>
+    public static void ViewFile(string fileName)
     {
       if (ProgramDBUI.Settings.PhotoDir.IsEmpty)
       {
@@ -754,48 +751,48 @@ namespace Plants
         return;
       }
 
-      AbsPath Path = new AbsPath(ProgramDBUI.Settings.PhotoDir, FileName);
-      if (!EFPApp.FileExists(Path))
+      AbsPath path = new AbsPath(ProgramDBUI.Settings.PhotoDir, fileName);
+      if (!EFPApp.FileExists(path))
       {
-        EFPApp.ErrorMessageBox("Файл не найден: " + Path.ToString());
+        EFPApp.ErrorMessageBox("Файл не найден: " + path.ToString());
         return;
       }
 
       ProcessStartInfo psi = new ProcessStartInfo();
-      psi.FileName = Path.Path;
+      psi.FileName = path.Path;
       psi.UseShellExecute = true;
       Process.Start(psi);
     }
 
-    static void SubDocPhoto_ViewHandler_FileNeeded(object Sender, CancelEventArgs Args)
+    static void SubDocPhoto_ViewHandler_FileNeeded(object sender, CancelEventArgs args)
     {
-      EFPFileAssociationsCommandItemsHandler ViewHandler = (EFPFileAssociationsCommandItemsHandler)Sender;
-      EFPDataGridView ControlProvider = (EFPDataGridView)(ViewHandler.Tag);
+      EFPFileAssociationsCommandItemsHandler viewHandler = (EFPFileAssociationsCommandItemsHandler)sender;
+      EFPDataGridView controlProvider = (EFPDataGridView)(viewHandler.Tag);
 
-      ViewHandler.FilePath = AbsPath.Empty;
+      viewHandler.FilePath = AbsPath.Empty;
 
       if (ProgramDBUI.Settings.PhotoDir.IsEmpty)
       {
         EFPApp.ErrorMessageBox("Каталог со снимками не указан");
-        Args.Cancel = true;
+        args.Cancel = true;
         return;
       }
 
-      if (!ControlProvider.CheckSingleRow())
+      if (!controlProvider.CheckSingleRow())
       {
-        Args.Cancel = true;
+        args.Cancel = true;
         return;
       }
 
-      string FileName = DataTools.GetString(ControlProvider.CurrentDataRow, "FileName");
-      AbsPath Path = new AbsPath(ProgramDBUI.Settings.PhotoDir, FileName);
-      if (!EFPApp.FileExists(Path))
+      string fileName = DataTools.GetString(controlProvider.CurrentDataRow, "FileName");
+      AbsPath path = new AbsPath(ProgramDBUI.Settings.PhotoDir, fileName);
+      if (!EFPApp.FileExists(path))
       {
-        EFPApp.ErrorMessageBox("Файл не найден: " + Path.ToString());
-        Args.Cancel = true;
+        EFPApp.ErrorMessageBox("Файл не найден: " + path.ToString());
+        args.Cancel = true;
         return;
       }
-      ViewHandler.FilePath = Path;
+      viewHandler.FilePath = path;
     }
 
     #endregion
@@ -809,10 +806,10 @@ namespace Plants
   {
     #region Конструктор
 
-    public PlantThumbnailColumn(bool IsSubDoc)
-      : base("Thumbnail", new string[1] { IsSubDoc ? "Id" : "Photo" })
+    public PlantThumbnailColumn(bool isSubDoc)
+      : base("Thumbnail", new string[1] { isSubDoc ? "Id" : "Photo" })
     {
-      _IsSubDoc = IsSubDoc;
+      _IsSubDoc = isSubDoc;
       base.HeaderText = "Фото";
       base.Resizable = false;
     }
@@ -825,21 +822,21 @@ namespace Plants
 
     #region Переопределенные методы
 
-    public override void ApplyConfig(DataGridViewColumn Column, EFPDataGridViewConfigColumn Config, EFPDataGridView ControlProvider)
+    public override void ApplyConfig(DataGridViewColumn gridColumn, EFPDataGridViewConfigColumn config, EFPDataGridView controlProvider)
     {
-      base.ApplyConfig(Column, Config, ControlProvider);
+      base.ApplyConfig(gridColumn, config, controlProvider);
       if (_IsSubDoc)
       {
-        EFPSubDocGridView sdg = (EFPSubDocGridView)ControlProvider;
+        EFPSubDocGridView sdg = (EFPSubDocGridView)controlProvider;
         _SubDocs = sdg.MainEditor.Documents["Plants"].SubDocs["PlantPhotos"];
       }
 
-      DataGridViewImageColumn Column2 = (DataGridViewImageColumn)Column;
-      Column2.ImageLayout = DataGridViewImageCellLayout.Normal;
+      DataGridViewImageColumn column2 = (DataGridViewImageColumn)gridColumn;
+      column2.ImageLayout = DataGridViewImageCellLayout.Normal;
       //Column2.Resizable = DataGridViewTriState.False;
     }
 
-    public override int GetWidth(IEFPGridControlMeasures Measures)
+    public override int GetWidth(IEFPGridControlMeasures measures)
     {
       return DoGetWidth();
     }
@@ -852,22 +849,22 @@ namespace Plants
 
     protected override void OnValueNeeded(EFPGridProducerValueNeededEventArgs args)
     {
-      Int32 Id = args.GetInt(0);
-      if (Id == 0)
+      Int32 id = args.GetInt(0);
+      if (id == 0)
       {
         args.Value = EFPApp.MainImages.Images["EmptyImage"];
         args.ToolTipText = "Нет изображения";
         return;
       }
-      else if (Id < 0)
+      else if (id < 0)
       {
         if (_SubDocs != null)
         {
-          int p = _SubDocs.IndexOfSubDocId(Id);
+          int p = _SubDocs.IndexOfSubDocId(id);
           if (p >= 0)
           {
-            DBxSubDoc SubDoc = _SubDocs[p];
-            byte[] b = SubDoc.Values["ThumbnailData"].GetBinData();
+            DBxSubDoc subDoc = _SubDocs[p];
+            byte[] b = subDoc.Values["ThumbnailData"].GetBinData();
             if (b != null)
               args.Value = GetImage(b);
             return;
@@ -880,7 +877,7 @@ namespace Plants
       {
         try
         {
-          ImageInfo ii = Cache.GetItem<ImageInfo>(new string[] { Id.ToString(), ProgramDBUI.Settings.ThumbnailSizeCode.ToString() },
+          ImageInfo ii = Cache.GetItem<ImageInfo>(new string[] { id.ToString(), ProgramDBUI.Settings.ThumbnailSizeCode.ToString() },
             CachePersistance.MemoryOnly, this);
           if (args.Reason == EFPGridProducerValueReason.Value)
             args.Value = ii.Image;
@@ -906,10 +903,10 @@ namespace Plants
       using (MemoryStream ms = new MemoryStream(b))
       {
         Bitmap img = Image.FromStream(ms) as Bitmap;
-        Size MaxSize = ProgramDBUI.Settings.ThumbnailSize;
-        Size NewSize;
-        if (ImagingTools.IsImageShrinkNeeded(img, MaxSize, out NewSize))
-          img = new Bitmap(img, NewSize);
+        Size maxSize = ProgramDBUI.Settings.ThumbnailSize;
+        Size newSize;
+        if (ImagingTools.IsImageShrinkNeeded(img, maxSize, out newSize))
+          img = new Bitmap(img, newSize);
         return img;
       }
     }
@@ -935,9 +932,9 @@ namespace Plants
 
     #region ICacheFactory<Image> Members
 
-    ImageInfo ICacheFactory<ImageInfo>.CreateCacheItem(string[] Keys)
+    ImageInfo ICacheFactory<ImageInfo>.CreateCacheItem(string[] keys)
     {
-      Int32 Id = Int32.Parse(Keys[0]);
+      Int32 Id = Int32.Parse(keys[0]);
 
       // Размер можно не проверять
 
@@ -953,15 +950,15 @@ namespace Plants
 
     #region Высота строки
 
-    public static void RowHeightInfoNeeded(object Sender, DataGridViewRowHeightInfoNeededEventArgs Args)
+    public static void RowHeightInfoNeeded(object sender, DataGridViewRowHeightInfoNeededEventArgs args)
     {
       try
       {
-        DataGridView Control = (DataGridView)Sender;
+        DataGridView Control = (DataGridView)sender;
         if (Control.Columns.Contains("Thumbnail"))
-          Args.Height = Math.Max(Control.RowTemplate.Height, ProgramDBUI.Settings.ThumbnailSize.Height + 4);
+          args.Height = Math.Max(Control.RowTemplate.Height, ProgramDBUI.Settings.ThumbnailSize.Height + 4);
         else
-          Args.Height = Control.RowTemplate.Height;
+          args.Height = Control.RowTemplate.Height;
       }
       catch { }
     }

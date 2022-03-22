@@ -30,13 +30,11 @@ namespace Plants
 
     DocumentEditor _Editor;
 
-    public static void InitDocEditForm(object Sender, InitDocEditFormEventArgs Args)
+    public static void InitDocEditForm(object sender, InitDocEditFormEventArgs args)
     {
-      EditPlace Form = new EditPlace();
-
-      Form._Editor = Args.Editor;
-
-      Form.AddPage1(Args);
+      EditPlace form = new EditPlace();
+      form._Editor = args.Editor;
+      form.AddPage1(args);
     }
 
     #endregion
@@ -45,26 +43,26 @@ namespace Plants
 
     private EFPTextBox efpName;
 
-    private void AddPage1(InitDocEditFormEventArgs Args)
+    private void AddPage1(InitDocEditFormEventArgs args)
     {
-      DocEditPage Page = Args.AddPage("Общие", MainPanel1);
-      Page.ImageKey = "Place";
+      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      page.ImageKey = "Place";
 
       //Page.HelpContext = "BuxBase.chm::CompanyEdit.htm#Общие";
 
-      efpName = new EFPTextBox(Page.BaseProvider, edName);
+      efpName = new EFPTextBox(page.BaseProvider, edName);
       efpName.CanBeEmpty = false;
-      Args.AddText(efpName, "Name", false);
+      args.AddText(efpName, "Name", false);
 
-      EFPDocComboBox efpGroup = new EFPDocComboBox(Page.BaseProvider, cbGroup, ProgramDBUI.TheUI.DocTypes["PlaceGroups"]);
+      EFPDocComboBox efpGroup = new EFPDocComboBox(page.BaseProvider, cbGroup, ProgramDBUI.TheUI.DocTypes["PlaceGroups"]);
       efpGroup.CanBeEmpty = true;
-      Args.AddRef(efpGroup, "GroupId", true);
+      args.AddRef(efpGroup, "GroupId", true);
 
       #region Комментарий
 
-      EFPTextBox efpComment = new EFPTextBox(Page.BaseProvider, edComment);
+      EFPTextBox efpComment = new EFPTextBox(page.BaseProvider, edComment);
       efpComment.CanBeEmpty = true;
-      Args.AddText(efpComment, "Comment", true);
+      args.AddText(efpComment, "Comment", true);
 
       #endregion
     }

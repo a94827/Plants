@@ -27,16 +27,16 @@ namespace Plants
       base.Title = "Цветение за " + DateRangeFormatter.Default.ToString(FirstDate, LastDate, false);
     }
 
-    public override void ReadConfig(FreeLibSet.Config.CfgPart Config)
+    public override void ReadConfig(FreeLibSet.Config.CfgPart cfg)
     {
-      FirstDate = Config.GetNullableDate("FirstDate");
-      LastDate = Config.GetNullableDate("LastDate");
+      FirstDate = cfg.GetNullableDate("FirstDate");
+      LastDate = cfg.GetNullableDate("LastDate");
     }
 
-    public override void WriteConfig(FreeLibSet.Config.CfgPart Config)
+    public override void WriteConfig(FreeLibSet.Config.CfgPart cfg)
     {
-      Config.SetNullableDate("FirstDate", FirstDate);
-      Config.SetNullableDate("LastDate", LastDate);
+      cfg.SetNullableDate("FirstDate", FirstDate);
+      cfg.SetNullableDate("LastDate", LastDate);
     }
 
     #endregion
@@ -51,10 +51,10 @@ namespace Plants
     {
       MainImageKey = "FloweringReport";
 
-      MainPage = new EFPReportVarGridPage();
-      MainPage.Title = "Цветение";
-      MainPage.ImageKey = MainImageKey;
-      Pages.Add(MainPage);
+      _MainPage = new EFPReportVarGridPage();
+      _MainPage.Title = "Цветение";
+      _MainPage.ImageKey = MainImageKey;
+      Pages.Add(_MainPage);
     }
 
     #endregion
@@ -85,70 +85,70 @@ namespace Plants
 
     protected override void BuildReport()
     {
-      List<DBxFilter> Filters = new List<DBxFilter>();
+      List<DBxFilter> filters = new List<DBxFilter>();
 
-      PlantTools.AddDateRangeFilter(Filters, Params.FirstDate, Params.LastDate);
-      Filters.Add(DBSSubDocType.DeletedFalseFilter);
-      Filters.Add(DBSSubDocType.DocIdDeletedFalseFilter);
+      PlantTools.AddDateRangeFilter(filters, Params.FirstDate, Params.LastDate);
+      filters.Add(DBSSubDocType.DeletedFalseFilter);
+      filters.Add(DBSSubDocType.DocIdDeletedFalseFilter);
 
-      DataTable Table1 = ProgramDBUI.TheUI.DocProvider.FillSelect("PlantFlowering",
+      DataTable table1 = ProgramDBUI.TheUI.DocProvider.FillSelect("PlantFlowering",
         new DBxColumns("DocId,Date1,Date2,FlowerCount,DocId.Number"),
-        AndFilter.FromList(Filters), null);
+        AndFilter.FromList(filters), null);
 
       // Идентификаторы растений
-      Table1.DefaultView.Sort = "DocId.Number"; // по номеру в каталоге
-      IdList PlantIds = IdList.FromColumn(Table1.DefaultView, "DocId");
+      table1.DefaultView.Sort = "DocId.Number"; // по номеру в каталоге
+      IdList plantIds = IdList.FromColumn(table1.DefaultView, "DocId");
 
-      DataTable MainTable = new DataTable();
-      MainTable.Columns.Add("Date1", typeof(DateTime));
-      MainTable.Columns.Add("Date2", typeof(DateTime));
-      foreach (Int32 PlantId in PlantIds)
-        MainTable.Columns.Add("FlowerCount" + PlantId.ToString(), typeof(int));
-      MainTable.Columns.Add("Total", typeof(int));
+      DataTable mainTable = new DataTable();
+      mainTable.Columns.Add("Date1", typeof(DateTime));
+      mainTable.Columns.Add("Date2", typeof(DateTime));
+      foreach (Int32 PlantId in plantIds)
+        mainTable.Columns.Add("FlowerCount" + PlantId.ToString(), typeof(int));
+      mainTable.Columns.Add("Total", typeof(int));
 
-      DataTools.SetPrimaryKey(MainTable, "Date1,Date2");
+      DataTools.SetPrimaryKey(mainTable, "Date1,Date2");
 
-      foreach (DataRow SrcRow in Table1.Rows)
+      foreach (DataRow srcRow in table1.Rows)
       {
-        DataRow MainRow = DataTools.FindOrAddPrimaryKeyRow(MainTable, new object[] { SrcRow["Date1"], SrcRow["Date2"] });
-        Int32 PlantId = (Int32)(SrcRow["DocId"]);
-        int FlowerCount = DataTools.GetInt(SrcRow, "FlowerCount");
-        if (FlowerCount == 0)
-          FlowerCount = 1;
-        DataTools.IncInt(MainRow, "FlowerCount" + PlantId.ToString(), FlowerCount);
+        DataRow mainRow = DataTools.FindOrAddPrimaryKeyRow(mainTable, new object[] { srcRow["Date1"], srcRow["Date2"] });
+        Int32 plantId = (Int32)(srcRow["DocId"]);
+        int flowerCount = DataTools.GetInt(srcRow, "FlowerCount");
+        if (flowerCount == 0)
+          flowerCount = 1;
+        DataTools.IncInt(mainRow, "FlowerCount" + plantId.ToString(), flowerCount);
       }
 
       #region Итоги
 
-      foreach (DataRow MainRow in MainTable.Rows)
+      foreach (DataRow mainRow in mainTable.Rows)
       {
         int cnt = 0;
-        foreach (Int32 PlantId in PlantIds)
-          cnt += DataTools.GetInt(MainRow, "FlowerCount" + PlantId.ToString());
-        MainRow["Total"] = cnt;
+        foreach (Int32 PlantId in plantIds)
+          cnt += DataTools.GetInt(mainRow, "FlowerCount" + PlantId.ToString());
+        mainRow["Total"] = cnt;
       }
 
-      DataRow TotalRow = MainTable.NewRow();
-      TotalRow["Date1"] = DateTime.MaxValue;
-      TotalRow["Date2"] = DateTime.MaxValue;
-      foreach (Int32 PlantId in PlantIds)
-        DataTools.SumInt(TotalRow, "FlowerCount" + PlantId.ToString());
-      DataTools.SumInt(TotalRow, "Total");
-      MainTable.Rows.Add(TotalRow);
+      DataRow totalRow = mainTable.NewRow();
+      totalRow["Date1"] = DateTime.MaxValue;
+      totalRow["Date2"] = DateTime.MaxValue;
+      foreach (Int32 PlantId in plantIds)
+        DataTools.SumInt(totalRow, "FlowerCount" + PlantId.ToString());
+      DataTools.SumInt(totalRow, "Total");
+      mainTable.Rows.Add(totalRow);
 
       #endregion
 
-      MainTable.DefaultView.Sort = "Date1,Date2";
+      mainTable.DefaultView.Sort = "Date1,Date2";
 
-      EFPDBxGridView ghMain = new EFPDBxGridView(MainPage.BaseProvider,
+      EFPDBxGridView ghMain = new EFPDBxGridView(_MainPage.BaseProvider,
         new System.Windows.Forms.DataGridView(), ProgramDBUI.TheUI);
 
       ghMain.Control.AutoGenerateColumns = false;
       ghMain.Columns.AddText("Date", false, "Дата", 21, 8);
-      foreach (Int32 PlantId in PlantIds)
+      foreach (Int32 plantId in plantIds)
       {
-        object[] a = ProgramDBUI.TheUI.DocTypes["Plants"].TableCache.GetValues(PlantId, new DBxColumns("Number,Name"));
-        ghMain.Columns.AddInt("FlowerCount" + PlantId.ToString(), true, "№" + DataTools.GetInt(a[0]).ToString(ProgramDBUI.Settings.NumberMask) +
+        object[] a = ProgramDBUI.TheUI.DocTypes["Plants"].TableCache.GetValues(plantId, new DBxColumns("Number,Name"));
+        ghMain.Columns.AddInt("FlowerCount" + plantId.ToString(), true, "№" + DataTools.GetInt(a[0]).ToString(ProgramDBUI.Settings.NumberMask) +
           Environment.NewLine + DataTools.GetString(a[1]), 4);
       }
       ghMain.Columns.AddInt("Total", true, "Всего", 4);
@@ -168,34 +168,34 @@ namespace Plants
       ghMain.CanDelete = false;
       ghMain.CanMultiEdit = true;
       ghMain.EditData += new EventHandler(ghMain_EditData);
-      ghMain.Control.DataSource = MainTable.DefaultView;
+      ghMain.Control.DataSource = mainTable.DefaultView;
 
-      MainPage.ControlProvider = ghMain;
+      _MainPage.ControlProvider = ghMain;
     }
 
     #endregion
 
     #region Страница отчета
 
-    EFPReportVarGridPage MainPage;
+    EFPReportVarGridPage _MainPage;
 
-    void ghMain_GetRowAttributes(object Sender, EFPDataGridViewRowAttributesEventArgs Args)
+    void ghMain_GetRowAttributes(object sender, EFPDataGridViewRowAttributesEventArgs args)
     {
-      DateTime Date1 = DataTools.GetNullableDateTime(Args.DataRow, "Date1").Value;
-      if (Date1 == DateTime.MaxValue)
-        Args.ColorType = EFPDataGridViewColorType.TotalRow;
+      DateTime date1 = DataTools.GetNullableDateTime(args.DataRow, "Date1").Value;
+      if (date1 == DateTime.MaxValue)
+        args.ColorType = EFPDataGridViewColorType.TotalRow;
     }
 
-    void ghMain_GetCellAttributes(object Sender, EFPDataGridViewCellAttributesEventArgs Args)
+    void ghMain_GetCellAttributes(object sender, EFPDataGridViewCellAttributesEventArgs args)
     {
-      if (Args.ColumnName == "Date")
+      if (args.ColumnName == "Date")
       {
-        DateTime Date1 = DataTools.GetNullableDateTime(Args.DataRow, "Date1").Value;
-        DateTime Date2 = DataTools.GetNullableDateTime(Args.DataRow, "Date2").Value;
+        DateTime Date1 = DataTools.GetNullableDateTime(args.DataRow, "Date1").Value;
+        DateTime Date2 = DataTools.GetNullableDateTime(args.DataRow, "Date2").Value;
         if (Date1 == DateTime.MaxValue)
-          Args.Value = "Итого";
+          args.Value = "Итого";
         else
-          Args.Value = DateRangeFormatter.Default.ToString(Date1, Date2, false);
+          args.Value = DateRangeFormatter.Default.ToString(Date1, Date2, false);
       }
 
       ////return;
@@ -214,27 +214,27 @@ namespace Plants
       //}
     }
 
-    void ghMain_EditData(object Sender, EventArgs Args)
+    void ghMain_EditData(object sender, EventArgs args)
     {
-      EFPDataGridViewColumn[] Cols = MainPage.ControlProvider.SelectedColumns;
-      IdList PlanIds = new IdList();
-      for (int i = 0; i < Cols.Length; i++)
+      EFPDataGridViewColumn[] cols = _MainPage.ControlProvider.SelectedColumns;
+      IdList plantIds = new IdList();
+      for (int i = 0; i < cols.Length; i++)
       {
-        if (Cols[i].Name.StartsWith("FlowerCount"))
+        if (cols[i].Name.StartsWith("FlowerCount"))
         {
-          string sId = Cols[i].Name.Substring("FlowerCount".Length);
-          Int32 Id = Int32.Parse(sId);
-          PlanIds.Add(Id);
+          string sId = cols[i].Name.Substring("FlowerCount".Length);
+          Int32 id = Int32.Parse(sId);
+          plantIds.Add(id);
         }
       }
 
-      if (PlanIds.Count == 0)
+      if (plantIds.Count == 0)
       {
         EFPApp.ShowTempMessage("Растения не выбраны");
         return;
       }
 
-      ProgramDBUI.TheUI.DocTypes["Plants"].PerformEditing(PlanIds.ToArray(), MainPage.ControlProvider.State, false);
+      ProgramDBUI.TheUI.DocTypes["Plants"].PerformEditing(plantIds.ToArray(), _MainPage.ControlProvider.State, false);
     }
 
     #endregion

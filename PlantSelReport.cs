@@ -77,45 +77,45 @@ namespace Plants
       get { return EFPReportExtParamsPart.User | EFPReportExtParamsPart.NoHistory; }
     }
 
-    public override void WriteFormValues(EFPReportExtParamsForm Form, EFPReportExtParamsPart Part)
+    public override void WriteFormValues(EFPReportExtParamsForm form, EFPReportExtParamsPart part)
     {
-      PlantSelReportParamForm Form2 = (PlantSelReportParamForm)Form;
-      Form2.efpPeriod.First.Value = FirstDate;
-      Form2.efpPeriod.Last.Value = LastDate;
-      Form2.FiltersControlProvider.Filters = Filters;
+      PlantSelReportParamForm form2 = (PlantSelReportParamForm)form;
+      form2.efpPeriod.First.Value = FirstDate;
+      form2.efpPeriod.Last.Value = LastDate;
+      form2.FiltersControlProvider.Filters = Filters;
     }
 
-    public override void ReadFormValues(EFPReportExtParamsForm Form, EFPReportExtParamsPart Part)
+    public override void ReadFormValues(EFPReportExtParamsForm form, EFPReportExtParamsPart part)
     {
-      PlantSelReportParamForm Form2 = (PlantSelReportParamForm)Form;
-      FirstDate = Form2.efpPeriod.First.Value;
-      LastDate = Form2.efpPeriod.Last.Value;
+      PlantSelReportParamForm form2 = (PlantSelReportParamForm)form;
+      FirstDate = form2.efpPeriod.First.Value;
+      LastDate = form2.efpPeriod.Last.Value;
     }
 
-    public override void WriteConfig(FreeLibSet.Config.CfgPart Config, EFPReportExtParamsPart Part)
+    public override void WriteConfig(FreeLibSet.Config.CfgPart cfg, EFPReportExtParamsPart part)
     {
-      switch (Part)
+      switch (part)
       {
         case EFPReportExtParamsPart.User:
-          Filters.WriteConfig(Config);
+          Filters.WriteConfig(cfg);
           break;
         case EFPReportExtParamsPart.NoHistory:
-          Config.SetNullableDate("FirstDate", FirstDate);
-          Config.SetNullableDate("LastDate", LastDate);
+          cfg.SetNullableDate("FirstDate", FirstDate);
+          cfg.SetNullableDate("LastDate", LastDate);
           break;
       }
     }
 
-    public override void ReadConfig(FreeLibSet.Config.CfgPart Config, EFPReportExtParamsPart Part)
+    public override void ReadConfig(FreeLibSet.Config.CfgPart cfg, EFPReportExtParamsPart part)
     {
-      switch (Part)
+      switch (part)
       {
         case EFPReportExtParamsPart.User:
-          Filters.ReadConfig(Config);
+          Filters.ReadConfig(cfg);
           break;
         case EFPReportExtParamsPart.NoHistory:
-          Config.GetDate("FirstDate", ref FirstDate);
-          Config.GetDate("LastDate", ref LastDate);
+          cfg.GetDate("FirstDate", ref FirstDate);
+          cfg.GetDate("LastDate", ref LastDate);
           break;
       }
     }
@@ -132,10 +132,10 @@ namespace Plants
     {
       MainImageKey = "PlantSelReport";
 
-      MainPage = new EFPReportDocGridPage(ProgramDBUI.TheUI.DocTypes["Plants"]);
-      MainPage.InitGrid += new EventHandler(MainPage_InitGrid);
-      MainPage.ShowToolBar = true;
-      Pages.Add(MainPage);
+      _MainPage = new EFPReportDocGridPage(ProgramDBUI.TheUI.DocTypes["Plants"]);
+      _MainPage.InitGrid += new EventHandler(MainPage_InitGrid);
+      _MainPage.ShowToolBar = true;
+      Pages.Add(_MainPage);
     }
 
     #endregion
@@ -155,31 +155,31 @@ namespace Plants
 
     protected override void BuildReport()
     {
-      DBxFilter SqlFilter = Params.Filters.GetSqlFilter();
+      DBxFilter sqlFilter = Params.Filters.GetSqlFilter();
       if (ProgramDBUI.TheUI.DocProvider.DocTypes.UseDeleted)
-        SqlFilter &= DBSDocType.DeletedFalseFilter;
+        sqlFilter &= DBSDocType.DeletedFalseFilter;
 
-      DBxColumnList ColNames = new DBxColumnList();
-      ColNames.Add("Id");
-      ProgramDBUI.TheUI.DocTypes["Plants"].GridProducer.GetColumnNames("Plants", "", ColNames);
+      DBxColumnList colNames = new DBxColumnList();
+      colNames.Add("Id");
+      ProgramDBUI.TheUI.DocTypes["Plants"].GridProducer.GetColumnNames("Plants", "", colNames);
 
-      DataTable Table = ProgramDBUI.TheUI.DocProvider.FillSelect("Plants",
-        new DBxColumns(ColNames),
-        SqlFilter,
+      DataTable table = ProgramDBUI.TheUI.DocProvider.FillSelect("Plants",
+        new DBxColumns(colNames),
+        sqlFilter,
         DBxOrder.FromDataViewSort("Number,Name,Id"));
 
-      Params.Filters.PerformAuxFiltering(ref Table, Params.FirstDate, Params.LastDate);
+      Params.Filters.PerformAuxFiltering(ref table, Params.FirstDate, Params.LastDate);
 
-      MainPage.DataSource = Table.DefaultView;
+      _MainPage.DataSource = table.DefaultView;
     }
 
     #endregion
 
     #region Страница отчета
 
-    EFPReportDocGridPage MainPage;
+    EFPReportDocGridPage _MainPage;
 
-    void MainPage_InitGrid(object Sender, EventArgs Args)
+    void MainPage_InitGrid(object sender, EventArgs args)
     {
     }
 

@@ -27,14 +27,13 @@ namespace Plants
 
     DocumentEditor _Editor;
 
-    public static void InitDocEditForm(object Sender, InitDocEditFormEventArgs Args)
+    public static void InitDocEditForm(object sender, InitDocEditFormEventArgs args)
     {
-      EditCare Form = new EditCare();
-
-      Form._Editor = Args.Editor;
-      Form.AddPage1(Args);
-      if (!Args.Editor.MultiDocMode)
-        Args.AddSubDocsPage("CareRecords");
+      EditCare form = new EditCare();
+      form._Editor = args.Editor;
+      form.AddPage1(args);
+      if (!args.Editor.MultiDocMode)
+        args.AddSubDocsPage("CareRecords");
     }
 
     #endregion
@@ -43,30 +42,30 @@ namespace Plants
 
     private EFPTextBox efpName;
 
-    private void AddPage1(InitDocEditFormEventArgs Args)
+    private void AddPage1(InitDocEditFormEventArgs args)
     {
-      DocEditPage Page = Args.AddPage("Общие", MainPanel1);
-      Page.ImageKey = "Care";
+      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      page.ImageKey = "Care";
 
       //Page.HelpContext = "BuxBase.chm::CompanyEdit.htm#Общие";
 
-      efpName = new EFPTextBox(Page.BaseProvider, edName);
+      efpName = new EFPTextBox(page.BaseProvider, edName);
       efpName.CanBeEmpty = false;
-      Args.AddText(efpName, "Name", false);
+      args.AddText(efpName, "Name", false);
 
-      EFPDocComboBox efpParent = new EFPDocComboBox(Page.BaseProvider, cbParent, ProgramDBUI.TheUI.DocTypes["Care"]);
+      EFPDocComboBox efpParent = new EFPDocComboBox(page.BaseProvider, cbParent, ProgramDBUI.TheUI.DocTypes["Care"]);
       efpParent.CanBeEmpty = true;
-      Args.AddRef(efpParent, "ParentId", true);
+      args.AddRef(efpParent, "ParentId", true);
 
-      EFPDocComboBox efpGroup = new EFPDocComboBox(Page.BaseProvider, cbGroup, ProgramDBUI.TheUI.DocTypes["PlantGroups"]);
+      EFPDocComboBox efpGroup = new EFPDocComboBox(page.BaseProvider, cbGroup, ProgramDBUI.TheUI.DocTypes["PlantGroups"]);
       efpGroup.CanBeEmpty = true;
-      Args.AddRef(efpGroup, "GroupId", true);
+      args.AddRef(efpGroup, "GroupId", true);
 
       #region Комментарий
 
-      EFPTextBox efpComment = new EFPTextBox(Page.BaseProvider, edComment);
+      EFPTextBox efpComment = new EFPTextBox(page.BaseProvider, edComment);
       efpComment.CanBeEmpty = true;
-      Args.AddText(efpComment, "Comment", true);
+      args.AddText(efpComment, "Comment", true);
 
       #endregion
     }

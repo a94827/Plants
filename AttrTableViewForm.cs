@@ -19,44 +19,44 @@ namespace Plants
   {
     #region Конструктор формы
 
-    public AttrTableViewForm(Int32[] DocIds)
+    public AttrTableViewForm(Int32[] docIds)
     {
       InitializeComponent();
 
       Text = "Атрибуты";
       Icon = EFPApp.MainImageIcon("AttributeTable");
 
-      DataTable Table = ProgramDBUI.TheUI.DocTypes["AttrTypes"].GetUnbufferedData(DBSDocType.IdColumns, null, false, new DBxOrder("Name"));
-      _AttrTypeDocs = new AttrTypeDoc[Table.Rows.Count];
-      for (int i = 0; i < Table.Rows.Count; i++)
+      DataTable table = ProgramDBUI.TheUI.DocTypes["AttrTypes"].GetUnbufferedData(DBSDocType.IdColumns, null, false, new DBxOrder("Name"));
+      _AttrTypeDocs = new AttrTypeDoc[table.Rows.Count];
+      for (int i = 0; i < table.Rows.Count; i++)
       {
-        Int32 Id = DataTools.GetInt(Table.Rows[i], "Id");
-        AttrTypeDoc attr = new AttrTypeDoc(Id);
+        Int32 id = DataTools.GetInt(table.Rows[i], "Id");
+        AttrTypeDoc attr = new AttrTypeDoc(id);
         _AttrTypeDocs[i] = attr;
       }
 
-      this._MainDocIds = DocIds;
+      this._MainDocIds = docIds;
 
 
       _DocTypeUI = ProgramDBUI.TheUI.DocTypes["Plants"];
 
       #region Создание таблицы
 
-      Table = new DataTable();
-      Table.Columns.Add("Id", typeof(Int32)); // Идентификатор основного документа (учреждения)
-      Table.Columns.Add("NPop", typeof(int)); // Исходный порядок документов 
-      Table.Columns.Add("Number", typeof(int));
-      Table.Columns.Add("Name", typeof(string));
+      table = new DataTable();
+      table.Columns.Add("Id", typeof(Int32)); // Идентификатор основного документа (учреждения)
+      table.Columns.Add("NPop", typeof(int)); // Исходный порядок документов 
+      table.Columns.Add("Number", typeof(int));
+      table.Columns.Add("Name", typeof(string));
 
       for (int i = 0; i < _AttrTypeDocs.Length; i++)
-        Table.Columns.Add("Attr" + _AttrTypeDocs[i].Id.ToString(), PlantTools.ValueTypeToType(_AttrTypeDocs[i].ValueType));
+        table.Columns.Add("Attr" + _AttrTypeDocs[i].Id.ToString(), PlantTools.ValueTypeToType(_AttrTypeDocs[i].ValueType));
 
-      for (int i = 0; i < DocIds.Length; i++)
+      for (int i = 0; i < docIds.Length; i++)
       {
-        DataRow ResRow = Table.NewRow();
-        ResRow["Id"] = DocIds[i];
+        DataRow ResRow = table.NewRow();
+        ResRow["Id"] = docIds[i];
         ResRow["NPop"] = i + 1;
-        Table.Rows.Add(ResRow);
+        table.Rows.Add(ResRow);
       }
 
       #endregion
@@ -77,76 +77,76 @@ namespace Plants
 
       #region GridProducer
 
-      EFPGridProducer Producer = new EFPGridProducer();
-      Producer.NewDefaultConfig(false);
+      EFPGridProducer producer = new EFPGridProducer();
+      producer.NewDefaultConfig(false);
 
-      Producer.Columns.AddInt("NPop", "№ п/п", 3);
-      Producer.Columns.LastAdded.CanIncSearch = true;
-      Producer.DefaultConfig.Columns.Add("NPop");
-      Producer.Orders.Add("NPop", "В исходном порядке");
-      Producer.FixedColumns.Add("NPop"); // Иначе не работает сортировка по атрибутам без наличия столбца "№ п/п"
+      producer.Columns.AddInt("NPop", "№ п/п", 3);
+      producer.Columns.LastAdded.CanIncSearch = true;
+      producer.DefaultConfig.Columns.Add("NPop");
+      producer.Orders.Add("NPop", "В исходном порядке");
+      producer.FixedColumns.Add("NPop"); // Иначе не работает сортировка по атрибутам без наличия столбца "№ п/п"
 
-      Producer.Columns.AddUserImage("Image", "Id",
+      producer.Columns.AddUserImage("Image", "Id",
         new EFPGridProducerValueNeededEventHandler(Image_ColumnValueNeeded), String.Empty);
-      Producer.DefaultConfig.Columns.Add("Image");
+      producer.DefaultConfig.Columns.Add("Image");
 
       // Основные столбцы
-      Producer.Columns.AddText("Number", "Номер по каталогу", 3, 3);
-      Producer.Columns.LastAdded.Format = ProgramDBUI.Settings.NumberMask;
-      Producer.Columns.LastAdded.CanIncSearch = true;
-      Producer.DefaultConfig.Columns.Add("Number");
+      producer.Columns.AddText("Number", "Номер по каталогу", 3, 3);
+      producer.Columns.LastAdded.Format = ProgramDBUI.Settings.NumberMask;
+      producer.Columns.LastAdded.CanIncSearch = true;
+      producer.DefaultConfig.Columns.Add("Number");
 
-      Producer.Columns.AddText("Name", "Название", 20, 5);
-      Producer.Columns.LastAdded.CanIncSearch = true;
-      Producer.DefaultConfig.Columns.Add("Name");
+      producer.Columns.AddText("Name", "Название", 20, 5);
+      producer.Columns.LastAdded.CanIncSearch = true;
+      producer.DefaultConfig.Columns.Add("Name");
 
-      Producer.Orders.Add("Number", "Номер по каталогу");
-      Producer.Orders.Add("Name", "Название");
+      producer.Orders.Add("Number", "Номер по каталогу");
+      producer.Orders.Add("Name", "Название");
 
       for (int i = 0; i < _AttrTypeDocs.Length; i++)
       {
-        string ColName = "Attr" + _AttrTypeDocs[i].Id.ToString();
-        ProgramDBUI.AddValueTypeColumn(Producer, _AttrTypeDocs[i].ValueType, ColName, _AttrTypeDocs[i].Name);
-        Producer.Columns.LastAdded.DisplayName = _AttrTypeDocs[i].Name;
+        string colName = "Attr" + _AttrTypeDocs[i].Id.ToString();
+        ProgramDBUI.AddValueTypeColumn(producer, _AttrTypeDocs[i].ValueType, colName, _AttrTypeDocs[i].Name);
+        producer.Columns.LastAdded.DisplayName = _AttrTypeDocs[i].Name;
         if (!String.IsNullOrEmpty(_AttrTypeDocs[i].Comment))
-          Producer.Columns.LastAdded.DisplayName += " (" + _AttrTypeDocs[i].Comment + ")";
-        Producer.Columns.LastAdded.HeaderToolTipText = "Тип: " + PlantTools.GetValueTypeName(_AttrTypeDocs[i].ValueType) +
+          producer.Columns.LastAdded.DisplayName += " (" + _AttrTypeDocs[i].Comment + ")";
+        producer.Columns.LastAdded.HeaderToolTipText = "Тип: " + PlantTools.GetValueTypeName(_AttrTypeDocs[i].ValueType) +
           Environment.NewLine + _AttrTypeDocs[i].Comment;
-        Producer.DefaultConfig.Columns.Add(ColName);
+        producer.DefaultConfig.Columns.Add(colName);
 
         switch (_AttrTypeDocs[i].ValueType)
         {
           case ValueType.Date:
           case ValueType.DateTime:
-            Producer.Orders.Add(ColName + ",NPop", _AttrTypeDocs[i].Name + " (по возрастанию)", new EFPDataGridViewSortInfo(ColName, ListSortDirection.Ascending));
-            Producer.Orders.Add(ColName + " DESC,NPop", _AttrTypeDocs[i].Name + " (по убыванию)", new EFPDataGridViewSortInfo(ColName.ToString(), ListSortDirection.Descending));
+            producer.Orders.Add(colName + ",NPop", _AttrTypeDocs[i].Name + " (по возрастанию)", new EFPDataGridViewSortInfo(colName, ListSortDirection.Ascending));
+            producer.Orders.Add(colName + " DESC,NPop", _AttrTypeDocs[i].Name + " (по убыванию)", new EFPDataGridViewSortInfo(colName.ToString(), ListSortDirection.Descending));
             break;
           case ValueType.Boolean:
             break;
           default:
-            Producer.Orders.Add(ColName + ",NPop", _AttrTypeDocs[i].Name, new EFPDataGridViewSortInfo(ColName, ListSortDirection.Ascending));
+            producer.Orders.Add(colName + ",NPop", _AttrTypeDocs[i].Name, new EFPDataGridViewSortInfo(colName, ListSortDirection.Ascending));
             break;
         }
       }
 
-      Producer.DefaultConfig.FrozenColumns = 3;
+      producer.DefaultConfig.FrozenColumns = 3;
 
       #region Именные конфигурации
 
       // Для каждого вида атрибута добавляем именную настройку с единственным столбцом
       for (int i = 0; i < _AttrTypeDocs.Length; i++)
       {
-        EFPDataGridViewConfig Cfg = Producer.NewNamedConfig(_AttrTypeDocs[i].Name);
-        Cfg.ImageKey = "AttributeType";
-        string MainColName = "Attr" + _AttrTypeDocs[i].Id.ToString();
-        for (int j = 0; j < Producer.DefaultConfig.Columns.Count; j++)
+        EFPDataGridViewConfig config = producer.NewNamedConfig(_AttrTypeDocs[i].Name);
+        config.ImageKey = "AttributeType";
+        string mainColName = "Attr" + _AttrTypeDocs[i].Id.ToString();
+        for (int j = 0; j < producer.DefaultConfig.Columns.Count; j++)
         {
-          if (Producer.DefaultConfig.Columns[j].ColumnName.StartsWith("Attr"))
+          if (producer.DefaultConfig.Columns[j].ColumnName.StartsWith("Attr"))
           {
-            if (Producer.DefaultConfig.Columns[j].ColumnName != MainColName)
+            if (producer.DefaultConfig.Columns[j].ColumnName != mainColName)
               continue; // оставляем только свой столбец
           }
-          Cfg.Columns.Add(Producer.DefaultConfig.Columns[j].Clone());
+          config.Columns.Add(producer.DefaultConfig.Columns[j].Clone());
         }
       }
 
@@ -156,7 +156,7 @@ namespace Plants
 
       gh = new EFPDBxGridView(efpForm, TheGrid, ProgramDBUI.TheUI);
       gh.Control.AutoGenerateColumns = false;
-      gh.GridProducer = Producer;
+      gh.GridProducer = producer;
       gh.ConfigSectionName = "Plants-AttrTable";
 
 
@@ -182,7 +182,7 @@ namespace Plants
       gh.CommandItems.ClipboardInToolBar = true;
       gh.ToolBarPanel = PanSpb;
 
-      gh.Control.DataSource = Table.DefaultView;
+      gh.Control.DataSource = table.DefaultView;
       gh.RefreshData += new EventHandler(gh_RefreshData); // 27.03.2017
 
       #endregion
@@ -209,14 +209,14 @@ namespace Plants
 
       #endregion
 
-      FillTable(Table);
+      FillTable(table);
 
       TheGrid.Select();
     }
 
-    protected override void OnLoad(EventArgs e)
+    protected override void OnLoad(EventArgs args)
     {
-      base.OnLoad(e);
+      base.OnLoad(args);
 
       // Отключаем редактирование по месту после загрузки формы, чтобы команды вставки из буфера обмена
       // успели инициализироваться
@@ -255,7 +255,7 @@ namespace Plants
 
     #region Поле даты
 
-    void efpDate_ValueChanged(object Sender, EventArgs Args)
+    void efpDate_ValueChanged(object sender, EventArgs args)
     {
       if (efpDate.NValue.HasValue)
       {
@@ -270,8 +270,8 @@ namespace Plants
 
     private void Image_ColumnValueNeeded(object sender, EFPGridProducerValueNeededEventArgs args)
     {
-      Int32 DocId = args.GetInt("Id");
-      args.Value = _DocTypeUI.GetImageValue(DocId);
+      Int32 docId = args.GetInt("Id");
+      args.Value = _DocTypeUI.GetImageValue(docId);
     }
 
     void gh_GetCellAttributes(object sender, EFPDataGridViewCellAttributesEventArgs args)
@@ -282,8 +282,8 @@ namespace Plants
       {
         if (args.ColumnName == "Image")
         {
-          Int32 DocId = DataTools.GetInt(args.DataRow, "Id");
-          args.ToolTipText = _DocTypeUI.GetToolTipText(DocId);
+          Int32 docId = DataTools.GetInt(args.DataRow, "Id");
+          args.ToolTipText = _DocTypeUI.GetToolTipText(docId);
         }
       }
       else if (args.Reason == EFPDataGridViewAttributesReason.ReadOnly)
@@ -297,22 +297,22 @@ namespace Plants
       if (args.ColumnName.StartsWith("Attr"))
       {
         string txt = args.ColumnName.Substring(4);
-        Int32 AttrTypeId = Int32.Parse(txt);
-        AttrTypeDoc AttrDoc = new AttrTypeDoc(AttrTypeId);
-        object Value = args.DataRow[args.ColumnName];
-        string ErrorText;
-        if (!AttrDoc.TestValue(Value, out ErrorText))
+        Int32 attrTypeId = Int32.Parse(txt);
+        AttrTypeDoc attrDoc = new AttrTypeDoc(attrTypeId);
+        object value = args.DataRow[args.ColumnName];
+        string errorText;
+        if (!attrDoc.TestValue(value, out errorText))
         {
           args.ColorType = EFPDataGridViewColorType.Warning;
-          args.ToolTipText += Environment.NewLine + ErrorText;
+          args.ToolTipText += Environment.NewLine + errorText;
         }
       }
     }
 
     void gh_EditData(object Sender, EventArgs Args)
     {
-      Int32[] SelDocIds = gh.SelectedIds;
-      if (SelDocIds.Length == 0)
+      Int32[] selDocIds = gh.SelectedIds;
+      if (selDocIds.Length == 0)
       {
         EFPApp.ShowTempMessage("Нет выбранных документов");
         return;
@@ -324,102 +324,100 @@ namespace Plants
         if (gh.CurrentColumnName.StartsWith("Attr"))
         {
           string txt = gh.CurrentColumnName.Substring(4);
-          Int32 AttrTypeId = Int32.Parse(txt);
-          DoEditAttrs(AttrTypeId, SelDocIds);
+          Int32 attrTypeId = Int32.Parse(txt);
+          DoEditAttrs(attrTypeId, selDocIds);
           return;
         }
       }
 
       // Обычное редактирование
 
-      if (SelDocIds.Length > 0 && (!_DocTypeUI.CanMultiEdit))
+      if (selDocIds.Length > 0 && (!_DocTypeUI.CanMultiEdit))
       {
         EFPApp.ShowTempMessage("Групповое редактирование документов \"" + _DocTypeUI.DocType.PluralTitle + "\" не допускается");
         return;
       }
 
-      if (_DocTypeUI.PerformEditing(SelDocIds, gh.State, true, null))
+      if (_DocTypeUI.PerformEditing(selDocIds, gh.State, true, null))
         FillRows(gh.SelectedDataRows);
     }
 
-    private void DoEditAttrs(Int32 AttrTypeId, Int32[] SelDocIds)
+    private void DoEditAttrs(Int32 attrTypeId, Int32[] selDocIds)
     {
-      if (!EditAttrValueGroup.PerformEdit(_DocTypeUI, SelDocIds, AttrTypeId))
+      if (!EditAttrValueGroup.PerformEdit(_DocTypeUI, selDocIds, attrTypeId))
         return;
 
-      DataRow[] Rows = gh.SelectedDataRows;
-      FillRows(Rows);
+      DataRow[] rows = gh.SelectedDataRows;
+      FillRows(rows);
     }
 
-    void gh_GetDocSel(object Sender, EFPDBxGridViewDocSelEventArgs Args)
+    void gh_GetDocSel(object sender, EFPDBxGridViewDocSelEventArgs args)
     {
-      Args.AddFromColumn(_DocTypeUI.DocType.Name, "Id");
+      args.AddFromColumn(_DocTypeUI.DocType.Name, "Id");
     }
 
-    void gh_RefreshData(object Sender, EventArgs Args)
+    void gh_RefreshData(object sender, EventArgs args)
     {
       FillTable(gh.SourceAsDataTable);
     }
-
 
     #endregion
 
     #region Заполнение таблицы
 
-    private void FillTable(DataTable Table)
+    private void FillTable(DataTable table)
     {
-      DataRow[] Rows = new DataRow[Table.Rows.Count];
-      Table.Rows.CopyTo(Rows, 0);
-      FillRows(Rows);
+      DataRow[] rows = new DataRow[table.Rows.Count];
+      table.Rows.CopyTo(rows, 0);
+      FillRows(rows);
     }
 
-    private void FillRows(DataRow[] Rows)
+    private void FillRows(DataRow[] rows)
     {
-      Int32[] DocIds = DataTools.GetIds(Rows);
-      if (DocIds.Length == 0)
+      Int32[] docIds = DataTools.GetIds(rows);
+      if (docIds.Length == 0)
         return;
 
-      DBxDocSet DocSet = new DBxDocSet(ProgramDBUI.TheUI.DocProvider);
-      DBxMultiDocs mDocs = DocSet[_DocTypeUI.DocType.Name];
-      mDocs.View(DocIds);
+      DBxDocSet docSet = new DBxDocSet(ProgramDBUI.TheUI.DocProvider);
+      DBxMultiDocs mDocs = docSet[_DocTypeUI.DocType.Name];
+      mDocs.View(docIds);
 
-      foreach (DataRow DocRow in Rows)
+      foreach (DataRow docRow in rows)
       {
-        Int32 DocId = DataTools.GetInt(DocRow, "Id");
-        DBxSingleDoc Doc = mDocs.GetDocById(DocId);
-        FillOneRow(DocRow, Doc);
+        Int32 docId = DataTools.GetInt(docRow, "Id");
+        DBxSingleDoc doc = mDocs.GetDocById(docId);
+        FillOneRow(docRow, doc);
       }
     }
 
-    private void FillOneRow(DataRow DocRow, DBxSingleDoc Doc)
+    private void FillOneRow(DataRow docRow, DBxSingleDoc doc)
     {
-      DocRow["Number"] = Doc.Values["Number"].AsInteger;
-      DocRow["Name"] = Doc.Values["Name"].AsString;
+      docRow["Number"] = doc.Values["Number"].AsInteger;
+      docRow["Name"] = doc.Values["Name"].AsString;
 
-
-      DataTable SubTable = Doc.SubDocs["PlantAttributes"].CreateSubDocsData();
-      SubTable.DefaultView.Sort = "Date";
+      DataTable subTable = doc.SubDocs["PlantAttributes"].CreateSubDocsData();
+      subTable.DefaultView.Sort = "Date";
       for (int i = 0; i < _AttrTypeDocs.Length; i++)
       {
-        DocRow["Attr" + _AttrTypeDocs[i].Id.ToString()] = DBNull.Value;
+        docRow["Attr" + _AttrTypeDocs[i].Id.ToString()] = DBNull.Value;
 
-        SubTable.DefaultView.RowFilter = "AttrType=" + _AttrTypeDocs[i].Id;
-        for (int j = SubTable.DefaultView.Count - 1; j >= 0; j--)
+        subTable.DefaultView.RowFilter = "AttrType=" + _AttrTypeDocs[i].Id;
+        for (int j = subTable.DefaultView.Count - 1; j >= 0; j--)
         {
-          DataRow ValueRow = SubTable.DefaultView[j].Row;
-          DateTime? dt = DataTools.GetNullableDateTime(ValueRow, "Date");
+          DataRow valueRow = subTable.DefaultView[j].Row;
+          DateTime? dt = DataTools.GetNullableDateTime(valueRow, "Date");
           if (dt.HasValue)
           {
             if (dt.Value > efpDate.Value)
               continue;
           }
 
-          string s = DataTools.GetString(ValueRow, "LongValue");
+          string s = DataTools.GetString(valueRow, "LongValue");
           if (String.IsNullOrEmpty(s))
-            s = DataTools.GetString(ValueRow, "Value");
+            s = DataTools.GetString(valueRow, "Value");
           object v = PlantTools.ValueFromSaveableString(s, _AttrTypeDocs[i].ValueType);
           if (v != null)
-            DocRow["Attr" + _AttrTypeDocs[i].Id.ToString()] = v;
+            docRow["Attr" + _AttrTypeDocs[i].Id.ToString()] = v;
           break;
         }
       }
@@ -428,51 +426,51 @@ namespace Plants
     /// <summary>
     /// Обновление одной строк после редактирование
     /// </summary>
-    /// <param name="DocRow"></param>
-    private void FillOneRow(DataRow DocRow)
+    /// <param name="docRow"></param>
+    private void FillOneRow(DataRow docRow)
     {
-      Int32 DocId = DataTools.GetInt(DocRow, "Id");
-      DBxDocSet DocSet = new DBxDocSet(ProgramDBUI.TheUI.DocProvider);
-      DBxMultiDocs mDocs = DocSet[_DocTypeUI.DocType.Name];
-      mDocs.View(DocId);
-      FillOneRow(DocRow, mDocs[0]);
+      Int32 docId = DataTools.GetInt(docRow, "Id");
+      DBxDocSet docSet = new DBxDocSet(ProgramDBUI.TheUI.DocProvider);
+      DBxMultiDocs mDocs = docSet[_DocTypeUI.DocType.Name];
+      mDocs.View(docId);
+      FillOneRow(docRow, mDocs[0]);
     }
 
     #endregion
 
     #region Редактирование по месту
 
-    void efpEnableInPlace_ValueChanged(object Sender, EventArgs Args)
+    void efpEnableInPlace_ValueChanged(object sender, EventArgs args)
     {
       gh.Control.ReadOnly = !efpEnableInPlace.Checked;
     }
 
-    void efpStartDate_NValueChanged(object Sender, EventArgs Args)
+    void efpStartDate_NValueChanged(object sender, EventArgs args)
     {
       EditAttrValueHelper.LastDate = efpStartDate.NValue;
     }
 
-    void gh_CellFinished(object Sender, EFPDataGridViewCellFinishedEventArgs Args)
+    void gh_CellFinished(object sender, EFPDataGridViewCellFinishedEventArgs args)
     {
       if (!efpEnableInPlace.Checked)
         throw new InvalidOperationException("Редактирование по месту запрещено");
 
-      if (!Args.ColumnName.StartsWith("Attr"))
+      if (!args.ColumnName.StartsWith("Attr"))
         throw new InvalidOperationException("Столбец не относится к атрибутам");
 
       string txt = gh.CurrentColumnName.Substring(4);
-      Int32 AttrTypeId = Int32.Parse(txt);
+      Int32 attrTypeId = Int32.Parse(txt);
 
-      Int32 DocId = DataTools.GetInt(Args.DataRow, "Id");
-      if (Args.Cell.Value == null || (Args.Cell.Value is DBNull))
-        EditAttrValueHelper.ClearValue(_DocTypeUI.DocType.Name, DocId, AttrTypeId, efpStartDate.Value);
+      Int32 docId = DataTools.GetInt(args.DataRow, "Id");
+      if (args.Cell.Value == null || (args.Cell.Value is DBNull))
+        EditAttrValueHelper.ClearValue(_DocTypeUI.DocType.Name, docId, attrTypeId, efpStartDate.Value);
       else
-        EditAttrValueHelper.SetValue(DocId, AttrTypeId, efpStartDate.Value, Args.Cell.Value);
+        EditAttrValueHelper.SetValue(docId, attrTypeId, efpStartDate.Value, args.Cell.Value);
 
-      FillOneRow(Args.DataRow); // Перечитываем значение
+      FillOneRow(args.DataRow); // Перечитываем значение
     }
 
-    void efpSetStartDate_Click(object Sender, EventArgs Args)
+    void efpSetStartDate_Click(object sender, EventArgs args)
     {
       efpStartDate.Value = efpDate.Value;
     }
@@ -487,11 +485,11 @@ namespace Plants
   {
     #region Конструктор
 
-    public AttrTypeDoc(Int32 Id)
+    public AttrTypeDoc(Int32 id)
     {
-      object[] a = ProgramDBUI.TheUI.DocTypes["AttrTypes"].TableCache.GetValues(Id,
+      object[] a = ProgramDBUI.TheUI.DocTypes["AttrTypes"].TableCache.GetValues(id,
         new DBxColumns("Name,Type,Comment,Format,Source"));
-      this._Id = Id;
+      this._Id = id;
       this._Name = DataTools.GetString(a[0]);
       this._ValueType = (ValueType)(DataTools.GetInt(a[1]));
       this._Comment = DataTools.GetString(a[2]);
@@ -500,7 +498,7 @@ namespace Plants
       else
         this._Format = String.Empty;
 
-      this.FSourceType = (AttrValueSourceType)(DataTools.GetInt(a[4]));
+      this._SourceType = (AttrValueSourceType)(DataTools.GetInt(a[4]));
     }
 
     #endregion
@@ -531,8 +529,8 @@ namespace Plants
     /// <summary>
     /// Тип источника значений
     /// </summary>
-    public AttrValueSourceType SourceType { get { return FSourceType; } }
-    private AttrValueSourceType FSourceType;
+    public AttrValueSourceType SourceType { get { return _SourceType; } }
+    private AttrValueSourceType _SourceType;
 
 
     /// <summary>
@@ -546,19 +544,19 @@ namespace Plants
     {
       get
       {
-        if (FStoreValueList == null)
-          FStoreValueList = GetStoreValueList();
-        return FStoreValueList;
+        if (_StoreValueList == null)
+          _StoreValueList = GetStoreValueList();
+        return _StoreValueList;
       }
     }
-    private string[] FStoreValueList;
+    private string[] _StoreValueList;
 
-    private static readonly string[] BoolStoreValueList = new string[] { "0", "1" };
+    private static readonly string[] _BoolStoreValueList = new string[] { "0", "1" };
 
     private string[] GetStoreValueList()
     {
       if (ValueType == ValueType.Boolean)
-        return BoolStoreValueList;
+        return _BoolStoreValueList;
 
       switch (SourceType)
       {
@@ -580,12 +578,12 @@ namespace Plants
     {
       get
       {
-        if (FValueList == null)
-          FValueList = GetValueList();
-        return FValueList;
+        if (_ValueList == null)
+          _ValueList = GetValueList();
+        return _ValueList;
       }
     }
-    private object[] FValueList;
+    private object[] _ValueList;
 
     private object[] GetValueList()
     {
@@ -647,32 +645,32 @@ namespace Plants
     /// Проверка корректности значения атрибута.
     /// Null и значение по умолчанию (0) считаются корректными значениями.
     /// </summary>
-    /// <param name="Value">Проверяемое значение</param>
-    /// <param name="ErrorText">Сюда помещается сообщение об ошибке или null, если ошибки нет</param>
+    /// <param name="value">Проверяемое значение</param>
+    /// <param name="errorText">Сюда помещается сообщение об ошибке или null, если ошибки нет</param>
     /// <returns>true, если значение является корректным</returns>
-    public bool TestValue(object Value, out string ErrorText)
+    public bool TestValue(object value, out string errorText)
     {
-      ErrorText = null;
-      if (Value == null)
+      errorText = null;
+      if (value == null)
         return true;
 
       try
       {
-        if (PlantTools.IsDefaultValue(Value, this.ValueType))
+        if (PlantTools.IsDefaultValue(value, this.ValueType))
           return true;
 
         if (this.Mask != null)
         {
-          if (!this.Mask.Test(Value.ToString(), out ErrorText))
+          if (!this.Mask.Test(value.ToString(), out errorText))
             return false;
         }
 
         if (this.ValueList.Length > 0)
         {
 
-          if (Array.IndexOf<object>(this.ValueList, Value) < 0)
+          if (Array.IndexOf<object>(this.ValueList, value) < 0)
           {
-            ErrorText = "Значения \"" + PlantTools.ToString(Value, this.ValueType) + "\" нет в списке допустимых для атрибута \"" + this.Name + "\"";
+            errorText = "Значения \"" + PlantTools.ToString(value, this.ValueType) + "\" нет в списке допустимых для атрибута \"" + this.Name + "\"";
             return false;
           }
         }
@@ -681,7 +679,7 @@ namespace Plants
       }
       catch (Exception e)
       {
-        ErrorText = "Исключение при проверке значения атрибута \"" + this.Name + "\" " + e.Message;
+        errorText = "Исключение при проверке значения атрибута \"" + this.Name + "\" " + e.Message;
         return false;
       }
     }
@@ -690,12 +688,12 @@ namespace Plants
     /// Проверка корректности значения атрибута.
     /// Null и значение по умолчанию (0) считаются корректными значениями.
     /// </summary>
-    /// <param name="Value">Проверяемое значение</param>
+    /// <param name="value">Проверяемое значение</param>
     /// <returns>true, если значение является корректным</returns>
-    public bool TestValue(object Value)
+    public bool TestValue(object value)
     {
-      string ErrorText;
-      return TestValue(Value, out ErrorText);
+      string errorText;
+      return TestValue(value, out errorText);
     }
 
     #endregion
@@ -716,37 +714,35 @@ namespace Plants
     /// <summary>
     /// Проверка текста атрибута и преобразование его в значение
     /// </summary>
-    /// <param name="AttrType"></param>
-    /// <param name="Args"></param>
-    public static void ValidateAttributeText(AttrTypeDoc AttrType, EFPSelRCValidatingEventArgs Args)
+    public static void ValidateAttributeText(AttrTypeDoc attrType, EFPSelRCValidatingEventArgs args)
     {
-      if (String.IsNullOrEmpty(Args.SourceData))
+      if (String.IsNullOrEmpty(args.SourceData))
       {
-        Args.ResultValue = null;
+        args.ResultValue = null;
         return;
       }
 
       object v;
-      if (PlantTools.TryParse(Args.SourceData, AttrType.ValueType, out v))
-        Args.ResultValue = v;
+      if (PlantTools.TryParse(args.SourceData, attrType.ValueType, out v))
+        args.ResultValue = v;
       else
-        Args.SetError("Нельзя преобразовать в \"" + PlantTools.GetValueTypeName(AttrType.ValueType) + "\"");
+        args.SetError("Нельзя преобразовать в \"" + PlantTools.GetValueTypeName(attrType.ValueType) + "\"");
     }
 
-    public static void AddAtrSubDoc(DBxSingleDoc Doc, AttrTypeDoc AttrType, object Value, DateTime? Date)
+    public static void AddAtrSubDoc(DBxSingleDoc doc, AttrTypeDoc attrType, object value, DateTime? date)
     {
-      if (PlantTools.IsDefaultValue(Value, AttrType.ValueType))
+      if (PlantTools.IsDefaultValue(value, attrType.ValueType))
         // Значение по умолчанию добавлять не будем
         return;
 
-      DBxSubDoc SubDoc = Doc.SubDocs["PlantAttributes"].Insert();
-      SubDoc.Values["AttrType"].SetInteger(AttrType.Id);
-      SubDoc.Values["Date"].SetNullableDateTime(Date);
-      string s = PlantTools.ValueToSaveableString(Value, AttrType.ValueType);
+      DBxSubDoc subDoc = doc.SubDocs["PlantAttributes"].Insert();
+      subDoc.Values["AttrType"].SetInteger(attrType.Id);
+      subDoc.Values["Date"].SetNullableDateTime(date);
+      string s = PlantTools.ValueToSaveableString(value, attrType.ValueType);
       if (s.Length <= PlantTools.AttrValueShortMaxLength)
-        SubDoc.Values["Value"].SetString(s);
+        subDoc.Values["Value"].SetString(s);
       else
-        SubDoc.Values["LongValue"].SetString(s);
+        subDoc.Values["LongValue"].SetString(s);
     }
 
     #endregion
@@ -776,85 +772,80 @@ namespace Plants
     /// <summary>
     /// Удаляет для документа значение атрибута, если оно существует
     /// </summary>
-    /// <param name="DocTypeName"></param>
-    /// <param name="DocId"></param>
-    /// <param name="AttrTypeId"></param>
-    /// <param name="Date"></param>
-    public static void ClearValue(string DocTypeName, Int32 DocId, Int32 AttrTypeId, DateTime? Date)
+    public static void ClearValue(string docTypeName, Int32 docId, Int32 attrTypeId, DateTime? date)
     {
-      AttrTypeDoc AttrType = new AttrTypeDoc(AttrTypeId);
-      DBxDocSet DocSet = new DBxDocSet(ProgramDBUI.TheUI.DocProvider);
-      DBxSingleDoc Doc = DocSet[DocTypeName].Edit(DocId);
-      DBxSubDoc SubDoc;
-      if (FindSubDoc(Doc, AttrTypeId, Date, out SubDoc))
+      AttrTypeDoc attrType = new AttrTypeDoc(attrTypeId);
+      DBxDocSet docSet = new DBxDocSet(ProgramDBUI.TheUI.DocProvider);
+      DBxSingleDoc doc = docSet[docTypeName].Edit(docId);
+      DBxSubDoc subDoc;
+      if (FindSubDoc(doc, attrTypeId, date, out subDoc))
       {
-        DocSet.ActionInfo = "Удаление атрибута \"" + AttrType.Name + "\"";
-        SubDoc.Delete();
-        DocSet.ApplyChanges(false);
+        docSet.ActionInfo = "Удаление атрибута \"" + attrType.Name + "\"";
+        subDoc.Delete();
+        docSet.ApplyChanges(false);
       }
     }
 
-    public static void SetValue(Int32 DocId, Int32 AttrTypeId, DateTime? Date, object Value)
+    public static void SetValue(Int32 docId, Int32 attrTypeId, DateTime? date, object value)
     {
-      AttrTypeDoc AttrType = new AttrTypeDoc(AttrTypeId);
-      string NewSValue = PlantTools.ValueToSaveableString(Value, AttrType.ValueType);
-      string NewSValue1, NewSValue2;
-      SplitAttrValue(NewSValue, out NewSValue1, out NewSValue2);
+      AttrTypeDoc attrType = new AttrTypeDoc(attrTypeId);
+      string newSValue = PlantTools.ValueToSaveableString(value, attrType.ValueType);
+      string newSValue1, newSValue2;
+      SplitAttrValue(newSValue, out newSValue1, out newSValue2);
 
 
-      DBxDocSet DocSet = new DBxDocSet(ProgramDBUI.TheUI.DocProvider);
-      DBxSingleDoc Doc = DocSet["Plants"].Edit(DocId);
+      DBxDocSet docSet = new DBxDocSet(ProgramDBUI.TheUI.DocProvider);
+      DBxSingleDoc doc = docSet["Plants"].Edit(docId);
 
-      DBxSubDoc SubDoc;
-      if (FindSubDoc(Doc, AttrTypeId, Date, out SubDoc))
+      DBxSubDoc subDoc;
+      if (FindSubDoc(doc, attrTypeId, date, out subDoc))
       {
-        string OldSValue1 = SubDoc.Values["Value"].AsString;
-        string OldSValue2 = SubDoc.Values["LongValue"].AsString;
-        if (NewSValue1 == OldSValue1 && NewSValue2 == OldSValue2)
+        string oldSValue1 = subDoc.Values["Value"].AsString;
+        string oldSValue2 = subDoc.Values["LongValue"].AsString;
+        if (newSValue1 == oldSValue1 && newSValue2 == oldSValue2)
           return; // Ничего менять не надо
 
-        DocSet.ActionInfo = "Изменение атрибута \"" + AttrType.Name + "\"";
-        SubDoc.Values["Value"].SetString(NewSValue1);
-        SubDoc.Values["LongValue"].SetString(NewSValue2);
+        docSet.ActionInfo = "Изменение атрибута \"" + attrType.Name + "\"";
+        subDoc.Values["Value"].SetString(newSValue1);
+        subDoc.Values["LongValue"].SetString(newSValue2);
       }
       else
       {
         // Нет такого атрибута
         // Добавление пустого значения не эквивалентно отсутствию атрибута вообще, если задана дата атрибута
-        if ((!Date.HasValue) && PlantTools.IsDefaultValue(Value, AttrType.ValueType))
+        if ((!date.HasValue) && PlantTools.IsDefaultValue(value, attrType.ValueType))
           return;
 
-        DocSet.ActionInfo = "Добавление атрибута \"" + AttrType.Name + "\"";
+        docSet.ActionInfo = "Добавление атрибута \"" + attrType.Name + "\"";
 
-        SubDoc = Doc.SubDocs["PlantAttributes"].Insert();
-        SubDoc.Values["AttrType"].SetInteger(AttrType.Id);
-        SubDoc.Values["Date"].SetNullableDateTime(Date);
-        SubDoc.Values["Value"].SetString(NewSValue1);
-        SubDoc.Values["LongValue"].SetString(NewSValue2);
+        subDoc = doc.SubDocs["PlantAttributes"].Insert();
+        subDoc.Values["AttrType"].SetInteger(attrType.Id);
+        subDoc.Values["Date"].SetNullableDateTime(date);
+        subDoc.Values["Value"].SetString(newSValue1);
+        subDoc.Values["LongValue"].SetString(newSValue2);
       }
 
-      DocSet.ApplyChanges(false);
+      docSet.ApplyChanges(false);
     }
 
-    private static bool FindSubDoc(DBxSingleDoc Doc, Int32 AttrTypeId, DateTime? Date, out DBxSubDoc SubDoc)
+    private static bool FindSubDoc(DBxSingleDoc doc, Int32 attrTypeId, DateTime? date, out DBxSubDoc subDoc)
     {
-      DBxSingleSubDocs SubDocs = Doc.SubDocs["PlantAttributes"];
-      foreach (DBxSubDoc ThisSubDoc in SubDocs)
+      DBxSingleSubDocs subDocs = doc.SubDocs["PlantAttributes"];
+      foreach (DBxSubDoc thisSubDoc in subDocs)
       {
-        if (ThisSubDoc.Values["AttrType"].AsInteger == AttrTypeId &&
-          ThisSubDoc.Values["Date"].AsNullableDateTime == Date)
+        if (thisSubDoc.Values["AttrType"].AsInteger == attrTypeId &&
+          thisSubDoc.Values["Date"].AsNullableDateTime == date)
         {
-          SubDoc = ThisSubDoc;
+          subDoc = thisSubDoc;
           return true;
         }
       }
 
       // Не нашли
-      SubDoc = new DBxSubDoc();
+      subDoc = new DBxSubDoc();
       return false;
     }
 
     #endregion
   }
-
 }

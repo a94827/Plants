@@ -26,9 +26,9 @@ namespace Plants
     {
     }
 
-    protected override void Dispose(bool Disposing)
+    protected override void Dispose(bool disposing)
     {
-      if (Disposing)
+      if (disposing)
       {
         if (_GlobalDocData != null)
         {
@@ -41,23 +41,23 @@ namespace Plants
 
       _GlobalDocData = null;
 
-      base.Dispose(Disposing);
+      base.Dispose(disposing);
     }
 
     #endregion
 
     #region InitDB()
 
-    public void InitDB(AbsPath DBDir, ISplash Splash)
+    public void InitDB(AbsPath dbDir, ISplash spl)
     {
       #region Объявление видов документов
 
-      string OldPT = Splash.PhaseText;
-      Splash.PhaseText = "Объявление видов документов";
+      string oldPT = spl.PhaseText;
+      spl.PhaseText = "Объявление видов документов";
 
       InitDocTypes();
 
-      Splash.PhaseText = OldPT;
+      spl.PhaseText = oldPT;
 
       #endregion
 
@@ -65,20 +65,20 @@ namespace Plants
 
       #region Инициализация DBConnectionHelper
 
-      InitDBConnectionHelper(DBDir);
+      InitDBConnectionHelper(dbDir);
 
       #endregion
 
       #region Создание / обновление баз данных документов
 
-      _DBConnectionHelper.Splash = Splash;
+      _DBConnectionHelper.Splash = spl;
       _GlobalDocData = _DBConnectionHelper.CreateRealDocProviderGlobal();
       _DBConnectionHelper.Splash = null; // он скоро исчезнет
       if (_DBConnectionHelper.Errors.Count > 0)
       {
         // Регистрируем сообщения в log-файле
-        AbsPath LogFilePath = LogoutTools.GetLogFileName("DBChange", String.Empty);
-        using (StreamWriter wrt = new StreamWriter(LogFilePath.Path, false, LogoutTools.LogEncoding))
+        AbsPath logFilePath = LogoutTools.GetLogFileName("DBChange", String.Empty);
+        using (StreamWriter wrt = new StreamWriter(logFilePath.Path, false, LogoutTools.LogEncoding))
         {
           wrt.WriteLine("Изменение структуры баз данных Plants");
           wrt.WriteLine("Время: " + DateTime.Now.ToString());
@@ -98,9 +98,9 @@ namespace Plants
         }
       }
 
-      using (DBxCon Con = new DBxCon(GlobalDocData.MainDBEntry))
+      using (DBxCon con = new DBxCon(GlobalDocData.MainDBEntry))
       {
-        _DataVersionHandler.InitTableRow(Con);
+        _DataVersionHandler.InitTableRow(con);
       }
 
       #endregion
@@ -117,7 +117,7 @@ namespace Plants
 
       #endregion
 
-      _DBDir = DBDir;
+      _DBDir = dbDir;
     }
 
     /// <summary>
@@ -672,7 +672,7 @@ namespace Plants
       dt.Struct.Columns.AddString("Name", 250, true);
       dt.Struct.Columns.AddMemo("Comment");
       dt.Struct.Columns.AddReference("ParentId", "Care", true); // для наследования записей
-      dt.TreeParentColumnName= "ParentId";
+      dt.TreeParentColumnName = "ParentId";
 
       dt.Struct.Columns.AddReference("GroupId", "PlantGroups", true); // те же группы, что и в каталоге растений
       dt.GroupRefColumnName = "GroupId";
@@ -722,15 +722,15 @@ namespace Plants
 
     #region AttrTypes
 
-    void AttrType_BeforeWrite(object Sender, ServerDocTypeBeforeWriteEventArgs Args)
+    void AttrType_BeforeWrite(object sender, ServerDocTypeBeforeWriteEventArgs args)
     {
-      AttrValueSourceType Type = (AttrValueSourceType)(Args.Doc.Values["Source"].AsInteger);
-      switch (Type)
+      AttrValueSourceType sourceType = (AttrValueSourceType)(args.Doc.Values["Source"].AsInteger);
+      switch (sourceType)
       {
         case AttrValueSourceType.List:
           break;
         default:
-          Args.Doc.Values["ValueList"].SetNull(); // Очищаем список, если он не используется
+          args.Doc.Values["ValueList"].SetNull(); // Очищаем список, если он не используется
           break;
       }
     }
@@ -739,65 +739,65 @@ namespace Plants
 
     #region Plants
 
-    void Plant_BeforeWrite(object Sender, ServerDocTypeBeforeWriteEventArgs Args)
+    void Plant_BeforeWrite(object sender, ServerDocTypeBeforeWriteEventArgs args)
     {
       #region Название
 
-      if (!Args.Doc.Values["LatinName"].IsNull)
+      if (!args.Doc.Values["LatinName"].IsNull)
       {
         // 16.09.2019
         // Если есть и русское и латинское название - выводим оба
-        string s = Args.Doc.Values["LatinName"].AsString;
-        string s2 = Args.Doc.Values["LocalName"].AsString;
+        string s = args.Doc.Values["LatinName"].AsString;
+        string s2 = args.Doc.Values["LocalName"].AsString;
         if (s2.Length > 0)
           s += " / " + s2;
-        Args.Doc.Values["Name"].SetValue(s);
+        args.Doc.Values["Name"].SetValue(s);
       }
-      else if (!Args.Doc.Values["LocalName"].IsNull)
-        Args.Doc.Values["Name"].SetValue(Args.Doc.Values["LocalName"].Value);
-      else if (!Args.Doc.Values["Description"].IsNull)
-        Args.Doc.Values["Name"].SetValue(Args.Doc.Values["Description"].Value);
+      else if (!args.Doc.Values["LocalName"].IsNull)
+        args.Doc.Values["Name"].SetValue(args.Doc.Values["LocalName"].Value);
+      else if (!args.Doc.Values["Description"].IsNull)
+        args.Doc.Values["Name"].SetValue(args.Doc.Values["Description"].Value);
       else
-        Args.Doc.Values["Name"].SetValue("?");
+        args.Doc.Values["Name"].SetValue("?");
 
       #endregion
 
-      DataTable Table;
+      DataTable table;
 
       #region Место и контрагенты
 
-      Args.Doc.Values["Place"].SetNull();
-      Args.Doc.Values["FromContra"].SetNull();
-      Args.Doc.Values["ToContra"].SetNull();
-      Args.Doc.Values["FromContra"].SetNull();
-      Args.Doc.Values["ToPlant"].SetNull();
-      Args.Doc.Values["FromPlant"].SetNull();
-      Args.Doc.Values["MovementState"].SetNull();
-      Table = Args.Doc.SubDocs["PlantMovement"].CreateSubDocsData();
-      Table.DefaultView.Sort = "Date1";
-      bool PlaceFound = false;
-      bool RemoveDateFound = false;
+      args.Doc.Values["Place"].SetNull();
+      args.Doc.Values["FromContra"].SetNull();
+      args.Doc.Values["ToContra"].SetNull();
+      args.Doc.Values["FromContra"].SetNull();
+      args.Doc.Values["ToPlant"].SetNull();
+      args.Doc.Values["FromPlant"].SetNull();
+      args.Doc.Values["MovementState"].SetNull();
+      table = args.Doc.SubDocs["PlantMovement"].CreateSubDocsData();
+      table.DefaultView.Sort = "Date1";
+      bool placeFound = false;
+      bool removeDateFound = false;
 
-      Int32 SoilId = 0;
-      Int32 PotKindId = 0;
-      DateTime LastAddDate = DateTime.MinValue;
+      Int32 soilId = 0;
+      Int32 potKindId = 0;
+      DateTime lastAddDate = DateTime.MinValue;
 
-      for (int i = Table.DefaultView.Count - 1; i >= 0; i--)
+      for (int i = table.DefaultView.Count - 1; i >= 0; i--)
       {
-        DataRow Row = Table.DefaultView[i].Row;
-        MovementKind Kind = (MovementKind)(DataTools.GetInt(Row, "Kind"));
+        DataRow row = table.DefaultView[i].Row;
+        MovementKind kind = (MovementKind)(DataTools.GetInt(row, "Kind"));
 
         #region Место
 
-        if (!PlaceFound)
+        if (!placeFound)
         {
-          switch (Kind)
+          switch (kind)
           {
             case MovementKind.Add:
             case MovementKind.Move:
-              Int32 PlaceId = DataTools.GetInt(Row, "Place");
-              Args.Doc.Values["Place"].SetInteger(PlaceId);
-              PlaceFound = true;
+              Int32 placeId = DataTools.GetInt(row, "Place");
+              args.Doc.Values["Place"].SetInteger(placeId);
+              placeFound = true;
               break;
           }
         }
@@ -806,21 +806,21 @@ namespace Plants
 
         #region Контрагент
 
-        Int32 ContraId = DataTools.GetInt(Row, "Contra");
-        Int32 ForkPlantId = DataTools.GetInt(Row, "ForkPlant");
-        switch (Kind)
+        Int32 contraId = DataTools.GetInt(row, "Contra");
+        Int32 forkPlantId = DataTools.GetInt(row, "ForkPlant");
+        switch (kind)
         {
           case MovementKind.Add:
-            if (Args.Doc.Values["FromContra"].IsNull && Args.Doc.Values["FromPlant"].IsNull)
+            if (args.Doc.Values["FromContra"].IsNull && args.Doc.Values["FromPlant"].IsNull)
             {
-              Args.Doc.Values["FromContra"].SetInteger(ContraId);
-              Args.Doc.Values["FromPlant"].SetInteger(ForkPlantId);
+              args.Doc.Values["FromContra"].SetInteger(contraId);
+              args.Doc.Values["FromPlant"].SetInteger(forkPlantId);
             }
             break;
 
           case MovementKind.Remove:
-            Args.Doc.Values["ToContra"].SetInteger(ContraId);
-            Args.Doc.Values["ToPlant"].SetInteger(ForkPlantId);
+            args.Doc.Values["ToContra"].SetInteger(contraId);
+            args.Doc.Values["ToPlant"].SetInteger(forkPlantId);
             break;
         }
 
@@ -828,47 +828,47 @@ namespace Plants
 
         #region Приход
 
-        if (Kind == MovementKind.Add)
+        if (kind == MovementKind.Add)
         {
-          Args.Doc.Values["AddDate1"].SetValue(DataTools.GetNullableDateTime(Row, "Date1"));
-          Args.Doc.Values["AddDate2"].SetValue(DataTools.GetNullableDateTime(Row, "Date2"));
+          args.Doc.Values["AddDate1"].SetValue(DataTools.GetNullableDateTime(row, "Date1"));
+          args.Doc.Values["AddDate2"].SetValue(DataTools.GetNullableDateTime(row, "Date2"));
 
-          if (LastAddDate == DateTime.MinValue)
+          if (lastAddDate == DateTime.MinValue)
           {
-            LastAddDate = DataTools.GetNullableDateTime(Row, "Date1").Value;
-            SoilId = DataTools.GetInt(Row, "Soil");
-            PotKindId = DataTools.GetInt(Row, "PotKind");
+            lastAddDate = DataTools.GetNullableDateTime(row, "Date1").Value;
+            soilId = DataTools.GetInt(row, "Soil");
+            potKindId = DataTools.GetInt(row, "PotKind");
           }
         }
-        if (Kind == MovementKind.Remove && (!RemoveDateFound))
+        if (kind == MovementKind.Remove && (!removeDateFound))
         {
-          Args.Doc.Values["RemoveDate1"].SetValue(DataTools.GetNullableDateTime(Row, "Date1"));
-          Args.Doc.Values["RemoveDate2"].SetValue(DataTools.GetNullableDateTime(Row, "Date2"));
-          RemoveDateFound = true;
+          args.Doc.Values["RemoveDate1"].SetValue(DataTools.GetNullableDateTime(row, "Date1"));
+          args.Doc.Values["RemoveDate2"].SetValue(DataTools.GetNullableDateTime(row, "Date2"));
+          removeDateFound = true;
         }
 
         #endregion
 
         #region Текущее состояние
 
-        if (Args.Doc.Values["MovementState"].IsNull)
+        if (args.Doc.Values["MovementState"].IsNull)
         {
-          switch (Kind)
+          switch (kind)
           {
             case MovementKind.Add:
             case MovementKind.Move:
-              Args.Doc.Values["MovementState"].SetInteger((int)PlantMovementState.Placed);
+              args.Doc.Values["MovementState"].SetInteger((int)PlantMovementState.Placed);
               break;
             case MovementKind.Remove:
-              if (ContraId == 0)
+              if (contraId == 0)
               {
-                if (ForkPlantId==0)
-                  Args.Doc.Values["MovementState"].SetInteger((int)PlantMovementState.Dead);
+                if (forkPlantId == 0)
+                  args.Doc.Values["MovementState"].SetInteger((int)PlantMovementState.Dead);
                 else
-                  Args.Doc.Values["MovementState"].SetInteger((int)PlantMovementState.Merged);
+                  args.Doc.Values["MovementState"].SetInteger((int)PlantMovementState.Merged);
               }
               else
-                Args.Doc.Values["MovementState"].SetInteger((int)PlantMovementState.Given);
+                args.Doc.Values["MovementState"].SetInteger((int)PlantMovementState.Given);
               break;
           }
         }
@@ -880,55 +880,55 @@ namespace Plants
 
       #region Действия
 
-      Table = Args.Doc.SubDocs["PlantActions"].CreateSubDocsData();
-      Table.DefaultView.Sort = "Date1";
-      bool TransshipmentFound = false;
+      table = args.Doc.SubDocs["PlantActions"].CreateSubDocsData();
+      table.DefaultView.Sort = "Date1";
+      bool transshipmentFound = false;
 
-      Args.Doc.Values["LastPlantAction"].SetNull();
-      Args.Doc.Values["LastPlantReplanting"].SetNull();
+      args.Doc.Values["LastPlantAction"].SetNull();
+      args.Doc.Values["LastPlantReplanting"].SetNull();
 
-      for (int i = Table.DefaultView.Count - 1; i >= 0; i--)
+      for (int i = table.DefaultView.Count - 1; i >= 0; i--)
       {
-        DataRow Row = Table.DefaultView[i].Row;
-        ActionKind Kind = (ActionKind)(DataTools.GetInt(Row, "Kind"));
-        switch (Kind)
+        DataRow row = table.DefaultView[i].Row;
+        ActionKind kind = (ActionKind)(DataTools.GetInt(row, "Kind"));
+        switch (kind)
         {
           case ActionKind.Planting:
           case ActionKind.Replanting:
           case ActionKind.Transshipment:
           case ActionKind.SoilReplace:
-            if (!TransshipmentFound)
+            if (!transshipmentFound)
             {
-              Args.Doc.Values["LastPlantReplanting"].SetInteger(DataTools.GetInt(Row, "Id"));
-              TransshipmentFound = true;
+              args.Doc.Values["LastPlantReplanting"].SetInteger(DataTools.GetInt(row, "Id"));
+              transshipmentFound = true;
             }
             break;
         }
 
-        if (i == Table.DefaultView.Count - 1)
+        if (i == table.DefaultView.Count - 1)
         {
-          Args.Doc.Values["LastPlantAction"].SetInteger(DataTools.GetInt(Row, "Id"));
+          args.Doc.Values["LastPlantAction"].SetInteger(DataTools.GetInt(row, "Id"));
         }
       }
 
-      for (int i = 0; i < Table.DefaultView.Count; i++)
+      for (int i = 0; i < table.DefaultView.Count; i++)
       {
-        DataRow Row = Table.DefaultView[i].Row;
-        DateTime Date = DataTools.GetNullableDateTime(Row, "Date1").Value;
-        if (Date < LastAddDate)
+        DataRow row = table.DefaultView[i].Row;
+        DateTime date = DataTools.GetNullableDateTime(row, "Date1").Value;
+        if (date < lastAddDate)
           continue; // перекрыто следующим приходом
-        ActionKind Kind = (ActionKind)(DataTools.GetInt(Row, "Kind"));
-        if (PlantTools.IsSoilAppliable(Kind, true))
+        ActionKind kind = (ActionKind)(DataTools.GetInt(row, "Kind"));
+        if (PlantTools.IsSoilAppliable(kind, true))
         {
-          Int32 ThisSoilId = DataTools.GetInt(Row, "Soil");
-          if (ThisSoilId != 0)
-            SoilId = ThisSoilId;
+          Int32 thisSoilId = DataTools.GetInt(row, "Soil");
+          if (thisSoilId != 0)
+            soilId = thisSoilId;
         }
-        if (PlantTools.IsPotKindAppliable(Kind, true))
+        if (PlantTools.IsPotKindAppliable(kind, true))
         {
-          Int32 ThisPotKindId = DataTools.GetInt(Row, "PotKind");
-          if (ThisPotKindId != 0)
-            PotKindId = ThisPotKindId;
+          Int32 thisPotKindId = DataTools.GetInt(row, "PotKind");
+          if (thisPotKindId != 0)
+            potKindId = thisPotKindId;
         }
       }
 
@@ -936,32 +936,32 @@ namespace Plants
 
       #region Заболевания
 
-        Table = Args.Doc.SubDocs["PlantDiseases"].CreateSubDocsData();
-      Table.DefaultView.Sort = "Date1";
+      table = args.Doc.SubDocs["PlantDiseases"].CreateSubDocsData();
+      table.DefaultView.Sort = "Date1";
 
-      if (Table.DefaultView.Count > 0)
+      if (table.DefaultView.Count > 0)
       {
-        DataRow Row = Table.DefaultView[Table.DefaultView.Count - 1].Row;
-        Args.Doc.Values["LastPlantDisease"].SetInteger(DataTools.GetInt(Row,"Id"));
+        DataRow row = table.DefaultView[table.DefaultView.Count - 1].Row;
+        args.Doc.Values["LastPlantDisease"].SetInteger(DataTools.GetInt(row, "Id"));
       }
       else
       {
-        Args.Doc.Values["LastPlantDisease"].SetNull();
+        args.Doc.Values["LastPlantDisease"].SetNull();
       }
 
       #endregion
 
-      Args.Doc.Values["Soil"].SetInteger(SoilId);
-      Args.Doc.Values["PotKind"].SetInteger(PotKindId);
+      args.Doc.Values["Soil"].SetInteger(soilId);
+      args.Doc.Values["PotKind"].SetInteger(potKindId);
 
       #region Запланированные действия
 
-      Table = Args.Doc.SubDocs["PlantPlans"].CreateSubDocsData();
-      Table.DefaultView.Sort = "Date1";
-      if (Table.DefaultView.Count == 0)
-        Args.Doc.Values["FirstPlannedAction"].SetNull();
+      table = args.Doc.SubDocs["PlantPlans"].CreateSubDocsData();
+      table.DefaultView.Sort = "Date1";
+      if (table.DefaultView.Count == 0)
+        args.Doc.Values["FirstPlannedAction"].SetNull();
       else
-        Args.Doc.Values["FirstPlannedAction"].SetInteger((Int32)(Table.DefaultView[0]["Id"]));
+        args.Doc.Values["FirstPlannedAction"].SetInteger((Int32)(table.DefaultView[0]["Id"]));
 
       #endregion
     }
@@ -970,29 +970,29 @@ namespace Plants
 
     #region Soil
 
-    void Soil_BeforeWrite(object Sender, ServerDocTypeBeforeWriteEventArgs Args)
+    void Soil_BeforeWrite(object sender, ServerDocTypeBeforeWriteEventArgs args)
     {
-      if (Args.Doc.SubDocs["SoilParts"].SubDocCount == 0)
+      if (args.Doc.SubDocs["SoilParts"].SubDocCount == 0)
       {
-        Args.Doc.Values["Contents"].SetNull();
-        Args.Doc.Values["PartCount"].SetNull();
+        args.Doc.Values["Contents"].SetNull();
+        args.Doc.Values["PartCount"].SetNull();
       }
       else
       {
-        DataTable Table = Args.Doc.SubDocs["SoilParts"].CreateSubDocsData();
-        Table.DefaultView.Sort = "Order";
-        string[] a = new string[Table.DefaultView.Count];
+        DataTable table = args.Doc.SubDocs["SoilParts"].CreateSubDocsData();
+        table.DefaultView.Sort = "Order";
+        string[] a = new string[table.DefaultView.Count];
         for (int i = 0; i < a.Length; i++)
         {
-          DataRow Row = Table.DefaultView[i].Row;
-          Int32 SoilId = DataTools.GetInt(Row, "Soil");
-          a[i] = Args.DBCache["Soils"].GetString(SoilId, "Name");
-          int prc = DataTools.GetInt(Row, "Percent");
+          DataRow row = table.DefaultView[i].Row;
+          Int32 soilId = DataTools.GetInt(row, "Soil");
+          a[i] = args.DBCache["Soils"].GetString(soilId, "Name");
+          int prc = DataTools.GetInt(row, "Percent");
           if (prc > 0)
             a[i] += " " + prc.ToString() + "%";
         }
-        Args.Doc.Values["Contents"].SetString(String.Join(", ", a));
-        Args.Doc.Values["PartCount"].SetInteger(a.Length);
+        args.Doc.Values["Contents"].SetString(String.Join(", ", a));
+        args.Doc.Values["PartCount"].SetInteger(a.Length);
       }
     }
 
@@ -1000,11 +1000,11 @@ namespace Plants
 
     #region PotKinds
 
-    void PotKind_BeforeWrite(object Sender, ServerDocTypeBeforeWriteEventArgs Args)
+    void PotKind_BeforeWrite(object sender, ServerDocTypeBeforeWriteEventArgs args)
     {
       StringBuilder sb = new StringBuilder();
-      sb.Append(Args.Doc.Values["Text"].AsString);
-      float v = Args.Doc.Values["Volume"].AsSingle;
+      sb.Append(args.Doc.Values["Text"].AsString);
+      float v = args.Doc.Values["Volume"].AsSingle;
       if (v > 0)
       {
         if (sb.Length > 0)
@@ -1014,7 +1014,7 @@ namespace Plants
       }
       else
       {
-        int d = Args.Doc.Values["Diameter"].AsInteger;
+        int d = args.Doc.Values["Diameter"].AsInteger;
         if (d > 0)
         {
           if (sb.Length > 0)
@@ -1024,7 +1024,7 @@ namespace Plants
           sb.Append("мм");
         }
 
-        int h = Args.Doc.Values["Height"].AsInteger;
+        int h = args.Doc.Values["Height"].AsInteger;
         if (h > 0)
         {
           if (sb.Length > 0)
@@ -1035,7 +1035,7 @@ namespace Plants
         }
       }
 
-      string clr = Args.Doc.Values["Color"].AsString;
+      string clr = args.Doc.Values["Color"].AsString;
       if (clr.Length > 0)
       {
         if (sb.Length > 0)
@@ -1043,7 +1043,7 @@ namespace Plants
         sb.Append(clr);
       }
 
-      Args.Doc.Values["Name"].SetString(sb.ToString());
+      args.Doc.Values["Name"].SetString(sb.ToString());
     }
 
     #endregion
@@ -1062,16 +1062,14 @@ namespace Plants
     /// <summary>
     /// Инициализация объекта DBxDocDBConnectionHelper
     /// </summary>
-    /// <param name="DBDir"></param>
-    /// <returns></returns>
-    public void InitDBConnectionHelper(AbsPath DBDir)
+    public void InitDBConnectionHelper(AbsPath dbDir)
     {
       _DBConnectionHelper = new DBxDocDBConnectionHelper();
-      _DBConnectionHelper.DBDir = DBDir;
+      _DBConnectionHelper.DBDir = dbDir;
 
       _DBConnectionHelper.ProviderName = "SQLite";
-      AbsPath FileName = new AbsPath(DBDir, "db.db");
-      _DBConnectionHelper.ConnectionString = "Data Source=" + FileName.Path;
+      AbsPath filePath = new AbsPath(dbDir, "db.db");
+      _DBConnectionHelper.ConnectionString = "Data Source=" + filePath.Path;
 
       _DBConnectionHelper.CommandTimeout = 0; // бесконечное время выполнение команд
       _DBConnectionHelper.DocTypes = _DocTypes;

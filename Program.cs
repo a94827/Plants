@@ -60,13 +60,10 @@ namespace Plants
 
             #region Главное окно
 
-            // Картинки
-            DBUI.InitImages();
-            DummyForm frm = new DummyForm();
-            EFPApp.AddMainImages(frm.MainImageList);
-            EFPFormProvider.UseErrorProvider = false;
-
             ProgramDBUI.TheUI = new ProgramDBUI(db.CreateDocProvider().CreateProxy());
+            // Картинки
+            EFPApp.MainImages.Add(MainImagesResource.ResourceManager);
+
             //ProgramDBUI.TheUI.DebugShowIds = true; // показывать идентификаторы для отладки
             ProgramDBUI.ConfigSections = new ClientConfigSections(db);
             EFPApp.ConfigManager = ProgramDBUI.ConfigSections; // должно быть до показа форм

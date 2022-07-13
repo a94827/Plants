@@ -23,7 +23,7 @@ namespace Plants
     public EditAttrValueGroup()
     {
       InitializeComponent();
-      Icon = EFPApp.MainImageIcon("Edit");
+      Icon = EFPApp.MainImages.Icons["Edit"];
     }
 
 
@@ -113,7 +113,7 @@ namespace Plants
 
           #region Группа "Выбранные документы"
 
-          form.lblDocTypeName.ImageList = EFPApp.MainImages;
+          form.lblDocTypeName.ImageList = EFPApp.MainImages.ImageList;
           form.lblDocTypeName.ImageAlign = ContentAlignment.MiddleRight;
           if (docIds.Length == 1)
           {

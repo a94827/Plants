@@ -81,7 +81,7 @@ namespace Plants
 
             #endregion
 
-            FreeLibSet.Forms.Diagnostics.DebugTools.DebugFocusWindowVisible = true;
+            // FreeLibSet.Forms.Diagnostics.DebugTools.DebugFocusWindowVisible = true;
 
             spl.Complete();
 

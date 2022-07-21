@@ -198,7 +198,7 @@ namespace Plants
       efpValueSourceType.Validating += new UIValidatingEventHandler(efpValueSourceType_Validating);
 
 
-      tcVLView.ImageList = EFPApp.MainImages.ImageList;
+      tcVLView.ImageList = EFPApp.MainImages;
       tpVLTable.ImageKey = "Table";
       tpVLText.ImageKey = "Font"; // !!!
 

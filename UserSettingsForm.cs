@@ -22,7 +22,7 @@ namespace Plants
     public UserSettingsForm()
     {
       InitializeComponent();
-      Icon = EFPApp.MainImages.Icons["Settings"];
+      Icon = EFPApp.MainImageIcon("Settings");
 
       EFPFormProvider efpForm = new EFPFormProvider(this);
 

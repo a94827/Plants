@@ -169,11 +169,6 @@
       <DependentUpon>EditSoilPart.cs</DependentUpon>
     </Compile>
     <Compile Include="FloweringReport.cs" />
-    <Compile Include="MainImagesResource.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MainImagesResource.resx</DependentUpon>
-    </Compile>
     <Compile Include="PlanReport.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -190,6 +185,12 @@
     <Compile Include="PlantTools.cs" />
     <Compile Include="ConfigSection.cs" />
     <Compile Include="DBxDataVersionHandler.cs" />
+    <Compile Include="DummyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DummyForm.designer.cs">
+      <DependentUpon>DummyForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="EditAttrType.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -238,6 +239,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CareReport.resx">
       <DependentUpon>CareReport.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DummyForm.resx">
+      <DependentUpon>DummyForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="EditAttrType.resx">
@@ -320,11 +325,6 @@
       <DependentUpon>EditSoilPart.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainImagesResource.resx">
-      <SubType>Designer</SubType>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>MainImagesResource.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="PlanReport.resx">
       <SubType>Designer</SubType>
       <DependentUpon>PlanReport.cs</DependentUpon>
@@ -392,40 +392,6 @@
       <Link>SQLite.Interop.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Images\Main\ActionAddPlant.png" />
-    <None Include="Images\Main\ActionLooseSoil.png" />
-    <None Include="Images\Main\ActionPlanting.png" />
-    <None Include="Images\Main\ActionRemovePlant.png" />
-    <None Include="Images\Main\ActionReplanting.png" />
-    <None Include="Images\Main\ActionRooting.png" />
-    <None Include="Images\Main\ActionSoilReplace.png" />
-    <None Include="Images\Main\ActionTopCutting.png" />
-    <None Include="Images\Main\ActionTransshipment.png" />
-    <None Include="Images\Main\ActionTrimming.png" />
-    <None Include="Images\Main\ActionWash.png" />
-    <None Include="Images\Main\Attribute.png" />
-    <None Include="Images\Main\AttributeTable.png" />
-    <None Include="Images\Main\AttributeType.png" />
-    <None Include="Images\Main\Care.png" />
-    <None Include="Images\Main\CareRecord.png" />
-    <None Include="Images\Main\CareReport.png" />
-    <None Include="Images\Main\Company.png" />
-    <None Include="Images\Main\Contra.png" />
-    <None Include="Images\Main\Disease.png" />
-    <None Include="Images\Main\FloweringReport.png" />
-    <None Include="Images\Main\Place.png" />
-    <None Include="Images\Main\PlanReport.png" />
-    <None Include="Images\Main\Plant.png" />
-    <None Include="Images\Main\PlantAction.png" />
-    <None Include="Images\Main\PlantFlowering.png" />
-    <None Include="Images\Main\PlantMovement.png" />
-    <None Include="Images\Main\PlantSelReport.png" />
-    <None Include="Images\Main\PlantTranshipment.png" />
-    <None Include="Images\Main\PotKind.png" />
-    <None Include="Images\Main\Remedy.png" />
-    <None Include="Images\Main\ReplantingReport.png" />
-    <None Include="Images\Main\Soil.png" />
-    <None Include="Images\Main\SoilReplace.png" />
     <Content Include="Program.ico" />
   </ItemGroup>
   <ItemGroup>

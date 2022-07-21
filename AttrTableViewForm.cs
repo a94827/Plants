@@ -24,7 +24,7 @@ namespace Plants
       InitializeComponent();
 
       Text = "Атрибуты";
-      Icon = EFPApp.MainImageIcon("AttributeTable");
+      Icon = EFPApp.MainImages.Icons["AttributeTable"];
 
       DataTable table = ProgramDBUI.TheUI.DocTypes["AttrTypes"].GetUnbufferedData(DBSDocType.IdColumns, null, false, new DBxOrder("Name"));
       _AttrTypeDocs = new AttrTypeDoc[table.Rows.Count];
@@ -714,16 +714,16 @@ namespace Plants
     /// <summary>
     /// Проверка текста атрибута и преобразование его в значение
     /// </summary>
-    public static void ValidateAttributeText(AttrTypeDoc attrType, EFPSelRCValidatingEventArgs args)
+    public static void ValidateAttributeText(AttrTypeDoc attrType, UISelRCValidatingEventArgs args)
     {
-      if (String.IsNullOrEmpty(args.SourceData))
+      if (String.IsNullOrEmpty(args.SourceText))
       {
         args.ResultValue = null;
         return;
       }
 
       object v;
-      if (PlantTools.TryParse(args.SourceData, attrType.ValueType, out v))
+      if (PlantTools.TryParse(args.SourceText, attrType.ValueType, out v))
         args.ResultValue = v;
       else
         args.SetError("Нельзя преобразовать в \"" + PlantTools.GetValueTypeName(attrType.ValueType) + "\"");

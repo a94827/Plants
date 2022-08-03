@@ -193,6 +193,13 @@ namespace Plants {
             }
         }
         
+        internal static System.Drawing.Bitmap Date99991231 {
+            get {
+                object obj = ResourceManager.GetObject("Date99991231", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Disease {
             get {
                 object obj = ResourceManager.GetObject("Disease", resourceCulture);

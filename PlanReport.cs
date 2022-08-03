@@ -42,7 +42,7 @@ namespace Plants
 
     public PlanReportParams()
     {
-      Filters = new PlantReportFilters("DocId.");
+      Filters = new PlantReportFilters("DocId.", String.Empty);
     }
 
     #endregion

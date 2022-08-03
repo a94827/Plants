@@ -36,6 +36,7 @@ namespace Plants
       this.label4 = new System.Windows.Forms.Label();
       this.cbDisease = new FreeLibSet.Controls.UserSelComboBox();
       this.label2 = new System.Windows.Forms.Label();
+      this.btnDate99991231 = new System.Windows.Forms.Button();
       this.MainPanel1.SuspendLayout();
       this.groupBox3.SuspendLayout();
       this.groupBox1.SuspendLayout();
@@ -74,6 +75,7 @@ namespace Plants
       // 
       // groupBox1
       // 
+      this.groupBox1.Controls.Add(this.btnDate99991231);
       this.groupBox1.Controls.Add(this.cbDate);
       this.groupBox1.Controls.Add(this.label4);
       this.groupBox1.Controls.Add(this.cbDisease);
@@ -89,6 +91,7 @@ namespace Plants
       // cbDate
       // 
       this.cbDate.ClearButtonEnabled = false;
+      this.cbDate.Culture = new System.Globalization.CultureInfo("ru-RU");
       this.cbDate.Location = new System.Drawing.Point(152, 53);
       this.cbDate.Name = "cbDate";
       this.cbDate.Size = new System.Drawing.Size(162, 20);
@@ -121,6 +124,14 @@ namespace Plants
       this.label2.Text = "&Заболевание";
       this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
+      // btnDate99991231
+      // 
+      this.btnDate99991231.Location = new System.Drawing.Point(320, 53);
+      this.btnDate99991231.Name = "btnDate99991231";
+      this.btnDate99991231.Size = new System.Drawing.Size(32, 24);
+      this.btnDate99991231.TabIndex = 5;
+      this.btnDate99991231.UseVisualStyleBackColor = true;
+      // 
       // EditPlantDisease
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -147,5 +158,6 @@ namespace Plants
     private System.Windows.Forms.TextBox edComment;
     private FreeLibSet.Controls.UserMaskedComboBox cbDate;
     private System.Windows.Forms.Label label4;
+    private System.Windows.Forms.Button btnDate99991231;
   }
 }

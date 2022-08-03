@@ -42,7 +42,7 @@ namespace Plants
     public PlantSelReportParams()
     {
       FirstDate = LastDate = DateTime.Today;
-      Filters = new PlantReportFilters(String.Empty);
+      Filters = new PlantReportFilters(String.Empty, String.Empty);
     }
 
     #endregion

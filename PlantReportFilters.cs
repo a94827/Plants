@@ -6,6 +6,7 @@ using System.Data;
 using FreeLibSet.Data;
 using FreeLibSet.Data.Docs;
 using FreeLibSet.Core;
+using FreeLibSet.Collections;
 
 namespace Plants
 {
@@ -20,92 +21,138 @@ namespace Plants
     /// <summary>
     /// Создает фильтры
     /// </summary>
-    /// <param name="ColumnNamePrefix">Префикс перед именами полей, например, "DocId."</param>
-    public PlantReportFilters(string columnNamePrefix)
+    /// <param name="columnNamePrefix">Префикс перед именами полей, например, "DocId."</param>
+    /// <param name="usedFilters">Список кодов фильтров, разделенных запятыми, которые требуется использовать.
+    /// Если пустая строка, то используются все возможные фильтры</param>
+    public PlantReportFilters(string columnNamePrefix, string usedFilters)
     {
       if (columnNamePrefix == null)
         columnNamePrefix = String.Empty;
       _ColumnNamePrefix = columnNamePrefix;
 
-      FiltGroup = new RefGroupDocGridFilter(ProgramDBUI.TheUI, "PlantGroups", columnNamePrefix + "GroupId");
-      Add(FiltGroup);
+      if (String.IsNullOrEmpty(usedFilters))
+        usedFilters = "Group,HasNumber,NumberRange,Place,HasAdd,HasRemove,FromContra,ToContra,ActionKind,Remedy,Soil,PotKind,Disease";
+      StringArrayIndexer ufidx = new StringArrayIndexer(usedFilters.Split(','));
 
-      FiltHasNumber = new NullNotNullGridFilter(columnNamePrefix + "Number", typeof(int));
-      FiltHasNumber.Code = "HasNumber";
-      FiltHasNumber.DisplayName = "Наличие номера по каталогу";
-      FiltHasNumber.FilterTextNull = "Нет";
-      FiltHasNumber.FilterTextNotNull = "Есть";
-      Add(FiltHasNumber);
+      if (ufidx.Contains("Group"))
+      {
+        FiltGroup = new RefGroupDocGridFilter(ProgramDBUI.TheUI, "PlantGroups", columnNamePrefix + "GroupId");
+        FiltGroup.Code = "Group";
+        Add(FiltGroup);
+      }
 
-      FiltNumberRange = new IntRangeGridFilter(columnNamePrefix + "Number");
-      FiltNumberRange.DisplayName = "Диапазон номеров по каталогу";
-      FiltNumberRange.Minimum = 1;
-      FiltNumberRange.Increment = 1;
-      Add(FiltNumberRange);
+      if (ufidx.Contains("HasNumber"))
+      {
+        FiltHasNumber = new NullNotNullGridFilter(columnNamePrefix + "Number", typeof(int));
+        FiltHasNumber.Code = "HasNumber";
+        FiltHasNumber.DisplayName = "Наличие номера по каталогу";
+        FiltHasNumber.FilterTextNull = "Нет";
+        FiltHasNumber.FilterTextNotNull = "Есть";
+        Add(FiltHasNumber);
+      }
 
-      FiltPlace = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Places"], "Place");
-      FiltPlace.DisplayName = "Место расположения";
-      FiltPlace.Nullable = false;
-      FiltPlace.UseSqlFilter = false;
-      Add(FiltPlace);
+      if (ufidx.Contains("NumberRange"))
+      {
+        FiltNumberRange = new IntRangeGridFilter(columnNamePrefix + "Number");
+        FiltNumberRange.Code = "NumberRange";
+        FiltNumberRange.DisplayName = "Диапазон номеров по каталогу";
+        FiltNumberRange.Minimum = 1;
+        FiltNumberRange.Increment = 1;
+        Add(FiltNumberRange);
+      }
 
-      FiltHasAdd = new BoolValueGridFilter("HasAdd");
-      FiltHasAdd.DisplayName = "Есть приход";
-      FiltHasAdd.UseSqlFilter = false;
-      FiltHasAdd.FilterTextTrue = "Был приход растения в выбранный период";
-      FiltHasAdd.FilterTextFalse = String.Empty;
-      Add(FiltHasAdd);
+      if (ufidx.Contains("Place"))
+      {
+        FiltPlace = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Places"], "Place");
+        FiltPlace.DisplayName = "Место расположения";
+        FiltPlace.Nullable = false;
+        FiltPlace.UseSqlFilter = false;
+        Add(FiltPlace);
+      }
 
-      FiltHasRemove = new BoolValueGridFilter("HasRemove");
-      FiltHasRemove.DisplayName = "Есть выбытие";
-      FiltHasRemove.UseSqlFilter = false;
-      FiltHasRemove.FilterTextTrue = "Было выбытие растения в выбранный период";
-      FiltHasRemove.FilterTextFalse = String.Empty;
-      Add(FiltHasRemove);
+      if (ufidx.Contains("HasAdd"))
+      {
+        FiltHasAdd = new BoolValueGridFilter("HasAdd");
+        FiltHasAdd.DisplayName = "Есть приход";
+        FiltHasAdd.UseSqlFilter = false;
+        FiltHasAdd.FilterTextTrue = "Был приход растения в выбранный период";
+        FiltHasAdd.FilterTextFalse = String.Empty;
+        Add(FiltHasAdd);
+      }
 
-      FiltFromContra = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Contras"], "FromContra");
-      FiltFromContra.DisplayName = "От кого получено";
-      FiltFromContra.Nullable = true;
-      FiltFromContra.UseSqlFilter = false;
-      Add(FiltFromContra);
+      if (ufidx.Contains("HasRemove"))
+      {
+        FiltHasRemove = new BoolValueGridFilter("HasRemove");
+        FiltHasRemove.DisplayName = "Есть выбытие";
+        FiltHasRemove.UseSqlFilter = false;
+        FiltHasRemove.FilterTextTrue = "Было выбытие растения в выбранный период";
+        FiltHasRemove.FilterTextFalse = String.Empty;
+        Add(FiltHasRemove);
+      }
 
-      FiltToContra = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Contras"], "ToContra");
-      FiltToContra.DisplayName = "Кому передано";
-      FiltToContra.Nullable = true;
-      FiltToContra.UseSqlFilter = false;
-      Add(FiltToContra);
+      if (ufidx.Contains("FromContra"))
+      {
+        FiltFromContra = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Contras"], "FromContra");
+        FiltFromContra.DisplayName = "От кого получено";
+        FiltFromContra.Nullable = true;
+        FiltFromContra.UseSqlFilter = false;
+        Add(FiltFromContra);
+      }
 
-      FiltAction = new EnumGridFilter("Kind", PlantTools.ActionNames);
-      FiltAction.Code = "ActionKind";
-      FiltAction.DisplayName = "Действия";
-      FiltAction.ImageKeys = PlantTools.ActionImageKeys;
-      FiltAction.UseSqlFilter = false;
-      Add(FiltAction);
+      if (ufidx.Contains("ToContra"))
+      {
+        FiltToContra = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Contras"], "ToContra");
+        FiltToContra.DisplayName = "Кому передано";
+        FiltToContra.Nullable = true;
+        FiltToContra.UseSqlFilter = false;
+        Add(FiltToContra);
+      }
 
-      FiltRemedy = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Remedies"], "Remedy");
-      FiltRemedy.DisplayName = "Обработка препаратом";
-      FiltRemedy.Nullable = false;
-      FiltRemedy.UseSqlFilter = false;
-      Add(FiltRemedy);
+      if (ufidx.Contains("ActionKind"))
+      {
+        FiltAction = new EnumGridFilter("Kind", PlantTools.ActionNames);
+        FiltAction.Code = "ActionKind";
+        FiltAction.DisplayName = "Действия";
+        FiltAction.ImageKeys = PlantTools.ActionImageKeys;
+        FiltAction.UseSqlFilter = false;
+        Add(FiltAction);
+      }
 
-      FiltSoil = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Soils"], "Soil");
-      FiltSoil.DisplayName = "Грунт";
-      FiltSoil.Nullable = true;
-      FiltSoil.UseSqlFilter = false;
-      Add(FiltSoil);
+      if (ufidx.Contains("Remedy"))
+      {
+        FiltRemedy = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Remedies"], "Remedy");
+        FiltRemedy.DisplayName = "Обработка препаратом";
+        FiltRemedy.Nullable = false;
+        FiltRemedy.UseSqlFilter = false;
+        Add(FiltRemedy);
+      }
 
-      FiltPotKind = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["PotKinds"], "PotKind");
-      FiltPotKind.DisplayName = "Горшок";
-      FiltPotKind.Nullable = true;
-      FiltPotKind.UseSqlFilter = false;
-      Add(FiltPotKind);
+      if (ufidx.Contains("Soil"))
+      {
+        FiltSoil = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Soils"], "Soil");
+        FiltSoil.DisplayName = "Грунт";
+        FiltSoil.Nullable = true;
+        FiltSoil.UseSqlFilter = false;
+        Add(FiltSoil);
+      }
 
-      FiltDisease = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Diseases"], "Disease");
-      FiltDisease.DisplayName = "Заболевания";
-      FiltDisease.Nullable = true;
-      FiltDisease.UseSqlFilter = false;
-      Add(FiltDisease);
+      if (ufidx.Contains("PotKind"))
+      {
+        FiltPotKind = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["PotKinds"], "PotKind");
+        FiltPotKind.DisplayName = "Горшок";
+        FiltPotKind.Nullable = true;
+        FiltPotKind.UseSqlFilter = false;
+        Add(FiltPotKind);
+      }
 
+      if (ufidx.Contains("Disease"))
+      {
+        FiltDisease = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Diseases"], "Disease");
+        FiltDisease.DisplayName = "Заболевания";
+        FiltDisease.Nullable = true;
+        FiltDisease.UseSqlFilter = false;
+        Add(FiltDisease);
+      }
       /*
       EnumGridFilter FiltState = new EnumGridFilter("MovementState", PlantTools.PlantMovementStateNames);
       FiltState.DisplayName = "Состояние";
@@ -142,6 +189,14 @@ namespace Plants
 
     RefDocGridFilter FiltDisease, FiltRemedy;
 
+    private static bool IsSet(DBxCommonFilter filter)
+    {
+      if (filter == null)
+        return false;
+      else
+        return !filter.IsEmpty;
+    }
+
     #endregion
 
     #region Взаимная блокировка фильтров
@@ -153,8 +208,8 @@ namespace Plants
         return;
       switch (filter.Code)
       {
-        case "HasNumber": this["Number"].Clear(); break;
-        case "Number": this["HasNumber"].Clear(); break;
+        case "HasNumber": ClearFilter("Number"); break;
+        case "Number": ClearFilter("HasNumber"); break;
       }
     }
 
@@ -174,7 +229,14 @@ namespace Plants
 
     private DataTable _TableDiseases;
 
-
+    /// <summary>
+    /// Выполняет дополнительную фильтрацию таблицы каталога растений, которую нельзя было выполнить с помощью фильтра WHERE в SQL-запросе.
+    /// Диапазон дат используется для фильтрации таблиц поддокументов. Растение считается проходящим условие фильтра,
+    /// если это условие выполнялось когда-либо в течение диапазона дат.
+    /// </summary>
+    /// <param name="table">Таблица документов "Растения" или одного из поддокументов</param>
+    /// <param name="firstDate">Начальная дата диапазона</param>
+    /// <param name="lastDate">Конечная дата диапазона</param>
     public void PerformAuxFiltering(ref DataTable table, DateTime? firstDate, DateTime? lastDate)
     {
       string idColumnName = "Id";
@@ -191,20 +253,20 @@ namespace Plants
 
       #region Создание TableMovement
 
-      if (!(FiltPlace.IsEmpty && FiltHasAdd.IsEmpty && FiltHasRemove.IsEmpty && FiltFromContra.IsEmpty && FiltToContra.IsEmpty
-        && FiltSoil.IsEmpty && FiltPotKind.IsEmpty))
+      if (IsSet(FiltPlace) || IsSet(FiltHasAdd) || IsSet(FiltHasRemove) || IsSet(FiltFromContra) || IsSet(FiltToContra)
+        || IsSet(FiltSoil) || IsSet(FiltPotKind))
       {
         List<DBxFilter> filters = new List<DBxFilter>();
         DBxColumnList columns = new DBxColumnList();
         columns.Add("Id,DocId,Kind,Date1,Date2");
-        if (!(FiltPlace.IsEmpty &&
-          FiltHasAdd.IsEmpty && FiltHasRemove.IsEmpty /* 16.10.2019 */))
+        if (IsSet(FiltPlace) ||
+          IsSet(FiltHasAdd) || IsSet(FiltHasRemove) /* 16.10.2019 */)
           columns.Add("Place");
-        if (!(FiltFromContra.IsEmpty && FiltToContra.IsEmpty))
+        if (IsSet(FiltFromContra) || IsSet(FiltToContra))
           columns.Add("Contra");
-        if (!FiltSoil.IsEmpty)
+        if (IsSet(FiltSoil))
           columns.Add("Soil");
-        if (!FiltPotKind.IsEmpty)
+        if (IsSet(FiltPotKind))
           columns.Add("PotKind");
 
         filters.Add(new DateRangeCrossFilter("Date1", "Date2", null, lastDate)); // учитываются все даты с начала времен
@@ -222,28 +284,28 @@ namespace Plants
 
       #region Создание TableActions
 
-      if (!(FiltAction.IsEmpty && FiltRemedy.IsEmpty && FiltSoil.IsEmpty && FiltPotKind.IsEmpty))
+      if (IsSet(FiltAction) || IsSet(FiltRemedy) || IsSet(FiltSoil) || IsSet(FiltPotKind))
       {
         List<DBxFilter> filters = new List<DBxFilter>();
         DBxColumnList columns = new DBxColumnList();
         columns.Add("Id,DocId,Date1,Date2,Kind");
 
-        if (FiltRemedy.IsEmpty && FiltSoil.IsEmpty && FiltPotKind.IsEmpty)
+        if (IsSet(FiltRemedy) || IsSet(FiltSoil) || IsSet(FiltPotKind))
+        {
+          filters.Add(new DateRangeCrossFilter("Date1", "Date2", null, lastDate));// учитываются все даты с начала времен
+          //Filters.Add(FiltAction.GetSqlFilter()); // придется фильтровать руками, т.к. грунт и горшок могут относиться к другим действиям
+          if (IsSet(FiltSoil))
+            columns.Add("Soil");
+          if (IsSet(FiltPotKind))
+            columns.Add("PotKind");
+          if (IsSet(FiltRemedy))
+            columns.Add("Remedy");
+        }
+        else
         {
           // Если есть только фильтр по виду действия
           filters.Add(new DateRangeCrossFilter("Date1", "Date2", firstDate, lastDate));// учитываются только даты в диапазоне
           filters.Add(FiltAction.GetSqlFilter());
-        }
-        else
-        {
-          filters.Add(new DateRangeCrossFilter("Date1", "Date2", null, lastDate));// учитываются все даты с начала времен
-          //Filters.Add(FiltAction.GetSqlFilter()); // придется фильтровать руками, т.к. грунт и горшок могут относиться к другим действиям
-          if (!FiltSoil.IsEmpty)
-            columns.Add("Soil");
-          if (!FiltPotKind.IsEmpty)
-            columns.Add("PotKind");
-          if (!FiltRemedy.IsEmpty)
-            columns.Add("Remedy");
         }
 
         if (useDeleted)
@@ -262,7 +324,7 @@ namespace Plants
 
       #region Создание TableDisease
 
-      if (!(FiltDisease.IsEmpty))
+      if (IsSet(FiltDisease))
       {
         List<DBxFilter> filters = new List<DBxFilter>();
         DBxColumnList columns = new DBxColumnList();
@@ -288,7 +350,7 @@ namespace Plants
       #region Создание временной таблицы
 
       // Таблица DataTable это тяжеловесный объект, который лучше создать один раз, а не для каждого растения
-      if (!(FiltSoil.IsEmpty && FiltPotKind.IsEmpty))
+      if (IsSet(FiltSoil) || IsSet(FiltPotKind))
       {
         _TempTableSoilAndPotKind = new DataTable();
         _TempTableSoilAndPotKind.Columns.Add("Date1", typeof(DateTime));
@@ -327,27 +389,27 @@ namespace Plants
       if (_TableMovement != null)
       {
         _TableMovement.DefaultView.RowFilter = new ValueFilter("DocId", docId).ToString();
-        if (!FiltPlace.IsEmpty)
+        if (IsSet(FiltPlace))
         {
           if (!TestPlaceFilter(_TableMovement.DefaultView, firstDate ?? DateTime.MinValue))
             return false;
         }
-        if (!FiltHasAdd.IsEmpty)
+        if (IsSet(FiltHasAdd))
         {
           if (!TestHasAddFilter(_TableMovement.DefaultView, firstDate ?? DateTime.MinValue))
             return false;
         }
-        if (!FiltHasRemove.IsEmpty)
+        if (IsSet(FiltHasRemove))
         {
           if (!TestHasRemoveFilter(_TableMovement.DefaultView, firstDate ?? DateTime.MinValue))
             return false;
         }
-        if (!FiltFromContra.IsEmpty)
+        if (IsSet(FiltFromContra))
         {
           if (!TestContraFilter(_TableMovement.DefaultView, firstDate ?? DateTime.MinValue, true))
             return false;
         }
-        if (!FiltToContra.IsEmpty)
+        if (IsSet(FiltToContra))
         {
           if (!TestContraFilter(_TableMovement.DefaultView, firstDate ?? DateTime.MinValue, false))
             return false;
@@ -357,27 +419,26 @@ namespace Plants
       if (_TableActions != null)
       {
         _TableActions.DefaultView.RowFilter = new ValueFilter("DocId", docId).ToString();
-        if (!FiltAction.IsEmpty)
+        if (IsSet(FiltAction))
         {
           if (!TestActionFilter(_TableActions.DefaultView, firstDate ?? DateTime.MinValue))
             return false;
         }
 
-        if (!FiltRemedy.IsEmpty)
+        if (IsSet(FiltRemedy))
         {
           if (!TestRemedyFilter(_TableActions.DefaultView, firstDate ?? DateTime.MinValue))
             return false;
         }
       }
 
-
-      if (!FiltSoil.IsEmpty)
+      if (IsSet(FiltSoil))
       {
         if (!TestSoilOrPotKind(_TableMovement.DefaultView, _TableActions.DefaultView, FiltSoil, firstDate ?? DateTime.MinValue))
           return false;
       }
 
-      if (!FiltPotKind.IsEmpty)
+      if (IsSet(FiltPotKind))
       {
         if (!TestSoilOrPotKind(_TableMovement.DefaultView, _TableActions.DefaultView, FiltPotKind, firstDate ?? DateTime.MinValue))
           return false;
@@ -386,7 +447,7 @@ namespace Plants
       if (_TableDiseases != null)
       {
         _TableDiseases.DefaultView.RowFilter = new ValueFilter("DocId", docId).ToString();
-        if (!FiltDisease.IsEmpty)
+        if (IsSet(FiltDisease))
         {
           if (!TestDiseaseFilter(_TableDiseases.DefaultView, firstDate ?? DateTime.MinValue))
             return false;
@@ -428,7 +489,7 @@ namespace Plants
         DateTime dt1 = DataTools.GetDateTime(drv.Row, "Date1");
         Int32 placeId = DataTools.GetInt(drv.Row, "Place");
         bool inPlace = true;
-        if (!FiltPlace.IsEmpty)
+        if (IsSet(FiltPlace))
           inPlace = FiltPlace.TestValue(placeId);
 
         switch (kind)
@@ -461,7 +522,7 @@ namespace Plants
         DateTime dt1 = DataTools.GetDateTime(drv.Row, "Date1");
         Int32 placeId = DataTools.GetInt(drv.Row, "Place");
         bool inPlace = true;
-        if (!FiltPlace.IsEmpty)
+        if (IsSet(FiltPlace))
           inPlace = FiltPlace.TestValue(placeId);
 
         switch (kind)

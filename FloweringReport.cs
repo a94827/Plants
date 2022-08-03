@@ -1,22 +1,60 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
 using System.Text;
+using System.Windows.Forms;
 using FreeLibSet.Forms;
 using FreeLibSet.Forms.Docs;
-using System.Data;
+using FreeLibSet.Calendar;
 using FreeLibSet.Data;
 using FreeLibSet.Data.Docs;
-using FreeLibSet.Calendar;
 using FreeLibSet.Core;
 
 namespace Plants
 {
-  public class FloweringReportParams : EFPReportParams
+  internal partial class FloweringReportParamForm : EFPReportExtParamsTwoPageForm
   {
+    #region Конструктор формы
+
+    public FloweringReportParamForm()
+    {
+      InitializeComponent();
+
+      efpPeriod = new EFPDateRangeBox(base.FormProvider, edPeriod);
+      efpPeriod.First.CanBeEmpty = false;
+      efpPeriod.Last.CanBeEmpty = false;
+    }
+
+    #endregion
+
     #region Поля
 
-    public DateTime? FirstDate;
-    public DateTime? LastDate;
+    public EFPDateRangeBox efpPeriod;
+
+    #endregion
+  }
+
+
+  internal class FloweringReportParams : EFPReportExtParams
+  {
+    #region Конструктор
+
+    public FloweringReportParams()
+    {
+      FirstDate = LastDate = DateTime.Today;
+      Filters = new PlantReportFilters("DocId.", "Group,Place");
+    }
+
+    #endregion
+
+    #region Поля
+
+    public DateTime FirstDate;
+    public DateTime LastDate;
+
+    public PlantReportFilters Filters;
 
     #endregion
 
@@ -25,24 +63,66 @@ namespace Plants
     protected override void OnInitTitle()
     {
       base.Title = "Цветение за " + DateRangeFormatter.Default.ToString(FirstDate, LastDate, false);
+      Filters.AddFilterInfo(FilterInfo);
     }
 
-    public override void ReadConfig(FreeLibSet.Config.CfgPart cfg)
+    public override EFPReportExtParamsForm CreateForm()
     {
-      FirstDate = cfg.GetNullableDate("FirstDate");
-      LastDate = cfg.GetNullableDate("LastDate");
+      return new FloweringReportParamForm();
     }
 
-    public override void WriteConfig(FreeLibSet.Config.CfgPart cfg)
+    public override EFPReportExtParamsPart UsedParts
     {
-      cfg.SetNullableDate("FirstDate", FirstDate);
-      cfg.SetNullableDate("LastDate", LastDate);
+      get { return EFPReportExtParamsPart.User | EFPReportExtParamsPart.NoHistory; }
+    }
+
+    public override void WriteFormValues(EFPReportExtParamsForm form, EFPReportExtParamsPart part)
+    {
+      FloweringReportParamForm form2 = (FloweringReportParamForm)form;
+      form2.efpPeriod.First.Value = FirstDate;
+      form2.efpPeriod.Last.Value = LastDate;
+      form2.FiltersControlProvider.Filters = Filters;
+    }
+
+    public override void ReadFormValues(EFPReportExtParamsForm form, EFPReportExtParamsPart part)
+    {
+      FloweringReportParamForm form2 = (FloweringReportParamForm)form;
+      FirstDate = form2.efpPeriod.First.Value;
+      LastDate = form2.efpPeriod.Last.Value;
+    }
+
+    public override void WriteConfig(FreeLibSet.Config.CfgPart cfg, EFPReportExtParamsPart part)
+    {
+      switch (part)
+      {
+        case EFPReportExtParamsPart.User:
+          Filters.WriteConfig(cfg);
+          break;
+        case EFPReportExtParamsPart.NoHistory:
+          cfg.SetNullableDate("FirstDate", FirstDate);
+          cfg.SetNullableDate("LastDate", LastDate);
+          break;
+      }
+    }
+
+    public override void ReadConfig(FreeLibSet.Config.CfgPart cfg, EFPReportExtParamsPart part)
+    {
+      switch (part)
+      {
+        case EFPReportExtParamsPart.User:
+          Filters.ReadConfig(cfg);
+          break;
+        case EFPReportExtParamsPart.NoHistory:
+          cfg.GetDate("FirstDate", ref FirstDate);
+          cfg.GetDate("LastDate", ref LastDate);
+          break;
+      }
     }
 
     #endregion
   }
 
-  public class FloweringReport : EFPReport
+  internal class FloweringReport : EFPReport
   {
     #region Конструктор
 
@@ -68,32 +148,24 @@ namespace Plants
 
     public FloweringReportParams Params { get { return (FloweringReportParams)(base.ReportParams); } }
 
-    protected override bool QueryParams()
-    {
-      DateRangeDialog dlg = new DateRangeDialog();
-      dlg.Title = "Цветение растений";
-      dlg.Prompt = "За период";
-      dlg.CanBeEmpty = true;
-      dlg.NFirstDate = Params.FirstDate;
-      dlg.NLastDate = Params.LastDate;
-      if (dlg.ShowDialog() != System.Windows.Forms.DialogResult.OK)
-        return false;
-      Params.FirstDate = dlg.NFirstDate;
-      Params.LastDate = dlg.NLastDate;
-      return true;
-    }
-
     protected override void BuildReport()
     {
       List<DBxFilter> filters = new List<DBxFilter>();
 
       PlantTools.AddDateRangeFilter(filters, Params.FirstDate, Params.LastDate);
-      filters.Add(DBSSubDocType.DeletedFalseFilter);
-      filters.Add(DBSSubDocType.DocIdDeletedFalseFilter);
+      DBxFilter filter2 = Params.Filters.GetSqlFilter();
+      if (filter2 != null)
+        filters.Add(filter2);
+      if (ProgramDBUI.TheUI.DocProvider.DocTypes.UseDeleted)
+      {
+        filters.Add(DBSSubDocType.DeletedFalseFilter);
+        filters.Add(DBSSubDocType.DocIdDeletedFalseFilter);
+      }
 
       DataTable table1 = ProgramDBUI.TheUI.DocProvider.FillSelect("PlantFlowering",
         new DBxColumns("DocId,Date1,Date2,FlowerCount,DocId.Number"),
         AndFilter.FromList(filters), null);
+      Params.Filters.PerformAuxFiltering(ref table1, Params.FirstDate, Params.LastDate);
 
       // Идентификаторы растений
       table1.DefaultView.Sort = "DocId.Number"; // по номеру в каталоге

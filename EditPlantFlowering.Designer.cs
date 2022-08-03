@@ -36,6 +36,7 @@ namespace Plants
       this.label1 = new System.Windows.Forms.Label();
       this.cbDate = new FreeLibSet.Controls.UserMaskedComboBox();
       this.label4 = new System.Windows.Forms.Label();
+      this.btnDate99991231 = new System.Windows.Forms.Button();
       this.MainPanel1.SuspendLayout();
       this.groupBox3.SuspendLayout();
       this.groupBox1.SuspendLayout();
@@ -74,6 +75,7 @@ namespace Plants
       // 
       // groupBox1
       // 
+      this.groupBox1.Controls.Add(this.btnDate99991231);
       this.groupBox1.Controls.Add(this.edCount);
       this.groupBox1.Controls.Add(this.label1);
       this.groupBox1.Controls.Add(this.cbDate);
@@ -106,6 +108,7 @@ namespace Plants
       // cbDate
       // 
       this.cbDate.ClearButtonEnabled = false;
+      this.cbDate.Culture = new System.Globalization.CultureInfo("ru-RU");
       this.cbDate.Location = new System.Drawing.Point(158, 19);
       this.cbDate.Name = "cbDate";
       this.cbDate.Size = new System.Drawing.Size(156, 20);
@@ -119,6 +122,14 @@ namespace Plants
       this.label4.TabIndex = 0;
       this.label4.Text = "&Дата";
       this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+      // 
+      // btnDate99991231
+      // 
+      this.btnDate99991231.Location = new System.Drawing.Point(320, 17);
+      this.btnDate99991231.Name = "btnDate99991231";
+      this.btnDate99991231.Size = new System.Drawing.Size(32, 24);
+      this.btnDate99991231.TabIndex = 4;
+      this.btnDate99991231.UseVisualStyleBackColor = true;
       // 
       // EditPlantFlowering
       // 
@@ -145,5 +156,6 @@ namespace Plants
     private System.Windows.Forms.Label label4;
     private FreeLibSet.Controls.IntEditBox edCount;
     private System.Windows.Forms.Label label1;
+    private System.Windows.Forms.Button btnDate99991231;
   }
 }

@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using FreeLibSet.Forms;
 using System.ComponentModel;
 using FreeLibSet.Core;
+using FreeLibSet.Calendar;
 
 namespace Plants
 {
@@ -44,7 +45,9 @@ namespace Plants
       dt.GridProducer.Columns.Add(new PlantThumbnailColumn(false));
 
       dt.GridProducer.Columns.AddText("Place.Name", "Место", 15, 10);
-      dt.GridProducer.Columns.AddDateRange("AddDate", "AddDate1", "AddDate2", "Дата поступления", false, 10, 10);
+      //dt.GridProducer.Columns.AddDateRange("AddDate", "AddDate1", "AddDate2", "Дата поступления", false, 10, 10);
+      dt.GridProducer.Columns.AddUserText("AddDate", "AddDate1,AddDate2", DateRangeColumn_ValueNeeded, "Дата поступления", 10, 10)
+        .SizeGroup = "ShortDateRange"; // 31.12.2022
       dt.GridProducer.Columns.LastAdded.TextAlign = HorizontalAlignment.Center;
       dt.GridProducer.Columns.LastAdded.EmptyValue = String.Empty; // а не "все даты"
       dt.GridProducer.Columns.AddText("FromContra.Name", "От кого получено", 15, 10);
@@ -53,18 +56,24 @@ namespace Plants
       dt.GridProducer.Columns.AddUserText("StateText", "MovementState,Place,ToContra", new EFPGridProducerValueNeededEventHandler(EditPlant.StateText_Column_ToolTipText_ValueNeeded), "Состояние", 30, 5);
 
       dt.GridProducer.Columns.AddRefDocTextAndImage("LastPlantAction", this.DocTypes["Plants"].SubDocTypes["PlantActions"], "Последнее действие", 30, 10);
-      dt.GridProducer.Columns.AddDateRange("LastPlantActionDate", "LastPlantAction.Date1", "LastPlantAction.Date2", "Дата последнего действия", false, 10, 10);
+      //dt.GridProducer.Columns.AddDateRange("LastPlantActionDate", "LastPlantAction.Date1", "LastPlantAction.Date2", "Дата последнего действия", false, 10, 10);
+      dt.GridProducer.Columns.AddUserText("LastPlantActionDate", "LastPlantAction.Date1,LastPlantAction.Date2", DateRangeColumn_ValueNeeded, "Дата последнего действия", 10, 10)
+        .SizeGroup = "ShortDateRange"; // 31.12.2022
       dt.GridProducer.Columns.LastAdded.TextAlign = HorizontalAlignment.Center;
       dt.GridProducer.Columns.LastAdded.EmptyValue = String.Empty; // а не "все даты"
 
       dt.GridProducer.Columns.AddRefDocTextAndImage("LastPlantReplanting", this.DocTypes["Plants"].SubDocTypes["PlantActions"], "Пересадка", 30, 10);
-      dt.GridProducer.Columns.AddDateRange("LastPlantReplantingDate", "LastPlantReplanting.Date1", "LastPlantReplanting.Date2", "Дата пересадки", false, 10, 10);
+      //dt.GridProducer.Columns.AddDateRange("LastPlantReplantingDate", "LastPlantReplanting.Date1", "LastPlantReplanting.Date2", "Дата пересадки", false, 10, 10);
+      dt.GridProducer.Columns.AddUserText("LastPlantReplantingDate", "LastPlantReplanting.Date1,LastPlantReplanting.Date2", DateRangeColumn_ValueNeeded, "Дата пересадки", 10, 10)
+        .SizeGroup = "ShortDateRange"; // 31.12.2022
       dt.GridProducer.Columns.LastAdded.TextAlign = HorizontalAlignment.Center;
       dt.GridProducer.Columns.LastAdded.EmptyValue = String.Empty; // а не "все даты"
 
       dt.GridProducer.Columns.AddRefDocText("LastPlantDisease", this.DocTypes["Plants"].SubDocTypes["PlantDiseases"], "Заболевание", 30, 10);
 
-      dt.GridProducer.Columns.AddDateRange("RemoveDate", "RemoveDate1", "RemoveDate2", "Дата выбытия", false, 10, 10);
+      //dt.GridProducer.Columns.AddDateRange("RemoveDate", "RemoveDate1", "RemoveDate2", "Дата выбытия", false, 10, 10);
+      dt.GridProducer.Columns.AddUserText("RemoveDate", "RemoveDate1,RemoveDate2", DateRangeColumn_ValueNeeded, "Дата выбытия", 10, 10)
+        .SizeGroup = "ShortDateRange"; // 31.12.2022
       dt.GridProducer.Columns.LastAdded.TextAlign = HorizontalAlignment.Center;
       dt.GridProducer.Columns.LastAdded.EmptyValue = String.Empty; // а не "все даты"
       dt.GridProducer.Columns.AddText("ToContra.Name", "Кому передано", 15, 10);
@@ -82,7 +91,9 @@ namespace Plants
         new EFPGridProducerValueNeededEventHandler(EditPlant.FirstPlannedActionImageColumnValueNeeded), String.Empty).DisplayName = "Запланированное действие (значок)";
       dt.GridProducer.Columns.AddUserText("FirstPlannedActionText", "FirstPlannedAction.Kind,FirstPlannedAction.ActionName",
         new EFPGridProducerValueNeededEventHandler(EditPlant.FirstPlannedActionTextColumnValueNeeded), "Запланированное действие", 15, 10);
-      dt.GridProducer.Columns.AddDateRange("FirstPlannedActionDate", "FirstPlannedAction.Date1", "FirstPlannedAction.Date2", "Дата запланированного действия", false, 15, 10);
+      //dt.GridProducer.Columns.AddDateRange("FirstPlannedActionDate", "FirstPlannedAction.Date1", "FirstPlannedAction.Date2", "Дата запланированного действия", false, 15, 10);
+      dt.GridProducer.Columns.AddUserText("FirstPlannedActionDate", "FirstPlannedAction.Date1,FirstPlannedAction.Date2", DateRangeColumn_ValueNeeded, "Дата запланированного действия", 15, 10)
+        .SizeGroup = "ShortDateRange"; // 31.12.2022
 
       dt.GridProducer.Columns.AddText("GroupId.Name", "Группа", 15, 5);
       dt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
@@ -186,7 +197,9 @@ namespace Plants
 
       sdt = dt.SubDocTypes["PlantMovement"];
       sdt.GridProducer.Columns.AddEnumText("Kind", PlantTools.MovementNames, "Действие", 10, 5);
-      sdt.GridProducer.Columns.AddDateRange("Date", "Date1", "Date2", "Дата", false, 15, 10);
+      //sdt.GridProducer.Columns.AddDateRange("Date", "Date1", "Date2", "Дата", false, 15, 10);
+      sdt.GridProducer.Columns.AddUserText("Date", "Date1,Date2", DateRangeColumn_ValueNeeded, "Дата", 15, 10)
+        .SizeGroup = "ShortDateRange"; // 31.12.2022
       sdt.GridProducer.Columns.AddText("Place.Name", "Место", 20, 5);
       sdt.GridProducer.Columns.AddText("Contra.Name", "От кого / кому", 20, 5);
       sdt.GridProducer.Columns.AddText("ForkPlant.Name", "Отсажено / подсажено", 20, 10);
@@ -225,7 +238,9 @@ namespace Plants
       sdt.GridProducer.Columns.AddUserText("ActionText", "Kind,ActionName,Remedy", /* нельзя использовать Remedy.Name */
         new EFPGridProducerValueNeededEventHandler(EditPlantAction.ActionTextColumnValueNeeded),
         "Действие", 30, 10);
-      sdt.GridProducer.Columns.AddDateRange("Date", "Date1", "Date2", "Дата", false, 15, 10);
+      //sdt.GridProducer.Columns.AddDateRange("Date", "Date1", "Date2", "Дата", false, 15, 10);
+      sdt.GridProducer.Columns.AddUserText("Date", "Date1,Date2", DateRangeColumn_ValueNeeded, "Дата", 15, 10)
+        .SizeGroup = "ShortDateRange"; // 31.12.2022
       sdt.GridProducer.Columns.AddText("Soil.Name", "Грунт", 20, 10);
       sdt.GridProducer.Columns.AddText("PotKind.Name", "Горшок", 20, 10);
       sdt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
@@ -257,7 +272,9 @@ namespace Plants
       #region Цветение
 
       sdt = dt.SubDocTypes["PlantFlowering"];
-      sdt.GridProducer.Columns.AddDateRange("Date", "Date1", "Date2", "Дата", false, 15, 10);
+      //sdt.GridProducer.Columns.AddDateRange("Date", "Date1", "Date2", "Дата", false, 15, 10);
+      sdt.GridProducer.Columns.AddUserText("Date", "Date1,Date2", DateRangeColumn_ValueNeeded, "Дата", 15, 10)
+        .SizeGroup = "ShortDateRange"; // 31.12.2022
       sdt.GridProducer.Columns.AddInt("FlowerCount", "Количество цветков", 3);
       sdt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
 
@@ -268,7 +285,7 @@ namespace Plants
       sdt.GridProducer.DefaultConfig.Columns.Add("FlowerCount");
       sdt.GridProducer.DefaultConfig.ToolTips.Add("Comment");
 
-      sdt.ImageKey = "PlantFlowering";
+      sdt.AddImageHandler("PlantFlowering", new DBxColumns("Date1,Date2"), EditPlantFlowering.ImageValueNeeded);
       sdt.CanInsertCopy = true;
       sdt.CanMultiEdit = true;
       sdt.InitEditForm += new InitSubDocEditFormEventHandler(EditPlantFlowering.InitEditForm);
@@ -283,7 +300,9 @@ namespace Plants
 
       sdt = dt.SubDocTypes["PlantDiseases"];
       sdt.GridProducer.Columns.AddText("Disease.Name", "Заболевание", 30, 5);
-      sdt.GridProducer.Columns.AddDateRange("Date", "Date1", "Date2", "Дата", false, 15, 10);
+      //sdt.GridProducer.Columns.AddDateRange("Date", "Date1", "Date2", "Дата", false, 15, 10);
+      sdt.GridProducer.Columns.AddUserText("Date", "Date1,Date2", DateRangeColumn_ValueNeeded, "Дата", 15, 10)
+        .SizeGroup = "ShortDateRange"; // 31.12.2022
       sdt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
 
       sdt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
@@ -310,7 +329,9 @@ namespace Plants
       sdt.GridProducer.Columns.AddUserText("ActionText", "Kind,ActionName,Remedy",
         new EFPGridProducerValueNeededEventHandler(EditPlantPlan.ActionTextColumnValueNeeded),
         "Действие", 30, 10);
-      sdt.GridProducer.Columns.AddDateRange("Date", "Date1", "Date2", "Дата", false, 15, 10);
+      //sdt.GridProducer.Columns.AddDateRange("Date", "Date1", "Date2", "Дата", false, 15, 10);
+      sdt.GridProducer.Columns.AddUserText("Date", "Date1,Date2", DateRangeColumn_ValueNeeded, "Дата", 15, 10)
+        .SizeGroup = "ShortDateRange"; // 31.12.2022
       sdt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
 
       sdt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
@@ -694,6 +715,32 @@ namespace Plants
     {
       ColumnUI colUI = (ColumnUI)sender;
       colUI.DefaultValue = DateTime.Today;
+    }
+
+    /// <summary>
+    /// Текст для столбцов диапазонов дат 
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="args"></param>
+    private static void DateRangeColumn_ValueNeeded(object sender, EFPGridProducerValueNeededEventArgs args) // 31.12.2022
+    {
+      DateTime? firstDate = args.GetNullableDateTime(0);
+      DateTime? lastDate = args.GetNullableDateTime(1);
+
+      // Нестандартное преобразование
+      if (firstDate.HasValue)
+      {
+        if (firstDate == DateRange.Whole.FirstDate)
+          firstDate = null;
+      }
+      if (lastDate.HasValue)
+      {
+        if (lastDate == DateRange.Whole.LastDate)
+          lastDate = null;
+      }
+
+      if (firstDate.HasValue || lastDate.HasValue)
+        args.Value = DateRangeFormatter.Default.ToString(firstDate, lastDate, false);
     }
 
     #endregion

@@ -9,6 +9,7 @@ using FreeLibSet.Forms.Docs;
 using FreeLibSet.Forms;
 using FreeLibSet.DependedValues;
 using FreeLibSet.Calendar;
+using FreeLibSet.Core;
 
 namespace Plants
 {
@@ -20,6 +21,22 @@ namespace Plants
     {
       InitializeComponent();
     }
+
+    #endregion
+
+    #region Табличный просмотр
+
+    #region Значок
+
+    public static void ImageValueNeeded(object sender, DBxImageValueNeededEventArgs args)
+    {
+      DateTime dt1 = args.GetDateTime(0);
+      DateTime dt2 = args.GetDateTime(1);
+      if (DataTools.DateInRange(DateTime.Today, dt1, dt2))
+        args.ImageKey = "Play"; // 31.12.2022
+    }
+
+    #endregion
 
     #endregion
 

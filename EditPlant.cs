@@ -33,7 +33,7 @@ namespace Plants
 
     #region Табличный просмотр документов
 
-    #region Вычисляемые столбцы
+    #region Значок
 
     public static void ImageValueNeeded(object sender, DBxImageValueNeededEventArgs args)
     {
@@ -48,6 +48,10 @@ namespace Plants
           break;
       }
     }
+
+    #endregion
+
+    #region Вычисляемые столбцы
 
     public static void ContraNameColumnValueNeeded(object sender, EFPGridProducerValueNeededEventArgs args)
     {

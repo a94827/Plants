@@ -62,7 +62,7 @@ namespace Plants
 
     protected override void OnInitTitle()
     {
-      base.Title = "Цветение за " + DateRangeFormatter.Default.ToString(FirstDate, LastDate, false);
+      base.Title = "Цветение за " + DateRangeFormatter.Default.ToString(FirstDate, LastDate, true);
       Filters.AddFilterInfo(FilterInfo);
     }
 
@@ -262,12 +262,14 @@ namespace Plants
     {
       if (args.ColumnName == "Date")
       {
-        DateTime Date1 = DataTools.GetNullableDateTime(args.DataRow, "Date1").Value;
-        DateTime Date2 = DataTools.GetNullableDateTime(args.DataRow, "Date2").Value;
-        if (Date1 == DateTime.MaxValue)
+        DateTime date1 = DataTools.GetNullableDateTime(args.DataRow, "Date1").Value;
+        DateTime date2 = DataTools.GetNullableDateTime(args.DataRow, "Date2").Value;
+        if (date1 == DateTime.MaxValue)
           args.Value = "Итого";
+        else if (date2==DateRange.Whole.LastDate)
+          args.Value = DateRangeFormatter.Default.ToString(date1, null, false); // 31.12.2022
         else
-          args.Value = DateRangeFormatter.Default.ToString(Date1, Date2, false);
+          args.Value = DateRangeFormatter.Default.ToString(date1, date2, false);
       }
 
       ////return;

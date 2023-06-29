@@ -48,7 +48,7 @@ namespace Plants
 
     public abstract void SetItemValue(IDBxDocValues docValues, object itemValue);
 
-    public abstract void AddColumns(DBxColumnStructList columns);
+    public abstract void AddColumns(DBxTableStruct.ColumnCollection columns);
 
     #endregion
 
@@ -261,7 +261,7 @@ namespace Plants
       docValues[Code].SetString(s);
     }
 
-    public override void AddColumns(DBxColumnStructList columns)
+    public override void AddColumns(DBxTableStruct.ColumnCollection columns)
     {
       columns.AddMemo(Code);
     }
@@ -325,7 +325,7 @@ namespace Plants
 
     #region Переопределенные методы
 
-    public override void AddColumns(DBxColumnStructList columns)
+    public override void AddColumns(DBxTableStruct.ColumnCollection columns)
     {
       int maxLen = 1;
       for (int i = 0; i < EnumCodes.Length; i++)
@@ -412,7 +412,7 @@ namespace Plants
 
     #region Переопределенные методы
 
-    public override void AddColumns(DBxColumnStructList columns)
+    public override void AddColumns(DBxTableStruct.ColumnCollection columns)
     {
       columns.AddInt(Code, Minimum, Maximum);
     }
@@ -543,7 +543,7 @@ namespace Plants
 
     #region Переопределенные методы
 
-    public override void AddColumns(DBxColumnStructList columns)
+    public override void AddColumns(DBxTableStruct.ColumnCollection columns)
     {
       columns.AddInt(ColumnName1, Minimum, Maximum);
       columns.AddInt(ColumnName2, Minimum, Maximum);
@@ -835,7 +835,7 @@ namespace Plants
       docValues[Code].SetValue(itemValue);
     }
 
-    public override void AddColumns(DBxColumnStructList columns)
+    public override void AddColumns(DBxTableStruct.ColumnCollection columns)
     {
       columns.AddInt(Code);
     }

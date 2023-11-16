@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,7 +13,7 @@ namespace Plants
 {
   internal partial class EditRemedyUsage : Form
   {
-    #region Конструктор формы
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ С„РѕСЂРјС‹
 
     public EditRemedyUsage()
     {
@@ -22,7 +22,7 @@ namespace Plants
 
     #endregion
 
-    #region Редактор
+    #region Р РµРґР°РєС‚РѕСЂ
 
     public static void InitEditForm(object sender, InitSubDocEditFormEventArgs args)
     {
@@ -32,7 +32,7 @@ namespace Plants
 
     private void AddPage1(InitSubDocEditFormEventArgs args)
     {
-      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      DocEditPage page = args.AddPage("РћР±С‰РёРµ", MainPanel1);
       page.ImageKey = args.Editor.SubDocTypeUI.ImageKey;
 
       EFPTextBox efpName = new EFPTextBox(page.BaseProvider, edName);

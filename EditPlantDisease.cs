@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,7 +14,7 @@ namespace Plants
 {
   internal partial class EditPlantDisease : Form
   {
-    #region Конструктор формы
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ С„РѕСЂРјС‹
 
     public EditPlantDisease()
     {
@@ -23,7 +23,7 @@ namespace Plants
 
     #endregion
 
-    #region Редактор
+    #region Р РµРґР°РєС‚РѕСЂ
 
     public static void InitEditForm(object sender, InitSubDocEditFormEventArgs args)
     {
@@ -35,7 +35,7 @@ namespace Plants
 
     private void AddPage1(InitSubDocEditFormEventArgs args)
     {
-      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      DocEditPage page = args.AddPage("РћР±С‰РёРµ", MainPanel1);
       page.ImageKey = args.Editor.SubDocTypeUI.ImageKey;
 
       EFPDocComboBox efpDisease = new EFPDocComboBox(page.BaseProvider, cbDisease, ProgramDBUI.TheUI.DocTypes["Diseases"]);
@@ -48,8 +48,8 @@ namespace Plants
 
       btnDate99991231.Image = EFPApp.MainImages.Images["Date99991231"];
       EFPButton efpDate99991231 = new EFPButton(page.BaseProvider, btnDate99991231);
-      efpDate99991231.DisplayName = "Бесконечное время";
-      efpDate99991231.ToolTipText = "Устанавливает конечную дату диапазона " + DateRangeFormatter.Default.ToString(DateRange.Whole.LastDate, false);
+      efpDate99991231.DisplayName = "Р‘РµСЃРєРѕРЅРµС‡РЅРѕРµ РІСЂРµРјСЏ";
+      efpDate99991231.ToolTipText = "РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ РєРѕРЅРµС‡РЅСѓСЋ РґР°С‚Сѓ РґРёР°РїР°Р·РѕРЅР° " + DateRangeFormatter.Default.ToString(DateRange.Whole.LastDate, false);
       //efpDate99991231.EnabledEx = new DepAnd(efpDate.EditableEx, new DepNot(new DepEqual<DateTime>(efpDate.LastDateEx, DateRange.Whole.LastDate)));
       efpDate99991231.EnabledEx = new DepExpr3<bool, bool, bool, DateTime>(efpDate.EditableEx, efpDate.IsNotEmptyEx, efpDate.LastDateEx, CalcDate99991231Enabled);
       efpDate99991231.Click += new EventHandler(efpDate99991231_Click);

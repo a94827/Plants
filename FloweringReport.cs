@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,12 +11,13 @@ using FreeLibSet.Calendar;
 using FreeLibSet.Data;
 using FreeLibSet.Data.Docs;
 using FreeLibSet.Core;
+using FreeLibSet.Config;
 
 namespace Plants
 {
   internal partial class FloweringReportParamForm : EFPReportExtParamsTwoPageForm
   {
-    #region Конструктор формы
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ С„РѕСЂРјС‹
 
     public FloweringReportParamForm()
     {
@@ -29,7 +30,7 @@ namespace Plants
 
     #endregion
 
-    #region Поля
+    #region РџРѕР»СЏ
 
     public EFPDateRangeBox efpPeriod;
 
@@ -39,7 +40,7 @@ namespace Plants
 
   internal class FloweringReportParams : EFPReportExtParams
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     public FloweringReportParams()
     {
@@ -49,7 +50,7 @@ namespace Plants
 
     #endregion
 
-    #region Поля
+    #region РџРѕР»СЏ
 
     public DateTime FirstDate;
     public DateTime LastDate;
@@ -58,11 +59,11 @@ namespace Plants
 
     #endregion
 
-    #region Переопределенные методы
+    #region РџРµСЂРµРѕРїСЂРµРґРµР»РµРЅРЅС‹Рµ РјРµС‚РѕРґС‹
 
     protected override void OnInitTitle()
     {
-      base.Title = "Цветение за " + DateRangeFormatter.Default.ToString(FirstDate, LastDate, true);
+      base.Title = "Р¦РІРµС‚РµРЅРёРµ Р·Р° " + DateRangeFormatter.Default.ToString(FirstDate, LastDate, true);
       Filters.AddFilterInfo(FilterInfo);
     }
 
@@ -71,12 +72,12 @@ namespace Plants
       return new FloweringReportParamForm();
     }
 
-    public override EFPReportExtParamsPart UsedParts
+    public override SettingsPart UsedParts
     {
-      get { return EFPReportExtParamsPart.User | EFPReportExtParamsPart.NoHistory; }
+      get { return SettingsPart.User | SettingsPart.NoHistory; }
     }
 
-    public override void WriteFormValues(EFPReportExtParamsForm form, EFPReportExtParamsPart part)
+    public override void WriteFormValues(EFPReportExtParamsForm form, SettingsPart part)
     {
       FloweringReportParamForm form2 = (FloweringReportParamForm)form;
       form2.efpPeriod.First.Value = FirstDate;
@@ -84,35 +85,35 @@ namespace Plants
       form2.FiltersControlProvider.Filters = Filters;
     }
 
-    public override void ReadFormValues(EFPReportExtParamsForm form, EFPReportExtParamsPart part)
+    public override void ReadFormValues(EFPReportExtParamsForm form, SettingsPart part)
     {
       FloweringReportParamForm form2 = (FloweringReportParamForm)form;
       FirstDate = form2.efpPeriod.First.Value;
       LastDate = form2.efpPeriod.Last.Value;
     }
 
-    public override void WriteConfig(FreeLibSet.Config.CfgPart cfg, EFPReportExtParamsPart part)
+    public override void WriteConfig(FreeLibSet.Config.CfgPart cfg, SettingsPart part)
     {
       switch (part)
       {
-        case EFPReportExtParamsPart.User:
+        case SettingsPart.User:
           Filters.WriteConfig(cfg);
           break;
-        case EFPReportExtParamsPart.NoHistory:
+        case SettingsPart.NoHistory:
           cfg.SetNullableDate("FirstDate", FirstDate);
           cfg.SetNullableDate("LastDate", LastDate);
           break;
       }
     }
 
-    public override void ReadConfig(FreeLibSet.Config.CfgPart cfg, EFPReportExtParamsPart part)
+    public override void ReadConfig(FreeLibSet.Config.CfgPart cfg, SettingsPart part)
     {
       switch (part)
       {
-        case EFPReportExtParamsPart.User:
+        case SettingsPart.User:
           Filters.ReadConfig(cfg);
           break;
-        case EFPReportExtParamsPart.NoHistory:
+        case SettingsPart.NoHistory:
           cfg.GetDate("FirstDate", ref FirstDate);
           cfg.GetDate("LastDate", ref LastDate);
           break;
@@ -124,7 +125,7 @@ namespace Plants
 
   internal class FloweringReport : EFPReport
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     public FloweringReport()
       : base("FloweringReport")
@@ -132,14 +133,14 @@ namespace Plants
       MainImageKey = "FloweringReport";
 
       _MainPage = new EFPReportVarGridPage();
-      _MainPage.Title = "Цветение";
+      _MainPage.Title = "Р¦РІРµС‚РµРЅРёРµ";
       _MainPage.ImageKey = MainImageKey;
       Pages.Add(_MainPage);
     }
 
     #endregion
 
-    #region Построение отчета
+    #region РџРѕСЃС‚СЂРѕРµРЅРёРµ РѕС‚С‡РµС‚Р°
 
     protected override EFPReportParams CreateParams()
     {
@@ -167,8 +168,8 @@ namespace Plants
         AndFilter.FromList(filters), null);
       Params.Filters.PerformAuxFiltering(ref table1, Params.FirstDate, Params.LastDate);
 
-      // Идентификаторы растений
-      table1.DefaultView.Sort = "DocId.Number"; // по номеру в каталоге
+      // РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂС‹ СЂР°СЃС‚РµРЅРёР№
+      table1.DefaultView.Sort = "DocId.Number"; // РїРѕ РЅРѕРјРµСЂСѓ РІ РєР°С‚Р°Р»РѕРіРµ
       IdList plantIds = IdList.FromColumn(table1.DefaultView, "DocId");
 
       DataTable mainTable = new DataTable();
@@ -190,7 +191,7 @@ namespace Plants
         DataTools.IncInt(mainRow, "FlowerCount" + plantId.ToString(), flowerCount);
       }
 
-      #region Итоги
+      #region РС‚РѕРіРё
 
       foreach (DataRow mainRow in mainTable.Rows)
       {
@@ -216,14 +217,14 @@ namespace Plants
         new System.Windows.Forms.DataGridView(), ProgramDBUI.TheUI);
 
       ghMain.Control.AutoGenerateColumns = false;
-      ghMain.Columns.AddText("Date", false, "Дата", 21, 8);
+      ghMain.Columns.AddText("Date", false, "Р”Р°С‚Р°", 21, 8);
       foreach (Int32 plantId in plantIds)
       {
         object[] a = ProgramDBUI.TheUI.DocTypes["Plants"].TableCache.GetValues(plantId, new DBxColumns("Number,Name"));
-        ghMain.Columns.AddInt("FlowerCount" + plantId.ToString(), true, "№" + DataTools.GetInt(a[0]).ToString(ProgramDBUI.Settings.NumberMask) +
+        ghMain.Columns.AddInt("FlowerCount" + plantId.ToString(), true, "в„–" + DataTools.GetInt(a[0]).ToString(ProgramDBUI.Settings.NumberMask) +
           Environment.NewLine + DataTools.GetString(a[1]), 4);
       }
-      ghMain.Columns.AddInt("Total", true, "Всего", 4);
+      ghMain.Columns.AddInt("Total", true, "Р’СЃРµРіРѕ", 4);
       ghMain.Columns.LastAdded.ColorType = EFPDataGridViewColorType.Total1;
 
       ghMain.FrozenColumns = 1;
@@ -247,7 +248,7 @@ namespace Plants
 
     #endregion
 
-    #region Страница отчета
+    #region РЎС‚СЂР°РЅРёС†Р° РѕС‚С‡РµС‚Р°
 
     EFPReportVarGridPage _MainPage;
 
@@ -265,7 +266,7 @@ namespace Plants
         DateTime date1 = DataTools.GetNullableDateTime(args.DataRow, "Date1").Value;
         DateTime date2 = DataTools.GetNullableDateTime(args.DataRow, "Date2").Value;
         if (date1 == DateTime.MaxValue)
-          args.Value = "Итого";
+          args.Value = "РС‚РѕРіРѕ";
         else if (date2==DateRange.Whole.LastDate)
           args.Value = DateRangeFormatter.Default.ToString(date1, null, false); // 31.12.2022
         else
@@ -304,7 +305,7 @@ namespace Plants
 
       if (plantIds.Count == 0)
       {
-        EFPApp.ShowTempMessage("Растения не выбраны");
+        EFPApp.ShowTempMessage("Р Р°СЃС‚РµРЅРёСЏ РЅРµ РІС‹Р±СЂР°РЅС‹");
         return;
       }
 

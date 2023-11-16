@@ -1,4 +1,4 @@
-namespace Plants
+п»їnamespace Plants
 {
   partial class FloweringReportParamForm
   {
@@ -52,7 +52,7 @@ namespace Plants
       this.grpPeriod.Size = new System.Drawing.Size(500, 69);
       this.grpPeriod.TabIndex = 2;
       this.grpPeriod.TabStop = false;
-      this.grpPeriod.Text = "Период цветения";
+      this.grpPeriod.Text = "РџРµСЂРёРѕРґ С†РІРµС‚РµРЅРёСЏ";
       // 
       // edPeriod
       // 

@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,7 +17,7 @@ namespace Plants
 {
   internal partial class EditCareRecord : Form
   {
-    #region Конструктор формы
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ С„РѕСЂРјС‹
 
     public EditCareRecord()
     {
@@ -26,7 +26,7 @@ namespace Plants
 
     #endregion
 
-    #region Редактор
+    #region Р РµРґР°РєС‚РѕСЂ
 
     public static void InitEditForm(object sender, InitSubDocEditFormEventArgs args)
     {
@@ -38,16 +38,16 @@ namespace Plants
 
     private void AddPage1(InitSubDocEditFormEventArgs args)
     {
-      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      DocEditPage page = args.AddPage("РћР±С‰РёРµ", MainPanel1);
       page.ImageKey = args.Editor.SubDocTypeUI.ImageKey;
 
       efpDay1 = new EFPMonthDayTextBox(page.BaseProvider, edDay1);
-      efpDay1.DisplayName = "Начало периода";
+      efpDay1.DisplayName = "РќР°С‡Р°Р»Рѕ РїРµСЂРёРѕРґР°";
       efpDay1.CanBeEmpty = true;
       args.AddInt(efpDay1, "Day1", false);
 
       efpDay2 = new EFPMonthDayTextBox(page.BaseProvider, edDay2);
-      efpDay2.DisplayName = "Конец периода";
+      efpDay2.DisplayName = "РљРѕРЅРµС† РїРµСЂРёРѕРґР°";
       efpDay2.CanBeEmpty = true;
       args.AddInt(efpDay2, "Day2", false);
 
@@ -61,7 +61,7 @@ namespace Plants
 
       efpName.CanBeEmpty = true;
       efpName.Validators.AddError(efpName.IsNotEmptyEx,
-        "Значение должно быть задано",
+        "Р—РЅР°С‡РµРЅРёРµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ Р·Р°РґР°РЅРѕ",
         efpDay1.IsNotEmptyEx);
 
       EFPCareGridView ghItems = new EFPCareGridView(page.BaseProvider, grItems);
@@ -75,17 +75,17 @@ namespace Plants
         return;
 
       if (efpDay1.Value.IsEmpty != efpDay2.Value.IsEmpty)
-        args.SetError("Начало и конец периода должны быть заполнены одновременно");
+        args.SetError("РќР°С‡Р°Р»Рѕ Рё РєРѕРЅРµС† РїРµСЂРёРѕРґР° РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ Р·Р°РїРѕР»РЅРµРЅС‹ РѕРґРЅРѕРІСЂРµРјРµРЅРЅРѕ");
     }
 
 
     #endregion
 
-    #region Переходник для таблицы значений
+    #region РџРµСЂРµС…РѕРґРЅРёРє РґР»СЏ С‚Р°Р±Р»РёС†С‹ Р·РЅР°С‡РµРЅРёР№
 
     public class CareDocEditItem : IDocEditItem
     {
-      #region Конструктор
+      #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
       public CareDocEditItem(IDBxDocValues docValues, EFPCareGridView controlProvider)
       {
@@ -105,7 +105,7 @@ namespace Plants
 
       #endregion
 
-      #region Свойства
+      #region РЎРІРѕР№СЃС‚РІР°
 
       public IDBxDocValues DocValues { get { return _DocValues; } }
       private IDBxDocValues _DocValues;
@@ -136,7 +136,7 @@ namespace Plants
       {
       }
 
-      public void WriteValues() // TODO: проверить реализацию!
+      public void WriteValues() // TODO: РїСЂРѕРІРµСЂРёС‚СЊ СЂРµР°Р»РёР·Р°С†РёСЋ!
       {
         ControlProvider.Values.Write(DocValues);
         OrgValues.Read(DocValues);
@@ -166,11 +166,11 @@ namespace Plants
   }
 
   /// <summary>
-  /// Провайдер табличного просмотра для просмотра / редактирования списка характеристик
+  /// РџСЂРѕРІР°Р№РґРµСЂ С‚Р°Р±Р»РёС‡РЅРѕРіРѕ РїСЂРѕСЃРјРѕС‚СЂР° РґР»СЏ РїСЂРѕСЃРјРѕС‚СЂР° / СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ СЃРїРёСЃРєР° С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРє
   /// </summary>
   public class EFPCareGridView : EFPDataGridView
   {
-    #region Конструкторы
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹
 
     public EFPCareGridView(EFPBaseProvider baseProvider, DataGridView control)
       : base(baseProvider, control)
@@ -188,10 +188,10 @@ namespace Plants
     {
       Control.AutoGenerateColumns = false;
       Columns.AddImage();
-      Columns.AddText("Name", false, "Параметр", 25, 10);
+      Columns.AddText("Name", false, "РџР°СЂР°РјРµС‚СЂ", 25, 10);
       Columns.LastAdded.CanIncSearch = true;
 
-      Columns.AddTextFill("Value", false, "Значение", 100, 10);
+      Columns.AddTextFill("Value", false, "Р—РЅР°С‡РµРЅРёРµ", 100, 10);
       DisableOrdering();
 
       Control.ReadOnly = true;
@@ -224,13 +224,13 @@ namespace Plants
 
     #endregion
 
-    #region Список
+    #region РЎРїРёСЃРѕРє
 
     /// <summary>
-    /// Используемый список характеристик.
-    /// Определяет количество строк в просмотре.
-    /// Инициализируется равным CareItem.TheList.
-    /// При необходимости, следует создать собственный список и задать ссылку на него.
+    /// РСЃРїРѕР»СЊР·СѓРµРјС‹Р№ СЃРїРёСЃРѕРє С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРє.
+    /// РћРїСЂРµРґРµР»СЏРµС‚ РєРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СЂРѕРє РІ РїСЂРѕСЃРјРѕС‚СЂРµ.
+    /// РРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚СЃСЏ СЂР°РІРЅС‹Рј CareItem.TheList.
+    /// РџСЂРё РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё, СЃР»РµРґСѓРµС‚ СЃРѕР·РґР°С‚СЊ СЃРѕР±СЃС‚РІРµРЅРЅС‹Р№ СЃРїРёСЃРѕРє Рё Р·Р°РґР°С‚СЊ СЃСЃС‹Р»РєСѓ РЅР° РЅРµРіРѕ.
     /// </summary>
     public NamedList<CareItem> UsedItems
     {
@@ -266,16 +266,16 @@ namespace Plants
     }
 
     /// <summary>
-    /// Устанавливается вместе со свойством UsedItems.
-    /// Длина массива соответствует числу строк в просмотре.
-    /// Содержит номера групп (1,2,...).
-    /// Используется для полосатой раскраски
+    /// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚СЃСЏ РІРјРµСЃС‚Рµ СЃРѕ СЃРІРѕР№СЃС‚РІРѕРј UsedItems.
+    /// Р”Р»РёРЅР° РјР°СЃСЃРёРІР° СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ С‡РёСЃР»Сѓ СЃС‚СЂРѕРє РІ РїСЂРѕСЃРјРѕС‚СЂРµ.
+    /// РЎРѕРґРµСЂР¶РёС‚ РЅРѕРјРµСЂР° РіСЂСѓРїРї (1,2,...).
+    /// РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ РїРѕР»РѕСЃР°С‚РѕР№ СЂР°СЃРєСЂР°СЃРєРё
     /// </summary>
     private int[] _GroupIndexes;
 
     #endregion
 
-    #region Список значений
+    #region РЎРїРёСЃРѕРє Р·РЅР°С‡РµРЅРёР№
 
     public CareValues Values { get { return _Values; } }
     private CareValues _Values;
@@ -291,7 +291,7 @@ namespace Plants
 
     #endregion
 
-    #region Редактирование
+    #region Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ
 
     protected override bool OnEditData(EventArgs args)
     {

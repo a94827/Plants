@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using FreeLibSet.Logging;
@@ -29,11 +29,11 @@ namespace Plants
         using (ProgramDB db = new ProgramDB())
         {
           using (Splash spl = new Splash(new string[] { 
-          "Инициализация базы данных", 
-          "Инициализация главного окна",
-          "Проверка запланированных действий"}))
+          "РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ Р±Р°Р·С‹ РґР°РЅРЅС‹С…", 
+          "РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РіР»Р°РІРЅРѕРіРѕ РѕРєРЅР°",
+          "РџСЂРѕРІРµСЂРєР° Р·Р°РїР»Р°РЅРёСЂРѕРІР°РЅРЅС‹С… РґРµР№СЃС‚РІРёР№"}))
           {
-            #region Инициализация каталогов
+            #region РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РєР°С‚Р°Р»РѕРіРѕРІ
 
             LogoutTools.LogBaseDirectory = FileTools.ApplicationBaseDir + "Log";
             if (!CreateDir(LogoutTools.LogBaseDirectory))
@@ -58,20 +58,20 @@ namespace Plants
 
             DateRangeFormatter.Default = new MyDateRangeFormatter();
 
-            #region Главное окно
+            #region Р“Р»Р°РІРЅРѕРµ РѕРєРЅРѕ
 
             ProgramDBUI.TheUI = new ProgramDBUI(db.CreateDocProvider().CreateProxy());
-            // Картинки
+            // РљР°СЂС‚РёРЅРєРё
             EFPApp.MainImages.Add(MainImagesResource.ResourceManager);
 
-            //ProgramDBUI.TheUI.DebugShowIds = true; // показывать идентификаторы для отладки
+            //ProgramDBUI.TheUI.DebugShowIds = true; // РїРѕРєР°Р·С‹РІР°С‚СЊ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂС‹ РґР»СЏ РѕС‚Р»Р°РґРєРё
             ProgramDBUI.ConfigSections = new ClientConfigSections(db);
-            EFPApp.ConfigManager = ProgramDBUI.ConfigSections; // должно быть до показа форм
+            EFPApp.ConfigManager = ProgramDBUI.ConfigSections; // РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РґРѕ РїРѕРєР°Р·Р° С„РѕСЂРј
             //ProgramDBUI.Docs = new CoProDevDocuments(ProgramDBUI.TheUI.TextHandlers);
             //ProgramDBUI.Cache = new ProgramCache();
             MainMenu.Init();
             EFPApp.Interface = new EFPAppInterfaceSDI();
-            EFPApp.MainWindowTitle = "Каталог растений";
+            EFPApp.MainWindowTitle = "РљР°С‚Р°Р»РѕРі СЂР°СЃС‚РµРЅРёР№";
             EFPApp.LoadMainWindowLayout();
             EFPApp.FormCreators.Add(ProgramDBUI.TheUI);
             EFPApp.LoadComposition();
@@ -93,7 +93,7 @@ namespace Plants
 
           if (ProgramDBUI.Settings.BackupMode != UserSettings.BackupModes.None)
           {
-            using (Splash spl = new Splash("Создание резервной копии"))
+            using (Splash spl = new Splash("РЎРѕР·РґР°РЅРёРµ СЂРµР·РµСЂРІРЅРѕР№ РєРѕРїРёРё"))
             {
               switch (ProgramDBUI.Settings.BackupMode)
               {
@@ -114,7 +114,7 @@ namespace Plants
       }
       catch (Exception e)
       {
-        EFPApp.ShowException(e, "Ошибка запуска программы");
+        EFPApp.ShowException(e, "РћС€РёР±РєР° Р·Р°РїСѓСЃРєР° РїСЂРѕРіСЂР°РјРјС‹");
       }
     }
 
@@ -133,13 +133,13 @@ namespace Plants
       }
       catch (System.IO.IOException e)
       {
-        EFPApp.ErrorMessageBox("Невозможно создать каталог \"" + dir.Path + "\". " + e.Message);
+        EFPApp.ErrorMessageBox("РќРµРІРѕР·РјРѕР¶РЅРѕ СЃРѕР·РґР°С‚СЊ РєР°С‚Р°Р»РѕРі \"" + dir.Path + "\". " + e.Message);
         return false;
       }
     }
 
     /// <summary>
-    /// Возвращает true, если сегодня уже была создана резервная копия
+    /// Р’РѕР·РІСЂР°С‰Р°РµС‚ true, РµСЃР»Рё СЃРµРіРѕРґРЅСЏ СѓР¶Рµ Р±С‹Р»Р° СЃРѕР·РґР°РЅР° СЂРµР·РµСЂРІРЅР°СЏ РєРѕРїРёСЏ
     /// </summary>
     /// <returns></returns>
     private static bool HasDailyBackup()

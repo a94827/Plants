@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,12 +10,13 @@ using FreeLibSet.Data;
 using FreeLibSet.Data.Docs;
 using FreeLibSet.Forms.Docs;
 using FreeLibSet.Calendar;
+using FreeLibSet.Config;
 
 namespace Plants
 {
   internal partial class PlantSelReportParamForm : EFPReportExtParamsTwoPageForm
   {
-    #region Конструктор формы
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ С„РѕСЂРјС‹
 
     public PlantSelReportParamForm()
     {
@@ -28,7 +29,7 @@ namespace Plants
 
     #endregion
 
-    #region Поля
+    #region РџРѕР»СЏ
 
     public EFPDateRangeBox efpPeriod;
 
@@ -37,7 +38,7 @@ namespace Plants
 
   internal class PlantSelReportParams : EFPReportExtParams
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     public PlantSelReportParams()
     {
@@ -47,7 +48,7 @@ namespace Plants
 
     #endregion
 
-    #region Поля
+    #region РџРѕР»СЏ
 
     public DateTime FirstDate;
 
@@ -59,11 +60,11 @@ namespace Plants
 
     #endregion
 
-    #region Переопределенные методы
+    #region РџРµСЂРµРѕРїСЂРµРґРµР»РµРЅРЅС‹Рµ РјРµС‚РѕРґС‹
 
     protected override void OnInitTitle()
     {
-      base.Title = "Выборка растений за " + DateRangeFormatter.Default.ToString(FirstDate, LastDate, true);
+      base.Title = "Р’С‹Р±РѕСЂРєР° СЂР°СЃС‚РµРЅРёР№ Р·Р° " + DateRangeFormatter.Default.ToString(FirstDate, LastDate, true);
       Filters.AddFilterInfo(FilterInfo);
     }
 
@@ -72,12 +73,12 @@ namespace Plants
       return new PlantSelReportParamForm();
     }
 
-    public override EFPReportExtParamsPart UsedParts
+    public override SettingsPart UsedParts
     {
-      get { return EFPReportExtParamsPart.User | EFPReportExtParamsPart.NoHistory; }
+      get { return SettingsPart.User | SettingsPart.NoHistory; }
     }
 
-    public override void WriteFormValues(EFPReportExtParamsForm form, EFPReportExtParamsPart part)
+    public override void WriteFormValues(EFPReportExtParamsForm form, SettingsPart part)
     {
       PlantSelReportParamForm form2 = (PlantSelReportParamForm)form;
       form2.efpPeriod.First.Value = FirstDate;
@@ -85,35 +86,35 @@ namespace Plants
       form2.FiltersControlProvider.Filters = Filters;
     }
 
-    public override void ReadFormValues(EFPReportExtParamsForm form, EFPReportExtParamsPart part)
+    public override void ReadFormValues(EFPReportExtParamsForm form, SettingsPart part)
     {
       PlantSelReportParamForm form2 = (PlantSelReportParamForm)form;
       FirstDate = form2.efpPeriod.First.Value;
       LastDate = form2.efpPeriod.Last.Value;
     }
 
-    public override void WriteConfig(FreeLibSet.Config.CfgPart cfg, EFPReportExtParamsPart part)
+    public override void WriteConfig(FreeLibSet.Config.CfgPart cfg, SettingsPart part)
     {
       switch (part)
       {
-        case EFPReportExtParamsPart.User:
+        case SettingsPart.User:
           Filters.WriteConfig(cfg);
           break;
-        case EFPReportExtParamsPart.NoHistory:
+        case SettingsPart.NoHistory:
           cfg.SetNullableDate("FirstDate", FirstDate);
           cfg.SetNullableDate("LastDate", LastDate);
           break;
       }
     }
 
-    public override void ReadConfig(FreeLibSet.Config.CfgPart cfg, EFPReportExtParamsPart part)
+    public override void ReadConfig(FreeLibSet.Config.CfgPart cfg, SettingsPart part)
     {
       switch (part)
       {
-        case EFPReportExtParamsPart.User:
+        case SettingsPart.User:
           Filters.ReadConfig(cfg);
           break;
-        case EFPReportExtParamsPart.NoHistory:
+        case SettingsPart.NoHistory:
           cfg.GetDate("FirstDate", ref FirstDate);
           cfg.GetDate("LastDate", ref LastDate);
           break;
@@ -125,7 +126,7 @@ namespace Plants
 
   internal class PlantSelReport : EFPReport
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     public PlantSelReport()
       : base("PlantSelReport")
@@ -140,7 +141,7 @@ namespace Plants
 
     #endregion
 
-    #region Запрос параметров
+    #region Р—Р°РїСЂРѕСЃ РїР°СЂР°РјРµС‚СЂРѕРІ
 
     protected override EFPReportParams CreateParams()
     {
@@ -151,7 +152,7 @@ namespace Plants
 
     #endregion
 
-    #region Построение отчета
+    #region РџРѕСЃС‚СЂРѕРµРЅРёРµ РѕС‚С‡РµС‚Р°
 
     protected override void BuildReport()
     {
@@ -175,7 +176,7 @@ namespace Plants
 
     #endregion
 
-    #region Страница отчета
+    #region РЎС‚СЂР°РЅРёС†Р° РѕС‚С‡РµС‚Р°
 
     EFPReportDocGridPage _MainPage;
 

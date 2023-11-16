@@ -1,4 +1,4 @@
-namespace Plants
+п»їnamespace Plants
 {
   partial class EditPlantMovement
   {
@@ -70,7 +70,7 @@ namespace Plants
       this.groupBox3.Size = new System.Drawing.Size(502, 115);
       this.groupBox3.TabIndex = 1;
       this.groupBox3.TabStop = false;
-      this.groupBox3.Text = "Комментари&й";
+      this.groupBox3.Text = "РљРѕРјРјРµРЅС‚Р°СЂРё&Р№";
       // 
       // edComment
       // 
@@ -104,7 +104,7 @@ namespace Plants
       this.groupBox1.Size = new System.Drawing.Size(502, 210);
       this.groupBox1.TabIndex = 0;
       this.groupBox1.TabStop = false;
-      this.groupBox1.Text = "Приход / перемещение / выбытие";
+      this.groupBox1.Text = "РџСЂРёС…РѕРґ / РїРµСЂРµРјРµС‰РµРЅРёРµ / РІС‹Р±С‹С‚РёРµ";
       // 
       // cbPotKind
       // 
@@ -121,7 +121,7 @@ namespace Plants
       this.label6.Name = "label6";
       this.label6.Size = new System.Drawing.Size(140, 21);
       this.label6.TabIndex = 12;
-      this.label6.Text = "Гор&шок";
+      this.label6.Text = "Р“РѕСЂ&С€РѕРє";
       this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // cbSoil
@@ -139,7 +139,7 @@ namespace Plants
       this.label5.Name = "label5";
       this.label5.Size = new System.Drawing.Size(140, 21);
       this.label5.TabIndex = 10;
-      this.label5.Text = "&Грунт";
+      this.label5.Text = "&Р“СЂСѓРЅС‚";
       this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // cbDate
@@ -157,7 +157,7 @@ namespace Plants
       this.label4.Name = "label4";
       this.label4.Size = new System.Drawing.Size(140, 20);
       this.label4.TabIndex = 2;
-      this.label4.Text = "&Дата";
+      this.label4.Text = "&Р”Р°С‚Р°";
       this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // cbContra
@@ -175,7 +175,7 @@ namespace Plants
       this.label3.Name = "label3";
       this.label3.Size = new System.Drawing.Size(140, 20);
       this.label3.TabIndex = 6;
-      this.label3.Text = "О&т кого / кому";
+      this.label3.Text = "Рћ&С‚ РєРѕРіРѕ / РєРѕРјСѓ";
       this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // cbPlace
@@ -193,7 +193,7 @@ namespace Plants
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(140, 20);
       this.label2.TabIndex = 4;
-      this.label2.Text = "&Место";
+      this.label2.Text = "&РњРµСЃС‚Рѕ";
       this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // cbKind
@@ -212,7 +212,7 @@ namespace Plants
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(140, 21);
       this.label1.TabIndex = 0;
-      this.label1.Text = "&Операция";
+      this.label1.Text = "&РћРїРµСЂР°С†РёСЏ";
       this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // cbForkPlant
@@ -230,7 +230,7 @@ namespace Plants
       this.label7.Name = "label7";
       this.label7.Size = new System.Drawing.Size(140, 20);
       this.label7.TabIndex = 8;
-      this.label7.Text = "Отса&жено / подсажено";
+      this.label7.Text = "РћС‚СЃР°&Р¶РµРЅРѕ / РїРѕРґСЃР°Р¶РµРЅРѕ";
       this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // EditPlantMovement

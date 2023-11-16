@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.Text;
 using FreeLibSet.Forms.Docs;
@@ -11,19 +11,19 @@ using FreeLibSet.Collections;
 namespace Plants
 {
   /// <summary>
-  /// Фильтры для отчетов.
-  /// Так как программа не разделяется на клиент и сервер, достаточно только фильтров клиента, а класса, производного от DBxCommonFilters не требуется.
+  /// Р¤РёР»СЊС‚СЂС‹ РґР»СЏ РѕС‚С‡РµС‚РѕРІ.
+  /// РўР°Рє РєР°Рє РїСЂРѕРіСЂР°РјРјР° РЅРµ СЂР°Р·РґРµР»СЏРµС‚СЃСЏ РЅР° РєР»РёРµРЅС‚ Рё СЃРµСЂРІРµСЂ, РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ С‚РѕР»СЊРєРѕ С„РёР»СЊС‚СЂРѕРІ РєР»РёРµРЅС‚Р°, Р° РєР»Р°СЃСЃР°, РїСЂРѕРёР·РІРѕРґРЅРѕРіРѕ РѕС‚ DBxCommonFilters РЅРµ С‚СЂРµР±СѓРµС‚СЃСЏ.
   /// </summary>
   internal class PlantReportFilters : DBxClientFilters
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     /// <summary>
-    /// Создает фильтры
+    /// РЎРѕР·РґР°РµС‚ С„РёР»СЊС‚СЂС‹
     /// </summary>
-    /// <param name="columnNamePrefix">Префикс перед именами полей, например, "DocId."</param>
-    /// <param name="usedFilters">Список кодов фильтров, разделенных запятыми, которые требуется использовать.
-    /// Если пустая строка, то используются все возможные фильтры</param>
+    /// <param name="columnNamePrefix">РџСЂРµС„РёРєСЃ РїРµСЂРµРґ РёРјРµРЅР°РјРё РїРѕР»РµР№, РЅР°РїСЂРёРјРµСЂ, "DocId."</param>
+    /// <param name="usedFilters">РЎРїРёСЃРѕРє РєРѕРґРѕРІ С„РёР»СЊС‚СЂРѕРІ, СЂР°Р·РґРµР»РµРЅРЅС‹С… Р·Р°РїСЏС‚С‹РјРё, РєРѕС‚РѕСЂС‹Рµ С‚СЂРµР±СѓРµС‚СЃСЏ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ.
+    /// Р•СЃР»Рё РїСѓСЃС‚Р°СЏ СЃС‚СЂРѕРєР°, С‚Рѕ РёСЃРїРѕР»СЊР·СѓСЋС‚СЃСЏ РІСЃРµ РІРѕР·РјРѕР¶РЅС‹Рµ С„РёР»СЊС‚СЂС‹</param>
     public PlantReportFilters(string columnNamePrefix, string usedFilters)
     {
       if (columnNamePrefix == null)
@@ -45,9 +45,9 @@ namespace Plants
       {
         FiltHasNumber = new NullNotNullGridFilter(columnNamePrefix + "Number", typeof(int));
         FiltHasNumber.Code = "HasNumber";
-        FiltHasNumber.DisplayName = "Наличие номера по каталогу";
-        FiltHasNumber.FilterTextNull = "Нет";
-        FiltHasNumber.FilterTextNotNull = "Есть";
+        FiltHasNumber.DisplayName = "РќР°Р»РёС‡РёРµ РЅРѕРјРµСЂР° РїРѕ РєР°С‚Р°Р»РѕРіСѓ";
+        FiltHasNumber.FilterTextNull = "РќРµС‚";
+        FiltHasNumber.FilterTextNotNull = "Р•СЃС‚СЊ";
         Add(FiltHasNumber);
       }
 
@@ -55,7 +55,7 @@ namespace Plants
       {
         FiltNumberRange = new IntRangeGridFilter(columnNamePrefix + "Number");
         FiltNumberRange.Code = "NumberRange";
-        FiltNumberRange.DisplayName = "Диапазон номеров по каталогу";
+        FiltNumberRange.DisplayName = "Р”РёР°РїР°Р·РѕРЅ РЅРѕРјРµСЂРѕРІ РїРѕ РєР°С‚Р°Р»РѕРіСѓ";
         FiltNumberRange.Minimum = 1;
         FiltNumberRange.Increment = 1;
         Add(FiltNumberRange);
@@ -64,7 +64,7 @@ namespace Plants
       if (ufidx.Contains("Place"))
       {
         FiltPlace = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Places"], "Place");
-        FiltPlace.DisplayName = "Место расположения";
+        FiltPlace.DisplayName = "РњРµСЃС‚Рѕ СЂР°СЃРїРѕР»РѕР¶РµРЅРёСЏ";
         FiltPlace.Nullable = false;
         FiltPlace.UseSqlFilter = false;
         Add(FiltPlace);
@@ -73,9 +73,9 @@ namespace Plants
       if (ufidx.Contains("HasAdd"))
       {
         FiltHasAdd = new BoolValueGridFilter("HasAdd");
-        FiltHasAdd.DisplayName = "Есть приход";
+        FiltHasAdd.DisplayName = "Р•СЃС‚СЊ РїСЂРёС…РѕРґ";
         FiltHasAdd.UseSqlFilter = false;
-        FiltHasAdd.FilterTextTrue = "Был приход растения в выбранный период";
+        FiltHasAdd.FilterTextTrue = "Р‘С‹Р» РїСЂРёС…РѕРґ СЂР°СЃС‚РµРЅРёСЏ РІ РІС‹Р±СЂР°РЅРЅС‹Р№ РїРµСЂРёРѕРґ";
         FiltHasAdd.FilterTextFalse = String.Empty;
         Add(FiltHasAdd);
       }
@@ -83,9 +83,9 @@ namespace Plants
       if (ufidx.Contains("HasRemove"))
       {
         FiltHasRemove = new BoolValueGridFilter("HasRemove");
-        FiltHasRemove.DisplayName = "Есть выбытие";
+        FiltHasRemove.DisplayName = "Р•СЃС‚СЊ РІС‹Р±С‹С‚РёРµ";
         FiltHasRemove.UseSqlFilter = false;
-        FiltHasRemove.FilterTextTrue = "Было выбытие растения в выбранный период";
+        FiltHasRemove.FilterTextTrue = "Р‘С‹Р»Рѕ РІС‹Р±С‹С‚РёРµ СЂР°СЃС‚РµРЅРёСЏ РІ РІС‹Р±СЂР°РЅРЅС‹Р№ РїРµСЂРёРѕРґ";
         FiltHasRemove.FilterTextFalse = String.Empty;
         Add(FiltHasRemove);
       }
@@ -93,7 +93,7 @@ namespace Plants
       if (ufidx.Contains("FromContra"))
       {
         FiltFromContra = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Contras"], "FromContra");
-        FiltFromContra.DisplayName = "От кого получено";
+        FiltFromContra.DisplayName = "РћС‚ РєРѕРіРѕ РїРѕР»СѓС‡РµРЅРѕ";
         FiltFromContra.Nullable = true;
         FiltFromContra.UseSqlFilter = false;
         Add(FiltFromContra);
@@ -102,7 +102,7 @@ namespace Plants
       if (ufidx.Contains("ToContra"))
       {
         FiltToContra = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Contras"], "ToContra");
-        FiltToContra.DisplayName = "Кому передано";
+        FiltToContra.DisplayName = "РљРѕРјСѓ РїРµСЂРµРґР°РЅРѕ";
         FiltToContra.Nullable = true;
         FiltToContra.UseSqlFilter = false;
         Add(FiltToContra);
@@ -112,7 +112,7 @@ namespace Plants
       {
         FiltAction = new EnumGridFilter("Kind", PlantTools.ActionNames);
         FiltAction.Code = "ActionKind";
-        FiltAction.DisplayName = "Действия";
+        FiltAction.DisplayName = "Р”РµР№СЃС‚РІРёСЏ";
         FiltAction.ImageKeys = PlantTools.ActionImageKeys;
         FiltAction.UseSqlFilter = false;
         Add(FiltAction);
@@ -121,7 +121,7 @@ namespace Plants
       if (ufidx.Contains("Remedy"))
       {
         FiltRemedy = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Remedies"], "Remedy");
-        FiltRemedy.DisplayName = "Обработка препаратом";
+        FiltRemedy.DisplayName = "РћР±СЂР°Р±РѕС‚РєР° РїСЂРµРїР°СЂР°С‚РѕРј";
         FiltRemedy.Nullable = false;
         FiltRemedy.UseSqlFilter = false;
         Add(FiltRemedy);
@@ -130,7 +130,7 @@ namespace Plants
       if (ufidx.Contains("Soil"))
       {
         FiltSoil = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Soils"], "Soil");
-        FiltSoil.DisplayName = "Грунт";
+        FiltSoil.DisplayName = "Р“СЂСѓРЅС‚";
         FiltSoil.Nullable = true;
         FiltSoil.UseSqlFilter = false;
         Add(FiltSoil);
@@ -139,7 +139,7 @@ namespace Plants
       if (ufidx.Contains("PotKind"))
       {
         FiltPotKind = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["PotKinds"], "PotKind");
-        FiltPotKind.DisplayName = "Горшок";
+        FiltPotKind.DisplayName = "Р“РѕСЂС€РѕРє";
         FiltPotKind.Nullable = true;
         FiltPotKind.UseSqlFilter = false;
         Add(FiltPotKind);
@@ -148,14 +148,14 @@ namespace Plants
       if (ufidx.Contains("Disease"))
       {
         FiltDisease = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Diseases"], "Disease");
-        FiltDisease.DisplayName = "Заболевания";
+        FiltDisease.DisplayName = "Р—Р°Р±РѕР»РµРІР°РЅРёСЏ";
         FiltDisease.Nullable = true;
         FiltDisease.UseSqlFilter = false;
         Add(FiltDisease);
       }
       /*
       EnumGridFilter FiltState = new EnumGridFilter("MovementState", PlantTools.PlantMovementStateNames);
-      FiltState.DisplayName = "Состояние";
+      FiltState.DisplayName = "РЎРѕСЃС‚РѕСЏРЅРёРµ";
       FiltState.ImageKeys = PlantTools.PlantMovementStateImageKeys;
       Args.ControlProvider.Filters.Add(FiltState);
 
@@ -166,12 +166,12 @@ namespace Plants
 
     #endregion
 
-    #region Поля фильтров
+    #region РџРѕР»СЏ С„РёР»СЊС‚СЂРѕРІ
 
     RefGroupDocGridFilter FiltGroup;
 
     /// <summary>
-    /// Фильтр на наличие или отсутствие номера
+    /// Р¤РёР»СЊС‚СЂ РЅР° РЅР°Р»РёС‡РёРµ РёР»Рё РѕС‚СЃСѓС‚СЃС‚РІРёРµ РЅРѕРјРµСЂР°
     /// </summary>
     NullNotNullGridFilter FiltHasNumber;
 
@@ -199,7 +199,7 @@ namespace Plants
 
     #endregion
 
-    #region Взаимная блокировка фильтров
+    #region Р’Р·Р°РёРјРЅР°СЏ Р±Р»РѕРєРёСЂРѕРІРєР° С„РёР»СЊС‚СЂРѕРІ
 
     protected override void OnChanged(DBxCommonFilter filter)
     {
@@ -215,9 +215,9 @@ namespace Plants
 
     #endregion
 
-    #region Ручная фильтрация строк таблицы
+    #region Р СѓС‡РЅР°СЏ С„РёР»СЊС‚СЂР°С†РёСЏ СЃС‚СЂРѕРє С‚Р°Р±Р»РёС†С‹
 
-    #region Основной метод
+    #region РћСЃРЅРѕРІРЅРѕР№ РјРµС‚РѕРґ
 
     private string _ColumnNamePrefix;
 
@@ -230,28 +230,28 @@ namespace Plants
     private DataTable _TableDiseases;
 
     /// <summary>
-    /// Выполняет дополнительную фильтрацию таблицы каталога растений, которую нельзя было выполнить с помощью фильтра WHERE в SQL-запросе.
-    /// Диапазон дат используется для фильтрации таблиц поддокументов. Растение считается проходящим условие фильтра,
-    /// если это условие выполнялось когда-либо в течение диапазона дат.
+    /// Р’С‹РїРѕР»РЅСЏРµС‚ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅСѓСЋ С„РёР»СЊС‚СЂР°С†РёСЋ С‚Р°Р±Р»РёС†С‹ РєР°С‚Р°Р»РѕРіР° СЂР°СЃС‚РµРЅРёР№, РєРѕС‚РѕСЂСѓСЋ РЅРµР»СЊР·СЏ Р±С‹Р»Рѕ РІС‹РїРѕР»РЅРёС‚СЊ СЃ РїРѕРјРѕС‰СЊСЋ С„РёР»СЊС‚СЂР° WHERE РІ SQL-Р·Р°РїСЂРѕСЃРµ.
+    /// Р”РёР°РїР°Р·РѕРЅ РґР°С‚ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ С„РёР»СЊС‚СЂР°С†РёРё С‚Р°Р±Р»РёС† РїРѕРґРґРѕРєСѓРјРµРЅС‚РѕРІ. Р Р°СЃС‚РµРЅРёРµ СЃС‡РёС‚Р°РµС‚СЃСЏ РїСЂРѕС…РѕРґСЏС‰РёРј СѓСЃР»РѕРІРёРµ С„РёР»СЊС‚СЂР°,
+    /// РµСЃР»Рё СЌС‚Рѕ СѓСЃР»РѕРІРёРµ РІС‹РїРѕР»РЅСЏР»РѕСЃСЊ РєРѕРіРґР°-Р»РёР±Рѕ РІ С‚РµС‡РµРЅРёРµ РґРёР°РїР°Р·РѕРЅР° РґР°С‚.
     /// </summary>
-    /// <param name="table">Таблица документов "Растения" или одного из поддокументов</param>
-    /// <param name="firstDate">Начальная дата диапазона</param>
-    /// <param name="lastDate">Конечная дата диапазона</param>
+    /// <param name="table">РўР°Р±Р»РёС†Р° РґРѕРєСѓРјРµРЅС‚РѕРІ "Р Р°СЃС‚РµРЅРёСЏ" РёР»Рё РѕРґРЅРѕРіРѕ РёР· РїРѕРґРґРѕРєСѓРјРµРЅС‚РѕРІ</param>
+    /// <param name="firstDate">РќР°С‡Р°Р»СЊРЅР°СЏ РґР°С‚Р° РґРёР°РїР°Р·РѕРЅР°</param>
+    /// <param name="lastDate">РљРѕРЅРµС‡РЅР°СЏ РґР°С‚Р° РґРёР°РїР°Р·РѕРЅР°</param>
     public void PerformAuxFiltering(ref DataTable table, DateTime? firstDate, DateTime? lastDate)
     {
       string idColumnName = "Id";
       if (_ColumnNamePrefix.Length > 0)
-        idColumnName = _ColumnNamePrefix.Substring(0, _ColumnNamePrefix.Length - 1); // без точки
+        idColumnName = _ColumnNamePrefix.Substring(0, _ColumnNamePrefix.Length - 1); // Р±РµР· С‚РѕС‡РєРё
       int pId = table.Columns.IndexOf(idColumnName);
       if (pId < 0)
-        throw new BugException("Таблица должна содержать поле \"" + idColumnName + "\"");
+        throw new BugException("РўР°Р±Р»РёС†Р° РґРѕР»Р¶РЅР° СЃРѕРґРµСЂР¶Р°С‚СЊ РїРѕР»Рµ \"" + idColumnName + "\"");
 
       if (this.IsNonSqlEmpty)
-        return; // Никаких ручных фильтров нет
+        return; // РќРёРєР°РєРёС… СЂСѓС‡РЅС‹С… С„РёР»СЊС‚СЂРѕРІ РЅРµС‚
 
       bool useDeleted = ProgramDBUI.TheUI.DocProvider.DocTypes.UseDeleted;
 
-      #region Создание TableMovement
+      #region РЎРѕР·РґР°РЅРёРµ TableMovement
 
       if (IsSet(FiltPlace) || IsSet(FiltHasAdd) || IsSet(FiltHasRemove) || IsSet(FiltFromContra) || IsSet(FiltToContra)
         || IsSet(FiltSoil) || IsSet(FiltPotKind))
@@ -269,7 +269,7 @@ namespace Plants
         if (IsSet(FiltPotKind))
           columns.Add("PotKind");
 
-        filters.Add(new DateRangeCrossFilter("Date1", "Date2", null, lastDate)); // учитываются все даты с начала времен
+        filters.Add(new DateRangeCrossFilter("Date1", "Date2", null, lastDate)); // СѓС‡РёС‚С‹РІР°СЋС‚СЃСЏ РІСЃРµ РґР°С‚С‹ СЃ РЅР°С‡Р°Р»Р° РІСЂРµРјРµРЅ
         if (useDeleted)
         {
           filters.Add(DBSSubDocType.DeletedFalseFilter);
@@ -282,7 +282,7 @@ namespace Plants
 
       #endregion
 
-      #region Создание TableActions
+      #region РЎРѕР·РґР°РЅРёРµ TableActions
 
       if (IsSet(FiltAction) || IsSet(FiltRemedy) || IsSet(FiltSoil) || IsSet(FiltPotKind))
       {
@@ -292,8 +292,8 @@ namespace Plants
 
         if (IsSet(FiltRemedy) || IsSet(FiltSoil) || IsSet(FiltPotKind))
         {
-          filters.Add(new DateRangeCrossFilter("Date1", "Date2", null, lastDate));// учитываются все даты с начала времен
-          //Filters.Add(FiltAction.GetSqlFilter()); // придется фильтровать руками, т.к. грунт и горшок могут относиться к другим действиям
+          filters.Add(new DateRangeCrossFilter("Date1", "Date2", null, lastDate));// СѓС‡РёС‚С‹РІР°СЋС‚СЃСЏ РІСЃРµ РґР°С‚С‹ СЃ РЅР°С‡Р°Р»Р° РІСЂРµРјРµРЅ
+          //Filters.Add(FiltAction.GetSqlFilter()); // РїСЂРёРґРµС‚СЃСЏ С„РёР»СЊС‚СЂРѕРІР°С‚СЊ СЂСѓРєР°РјРё, С‚.Рє. РіСЂСѓРЅС‚ Рё РіРѕСЂС€РѕРє РјРѕРіСѓС‚ РѕС‚РЅРѕСЃРёС‚СЊСЃСЏ Рє РґСЂСѓРіРёРј РґРµР№СЃС‚РІРёСЏРј
           if (IsSet(FiltSoil))
             columns.Add("Soil");
           if (IsSet(FiltPotKind))
@@ -303,8 +303,8 @@ namespace Plants
         }
         else
         {
-          // Если есть только фильтр по виду действия
-          filters.Add(new DateRangeCrossFilter("Date1", "Date2", firstDate, lastDate));// учитываются только даты в диапазоне
+          // Р•СЃР»Рё РµСЃС‚СЊ С‚РѕР»СЊРєРѕ С„РёР»СЊС‚СЂ РїРѕ РІРёРґСѓ РґРµР№СЃС‚РІРёСЏ
+          filters.Add(new DateRangeCrossFilter("Date1", "Date2", firstDate, lastDate));// СѓС‡РёС‚С‹РІР°СЋС‚СЃСЏ С‚РѕР»СЊРєРѕ РґР°С‚С‹ РІ РґРёР°РїР°Р·РѕРЅРµ
           filters.Add(FiltAction.GetSqlFilter());
         }
 
@@ -322,7 +322,7 @@ namespace Plants
 
       #endregion
 
-      #region Создание TableDisease
+      #region РЎРѕР·РґР°РЅРёРµ TableDisease
 
       if (IsSet(FiltDisease))
       {
@@ -330,7 +330,7 @@ namespace Plants
         DBxColumnList columns = new DBxColumnList();
         columns.Add("Id,DocId,Date1,Date2,Disease");
 
-        filters.Add(new DateRangeCrossFilter("Date1", "Date2", firstDate, lastDate));// учитываются только даты в диапазоне
+        filters.Add(new DateRangeCrossFilter("Date1", "Date2", firstDate, lastDate));// СѓС‡РёС‚С‹РІР°СЋС‚СЃСЏ С‚РѕР»СЊРєРѕ РґР°С‚С‹ РІ РґРёР°РїР°Р·РѕРЅРµ
         filters.Add(FiltDisease.GetSqlFilter());
 
         if (useDeleted)
@@ -347,9 +347,9 @@ namespace Plants
 
       #endregion
 
-      #region Создание временной таблицы
+      #region РЎРѕР·РґР°РЅРёРµ РІСЂРµРјРµРЅРЅРѕР№ С‚Р°Р±Р»РёС†С‹
 
-      // Таблица DataTable это тяжеловесный объект, который лучше создать один раз, а не для каждого растения
+      // РўР°Р±Р»РёС†Р° DataTable СЌС‚Рѕ С‚СЏР¶РµР»РѕРІРµСЃРЅС‹Р№ РѕР±СЉРµРєС‚, РєРѕС‚РѕСЂС‹Р№ Р»СѓС‡С€Рµ СЃРѕР·РґР°С‚СЊ РѕРґРёРЅ СЂР°Р·, Р° РЅРµ РґР»СЏ РєР°Р¶РґРѕРіРѕ СЂР°СЃС‚РµРЅРёСЏ
       if (IsSet(FiltSoil) || IsSet(FiltPotKind))
       {
         _TempTableSoilAndPotKind = new DataTable();
@@ -362,7 +362,7 @@ namespace Plants
 
       #endregion
 
-      #region Фильтрация записей
+      #region Р¤РёР»СЊС‚СЂР°С†РёСЏ Р·Р°РїРёСЃРµР№
 
       bool delFlag = false;
       for (int i = table.Rows.Count - 1; i >= 0; i--)
@@ -382,7 +382,7 @@ namespace Plants
 
     #endregion
 
-    #region Проверка одного растения
+    #region РџСЂРѕРІРµСЂРєР° РѕРґРЅРѕРіРѕ СЂР°СЃС‚РµРЅРёСЏ
 
     private bool TestPlantFilter(Int32 docId, DateTime? firstDate, DateTime? lastDate)
     {
@@ -548,7 +548,7 @@ namespace Plants
 
     private bool TestContraFilter(DataView dv, DateTime firstDate, bool isFromContra)
     {
-      // Проверяем только операции прихода или выбытия в периоде
+      // РџСЂРѕРІРµСЂСЏРµРј С‚РѕР»СЊРєРѕ РѕРїРµСЂР°С†РёРё РїСЂРёС…РѕРґР° РёР»Рё РІС‹Р±С‹С‚РёСЏ РІ РїРµСЂРёРѕРґРµ
 
       foreach (DataRowView drv in dv)
       {
@@ -628,7 +628,7 @@ namespace Plants
 
     private bool TestSoilOrPotKind(DataView dvMovement, DataView dvActions, RefDocGridFilter gridFilter, DateTime firstDate)
     {
-      #region Требуется таблица для объединения значений
+      #region РўСЂРµР±СѓРµС‚СЃСЏ С‚Р°Р±Р»РёС†Р° РґР»СЏ РѕР±СЉРµРґРёРЅРµРЅРёСЏ Р·РЅР°С‡РµРЅРёР№
 
       _TempTableSoilAndPotKind.Rows.Clear();
       foreach (DataRowView drv in dvMovement)
@@ -654,7 +654,7 @@ namespace Plants
               continue;
             break;
           default:
-            throw new ArgumentException("Неизвестный фильтр " + gridFilter.ColumnName, "Filt");
+            throw new ArgumentException("РќРµРёР·РІРµСЃС‚РЅС‹Р№ С„РёР»СЊС‚СЂ " + gridFilter.ColumnName, "Filt");
         }
         object id = drv.Row[gridFilter.ColumnName];
         if (id != null)
@@ -666,7 +666,7 @@ namespace Plants
 
       #endregion
 
-      #region Теперь перебираем объединенные записи
+      #region РўРµРїРµСЂСЊ РїРµСЂРµР±РёСЂР°РµРј РѕР±СЉРµРґРёРЅРµРЅРЅС‹Рµ Р·Р°РїРёСЃРё
 
       Int32 prevId = 0;
       bool needsTestPrev = false;
@@ -689,7 +689,7 @@ namespace Plants
 
       #endregion
 
-      #region Проверка первоначального значения
+      #region РџСЂРѕРІРµСЂРєР° РїРµСЂРІРѕРЅР°С‡Р°Р»СЊРЅРѕРіРѕ Р·РЅР°С‡РµРЅРёСЏ
 
       if (needsTestPrev)
         return gridFilter.TestValue(prevId);
@@ -702,8 +702,8 @@ namespace Plants
     #endregion
 
     /// <summary>
-    /// Возвращает true, если для выбранных фильтров требуется период времени, за который просматривать данные.
-    /// Возвращает false, если установлены только фильтры, не зависящие от времени, или нет установленных фильтров.
+    /// Р’РѕР·РІСЂР°С‰Р°РµС‚ true, РµСЃР»Рё РґР»СЏ РІС‹Р±СЂР°РЅРЅС‹С… С„РёР»СЊС‚СЂРѕРІ С‚СЂРµР±СѓРµС‚СЃСЏ РїРµСЂРёРѕРґ РІСЂРµРјРµРЅРё, Р·Р° РєРѕС‚РѕСЂС‹Р№ РїСЂРѕСЃРјР°С‚СЂРёРІР°С‚СЊ РґР°РЅРЅС‹Рµ.
+    /// Р’РѕР·РІСЂР°С‰Р°РµС‚ false, РµСЃР»Рё СѓСЃС‚Р°РЅРѕРІР»РµРЅС‹ С‚РѕР»СЊРєРѕ С„РёР»СЊС‚СЂС‹, РЅРµ Р·Р°РІРёСЃСЏС‰РёРµ РѕС‚ РІСЂРµРјРµРЅРё, РёР»Рё РЅРµС‚ СѓСЃС‚Р°РЅРѕРІР»РµРЅРЅС‹С… С„РёР»СЊС‚СЂРѕРІ.
     /// </summary>
     public bool PeriodRequired
     {

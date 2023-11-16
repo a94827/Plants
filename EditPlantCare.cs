@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,11 +12,11 @@ using AgeyevAV;
 namespace Plants
 {
   /// <summary>
-  /// Уход за растениями
+  /// РЈС…РѕРґ Р·Р° СЂР°СЃС‚РµРЅРёСЏРјРё
   /// </summary>
   internal partial class EditPlantCare : Form
   {
-    #region Конструктор формы
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ С„РѕСЂРјС‹
 
     public EditPlantCare()
     {
@@ -25,23 +25,23 @@ namespace Plants
 
     #endregion
 
-    #region Табличный просмотр
+    #region РўР°Р±Р»РёС‡РЅС‹Р№ РїСЂРѕСЃРјРѕС‚СЂ
 
     public static void StartDayTextColumnValueNeeded(object Sender, GridProducerUserColumnValueNeededEventArgs Args)
     {
       int StartDay = Args.GetInt("StartDay");
       if (StartDay == 0)
-        Args.Value = "Весь год";
+        Args.Value = "Р’РµСЃСЊ РіРѕРґ";
       else
       {
         MonthDay md = MonthDay.FromIntValue(StartDay);
-        Args.Value = "С " + md.ToString();
+        Args.Value = "РЎ " + md.ToString();
       }
     }
 
     #endregion
 
-    #region Редактор
+    #region Р РµРґР°РєС‚РѕСЂ
 
     public static void InitEditForm(object Sender, InitSubDocEditFormEventArgs Args)
     {
@@ -52,7 +52,7 @@ namespace Plants
 
     private void AddPage1(InitSubDocEditFormEventArgs Args)
     {
-      DocEditPage Page = Args.AddPage("Общие", MainPanel1);
+      DocEditPage Page = Args.AddPage("РћР±С‰РёРµ", MainPanel1);
       Page.ImageKey = "Properties";
 
       EFPCheckBox efpSetStartDay = new EFPCheckBox(Page.BaseProvider, cbSetStartDay);
@@ -70,7 +70,7 @@ namespace Plants
 
     private void AddPage2(InitSubDocEditFormEventArgs Args)
     {
-      DocEditPage Page = Args.AddPage("Температура", MainPanel2);
+      DocEditPage Page = Args.AddPage("РўРµРјРїРµСЂР°С‚СѓСЂР°", MainPanel2);
       Page.ImageKey = "Temperature";
 
       efpTMin = new EFPNumEditBox(Page.BaseProvider, edTMin);

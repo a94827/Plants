@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.Text;
 using FreeLibSet.Data.Docs;
@@ -11,7 +11,7 @@ namespace Plants
 {
   public abstract class CareItem : ObjectWithCode
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     public CareItem(string group, string code, string name)
       : base(code)
@@ -29,7 +29,7 @@ namespace Plants
 
     #endregion
 
-    #region Свойства
+    #region РЎРІРѕР№СЃС‚РІР°
 
     public string Group { get { return _Group; } }
     private string _Group;
@@ -39,10 +39,10 @@ namespace Plants
 
     #endregion
 
-    #region Чтение и запись
+    #region Р§С‚РµРЅРёРµ Рё Р·Р°РїРёСЃСЊ
 
-    // Тип для ItemValue зависит от класса.
-    // Значение null означает незаполненное значение
+    // РўРёРї РґР»СЏ ItemValue Р·Р°РІРёСЃРёС‚ РѕС‚ РєР»Р°СЃСЃР°.
+    // Р—РЅР°С‡РµРЅРёРµ null РѕР·РЅР°С‡Р°РµС‚ РЅРµР·Р°РїРѕР»РЅРµРЅРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ
 
     public abstract object GetItemValue(IDBxDocValues docValues);
 
@@ -52,7 +52,7 @@ namespace Plants
 
     #endregion
 
-    #region Другие методы
+    #region Р”СЂСѓРіРёРµ РјРµС‚РѕРґС‹
 
     public abstract string GetTextValue(object itemValue);
 
@@ -60,10 +60,10 @@ namespace Plants
 
     #endregion
 
-    #region Статичеcкий список
+    #region РЎС‚Р°С‚РёС‡РµcРєРёР№ СЃРїРёСЃРѕРє
 
     /// <summary>
-    /// Полный список характеристик ухода за растениями
+    /// РџРѕР»РЅС‹Р№ СЃРїРёСЃРѕРє С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРє СѓС…РѕРґР° Р·Р° СЂР°СЃС‚РµРЅРёСЏРјРё
     /// </summary>
     public static readonly NamedList<CareItem> TheList = CreateCareItems();
 
@@ -74,156 +74,156 @@ namespace Plants
       IntValueCareItem ivci;
       IntRangeCareItem irci;
 
-      #region Воздух
+      #region Р’РѕР·РґСѓС…
 
-      irci = new IntRangeCareItem("Воздух", "Topt", "Температура оптимальная");
+      irci = new IntRangeCareItem("Р’РѕР·РґСѓС…", "Topt", "РўРµРјРїРµСЂР°С‚СѓСЂР° РѕРїС‚РёРјР°Р»СЊРЅР°СЏ");
       irci.Minimum = -40;
       irci.Maximum = +60;
-      irci.MeasureUnit = "°C";
+      irci.MeasureUnit = "В°C";
       list.Add(irci);
 
-      ivci = new IntValueCareItem("Воздух", "Tmin", "Температура минимальная");
+      ivci = new IntValueCareItem("Р’РѕР·РґСѓС…", "Tmin", "РўРµРјРїРµСЂР°С‚СѓСЂР° РјРёРЅРёРјР°Р»СЊРЅР°СЏ");
       ivci.Minimum = -40;
       ivci.Maximum = +60;
-      ivci.MeasureUnit = "°C";
+      ivci.MeasureUnit = "В°C";
       list.Add(ivci);
 
-      ivci = new IntValueCareItem("Воздух", "Tmax", "Температура максимальная");
+      ivci = new IntValueCareItem("Р’РѕР·РґСѓС…", "Tmax", "РўРµРјРїРµСЂР°С‚СѓСЂР° РјР°РєСЃРёРјР°Р»СЊРЅР°СЏ");
       ivci.Minimum = -40;
       ivci.Maximum = +60;
-      ivci.MeasureUnit = "°C";
+      ivci.MeasureUnit = "В°C";
       list.Add(ivci);
 
-      list.Add(new EnumCareItem("Воздух", "Air", "Воздух",
+      list.Add(new EnumCareItem("Р’РѕР·РґСѓС…", "Air", "Р’РѕР·РґСѓС…",
         new string[] { "NODRAFTS", "AIR", "BALKONY" },
-        new string[] { "Беречь от сквозняков", "Проветривать", "Выносить на балкон" }));
+        new string[] { "Р‘РµСЂРµС‡СЊ РѕС‚ СЃРєРІРѕР·РЅСЏРєРѕРІ", "РџСЂРѕРІРµС‚СЂРёРІР°С‚СЊ", "Р’С‹РЅРѕСЃРёС‚СЊ РЅР° Р±Р°Р»РєРѕРЅ" }));
 
-      list.Add(new MemoCareItem("Воздух", "AirComment", "Воздух - примечания"));
+      list.Add(new MemoCareItem("Р’РѕР·РґСѓС…", "AirComment", "Р’РѕР·РґСѓС… - РїСЂРёРјРµС‡Р°РЅРёСЏ"));
 
       #endregion
 
-      #region Свет
+      #region РЎРІРµС‚
 
-      list.Add(new EnumCareItem("Свет", "Sun", "Освещение",
+      list.Add(new EnumCareItem("РЎРІРµС‚", "Sun", "РћСЃРІРµС‰РµРЅРёРµ",
         new string[] { "MAX", "NOONSHADING", "NOSUN", "DARK" },
-        new string[] { "Максимальное освещение", "Притенять от полуденных лучей", "Без прямых лучей", "В глубине комнаты" }));
+        new string[] { "РњР°РєСЃРёРјР°Р»СЊРЅРѕРµ РѕСЃРІРµС‰РµРЅРёРµ", "РџСЂРёС‚РµРЅСЏС‚СЊ РѕС‚ РїРѕР»СѓРґРµРЅРЅС‹С… Р»СѓС‡РµР№", "Р‘РµР· РїСЂСЏРјС‹С… Р»СѓС‡РµР№", "Р’ РіР»СѓР±РёРЅРµ РєРѕРјРЅР°С‚С‹" }));
 
-      list.Add(new EnumCareItem("Свет", "Rotation", "Поворот растения",
+      list.Add(new EnumCareItem("РЎРІРµС‚", "Rotation", "РџРѕРІРѕСЂРѕС‚ СЂР°СЃС‚РµРЅРёСЏ",
         new string[] { "NONE", "MONTH", "HALFMONTH", "WEEK" },
-        new string[] { "Не поворачивать", "1 раз в месяц", "2 раза в месяц", "1 раз в неделю" }));
+        new string[] { "РќРµ РїРѕРІРѕСЂР°С‡РёРІР°С‚СЊ", "1 СЂР°Р· РІ РјРµСЃСЏС†", "2 СЂР°Р·Р° РІ РјРµСЃСЏС†", "1 СЂР°Р· РІ РЅРµРґРµР»СЋ" }));
 
-      ivci = new IntValueCareItem("Свет", "DaylightUpTo", "Досветка до");
+      ivci = new IntValueCareItem("РЎРІРµС‚", "DaylightUpTo", "Р”РѕСЃРІРµС‚РєР° РґРѕ");
       ivci.Minimum = 0;
       ivci.Maximum = 24;
-      ivci.MeasureUnit = "ч.";
+      ivci.MeasureUnit = "С‡.";
       list.Add(ivci);
 
-      ivci = new IntValueCareItem("Свет", "DaylightTime", "Время досветки");
+      ivci = new IntValueCareItem("РЎРІРµС‚", "DaylightTime", "Р’СЂРµРјСЏ РґРѕСЃРІРµС‚РєРё");
       ivci.Minimum = 0;
       ivci.Maximum = 24;
-      ivci.MeasureUnit = "ч.";
+      ivci.MeasureUnit = "С‡.";
       list.Add(ivci);
 
-      list.Add(new MemoCareItem("Свет", "LightComment", "Свет - примечания"));
+      list.Add(new MemoCareItem("РЎРІРµС‚", "LightComment", "РЎРІРµС‚ - РїСЂРёРјРµС‡Р°РЅРёСЏ"));
 
       #endregion
 
-      #region Полив
+      #region РџРѕР»РёРІ
 
-      list.Add(new EnumCareItem("Полив", "WateringFrequency", "Частота полива",
+      list.Add(new EnumCareItem("РџРѕР»РёРІ", "WateringFrequency", "Р§Р°СЃС‚РѕС‚Р° РїРѕР»РёРІР°",
         new string[] { "NONE", "MONTH", "HALFMONTH", "WEEK", "HALFWEEK", "INADAY", "EVERYDAY" },
-        new string[] { "Не поливать", "1 раз в месяц", "2 раза в месяц", "1 раз в неделю", "2 раза в неделю", "Через день", "Каждый день" }));
+        new string[] { "РќРµ РїРѕР»РёРІР°С‚СЊ", "1 СЂР°Р· РІ РјРµСЃСЏС†", "2 СЂР°Р·Р° РІ РјРµСЃСЏС†", "1 СЂР°Р· РІ РЅРµРґРµР»СЋ", "2 СЂР°Р·Р° РІ РЅРµРґРµР»СЋ", "Р§РµСЂРµР· РґРµРЅСЊ", "РљР°Р¶РґС‹Р№ РґРµРЅСЊ" }));
 
-      list.Add(new EnumCareItem("Полив", "WateringTime", "Время полива",
+      list.Add(new EnumCareItem("РџРѕР»РёРІ", "WateringTime", "Р’СЂРµРјСЏ РїРѕР»РёРІР°",
         new string[] { "MORNING", "EVENING", "NOSUN" },
-        new string[] { "Утром", "Вечером", "Не на солнце" }));
+        new string[] { "РЈС‚СЂРѕРј", "Р’РµС‡РµСЂРѕРј", "РќРµ РЅР° СЃРѕР»РЅС†Рµ" }));
 
-      list.Add(new EnumCareItem("Полив", "WateringQuantity", "Интенсивность полива",
+      list.Add(new EnumCareItem("РџРѕР»РёРІ", "WateringQuantity", "РРЅС‚РµРЅСЃРёРІРЅРѕСЃС‚СЊ РїРѕР»РёРІР°",
         new string[] { "ABUNDANT", "MODERATE", "SMALL" },
-        new string[] { "Обильный", "Умеренный", "Небольшой" }));
+        new string[] { "РћР±РёР»СЊРЅС‹Р№", "РЈРјРµСЂРµРЅРЅС‹Р№", "РќРµР±РѕР»СЊС€РѕР№" }));
 
-      list.Add(new EnumCareItem("Полив", "WateringMethod", "Технология полива",
+      list.Add(new EnumCareItem("РџРѕР»РёРІ", "WateringMethod", "РўРµС…РЅРѕР»РѕРіРёСЏ РїРѕР»РёРІР°",
         new string[] { "PALLET" },
-        new string[] { "Через поддон" }));
+        new string[] { "Р§РµСЂРµР· РїРѕРґРґРѕРЅ" }));
 
-      list.Add(new MemoCareItem("Полив", "WateringComment", "Полив - примечания"));
+      list.Add(new MemoCareItem("РџРѕР»РёРІ", "WateringComment", "РџРѕР»РёРІ - РїСЂРёРјРµС‡Р°РЅРёСЏ"));
 
       #endregion
 
-      #region Удобрение
+      #region РЈРґРѕР±СЂРµРЅРёРµ
 
-      list.Add(new EnumCareItem("Удобрение", "FertilizerType", "Вид удобрений",
+      list.Add(new EnumCareItem("РЈРґРѕР±СЂРµРЅРёРµ", "FertilizerType", "Р’РёРґ СѓРґРѕР±СЂРµРЅРёР№",
         new string[] { "NONE", "SUCCULENT", "FLOWERING", "LEAVES", "ROSE" },
-        new string[] { "Нет", "Для кактусов и суккулентов", "Для цветущих", "Для листьевых", "Для роз" }));
+        new string[] { "РќРµС‚", "Р”Р»СЏ РєР°РєС‚СѓСЃРѕРІ Рё СЃСѓРєРєСѓР»РµРЅС‚РѕРІ", "Р”Р»СЏ С†РІРµС‚СѓС‰РёС…", "Р”Р»СЏ Р»РёСЃС‚СЊРµРІС‹С…", "Р”Р»СЏ СЂРѕР·" }));
 
-      list.Add(new EnumCareItem("Удобрение", "FertilizerFrequency", "Частота удобрения",
+      list.Add(new EnumCareItem("РЈРґРѕР±СЂРµРЅРёРµ", "FertilizerFrequency", "Р§Р°СЃС‚РѕС‚Р° СѓРґРѕР±СЂРµРЅРёСЏ",
         new string[] { "NONE", "YEAR", "HALFYEAR", "MONTH3", "MONTH2", "MONTH", "HALFMONTH", "WEEK", "HALFWEEK" },
-        new string[] { "Не удобрять", "1 раз в год", "2 раза в год", "1 раз в 3 месяца", "1 раз в 2 месяца", "1 раз в месяц", "2 раза в месяц", "1 раз в неделю", "2 раза в неделю" }));
+        new string[] { "РќРµ СѓРґРѕР±СЂСЏС‚СЊ", "1 СЂР°Р· РІ РіРѕРґ", "2 СЂР°Р·Р° РІ РіРѕРґ", "1 СЂР°Р· РІ 3 РјРµСЃСЏС†Р°", "1 СЂР°Р· РІ 2 РјРµСЃСЏС†Р°", "1 СЂР°Р· РІ РјРµСЃСЏС†", "2 СЂР°Р·Р° РІ РјРµСЃСЏС†", "1 СЂР°Р· РІ РЅРµРґРµР»СЋ", "2 СЂР°Р·Р° РІ РЅРµРґРµР»СЋ" }));
 
-      list.Add(new EnumCareItem("Удобрение", "FertilizerDoze", "Дозировка удобрений",
+      list.Add(new EnumCareItem("РЈРґРѕР±СЂРµРЅРёРµ", "FertilizerDoze", "Р”РѕР·РёСЂРѕРІРєР° СѓРґРѕР±СЂРµРЅРёР№",
         new string[] { "NORMAL", "HALF" },
-        new string[] { "Нормальная дозировка", "Половинная дозировка" }));
+        new string[] { "РќРѕСЂРјР°Р»СЊРЅР°СЏ РґРѕР·РёСЂРѕРІРєР°", "РџРѕР»РѕРІРёРЅРЅР°СЏ РґРѕР·РёСЂРѕРІРєР°" }));
 
-      list.Add(new MemoCareItem("Удобрение", "FertilizerComment", "Удобрение - примечания"));
+      list.Add(new MemoCareItem("РЈРґРѕР±СЂРµРЅРёРµ", "FertilizerComment", "РЈРґРѕР±СЂРµРЅРёРµ - РїСЂРёРјРµС‡Р°РЅРёСЏ"));
 
       #endregion
 
-      #region Влажность
+      #region Р’Р»Р°Р¶РЅРѕСЃС‚СЊ
 
-      irci = new IntRangeCareItem("Влажность", "Hopt", "Влажность оптимальная");
+      irci = new IntRangeCareItem("Р’Р»Р°Р¶РЅРѕСЃС‚СЊ", "Hopt", "Р’Р»Р°Р¶РЅРѕСЃС‚СЊ РѕРїС‚РёРјР°Р»СЊРЅР°СЏ");
       irci.Minimum = 0;
       irci.Maximum = 100;
       irci.MeasureUnit = "%";
       list.Add(irci);
 
-      ivci = new IntValueCareItem("Влажность", "Hmin", "Влажность минимальная");
+      ivci = new IntValueCareItem("Р’Р»Р°Р¶РЅРѕСЃС‚СЊ", "Hmin", "Р’Р»Р°Р¶РЅРѕСЃС‚СЊ РјРёРЅРёРјР°Р»СЊРЅР°СЏ");
       ivci.Minimum = 0;
       ivci.Maximum = 100;
       ivci.MeasureUnit = "%";
       list.Add(ivci);
 
-      ivci = new IntValueCareItem("Влажность", "Hmax", "Влажность максимальная");
+      ivci = new IntValueCareItem("Р’Р»Р°Р¶РЅРѕСЃС‚СЊ", "Hmax", "Р’Р»Р°Р¶РЅРѕСЃС‚СЊ РјР°РєСЃРёРјР°Р»СЊРЅР°СЏ");
       ivci.Minimum = 0;
       ivci.Maximum = 100;
       ivci.MeasureUnit = "%";
       list.Add(ivci);
 
-      list.Add(new EnumCareItem("Влажность", "Humidification", "Увлажнение",
+      list.Add(new EnumCareItem("Р’Р»Р°Р¶РЅРѕСЃС‚СЊ", "Humidification", "РЈРІР»Р°Р¶РЅРµРЅРёРµ",
         new string[] { "SPRAYING", "NOSPRAYING" },
-        new string[] { "Опрыскивать", "Не опрыскивать" }));
+        new string[] { "РћРїСЂС‹СЃРєРёРІР°С‚СЊ", "РќРµ РѕРїСЂС‹СЃРєРёРІР°С‚СЊ" }));
 
-      list.Add(new EnumCareItem("Влажность", "Washing", "Мытье растения под душем",
+      list.Add(new EnumCareItem("Р’Р»Р°Р¶РЅРѕСЃС‚СЊ", "Washing", "РњС‹С‚СЊРµ СЂР°СЃС‚РµРЅРёСЏ РїРѕРґ РґСѓС€РµРј",
         new string[] { "NONE", "REQUIRED", "MONTH", "HALFMONTH", "WEEK" },
-        new string[] { "Не мыть", "По необходимости", "Раз в месяц", "2 раза в месяц", "Раз в неделю" }));
+        new string[] { "РќРµ РјС‹С‚СЊ", "РџРѕ РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё", "Р Р°Р· РІ РјРµСЃСЏС†", "2 СЂР°Р·Р° РІ РјРµСЃСЏС†", "Р Р°Р· РІ РЅРµРґРµР»СЋ" }));
 
-      list.Add(new EnumCareItem("Влажность", "WetRubbing", "Влажная протирка листьев",
+      list.Add(new EnumCareItem("Р’Р»Р°Р¶РЅРѕСЃС‚СЊ", "WetRubbing", "Р’Р»Р°Р¶РЅР°СЏ РїСЂРѕС‚РёСЂРєР° Р»РёСЃС‚СЊРµРІ",
         new string[] { "NONE", "REQUIRED", "MONTH", "HALFMONTH", "WEEK" },
-        new string[] { "Не протирать", "По необходимости", "Раз в месяц", "2 раза в месяц", "Раз в неделю" }));
+        new string[] { "РќРµ РїСЂРѕС‚РёСЂР°С‚СЊ", "РџРѕ РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё", "Р Р°Р· РІ РјРµСЃСЏС†", "2 СЂР°Р·Р° РІ РјРµСЃСЏС†", "Р Р°Р· РІ РЅРµРґРµР»СЋ" }));
 
-      list.Add(new EnumCareItem("Влажность", "DryRubbing", "Сухая протирка листьев",
+      list.Add(new EnumCareItem("Р’Р»Р°Р¶РЅРѕСЃС‚СЊ", "DryRubbing", "РЎСѓС…Р°СЏ РїСЂРѕС‚РёСЂРєР° Р»РёСЃС‚СЊРµРІ",
         new string[] { "NONE", "REQUIRED" },
-        new string[] { "Не протирать", "По необходимости" }));
+        new string[] { "РќРµ РїСЂРѕС‚РёСЂР°С‚СЊ", "РџРѕ РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё" }));
 
-      list.Add(new MemoCareItem("Влажность", "HumidityComment", "Влажность - примечания"));
+      list.Add(new MemoCareItem("Р’Р»Р°Р¶РЅРѕСЃС‚СЊ", "HumidityComment", "Р’Р»Р°Р¶РЅРѕСЃС‚СЊ - РїСЂРёРјРµС‡Р°РЅРёСЏ"));
 
       #endregion
 
-      #region Болезни
+      #region Р‘РѕР»РµР·РЅРё
 
-      list.Add(new FlagsCareItem("Болезни", "Pests", "Вредители", new string[]{
-        "Щитовка",
-        "Тля", 
-        "Трипс",
-        "Паутинный клещ",
-        "Мучнистый червец",
+      list.Add(new FlagsCareItem("Р‘РѕР»РµР·РЅРё", "Pests", "Р’СЂРµРґРёС‚РµР»Рё", new string[]{
+        "Р©РёС‚РѕРІРєР°",
+        "РўР»СЏ", 
+        "РўСЂРёРїСЃ",
+        "РџР°СѓС‚РёРЅРЅС‹Р№ РєР»РµС‰",
+        "РњСѓС‡РЅРёСЃС‚С‹Р№ С‡РµСЂРІРµС†",
       }));
-      list.Add(new MemoCareItem("Болезни", "DeseasesComment", "Болезни - примечания"));
+      list.Add(new MemoCareItem("Р‘РѕР»РµР·РЅРё", "DeseasesComment", "Р‘РѕР»РµР·РЅРё - РїСЂРёРјРµС‡Р°РЅРёСЏ"));
 
       #endregion
 
-      #region Прочее
+      #region РџСЂРѕС‡РµРµ
 
-      list.Add(new MemoCareItem("Прочее", "OtherComment", "Прочие примечания"));
+      list.Add(new MemoCareItem("РџСЂРѕС‡РµРµ", "OtherComment", "РџСЂРѕС‡РёРµ РїСЂРёРјРµС‡Р°РЅРёСЏ"));
 
       #endregion
 
@@ -235,7 +235,7 @@ namespace Plants
 
   public class MemoCareItem : CareItem
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     public MemoCareItem(string group, string code, string name)
       : base(group, code, name)
@@ -244,7 +244,7 @@ namespace Plants
 
     #endregion
 
-    #region Переопределенные методы
+    #region РџРµСЂРµРѕРїСЂРµРґРµР»РµРЅРЅС‹Рµ РјРµС‚РѕРґС‹
 
     public override object GetItemValue(IDBxDocValues docValues)
     {
@@ -294,13 +294,13 @@ namespace Plants
 
   public class EnumCareItem : CareItem
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     public EnumCareItem(string group, string code, string name, string[] enumCodes, string[] enumValues)
       : base(group, code, name)
     {
       if (enumCodes.Length != enumValues.Length)
-        throw new ArgumentException("Длина массивов не совпадает");
+        throw new ArgumentException("Р”Р»РёРЅР° РјР°СЃСЃРёРІРѕРІ РЅРµ СЃРѕРІРїР°РґР°РµС‚");
 
       _EnumCodes = enumCodes;
 
@@ -311,7 +311,7 @@ namespace Plants
 
     #endregion
 
-    #region Свойства
+    #region РЎРІРѕР№СЃС‚РІР°
 
     public string[] EnumCodes { get { return _EnumCodes; } }
     private string[] _EnumCodes;
@@ -323,7 +323,7 @@ namespace Plants
 
     #endregion
 
-    #region Переопределенные методы
+    #region РџРµСЂРµРѕРїСЂРµРґРµР»РµРЅРЅС‹Рµ РјРµС‚РѕРґС‹
 
     public override void AddColumns(DBxTableStruct.ColumnCollection columns)
     {
@@ -365,7 +365,7 @@ namespace Plants
       ListSelectDialog dlg = new ListSelectDialog();
       dlg.Title = Name;
       dlg.Items = new string[EnumCodes.Length + 1];
-      dlg.Items[0] = "[ Не задано ]";
+      dlg.Items[0] = "[ РќРµ Р·Р°РґР°РЅРѕ ]";
       EnumValues.CopyTo(dlg.Items, 1);
 
       dlg.SelectedIndex = _CodeIndexer.IndexOf(DataTools.GetString(itemValue)) + 1;
@@ -385,7 +385,7 @@ namespace Plants
 
   public class IntValueCareItem : CareItem
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     public IntValueCareItem(string group, string code, string name)
       : base(group, code, name)
@@ -397,7 +397,7 @@ namespace Plants
 
     #endregion
 
-    #region Свойства
+    #region РЎРІРѕР№СЃС‚РІР°
 
     public string MeasureUnit { get { return _MeasureUnit; } set { _MeasureUnit = value; } }
     private string _MeasureUnit;
@@ -410,7 +410,7 @@ namespace Plants
 
     #endregion
 
-    #region Переопределенные методы
+    #region РџРµСЂРµРѕРїСЂРµРґРµР»РµРЅРЅС‹Рµ РјРµС‚РѕРґС‹
 
     public override void AddColumns(DBxTableStruct.ColumnCollection columns)
     {
@@ -430,7 +430,7 @@ namespace Plants
       if (itemValue == null)
         docValues[Code].SetNull();
       else
-        docValues[Code].SetValue(itemValue); // а не SetInt(), т.к. 0 это не null.
+        docValues[Code].SetValue(itemValue); // Р° РЅРµ SetInt(), С‚.Рє. 0 СЌС‚Рѕ РЅРµ null.
     }
 
     public override string GetTextValue(object itemValue)
@@ -464,7 +464,7 @@ namespace Plants
         case System.Windows.Forms.DialogResult.OK:
           itemValue = dlg.NValue;
           return true;
-        case System.Windows.Forms.DialogResult.No: // пока не бывает
+        case System.Windows.Forms.DialogResult.No: // РїРѕРєР° РЅРµ Р±С‹РІР°РµС‚
           itemValue = null;
           return true;
         default:
@@ -477,11 +477,11 @@ namespace Plants
 
   public class IntRangeCareItem : CareItem
   {
-    #region Значение
+    #region Р—РЅР°С‡РµРЅРёРµ
 
     public struct Range
     {
-      #region Конструктор
+      #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
       public Range(int min, int max)
       {
@@ -491,7 +491,7 @@ namespace Plants
 
       #endregion
 
-      #region Свойства
+      #region РЎРІРѕР№СЃС‚РІР°
 
       public int Min { get { return _Min; } }
       private int _Min;
@@ -512,7 +512,7 @@ namespace Plants
 
     #endregion
 
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     public IntRangeCareItem(string group, string code, string name)
       : base(group, code, name)
@@ -524,7 +524,7 @@ namespace Plants
 
     #endregion
 
-    #region Свойства
+    #region РЎРІРѕР№СЃС‚РІР°
 
     public string ColumnName1 { get { return Code + "1"; } }
 
@@ -541,7 +541,7 @@ namespace Plants
 
     #endregion
 
-    #region Переопределенные методы
+    #region РџРµСЂРµРѕРїСЂРµРґРµР»РµРЅРЅС‹Рµ РјРµС‚РѕРґС‹
 
     public override void AddColumns(DBxTableStruct.ColumnCollection columns)
     {
@@ -567,7 +567,7 @@ namespace Plants
       else
       {
         Range r = (Range)itemValue;
-        docValues[ColumnName1].SetValue(r.Min); // а не SetInt(), т.к. 0 это не null.
+        docValues[ColumnName1].SetValue(r.Min); // Р° РЅРµ SetInt(), С‚.Рє. 0 СЌС‚Рѕ РЅРµ null.
         docValues[ColumnName2].SetValue(r.Max);
       }
     }
@@ -638,14 +638,14 @@ namespace Plants
   }
 
 #if XXX
-  // Переделать, если будет нужен
+  // РџРµСЂРµРґРµР»Р°С‚СЊ, РµСЃР»Рё Р±СѓРґРµС‚ РЅСѓР¶РµРЅ
   public class SingleRangeCareItem : CareItem
   {
-  #region Значение
+  #region Р—РЅР°С‡РµРЅРёРµ
 
     public struct Range
     {
-  #region Конструктор
+  #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
       public Range(float Min, float Max)
       {
@@ -655,7 +655,7 @@ namespace Plants
 
   #endregion
 
-  #region Свойства
+  #region РЎРІРѕР№СЃС‚РІР°
 
       public float Min { get { return FMin; } }
       private float FMin;
@@ -681,7 +681,7 @@ namespace Plants
 
   #endregion
 
-  #region Конструктор
+  #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     public SingleRangeCareItem(string Code, string Name)
       : base(Code, Name)
@@ -691,7 +691,7 @@ namespace Plants
 
   #endregion
 
-  #region Свойства
+  #region РЎРІРѕР№СЃС‚РІР°
 
     public string ColumnName1 { get { return Code + "1"; } }
 
@@ -702,7 +702,7 @@ namespace Plants
 
   #endregion
 
-  #region Переопределенные методы
+  #region РџРµСЂРµРѕРїСЂРµРґРµР»РµРЅРЅС‹Рµ РјРµС‚РѕРґС‹
 
     public override void AddColumns(DBxColumnStructList Columns)
     {
@@ -728,7 +728,7 @@ namespace Plants
       else
       {
         Range r = (Range)ItemValue;
-        DocValues[ColumnName1].SetValue(r.Min); // а не SetSingle(), т.к. 0 это не null.
+        DocValues[ColumnName1].SetValue(r.Min); // Р° РЅРµ SetSingle(), С‚.Рє. 0 СЌС‚Рѕ РЅРµ null.
         DocValues[ColumnName2].SetValue(r.Max);
       }
     }
@@ -788,38 +788,38 @@ namespace Plants
 #endif
 
   /// <summary>
-  /// Набор флажков (вредители).
-  /// Хранится как одно целочисленное поле
+  /// РќР°Р±РѕСЂ С„Р»Р°Р¶РєРѕРІ (РІСЂРµРґРёС‚РµР»Рё).
+  /// РҐСЂР°РЅРёС‚СЃСЏ РєР°Рє РѕРґРЅРѕ С†РµР»РѕС‡РёСЃР»РµРЅРЅРѕРµ РїРѕР»Рµ
   /// </summary>
   public class FlagsCareItem : CareItem
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     /// <summary>
-    /// Конструктор
+    /// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
     /// </summary>
     /// <param name="group"></param>
     /// <param name="code"></param>
     /// <param name="name"></param>
-    /// <param name="itemNames">Названия для флажков. Нельзя убирать и менять порядок следования элементов</param>
+    /// <param name="itemNames">РќР°Р·РІР°РЅРёСЏ РґР»СЏ С„Р»Р°Р¶РєРѕРІ. РќРµР»СЊР·СЏ СѓР±РёСЂР°С‚СЊ Рё РјРµРЅСЏС‚СЊ РїРѕСЂСЏРґРѕРє СЃР»РµРґРѕРІР°РЅРёСЏ СЌР»РµРјРµРЅС‚РѕРІ</param>
     public FlagsCareItem(string group, string code, string name, string[] itemNames)
       : base(group, code, name)
     {
       if (itemNames.Length > 32)
-        throw new ArgumentException("Максимум 32 флажка", "ItemNames");
+        throw new ArgumentException("РњР°РєСЃРёРјСѓРј 32 С„Р»Р°Р¶РєР°", "ItemNames");
       _ItemNames = itemNames;
     }
 
     #endregion
 
-    #region Свойства
+    #region РЎРІРѕР№СЃС‚РІР°
 
     public string[] ItemNames { get { return _ItemNames; } }
     private string[] _ItemNames;
 
     #endregion
 
-    #region Переопределенные методы
+    #region РџРµСЂРµРѕРїСЂРµРґРµР»РµРЅРЅС‹Рµ РјРµС‚РѕРґС‹
 
     public override object GetItemValue(IDBxDocValues docValues)
     {
@@ -898,7 +898,7 @@ namespace Plants
 
   public class CareValueChangedEventArgs : EventArgs
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     public CareValueChangedEventArgs(CareValues careValues, int itemIndex, object oldValue)
     {
@@ -909,7 +909,7 @@ namespace Plants
 
     #endregion
 
-    #region Свойства
+    #region РЎРІРѕР№СЃС‚РІР°
 
     //    public CareValues CareValues { get { return FCareValues; } }
     private CareValues _CareValues;
@@ -930,11 +930,11 @@ namespace Plants
   public delegate void CareValueChangedEventHandler(object sender, CareValueChangedEventArgs args);
 
   /// <summary>
-  /// Массив значений типа object, в которых хранятся значения
+  /// РњР°СЃСЃРёРІ Р·РЅР°С‡РµРЅРёР№ С‚РёРїР° object, РІ РєРѕС‚РѕСЂС‹С… С…СЂР°РЅСЏС‚СЃСЏ Р·РЅР°С‡РµРЅРёСЏ
   /// </summary>
   public class CareValues
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     public CareValues(NamedList<CareItem> items)
     {
@@ -946,7 +946,7 @@ namespace Plants
 
     #endregion
 
-    #region Свойства
+    #region РЎРІРѕР№СЃС‚РІР°
 
     public NamedList<CareItem> Items { get { return _Items; } }
     private NamedList<CareItem> _Items;
@@ -974,7 +974,7 @@ namespace Plants
 
     #endregion
 
-    #region Чтение и запись
+    #region Р§С‚РµРЅРёРµ Рё Р·Р°РїРёСЃСЊ
 
     public void Read(IDBxDocValues docValues)
     {

@@ -1,4 +1,4 @@
-namespace Plants
+п»їnamespace Plants
 {
   partial class PlantSelReportParamForm
   {
@@ -47,7 +47,7 @@ namespace Plants
       this.grpPeriod.Size = new System.Drawing.Size(618, 69);
       this.grpPeriod.TabIndex = 1;
       this.grpPeriod.TabStop = false;
-      this.grpPeriod.Text = "Период для фильтров";
+      this.grpPeriod.Text = "РџРµСЂРёРѕРґ РґР»СЏ С„РёР»СЊС‚СЂРѕРІ";
       // 
       // edPeriod
       // 
@@ -62,7 +62,7 @@ namespace Plants
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(632, 452);
       this.Name = "PlantSelReportParamForm";
-      this.Text = "Создание выборки из каталога растений";
+      this.Text = "РЎРѕР·РґР°РЅРёРµ РІС‹Р±РѕСЂРєРё РёР· РєР°С‚Р°Р»РѕРіР° СЂР°СЃС‚РµРЅРёР№";
       this.MainTabPage.ResumeLayout(false);
       this.grpPeriod.ResumeLayout(false);
       this.ResumeLayout(false);

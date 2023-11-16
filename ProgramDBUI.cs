@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.Text;
 using FreeLibSet.Forms.Docs;
@@ -14,7 +14,7 @@ namespace Plants
 {
   internal class ProgramDBUI : DBUI
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     public ProgramDBUI(DBxDocProviderProxy sourceDocProviderProxy)
       : base(sourceDocProviderProxy)
@@ -22,105 +22,105 @@ namespace Plants
       DocTypeUI dt;
       SubDocTypeUI sdt;
 
-      #region Каталог растений
+      #region РљР°С‚Р°Р»РѕРі СЂР°СЃС‚РµРЅРёР№
 
-      #region Основной документ
+      #region РћСЃРЅРѕРІРЅРѕР№ РґРѕРєСѓРјРµРЅС‚
 
       dt = base.DocTypes["Plants"];
 
-      dt.GridProducer.Columns.AddText("Number", "№ по каталогу", 3, 3);
+      dt.GridProducer.Columns.AddText("Number", "в„– РїРѕ РєР°С‚Р°Р»РѕРіСѓ", 3, 3);
       dt.GridProducer.Columns.LastAdded.Format = ProgramDBUI.Settings.NumberMask;
       dt.GridProducer.Columns.LastAdded.CanIncSearch = true;
       dt.GridProducer.Columns.LastAdded.TextAlign = HorizontalAlignment.Center;
 
-      dt.GridProducer.Columns.AddText("Name", "Название или описание", 40, 15);
+      dt.GridProducer.Columns.AddText("Name", "РќР°Р·РІР°РЅРёРµ РёР»Рё РѕРїРёСЃР°РЅРёРµ", 40, 15);
       dt.GridProducer.Columns.LastAdded.CanIncSearch = true;
-      dt.GridProducer.Columns.AddText("LocalName", "Русское название", 40, 15);
+      dt.GridProducer.Columns.AddText("LocalName", "Р СѓСЃСЃРєРѕРµ РЅР°Р·РІР°РЅРёРµ", 40, 15);
       dt.GridProducer.Columns.LastAdded.CanIncSearch = true;
-      dt.GridProducer.Columns.AddText("LatinName", "Латинское название", 40, 15);
+      dt.GridProducer.Columns.AddText("LatinName", "Р›Р°С‚РёРЅСЃРєРѕРµ РЅР°Р·РІР°РЅРёРµ", 40, 15);
       dt.GridProducer.Columns.LastAdded.CanIncSearch = true;
-      dt.GridProducer.Columns.AddText("Description", "Описание", 40, 15);
+      dt.GridProducer.Columns.AddText("Description", "РћРїРёСЃР°РЅРёРµ", 40, 15);
       dt.GridProducer.Columns.LastAdded.CanIncSearch = true;
 
       dt.GridProducer.Columns.Add(new PlantThumbnailColumn(false));
 
-      dt.GridProducer.Columns.AddText("Place.Name", "Место", 15, 10);
-      //dt.GridProducer.Columns.AddDateRange("AddDate", "AddDate1", "AddDate2", "Дата поступления", false, 10, 10);
-      dt.GridProducer.Columns.AddUserText("AddDate", "AddDate1,AddDate2", DateRangeColumn_ValueNeeded, "Дата поступления", 10, 10)
+      dt.GridProducer.Columns.AddText("Place.Name", "РњРµСЃС‚Рѕ", 15, 10);
+      //dt.GridProducer.Columns.AddDateRange("AddDate", "AddDate1", "AddDate2", "Р”Р°С‚Р° РїРѕСЃС‚СѓРїР»РµРЅРёСЏ", false, 10, 10);
+      dt.GridProducer.Columns.AddUserText("AddDate", "AddDate1,AddDate2", DateRangeColumn_ValueNeeded, "Р”Р°С‚Р° РїРѕСЃС‚СѓРїР»РµРЅРёСЏ", 10, 10)
         .SizeGroup = "ShortDateRange"; // 31.12.2022
       dt.GridProducer.Columns.LastAdded.TextAlign = HorizontalAlignment.Center;
-      dt.GridProducer.Columns.LastAdded.EmptyValue = String.Empty; // а не "все даты"
-      dt.GridProducer.Columns.AddText("FromContra.Name", "От кого получено", 15, 10);
-      dt.GridProducer.Columns.AddRefDocText("FromPlant", DocTypes["Plants"], "Отсажено от растения", 15, 10);
+      dt.GridProducer.Columns.LastAdded.EmptyValue = String.Empty; // Р° РЅРµ "РІСЃРµ РґР°С‚С‹"
+      dt.GridProducer.Columns.AddText("FromContra.Name", "РћС‚ РєРѕРіРѕ РїРѕР»СѓС‡РµРЅРѕ", 15, 10);
+      dt.GridProducer.Columns.AddRefDocText("FromPlant", DocTypes["Plants"], "РћС‚СЃР°Р¶РµРЅРѕ РѕС‚ СЂР°СЃС‚РµРЅРёСЏ", 15, 10);
 
-      dt.GridProducer.Columns.AddUserText("StateText", "MovementState,Place,ToContra", new EFPGridProducerValueNeededEventHandler(EditPlant.StateText_Column_ToolTipText_ValueNeeded), "Состояние", 30, 5);
+      dt.GridProducer.Columns.AddUserText("StateText", "MovementState,Place,ToContra", new EFPGridProducerValueNeededEventHandler(EditPlant.StateText_Column_ToolTipText_ValueNeeded), "РЎРѕСЃС‚РѕСЏРЅРёРµ", 30, 5);
 
-      dt.GridProducer.Columns.AddRefDocTextAndImage("LastPlantAction", this.DocTypes["Plants"].SubDocTypes["PlantActions"], "Последнее действие", 30, 10);
-      //dt.GridProducer.Columns.AddDateRange("LastPlantActionDate", "LastPlantAction.Date1", "LastPlantAction.Date2", "Дата последнего действия", false, 10, 10);
-      dt.GridProducer.Columns.AddUserText("LastPlantActionDate", "LastPlantAction.Date1,LastPlantAction.Date2", DateRangeColumn_ValueNeeded, "Дата последнего действия", 10, 10)
+      dt.GridProducer.Columns.AddRefDocTextAndImage("LastPlantAction", this.DocTypes["Plants"].SubDocTypes["PlantActions"], "РџРѕСЃР»РµРґРЅРµРµ РґРµР№СЃС‚РІРёРµ", 30, 10);
+      //dt.GridProducer.Columns.AddDateRange("LastPlantActionDate", "LastPlantAction.Date1", "LastPlantAction.Date2", "Р”Р°С‚Р° РїРѕСЃР»РµРґРЅРµРіРѕ РґРµР№СЃС‚РІРёСЏ", false, 10, 10);
+      dt.GridProducer.Columns.AddUserText("LastPlantActionDate", "LastPlantAction.Date1,LastPlantAction.Date2", DateRangeColumn_ValueNeeded, "Р”Р°С‚Р° РїРѕСЃР»РµРґРЅРµРіРѕ РґРµР№СЃС‚РІРёСЏ", 10, 10)
         .SizeGroup = "ShortDateRange"; // 31.12.2022
       dt.GridProducer.Columns.LastAdded.TextAlign = HorizontalAlignment.Center;
-      dt.GridProducer.Columns.LastAdded.EmptyValue = String.Empty; // а не "все даты"
+      dt.GridProducer.Columns.LastAdded.EmptyValue = String.Empty; // Р° РЅРµ "РІСЃРµ РґР°С‚С‹"
 
-      dt.GridProducer.Columns.AddRefDocTextAndImage("LastPlantReplanting", this.DocTypes["Plants"].SubDocTypes["PlantActions"], "Пересадка", 30, 10);
-      //dt.GridProducer.Columns.AddDateRange("LastPlantReplantingDate", "LastPlantReplanting.Date1", "LastPlantReplanting.Date2", "Дата пересадки", false, 10, 10);
-      dt.GridProducer.Columns.AddUserText("LastPlantReplantingDate", "LastPlantReplanting.Date1,LastPlantReplanting.Date2", DateRangeColumn_ValueNeeded, "Дата пересадки", 10, 10)
+      dt.GridProducer.Columns.AddRefDocTextAndImage("LastPlantReplanting", this.DocTypes["Plants"].SubDocTypes["PlantActions"], "РџРµСЂРµСЃР°РґРєР°", 30, 10);
+      //dt.GridProducer.Columns.AddDateRange("LastPlantReplantingDate", "LastPlantReplanting.Date1", "LastPlantReplanting.Date2", "Р”Р°С‚Р° РїРµСЂРµСЃР°РґРєРё", false, 10, 10);
+      dt.GridProducer.Columns.AddUserText("LastPlantReplantingDate", "LastPlantReplanting.Date1,LastPlantReplanting.Date2", DateRangeColumn_ValueNeeded, "Р”Р°С‚Р° РїРµСЂРµСЃР°РґРєРё", 10, 10)
         .SizeGroup = "ShortDateRange"; // 31.12.2022
       dt.GridProducer.Columns.LastAdded.TextAlign = HorizontalAlignment.Center;
-      dt.GridProducer.Columns.LastAdded.EmptyValue = String.Empty; // а не "все даты"
+      dt.GridProducer.Columns.LastAdded.EmptyValue = String.Empty; // Р° РЅРµ "РІСЃРµ РґР°С‚С‹"
 
-      dt.GridProducer.Columns.AddRefDocText("LastPlantDisease", this.DocTypes["Plants"].SubDocTypes["PlantDiseases"], "Заболевание", 30, 10);
+      dt.GridProducer.Columns.AddRefDocText("LastPlantDisease", this.DocTypes["Plants"].SubDocTypes["PlantDiseases"], "Р—Р°Р±РѕР»РµРІР°РЅРёРµ", 30, 10);
 
-      //dt.GridProducer.Columns.AddDateRange("RemoveDate", "RemoveDate1", "RemoveDate2", "Дата выбытия", false, 10, 10);
-      dt.GridProducer.Columns.AddUserText("RemoveDate", "RemoveDate1,RemoveDate2", DateRangeColumn_ValueNeeded, "Дата выбытия", 10, 10)
+      //dt.GridProducer.Columns.AddDateRange("RemoveDate", "RemoveDate1", "RemoveDate2", "Р”Р°С‚Р° РІС‹Р±С‹С‚РёСЏ", false, 10, 10);
+      dt.GridProducer.Columns.AddUserText("RemoveDate", "RemoveDate1,RemoveDate2", DateRangeColumn_ValueNeeded, "Р”Р°С‚Р° РІС‹Р±С‹С‚РёСЏ", 10, 10)
         .SizeGroup = "ShortDateRange"; // 31.12.2022
       dt.GridProducer.Columns.LastAdded.TextAlign = HorizontalAlignment.Center;
-      dt.GridProducer.Columns.LastAdded.EmptyValue = String.Empty; // а не "все даты"
-      dt.GridProducer.Columns.AddText("ToContra.Name", "Кому передано", 15, 10);
-      dt.GridProducer.Columns.AddRefDocText("ToPlant", DocTypes["Plants"], "Подсажено к растению", 15, 10);
+      dt.GridProducer.Columns.LastAdded.EmptyValue = String.Empty; // Р° РЅРµ "РІСЃРµ РґР°С‚С‹"
+      dt.GridProducer.Columns.AddText("ToContra.Name", "РљРѕРјСѓ РїРµСЂРµРґР°РЅРѕ", 15, 10);
+      dt.GridProducer.Columns.AddRefDocText("ToPlant", DocTypes["Plants"], "РџРѕРґСЃР°Р¶РµРЅРѕ Рє СЂР°СЃС‚РµРЅРёСЋ", 15, 10);
 
       dt.GridProducer.Columns.AddUserText("ContraName", "FromContra,ToContra,FromPlant,ToPlant",
         new EFPGridProducerValueNeededEventHandler(EditPlant.ContraNameColumnValueNeeded),
-        "От кого / кому", 15, 10);
+        "РћС‚ РєРѕРіРѕ / РєРѕРјСѓ", 15, 10);
 
-      dt.GridProducer.Columns.AddText("Manufacturer.Name", "Изготовитель (питомник)", 15, 10);
-      dt.GridProducer.Columns.AddText("Care.Name", "Уход", 15, 10);
+      dt.GridProducer.Columns.AddText("Manufacturer.Name", "РР·РіРѕС‚РѕРІРёС‚РµР»СЊ (РїРёС‚РѕРјРЅРёРє)", 15, 10);
+      dt.GridProducer.Columns.AddText("Care.Name", "РЈС…РѕРґ", 15, 10);
 
 
       dt.GridProducer.Columns.AddUserImage("FirstPlannedActionImage", "FirstPlannedAction.Date1,FirstPlannedAction.Date2,FirstPlannedAction.Kind",
-        new EFPGridProducerValueNeededEventHandler(EditPlant.FirstPlannedActionImageColumnValueNeeded), String.Empty).DisplayName = "Запланированное действие (значок)";
+        new EFPGridProducerValueNeededEventHandler(EditPlant.FirstPlannedActionImageColumnValueNeeded), String.Empty).DisplayName = "Р—Р°РїР»Р°РЅРёСЂРѕРІР°РЅРЅРѕРµ РґРµР№СЃС‚РІРёРµ (Р·РЅР°С‡РѕРє)";
       dt.GridProducer.Columns.AddUserText("FirstPlannedActionText", "FirstPlannedAction.Kind,FirstPlannedAction.ActionName",
-        new EFPGridProducerValueNeededEventHandler(EditPlant.FirstPlannedActionTextColumnValueNeeded), "Запланированное действие", 15, 10);
-      //dt.GridProducer.Columns.AddDateRange("FirstPlannedActionDate", "FirstPlannedAction.Date1", "FirstPlannedAction.Date2", "Дата запланированного действия", false, 15, 10);
-      dt.GridProducer.Columns.AddUserText("FirstPlannedActionDate", "FirstPlannedAction.Date1,FirstPlannedAction.Date2", DateRangeColumn_ValueNeeded, "Дата запланированного действия", 15, 10)
+        new EFPGridProducerValueNeededEventHandler(EditPlant.FirstPlannedActionTextColumnValueNeeded), "Р—Р°РїР»Р°РЅРёСЂРѕРІР°РЅРЅРѕРµ РґРµР№СЃС‚РІРёРµ", 15, 10);
+      //dt.GridProducer.Columns.AddDateRange("FirstPlannedActionDate", "FirstPlannedAction.Date1", "FirstPlannedAction.Date2", "Р”Р°С‚Р° Р·Р°РїР»Р°РЅРёСЂРѕРІР°РЅРЅРѕРіРѕ РґРµР№СЃС‚РІРёСЏ", false, 15, 10);
+      dt.GridProducer.Columns.AddUserText("FirstPlannedActionDate", "FirstPlannedAction.Date1,FirstPlannedAction.Date2", DateRangeColumn_ValueNeeded, "Р”Р°С‚Р° Р·Р°РїР»Р°РЅРёСЂРѕРІР°РЅРЅРѕРіРѕ РґРµР№СЃС‚РІРёСЏ", 15, 10)
         .SizeGroup = "ShortDateRange"; // 31.12.2022
 
-      dt.GridProducer.Columns.AddText("GroupId.Name", "Группа", 15, 5);
-      dt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
+      dt.GridProducer.Columns.AddText("GroupId.Name", "Р“СЂСѓРїРїР°", 15, 5);
+      dt.GridProducer.Columns.AddText("Comment", "РљРѕРјРјРµРЅС‚Р°СЂРёР№", 30, 10);
 
-      dt.GridProducer.ToolTips.AddText("LocalName", "Русское название");
-      dt.GridProducer.ToolTips.AddText("LatinName", "Латинское название");
-      dt.GridProducer.ToolTips.AddText("Description", "Описание");
-      dt.GridProducer.ToolTips.AddUserItem("StateText", "MovementState,Place,ToContra", new EFPGridProducerValueNeededEventHandler(EditPlant.StateText_Column_ToolTipText_ValueNeeded), "Состояние");
-      dt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
+      dt.GridProducer.ToolTips.AddText("LocalName", "Р СѓСЃСЃРєРѕРµ РЅР°Р·РІР°РЅРёРµ");
+      dt.GridProducer.ToolTips.AddText("LatinName", "Р›Р°С‚РёРЅСЃРєРѕРµ РЅР°Р·РІР°РЅРёРµ");
+      dt.GridProducer.ToolTips.AddText("Description", "РћРїРёСЃР°РЅРёРµ");
+      dt.GridProducer.ToolTips.AddUserItem("StateText", "MovementState,Place,ToContra", new EFPGridProducerValueNeededEventHandler(EditPlant.StateText_Column_ToolTipText_ValueNeeded), "РЎРѕСЃС‚РѕСЏРЅРёРµ");
+      dt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "РљРѕРјРјРµРЅС‚Р°СЂРёР№ (РµСЃР»Рё Р·Р°РґР°РЅ)";
 
-      dt.GridProducer.Orders.Add("Number", "Номер по каталогу");
-      dt.GridProducer.Orders.Add("Name", "Название или описание");
-      dt.GridProducer.Orders.Add("LocalName", "Русское название");
-      dt.GridProducer.Orders.Add("LatinName", "Латинское название");
-      dt.GridProducer.Orders.Add("Description", "Описание");
-      dt.GridProducer.Orders.Add("AddDate1", "Дата прихода (по возрастанию)", new EFPDataGridViewSortInfo("AddDate", ListSortDirection.Ascending));
-      dt.GridProducer.Orders.Add("AddDate1 DESC", "Дата прихода (по убыванию)", new EFPDataGridViewSortInfo("AddDate", ListSortDirection.Descending));
-      dt.GridProducer.Orders.Add("RemoveDate1", "Дата выбытия (по возрастанию)", new EFPDataGridViewSortInfo("RemoveDate", ListSortDirection.Ascending));
-      dt.GridProducer.Orders.Add("RemoveDate1 DESC", "Дата выбытия (по убыванию)", new EFPDataGridViewSortInfo("RemoveDate", ListSortDirection.Descending));
-      dt.GridProducer.Orders.Add("LastPlantAction.Date1", "Дата последнего действия (по возрастанию)", new EFPDataGridViewSortInfo("LastPlantActionDate", ListSortDirection.Ascending));
-      dt.GridProducer.Orders.Add("LastPlantAction.Date1 DESC", "Дата последнего действия (по убыванию)", new EFPDataGridViewSortInfo("LastPlantActionDate", ListSortDirection.Descending));
-      dt.GridProducer.Orders.Add("LastPlantReplanting.Date1", "Дата пересадки (по возрастанию)", new EFPDataGridViewSortInfo("LastPlantReplantingDate", ListSortDirection.Ascending));
-      dt.GridProducer.Orders.Add("LastPlantReplanting.Date1 DESC", "Дата пересадки (по убыванию)", new EFPDataGridViewSortInfo("LastPlantReplantingDate", ListSortDirection.Descending));
-      dt.GridProducer.Orders.Add("LastDiseaseDate1", "Дата заболевания (по возрастанию)", new EFPDataGridViewSortInfo("LastDiseaseDate", ListSortDirection.Ascending));
-      dt.GridProducer.Orders.Add("LastDiseaseDate1 DESC", "Дата заболевания (по убыванию)", new EFPDataGridViewSortInfo("LastDiseaseDate", ListSortDirection.Descending));
-      dt.GridProducer.Columns.AddText("Soil.Name", "Грунт", 20, 10);
-      dt.GridProducer.Columns.AddText("PotKind.Name", "Горшок", 20, 10);
+      dt.GridProducer.Orders.Add("Number", "РќРѕРјРµСЂ РїРѕ РєР°С‚Р°Р»РѕРіСѓ");
+      dt.GridProducer.Orders.Add("Name", "РќР°Р·РІР°РЅРёРµ РёР»Рё РѕРїРёСЃР°РЅРёРµ");
+      dt.GridProducer.Orders.Add("LocalName", "Р СѓСЃСЃРєРѕРµ РЅР°Р·РІР°РЅРёРµ");
+      dt.GridProducer.Orders.Add("LatinName", "Р›Р°С‚РёРЅСЃРєРѕРµ РЅР°Р·РІР°РЅРёРµ");
+      dt.GridProducer.Orders.Add("Description", "РћРїРёСЃР°РЅРёРµ");
+      dt.GridProducer.Orders.Add("AddDate1", "Р”Р°С‚Р° РїСЂРёС…РѕРґР° (РїРѕ РІРѕР·СЂР°СЃС‚Р°РЅРёСЋ)", new EFPDataGridViewSortInfo("AddDate", ListSortDirection.Ascending));
+      dt.GridProducer.Orders.Add("AddDate1 DESC", "Р”Р°С‚Р° РїСЂРёС…РѕРґР° (РїРѕ СѓР±С‹РІР°РЅРёСЋ)", new EFPDataGridViewSortInfo("AddDate", ListSortDirection.Descending));
+      dt.GridProducer.Orders.Add("RemoveDate1", "Р”Р°С‚Р° РІС‹Р±С‹С‚РёСЏ (РїРѕ РІРѕР·СЂР°СЃС‚Р°РЅРёСЋ)", new EFPDataGridViewSortInfo("RemoveDate", ListSortDirection.Ascending));
+      dt.GridProducer.Orders.Add("RemoveDate1 DESC", "Р”Р°С‚Р° РІС‹Р±С‹С‚РёСЏ (РїРѕ СѓР±С‹РІР°РЅРёСЋ)", new EFPDataGridViewSortInfo("RemoveDate", ListSortDirection.Descending));
+      dt.GridProducer.Orders.Add("LastPlantAction.Date1", "Р”Р°С‚Р° РїРѕСЃР»РµРґРЅРµРіРѕ РґРµР№СЃС‚РІРёСЏ (РїРѕ РІРѕР·СЂР°СЃС‚Р°РЅРёСЋ)", new EFPDataGridViewSortInfo("LastPlantActionDate", ListSortDirection.Ascending));
+      dt.GridProducer.Orders.Add("LastPlantAction.Date1 DESC", "Р”Р°С‚Р° РїРѕСЃР»РµРґРЅРµРіРѕ РґРµР№СЃС‚РІРёСЏ (РїРѕ СѓР±С‹РІР°РЅРёСЋ)", new EFPDataGridViewSortInfo("LastPlantActionDate", ListSortDirection.Descending));
+      dt.GridProducer.Orders.Add("LastPlantReplanting.Date1", "Р”Р°С‚Р° РїРµСЂРµСЃР°РґРєРё (РїРѕ РІРѕР·СЂР°СЃС‚Р°РЅРёСЋ)", new EFPDataGridViewSortInfo("LastPlantReplantingDate", ListSortDirection.Ascending));
+      dt.GridProducer.Orders.Add("LastPlantReplanting.Date1 DESC", "Р”Р°С‚Р° РїРµСЂРµСЃР°РґРєРё (РїРѕ СѓР±С‹РІР°РЅРёСЋ)", new EFPDataGridViewSortInfo("LastPlantReplantingDate", ListSortDirection.Descending));
+      dt.GridProducer.Orders.Add("LastDiseaseDate1", "Р”Р°С‚Р° Р·Р°Р±РѕР»РµРІР°РЅРёСЏ (РїРѕ РІРѕР·СЂР°СЃС‚Р°РЅРёСЋ)", new EFPDataGridViewSortInfo("LastDiseaseDate", ListSortDirection.Ascending));
+      dt.GridProducer.Orders.Add("LastDiseaseDate1 DESC", "Р”Р°С‚Р° Р·Р°Р±РѕР»РµРІР°РЅРёСЏ (РїРѕ СѓР±С‹РІР°РЅРёСЋ)", new EFPDataGridViewSortInfo("LastDiseaseDate", ListSortDirection.Descending));
+      dt.GridProducer.Columns.AddText("Soil.Name", "Р“СЂСѓРЅС‚", 20, 10);
+      dt.GridProducer.Columns.AddText("PotKind.Name", "Р“РѕСЂС€РѕРє", 20, 10);
 
 
       dt.GridProducer.NewDefaultConfig(false);
@@ -145,13 +145,13 @@ namespace Plants
 
       #endregion
 
-      #region Фото
+      #region Р¤РѕС‚Рѕ
 
       sdt = dt.SubDocTypes["PlantPhotos"];
       sdt.GridProducer.Columns.Add(new PlantThumbnailColumn(true));
-      sdt.GridProducer.Columns.AddText("FileName", "Имя файла", 20, 7);
-      sdt.GridProducer.Columns.AddDate("ShootingTime", "Дата съемки");
-      sdt.GridProducer.Columns.AddText("Comment", "Комментарий", 20, 7);
+      sdt.GridProducer.Columns.AddText("FileName", "РРјСЏ С„Р°Р№Р»Р°", 20, 7);
+      sdt.GridProducer.Columns.AddDate("ShootingTime", "Р”Р°С‚Р° СЃСЉРµРјРєРё");
+      sdt.GridProducer.Columns.AddText("Comment", "РљРѕРјРјРµРЅС‚Р°СЂРёР№", 20, 7);
       sdt.InitView += new InitEFPDBxViewEventHandler(EditPlant.SubDocPhoto_InitView);
 
       sdt.GridProducer.DefaultConfig = new EFPDataGridViewConfig();
@@ -164,17 +164,17 @@ namespace Plants
 
       #endregion
 
-      #region Атрибуты
+      #region РђС‚СЂРёР±СѓС‚С‹
 
       sdt = dt.SubDocTypes["PlantAttributes"];
       sdt.AddImageHandler("Attribute", "AttrType,Value,LongValue", new DBxImageValueNeededEventHandler(EditAttrValue.ImageValueNeeded));
-      sdt.GridProducer.Columns.AddText("AttrType.Name", "Атрибут", 15, 5);
+      sdt.GridProducer.Columns.AddText("AttrType.Name", "РђС‚СЂРёР±СѓС‚", 15, 5);
       sdt.GridProducer.Columns.LastAdded.CanIncSearch = true;
-      sdt.GridProducer.Columns.AddDate("Date", "Начало действия");
-      sdt.GridProducer.Columns.AddUserText("ValueText", "Value,LongValue,AttrType.Type", EditAttrValue.ValueColumnValueNeeded, "Значение", 20, 10);
-      sdt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
+      sdt.GridProducer.Columns.AddDate("Date", "РќР°С‡Р°Р»Рѕ РґРµР№СЃС‚РІРёСЏ");
+      sdt.GridProducer.Columns.AddUserText("ValueText", "Value,LongValue,AttrType.Type", EditAttrValue.ValueColumnValueNeeded, "Р—РЅР°С‡РµРЅРёРµ", 20, 10);
+      sdt.GridProducer.Columns.AddText("Comment", "РљРѕРјРјРµРЅС‚Р°СЂРёР№", 30, 10);
 
-      sdt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
+      sdt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "РљРѕРјРјРµРЅС‚Р°СЂРёР№ (РµСЃР»Рё Р·Р°РґР°РЅ)";
 
       sdt.GridProducer.NewDefaultConfig(false);
       sdt.GridProducer.DefaultConfig.Columns.Add("AttrType.Name");
@@ -193,21 +193,21 @@ namespace Plants
 
       #endregion
 
-      #region Перемещение
+      #region РџРµСЂРµРјРµС‰РµРЅРёРµ
 
       sdt = dt.SubDocTypes["PlantMovement"];
-      sdt.GridProducer.Columns.AddEnumText("Kind", PlantTools.MovementNames, "Действие", 10, 5);
-      //sdt.GridProducer.Columns.AddDateRange("Date", "Date1", "Date2", "Дата", false, 15, 10);
-      sdt.GridProducer.Columns.AddUserText("Date", "Date1,Date2", DateRangeColumn_ValueNeeded, "Дата", 15, 10)
+      sdt.GridProducer.Columns.AddEnumText("Kind", PlantTools.MovementNames, "Р”РµР№СЃС‚РІРёРµ", 10, 5);
+      //sdt.GridProducer.Columns.AddDateRange("Date", "Date1", "Date2", "Р”Р°С‚Р°", false, 15, 10);
+      sdt.GridProducer.Columns.AddUserText("Date", "Date1,Date2", DateRangeColumn_ValueNeeded, "Р”Р°С‚Р°", 15, 10)
         .SizeGroup = "ShortDateRange"; // 31.12.2022
-      sdt.GridProducer.Columns.AddText("Place.Name", "Место", 20, 5);
-      sdt.GridProducer.Columns.AddText("Contra.Name", "От кого / кому", 20, 5);
-      sdt.GridProducer.Columns.AddText("ForkPlant.Name", "Отсажено / подсажено", 20, 10);
-      sdt.GridProducer.Columns.AddText("Soil.Name", "Грунт", 20, 10);
-      sdt.GridProducer.Columns.AddText("PotKind.Name", "Горшок", 20, 10);
-      sdt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
+      sdt.GridProducer.Columns.AddText("Place.Name", "РњРµСЃС‚Рѕ", 20, 5);
+      sdt.GridProducer.Columns.AddText("Contra.Name", "РћС‚ РєРѕРіРѕ / РєРѕРјСѓ", 20, 5);
+      sdt.GridProducer.Columns.AddText("ForkPlant.Name", "РћС‚СЃР°Р¶РµРЅРѕ / РїРѕРґСЃР°Р¶РµРЅРѕ", 20, 10);
+      sdt.GridProducer.Columns.AddText("Soil.Name", "Р“СЂСѓРЅС‚", 20, 10);
+      sdt.GridProducer.Columns.AddText("PotKind.Name", "Р“РѕСЂС€РѕРє", 20, 10);
+      sdt.GridProducer.Columns.AddText("Comment", "РљРѕРјРјРµРЅС‚Р°СЂРёР№", 30, 10);
 
-      sdt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
+      sdt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "РљРѕРјРјРµРЅС‚Р°СЂРёР№ (РµСЃР»Рё Р·Р°РґР°РЅ)";
 
       sdt.GridProducer.DefaultConfig = new EFPDataGridViewConfig();
       sdt.GridProducer.DefaultConfig.Columns.Add("Date");
@@ -232,20 +232,20 @@ namespace Plants
 
       #endregion
 
-      #region Действия
+      #region Р”РµР№СЃС‚РІРёСЏ
 
       sdt = dt.SubDocTypes["PlantActions"];
-      sdt.GridProducer.Columns.AddUserText("ActionText", "Kind,ActionName,Remedy", /* нельзя использовать Remedy.Name */
+      sdt.GridProducer.Columns.AddUserText("ActionText", "Kind,ActionName,Remedy", /* РЅРµР»СЊР·СЏ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ Remedy.Name */
         new EFPGridProducerValueNeededEventHandler(EditPlantAction.ActionTextColumnValueNeeded),
-        "Действие", 30, 10);
-      //sdt.GridProducer.Columns.AddDateRange("Date", "Date1", "Date2", "Дата", false, 15, 10);
-      sdt.GridProducer.Columns.AddUserText("Date", "Date1,Date2", DateRangeColumn_ValueNeeded, "Дата", 15, 10)
+        "Р”РµР№СЃС‚РІРёРµ", 30, 10);
+      //sdt.GridProducer.Columns.AddDateRange("Date", "Date1", "Date2", "Р”Р°С‚Р°", false, 15, 10);
+      sdt.GridProducer.Columns.AddUserText("Date", "Date1,Date2", DateRangeColumn_ValueNeeded, "Р”Р°С‚Р°", 15, 10)
         .SizeGroup = "ShortDateRange"; // 31.12.2022
-      sdt.GridProducer.Columns.AddText("Soil.Name", "Грунт", 20, 10);
-      sdt.GridProducer.Columns.AddText("PotKind.Name", "Горшок", 20, 10);
-      sdt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
+      sdt.GridProducer.Columns.AddText("Soil.Name", "Р“СЂСѓРЅС‚", 20, 10);
+      sdt.GridProducer.Columns.AddText("PotKind.Name", "Р“РѕСЂС€РѕРє", 20, 10);
+      sdt.GridProducer.Columns.AddText("Comment", "РљРѕРјРјРµРЅС‚Р°СЂРёР№", 30, 10);
 
-      sdt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
+      sdt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "РљРѕРјРјРµРЅС‚Р°СЂРёР№ (РµСЃР»Рё Р·Р°РґР°РЅ)";
 
       sdt.GridProducer.DefaultConfig = new EFPDataGridViewConfig();
       sdt.GridProducer.DefaultConfig.Columns.AddFill("ActionText");
@@ -269,16 +269,16 @@ namespace Plants
 
       #endregion
 
-      #region Цветение
+      #region Р¦РІРµС‚РµРЅРёРµ
 
       sdt = dt.SubDocTypes["PlantFlowering"];
-      //sdt.GridProducer.Columns.AddDateRange("Date", "Date1", "Date2", "Дата", false, 15, 10);
-      sdt.GridProducer.Columns.AddUserText("Date", "Date1,Date2", DateRangeColumn_ValueNeeded, "Дата", 15, 10)
+      //sdt.GridProducer.Columns.AddDateRange("Date", "Date1", "Date2", "Р”Р°С‚Р°", false, 15, 10);
+      sdt.GridProducer.Columns.AddUserText("Date", "Date1,Date2", DateRangeColumn_ValueNeeded, "Р”Р°С‚Р°", 15, 10)
         .SizeGroup = "ShortDateRange"; // 31.12.2022
-      sdt.GridProducer.Columns.AddInt("FlowerCount", "Количество цветков", 3);
-      sdt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
+      sdt.GridProducer.Columns.AddInt("FlowerCount", "РљРѕР»РёС‡РµСЃС‚РІРѕ С†РІРµС‚РєРѕРІ", 3);
+      sdt.GridProducer.Columns.AddText("Comment", "РљРѕРјРјРµРЅС‚Р°СЂРёР№", 30, 10);
 
-      sdt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
+      sdt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "РљРѕРјРјРµРЅС‚Р°СЂРёР№ (РµСЃР»Рё Р·Р°РґР°РЅ)";
 
       sdt.GridProducer.DefaultConfig = new EFPDataGridViewConfig();
       sdt.GridProducer.DefaultConfig.Columns.Add("Date");
@@ -296,16 +296,16 @@ namespace Plants
 
       #endregion
 
-      #region Заболевания
+      #region Р—Р°Р±РѕР»РµРІР°РЅРёСЏ
 
       sdt = dt.SubDocTypes["PlantDiseases"];
-      sdt.GridProducer.Columns.AddText("Disease.Name", "Заболевание", 30, 5);
-      //sdt.GridProducer.Columns.AddDateRange("Date", "Date1", "Date2", "Дата", false, 15, 10);
-      sdt.GridProducer.Columns.AddUserText("Date", "Date1,Date2", DateRangeColumn_ValueNeeded, "Дата", 15, 10)
+      sdt.GridProducer.Columns.AddText("Disease.Name", "Р—Р°Р±РѕР»РµРІР°РЅРёРµ", 30, 5);
+      //sdt.GridProducer.Columns.AddDateRange("Date", "Date1", "Date2", "Р”Р°С‚Р°", false, 15, 10);
+      sdt.GridProducer.Columns.AddUserText("Date", "Date1,Date2", DateRangeColumn_ValueNeeded, "Р”Р°С‚Р°", 15, 10)
         .SizeGroup = "ShortDateRange"; // 31.12.2022
-      sdt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
+      sdt.GridProducer.Columns.AddText("Comment", "РљРѕРјРјРµРЅС‚Р°СЂРёР№", 30, 10);
 
-      sdt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
+      sdt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "РљРѕРјРјРµРЅС‚Р°СЂРёР№ (РµСЃР»Рё Р·Р°РґР°РЅ)";
 
       sdt.GridProducer.DefaultConfig = new EFPDataGridViewConfig();
       sdt.GridProducer.DefaultConfig.Columns.AddFill("Disease.Name");
@@ -323,18 +323,18 @@ namespace Plants
 
       #endregion
 
-      #region Планы
+      #region РџР»Р°РЅС‹
 
       sdt = dt.SubDocTypes["PlantPlans"];
       sdt.GridProducer.Columns.AddUserText("ActionText", "Kind,ActionName,Remedy",
         new EFPGridProducerValueNeededEventHandler(EditPlantPlan.ActionTextColumnValueNeeded),
-        "Действие", 30, 10);
-      //sdt.GridProducer.Columns.AddDateRange("Date", "Date1", "Date2", "Дата", false, 15, 10);
-      sdt.GridProducer.Columns.AddUserText("Date", "Date1,Date2", DateRangeColumn_ValueNeeded, "Дата", 15, 10)
+        "Р”РµР№СЃС‚РІРёРµ", 30, 10);
+      //sdt.GridProducer.Columns.AddDateRange("Date", "Date1", "Date2", "Р”Р°С‚Р°", false, 15, 10);
+      sdt.GridProducer.Columns.AddUserText("Date", "Date1,Date2", DateRangeColumn_ValueNeeded, "Р”Р°С‚Р°", 15, 10)
         .SizeGroup = "ShortDateRange"; // 31.12.2022
-      sdt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
+      sdt.GridProducer.Columns.AddText("Comment", "РљРѕРјРјРµРЅС‚Р°СЂРёР№", 30, 10);
 
-      sdt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
+      sdt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "РљРѕРјРјРµРЅС‚Р°СЂРёР№ (РµСЃР»Рё Р·Р°РґР°РЅ)";
 
       sdt.GridProducer.DefaultConfig = new EFPDataGridViewConfig();
       sdt.GridProducer.DefaultConfig.Columns.AddFill("ActionText");
@@ -348,7 +348,7 @@ namespace Plants
       sdt.InitEditForm += new InitSubDocEditFormEventHandler(EditPlantPlan.InitEditForm);
       sdt.Columns["Date1"].NewMode = ColumnNewMode.Saved;
       sdt.Columns["Date2"].NewMode = ColumnNewMode.Saved;
-      // Планы явно делаются не на сегодняшний день
+      // РџР»Р°РЅС‹ СЏРІРЅРѕ РґРµР»Р°СЋС‚СЃСЏ РЅРµ РЅР° СЃРµРіРѕРґРЅСЏС€РЅРёР№ РґРµРЅСЊ
       //sdt.Columns["Date1"].DefaultValueNeeded += new EventHandler(DateColumn_DefaultValueNeeded);
       //sdt.Columns["Date2"].DefaultValueNeeded += new EventHandler(DateColumn_DefaultValueNeeded);
       sdt.Columns["Kind"].NewMode = ColumnNewMode.Saved;
@@ -358,19 +358,19 @@ namespace Plants
 
       #endregion
 
-      #region Места
+      #region РњРµСЃС‚Р°
 
       dt = base.DocTypes["Places"];
 
-      dt.GridProducer.Columns.AddText("Name", "Название", 40, 15);
+      dt.GridProducer.Columns.AddText("Name", "РќР°Р·РІР°РЅРёРµ", 40, 15);
       dt.GridProducer.Columns.LastAdded.CanIncSearch = true;
 
-      dt.GridProducer.Columns.AddText("GroupId.Name", "Группа", 15, 5);
-      dt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
+      dt.GridProducer.Columns.AddText("GroupId.Name", "Р“СЂСѓРїРїР°", 15, 5);
+      dt.GridProducer.Columns.AddText("Comment", "РљРѕРјРјРµРЅС‚Р°СЂРёР№", 30, 10);
 
-      dt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
+      dt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "РљРѕРјРјРµРЅС‚Р°СЂРёР№ (РµСЃР»Рё Р·Р°РґР°РЅ)";
 
-      // dt.GridProducer.Orders.Add("Name", "Название");
+      // dt.GridProducer.Orders.Add("Name", "РќР°Р·РІР°РЅРёРµ");
 
       dt.GridProducer.NewDefaultConfig(false);
       dt.GridProducer.DefaultConfig.Columns.AddFill("Name", 100);
@@ -380,23 +380,23 @@ namespace Plants
 
       dt.InitEditForm += new InitDocEditFormEventHandler(EditPlace.InitDocEditForm);
       dt.CanInsertCopy = true;
-      dt.CanMultiEdit = true; // можно менять группу у нескольких документов сразу
+      dt.CanMultiEdit = true; // РјРѕР¶РЅРѕ РјРµРЅСЏС‚СЊ РіСЂСѓРїРїСѓ Сѓ РЅРµСЃРєРѕР»СЊРєРёС… РґРѕРєСѓРјРµРЅС‚РѕРІ СЃСЂР°Р·Сѓ
       dt.DataBuffering = true;
       dt.Columns["Name"].NewMode = ColumnNewMode.AlwaysDefaultValue;
 
       #endregion
 
-      #region Контрагенты
+      #region РљРѕРЅС‚СЂР°РіРµРЅС‚С‹
 
       dt = base.DocTypes["Contras"];
 
-      dt.GridProducer.Columns.AddText("Name", "Название", 40, 15);
+      dt.GridProducer.Columns.AddText("Name", "РќР°Р·РІР°РЅРёРµ", 40, 15);
       dt.GridProducer.Columns.LastAdded.CanIncSearch = true;
 
-      dt.GridProducer.Columns.AddText("GroupId.Name", "Группа", 15, 5);
-      dt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
+      dt.GridProducer.Columns.AddText("GroupId.Name", "Р“СЂСѓРїРїР°", 15, 5);
+      dt.GridProducer.Columns.AddText("Comment", "РљРѕРјРјРµРЅС‚Р°СЂРёР№", 30, 10);
 
-      dt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
+      dt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "РљРѕРјРјРµРЅС‚Р°СЂРёР№ (РµСЃР»Рё Р·Р°РґР°РЅ)";
 
       dt.GridProducer.NewDefaultConfig(false);
       dt.GridProducer.DefaultConfig.Columns.AddFill("Name", 100);
@@ -406,23 +406,23 @@ namespace Plants
 
       dt.InitEditForm += new InitDocEditFormEventHandler(EditContra.InitDocEditForm);
       dt.CanInsertCopy = true;
-      dt.CanMultiEdit = true; // можно менять группу у нескольких документов сразу
+      dt.CanMultiEdit = true; // РјРѕР¶РЅРѕ РјРµРЅСЏС‚СЊ РіСЂСѓРїРїСѓ Сѓ РЅРµСЃРєРѕР»СЊРєРёС… РґРѕРєСѓРјРµРЅС‚РѕРІ СЃСЂР°Р·Сѓ
       dt.DataBuffering = true;
       dt.Columns["Name"].NewMode = ColumnNewMode.AlwaysDefaultValue;
 
       #endregion
 
-      #region Организации
+      #region РћСЂРіР°РЅРёР·Р°С†РёРё
 
       dt = base.DocTypes["Companies"];
 
-      dt.GridProducer.Columns.AddText("Name", "Название", 40, 15);
+      dt.GridProducer.Columns.AddText("Name", "РќР°Р·РІР°РЅРёРµ", 40, 15);
       dt.GridProducer.Columns.LastAdded.CanIncSearch = true;
 
-      dt.GridProducer.Columns.AddText("GroupId.Name", "Группа", 15, 5);
-      dt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
+      dt.GridProducer.Columns.AddText("GroupId.Name", "Р“СЂСѓРїРїР°", 15, 5);
+      dt.GridProducer.Columns.AddText("Comment", "РљРѕРјРјРµРЅС‚Р°СЂРёР№", 30, 10);
 
-      dt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
+      dt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "РљРѕРјРјРµРЅС‚Р°СЂРёР№ (РµСЃР»Рё Р·Р°РґР°РЅ)";
 
       dt.GridProducer.NewDefaultConfig(false);
       dt.GridProducer.DefaultConfig.Columns.AddFill("Name", 100);
@@ -432,24 +432,24 @@ namespace Plants
 
       dt.InitEditForm += new InitDocEditFormEventHandler(EditCompany.InitDocEditForm);
       dt.CanInsertCopy = true;
-      dt.CanMultiEdit = true; // можно менять группу у нескольких документов сразу
+      dt.CanMultiEdit = true; // РјРѕР¶РЅРѕ РјРµРЅСЏС‚СЊ РіСЂСѓРїРїСѓ Сѓ РЅРµСЃРєРѕР»СЊРєРёС… РґРѕРєСѓРјРµРЅС‚РѕРІ СЃСЂР°Р·Сѓ
       dt.DataBuffering = true;
       dt.Columns["Name"].NewMode = ColumnNewMode.AlwaysDefaultValue;
 
       #endregion
 
-      #region Виды заболеваний
+      #region Р’РёРґС‹ Р·Р°Р±РѕР»РµРІР°РЅРёР№
 
       dt = base.DocTypes["Diseases"];
 
-      dt.GridProducer.Columns.AddText("Name", "Название", 40, 15);
+      dt.GridProducer.Columns.AddText("Name", "РќР°Р·РІР°РЅРёРµ", 40, 15);
       dt.GridProducer.Columns.LastAdded.CanIncSearch = true;
 
-      dt.GridProducer.Columns.AddText("GroupId.Name", "Группа", 15, 5);
+      dt.GridProducer.Columns.AddText("GroupId.Name", "Р“СЂСѓРїРїР°", 15, 5);
 
-      dt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
+      dt.GridProducer.Columns.AddText("Comment", "РљРѕРјРјРµРЅС‚Р°СЂРёР№", 30, 10);
 
-      dt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
+      dt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "РљРѕРјРјРµРЅС‚Р°СЂРёР№ (РµСЃР»Рё Р·Р°РґР°РЅ)";
 
       dt.GridProducer.NewDefaultConfig(false);
       dt.GridProducer.DefaultConfig.Columns.AddFill("Name", 100);
@@ -459,27 +459,27 @@ namespace Plants
 
       dt.InitEditForm += new InitDocEditFormEventHandler(EditDisease.InitDocEditForm);
       dt.CanInsertCopy = true;
-      dt.CanMultiEdit = true; // можно менять группу у нескольких документов сразу
+      dt.CanMultiEdit = true; // РјРѕР¶РЅРѕ РјРµРЅСЏС‚СЊ РіСЂСѓРїРїСѓ Сѓ РЅРµСЃРєРѕР»СЊРєРёС… РґРѕРєСѓРјРµРЅС‚РѕРІ СЃСЂР°Р·Сѓ
       dt.DataBuffering = true;
       dt.Columns["Name"].NewMode = ColumnNewMode.AlwaysDefaultValue;
 
       #endregion
 
-      #region Препараты
+      #region РџСЂРµРїР°СЂР°С‚С‹
 
-      #region Основной документ
+      #region РћСЃРЅРѕРІРЅРѕР№ РґРѕРєСѓРјРµРЅС‚
 
       dt = base.DocTypes["Remedies"];
 
-      dt.GridProducer.Columns.AddText("Name", "Название", 40, 15);
+      dt.GridProducer.Columns.AddText("Name", "РќР°Р·РІР°РЅРёРµ", 40, 15);
       dt.GridProducer.Columns.LastAdded.CanIncSearch = true;
 
-      dt.GridProducer.Columns.AddText("Manufacturer.Name", "Изготовитель", 20, 5);
+      dt.GridProducer.Columns.AddText("Manufacturer.Name", "РР·РіРѕС‚РѕРІРёС‚РµР»СЊ", 20, 5);
 
-      dt.GridProducer.Columns.AddText("GroupId.Name", "Группа", 15, 5);
-      dt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
+      dt.GridProducer.Columns.AddText("GroupId.Name", "Р“СЂСѓРїРїР°", 15, 5);
+      dt.GridProducer.Columns.AddText("Comment", "РљРѕРјРјРµРЅС‚Р°СЂРёР№", 30, 10);
 
-      dt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
+      dt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "РљРѕРјРјРµРЅС‚Р°СЂРёР№ (РµСЃР»Рё Р·Р°РґР°РЅ)";
 
       dt.GridProducer.NewDefaultConfig(false);
       dt.GridProducer.DefaultConfig.Columns.AddFill("Name", 100);
@@ -490,17 +490,17 @@ namespace Plants
 
       dt.InitEditForm += new InitDocEditFormEventHandler(EditRemedy.InitDocEditForm);
       dt.CanInsertCopy = true;
-      dt.CanMultiEdit = true; // можно менять группу у нескольких документов сразу
+      dt.CanMultiEdit = true; // РјРѕР¶РЅРѕ РјРµРЅСЏС‚СЊ РіСЂСѓРїРїСѓ Сѓ РЅРµСЃРєРѕР»СЊРєРёС… РґРѕРєСѓРјРµРЅС‚РѕРІ СЃСЂР°Р·Сѓ
       dt.DataBuffering = true;
       dt.Columns["Name"].NewMode = ColumnNewMode.AlwaysDefaultValue;
       dt.Columns["Manufacturer"].NewMode = ColumnNewMode.Saved;
 
       #endregion
 
-      #region Вариант применения препарата
+      #region Р’Р°СЂРёР°РЅС‚ РїСЂРёРјРµРЅРµРЅРёСЏ РїСЂРµРїР°СЂР°С‚Р°
 
       sdt = dt.SubDocTypes["RemedyUsage"];
-      sdt.GridProducer.Columns.AddText("Name", "Название", 40, 15);
+      sdt.GridProducer.Columns.AddText("Name", "РќР°Р·РІР°РЅРёРµ", 40, 15);
       sdt.GridProducer.Columns.LastAdded.CanIncSearch = true;
 
       sdt.GridProducer.DefaultConfig = new EFPDataGridViewConfig();
@@ -515,28 +515,28 @@ namespace Plants
 
       #endregion
 
-      #region Грунты
+      #region Р“СЂСѓРЅС‚С‹
 
-      #region Основной документ
+      #region РћСЃРЅРѕРІРЅРѕР№ РґРѕРєСѓРјРµРЅС‚
 
       dt = base.DocTypes["Soils"];
 
-      dt.GridProducer.Columns.AddText("Name", "Название", 40, 15);
+      dt.GridProducer.Columns.AddText("Name", "РќР°Р·РІР°РЅРёРµ", 40, 15);
       dt.GridProducer.Columns.LastAdded.CanIncSearch = true;
 
-      dt.GridProducer.Columns.AddText("Manufacturer.Name", "Изготовитель", 20, 5);
+      dt.GridProducer.Columns.AddText("Manufacturer.Name", "РР·РіРѕС‚РѕРІРёС‚РµР»СЊ", 20, 5);
 
-      dt.GridProducer.Columns.AddInt("PartCount", "Количество компонентов", 2);
-      dt.GridProducer.Columns.AddText("Contents", "Состав", 50, 10);
+      dt.GridProducer.Columns.AddInt("PartCount", "РљРѕР»РёС‡РµСЃС‚РІРѕ РєРѕРјРїРѕРЅРµРЅС‚РѕРІ", 2);
+      dt.GridProducer.Columns.AddText("Contents", "РЎРѕСЃС‚Р°РІ", 50, 10);
       dt.GridProducer.Columns.AddUserText("pHtext", "pHmin,pHmax",
         new EFPGridProducerValueNeededEventHandler(EditSoil.pHcolumnValueNeeded),
         "pH", 7, 7);
       dt.GridProducer.Columns.LastAdded.TextAlign = HorizontalAlignment.Center;
 
-      dt.GridProducer.Columns.AddText("GroupId.Name", "Группа", 15, 5);
-      dt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
+      dt.GridProducer.Columns.AddText("GroupId.Name", "Р“СЂСѓРїРїР°", 15, 5);
+      dt.GridProducer.Columns.AddText("Comment", "РљРѕРјРјРµРЅС‚Р°СЂРёР№", 30, 10);
 
-      dt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
+      dt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "РљРѕРјРјРµРЅС‚Р°СЂРёР№ (РµСЃР»Рё Р·Р°РґР°РЅ)";
 
       dt.GridProducer.NewDefaultConfig(false);
       dt.GridProducer.DefaultConfig.Columns.AddFill("Name", 100);
@@ -548,17 +548,17 @@ namespace Plants
 
       dt.InitEditForm += new InitDocEditFormEventHandler(EditSoil.InitDocEditForm);
       dt.CanInsertCopy = true;
-      dt.CanMultiEdit = true; // можно менять группу у нескольких документов сразу
+      dt.CanMultiEdit = true; // РјРѕР¶РЅРѕ РјРµРЅСЏС‚СЊ РіСЂСѓРїРїСѓ Сѓ РЅРµСЃРєРѕР»СЊРєРёС… РґРѕРєСѓРјРµРЅС‚РѕРІ СЃСЂР°Р·Сѓ
       dt.DataBuffering = true;
       dt.Columns["Name"].NewMode = ColumnNewMode.AlwaysDefaultValue;
       dt.Columns["Manufacturer"].NewMode = ColumnNewMode.Saved;
 
       #endregion
 
-      #region Поддокумент "Компонент грунта"
+      #region РџРѕРґРґРѕРєСѓРјРµРЅС‚ "РљРѕРјРїРѕРЅРµРЅС‚ РіСЂСѓРЅС‚Р°"
 
       sdt = dt.SubDocTypes["SoilParts"];
-      sdt.GridProducer.Columns.AddText("Soil.Name", "Компонент", 20, 10);
+      sdt.GridProducer.Columns.AddText("Soil.Name", "РљРѕРјРїРѕРЅРµРЅС‚", 20, 10);
       sdt.GridProducer.Columns.LastAdded.CanIncSearch = true;
       sdt.GridProducer.Columns.AddInt("Percent", "%", 3);
 
@@ -575,30 +575,30 @@ namespace Plants
 
       #endregion
 
-      #region Горшки
+      #region Р“РѕСЂС€РєРё
 
       dt = base.DocTypes["PotKinds"];
 
-      dt.GridProducer.Columns.AddText("Name", "Описание", 40, 15);
+      dt.GridProducer.Columns.AddText("Name", "РћРїРёСЃР°РЅРёРµ", 40, 15);
       dt.GridProducer.Columns.LastAdded.CanIncSearch = true;
 
-      dt.GridProducer.Columns.AddText("Text", "Текстовая часть", 20, 15);
+      dt.GridProducer.Columns.AddText("Text", "РўРµРєСЃС‚РѕРІР°СЏ С‡Р°СЃС‚СЊ", 20, 15);
       dt.GridProducer.Columns.LastAdded.CanIncSearch = true;
 
-      dt.GridProducer.Columns.AddInt("Diameter", "d, мм", 3);
+      dt.GridProducer.Columns.AddInt("Diameter", "d, РјРј", 3);
       dt.GridProducer.Columns.LastAdded.SizeGroup = "SizeMM";
-      dt.GridProducer.Columns.AddInt("Height", "H, мм", 3);
+      dt.GridProducer.Columns.AddInt("Height", "H, РјРј", 3);
       dt.GridProducer.Columns.LastAdded.SizeGroup = "SizeMM";
 
-      dt.GridProducer.Columns.AddFixedPoint("Volume", "Объем, л", 5, 2, "VolumeL");
-      dt.GridProducer.Columns.AddText("Color", "Цвет", 10, 5);
+      dt.GridProducer.Columns.AddFixedPoint("Volume", "РћР±СЉРµРј, Р»", 5, 2, "VolumeL");
+      dt.GridProducer.Columns.AddText("Color", "Р¦РІРµС‚", 10, 5);
 
-      dt.GridProducer.Columns.AddText("Manufacturer.Name", "Изготовитель", 20, 5);
+      dt.GridProducer.Columns.AddText("Manufacturer.Name", "РР·РіРѕС‚РѕРІРёС‚РµР»СЊ", 20, 5);
 
-      dt.GridProducer.Columns.AddText("GroupId.Name", "Группа", 15, 5);
-      dt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
+      dt.GridProducer.Columns.AddText("GroupId.Name", "Р“СЂСѓРїРїР°", 15, 5);
+      dt.GridProducer.Columns.AddText("Comment", "РљРѕРјРјРµРЅС‚Р°СЂРёР№", 30, 10);
 
-      dt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
+      dt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "РљРѕРјРјРµРЅС‚Р°СЂРёР№ (РµСЃР»Рё Р·Р°РґР°РЅ)";
 
       dt.GridProducer.NewDefaultConfig(false);
       dt.GridProducer.DefaultConfig.Columns.AddFill("Name", 100);
@@ -617,20 +617,20 @@ namespace Plants
 
       #endregion
 
-      #region Виды атрибутов
+      #region Р’РёРґС‹ Р°С‚СЂРёР±СѓС‚РѕРІ
 
       dt = base.DocTypes["AttrTypes"];
       dt.ImageKey = "AttributeType";
-      dt.GridProducer.Columns.AddText("Name", "Имя атрибута", 20, 5);
+      dt.GridProducer.Columns.AddText("Name", "РРјСЏ Р°С‚СЂРёР±СѓС‚Р°", 20, 5);
       dt.GridProducer.Columns.LastAdded.CanIncSearch = true;
 
       dt.GridProducer.Columns.AddUserText("TypeText", "Type",
         new EFPGridProducerValueNeededEventHandler(EditAttrType.TypeColumnValueNeeded),
-        "Тип", 15, 2);
+        "РўРёРї", 15, 2);
 
-      dt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
+      dt.GridProducer.Columns.AddText("Comment", "РљРѕРјРјРµРЅС‚Р°СЂРёР№", 30, 10);
 
-      dt.GridProducer.ToolTips.AddText("Comment", "").DisplayName = "Комментарий (если задан)";
+      dt.GridProducer.ToolTips.AddText("Comment", "").DisplayName = "РљРѕРјРјРµРЅС‚Р°СЂРёР№ (РµСЃР»Рё Р·Р°РґР°РЅ)";
 
       dt.GridProducer.NewDefaultConfig(false);
       dt.GridProducer.DefaultConfig.Columns.AddFill("Name");
@@ -646,24 +646,24 @@ namespace Plants
 
       #endregion
 
-      #region Уход
+      #region РЈС…РѕРґ
 
-      #region Основной документ
+      #region РћСЃРЅРѕРІРЅРѕР№ РґРѕРєСѓРјРµРЅС‚
 
       dt = base.DocTypes["Care"];
 
-      dt.GridProducer.Columns.AddText("Name", "Название", 40, 15);
+      dt.GridProducer.Columns.AddText("Name", "РќР°Р·РІР°РЅРёРµ", 40, 15);
       dt.GridProducer.Columns.LastAdded.CanIncSearch = true;
 
-      dt.GridProducer.Columns.AddText("Parent.Name", "Родитель", 40, 15);
+      dt.GridProducer.Columns.AddText("Parent.Name", "Р РѕРґРёС‚РµР»СЊ", 40, 15);
       dt.GridProducer.Columns.LastAdded.CanIncSearch = true;
 
-      dt.GridProducer.Columns.AddText("GroupId.Name", "Группа", 15, 5);
-      dt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
+      dt.GridProducer.Columns.AddText("GroupId.Name", "Р“СЂСѓРїРїР°", 15, 5);
+      dt.GridProducer.Columns.AddText("Comment", "РљРѕРјРјРµРЅС‚Р°СЂРёР№", 30, 10);
 
-      dt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
+      dt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "РљРѕРјРјРµРЅС‚Р°СЂРёР№ (РµСЃР»Рё Р·Р°РґР°РЅ)";
 
-      dt.GridProducer.Orders.Add("Name", "Название");
+      dt.GridProducer.Orders.Add("Name", "РќР°Р·РІР°РЅРёРµ");
 
 
       dt.GridProducer.NewDefaultConfig(false);
@@ -675,23 +675,23 @@ namespace Plants
 
       dt.InitEditForm += new InitDocEditFormEventHandler(EditCare.InitDocEditForm);
       dt.CanInsertCopy = true;
-      dt.CanMultiEdit = true; // только вкладка "Общие"
+      dt.CanMultiEdit = true; // С‚РѕР»СЊРєРѕ РІРєР»Р°РґРєР° "РћР±С‰РёРµ"
       dt.DataBuffering = false;
 
       //dt.Writing += EditOrg.Writing;
 
       #endregion
 
-      #region Запись об уходе
+      #region Р—Р°РїРёСЃСЊ РѕР± СѓС…РѕРґРµ
 
       sdt = dt.SubDocTypes["CareRecords"];
       sdt.GridProducer.Columns.AddMonthDayRange("PeriodText", "Day1", "Day2",
-        "Период", false).EmptyValue = "Год";
+        "РџРµСЂРёРѕРґ", false).EmptyValue = "Р“РѕРґ";
       sdt.GridProducer.Columns.LastAdded.TextAlign = HorizontalAlignment.Center;
-      sdt.GridProducer.Columns.AddText("Name", "Название периода", 20, 10);
-      //sdt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
+      sdt.GridProducer.Columns.AddText("Name", "РќР°Р·РІР°РЅРёРµ РїРµСЂРёРѕРґР°", 20, 10);
+      //sdt.GridProducer.Columns.AddText("Comment", "РљРѕРјРјРµРЅС‚Р°СЂРёР№", 30, 10);
 
-      //sdt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
+      //sdt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "РљРѕРјРјРµРЅС‚Р°СЂРёР№ (РµСЃР»Рё Р·Р°РґР°РЅ)";
 
       sdt.GridProducer.DefaultConfig = new EFPDataGridViewConfig();
       sdt.GridProducer.DefaultConfig.Columns.Add("PeriodText");
@@ -718,7 +718,7 @@ namespace Plants
     }
 
     /// <summary>
-    /// Текст для столбцов диапазонов дат 
+    /// РўРµРєСЃС‚ РґР»СЏ СЃС‚РѕР»Р±С†РѕРІ РґРёР°РїР°Р·РѕРЅРѕРІ РґР°С‚ 
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="args"></param>
@@ -727,7 +727,7 @@ namespace Plants
       DateTime? firstDate = args.GetNullableDateTime(0);
       DateTime? lastDate = args.GetNullableDateTime(1);
 
-      // Нестандартное преобразование
+      // РќРµСЃС‚Р°РЅРґР°СЂС‚РЅРѕРµ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ
       if (firstDate.HasValue)
       {
         if (firstDate == DateRange.Whole.FirstDate)
@@ -745,15 +745,15 @@ namespace Plants
 
     #endregion
 
-    #region Диалог выбора значения атрибута из списка
+    #region Р”РёР°Р»РѕРі РІС‹Р±РѕСЂР° Р·РЅР°С‡РµРЅРёСЏ Р°С‚СЂРёР±СѓС‚Р° РёР· СЃРїРёСЃРєР°
 
     /// <summary>
-    /// Диалог выбора значения атрибута
+    /// Р”РёР°Р»РѕРі РІС‹Р±РѕСЂР° Р·РЅР°С‡РµРЅРёСЏ Р°С‚СЂРёР±СѓС‚Р°
     /// </summary>
-    /// <param name="value">Вход-выход: выбираемое значение</param>
-    /// <param name="title">Заголовок блока диалога</param>
-    /// <param name="attrType">Документ "Вид атрибута"</param>
-    /// <returns>true, если значение было выбрано</returns>
+    /// <param name="value">Р’С…РѕРґ-РІС‹С…РѕРґ: РІС‹Р±РёСЂР°РµРјРѕРµ Р·РЅР°С‡РµРЅРёРµ</param>
+    /// <param name="title">Р—Р°РіРѕР»РѕРІРѕРє Р±Р»РѕРєР° РґРёР°Р»РѕРіР°</param>
+    /// <param name="attrType">Р”РѕРєСѓРјРµРЅС‚ "Р’РёРґ Р°С‚СЂРёР±СѓС‚Р°"</param>
+    /// <returns>true, РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ Р±С‹Р»Рѕ РІС‹Р±СЂР°РЅРѕ</returns>
     public static bool SelectAttrValue(ref object value, string title, AttrTypeDoc attrType)
     {
       switch (attrType.SourceType)
@@ -763,7 +763,7 @@ namespace Plants
         default:
           if (attrType.ValueType == ValueType.Boolean)
             return SelectAttrValueBoolean(ref value, title, attrType);
-          EFPApp.ShowTempMessage("Для атрибута \"" + attrType.Name + "\" предусмотрен только ручной ввод значений");
+          EFPApp.ShowTempMessage("Р”Р»СЏ Р°С‚СЂРёР±СѓС‚Р° \"" + attrType.Name + "\" РїСЂРµРґСѓСЃРјРѕС‚СЂРµРЅ С‚РѕР»СЊРєРѕ СЂСѓС‡РЅРѕР№ РІРІРѕРґ Р·РЅР°С‡РµРЅРёР№");
           return false;
       }
     }
@@ -772,13 +772,13 @@ namespace Plants
     {
       if (attrType.ValueList.Length == 0)
       {
-        EFPApp.ShowTempMessage("У вида атрибута \"" + attrType.Name + "\" нет списка значений для выбора");
+        EFPApp.ShowTempMessage("РЈ РІРёРґР° Р°С‚СЂРёР±СѓС‚Р° \"" + attrType.Name + "\" РЅРµС‚ СЃРїРёСЃРєР° Р·РЅР°С‡РµРЅРёР№ РґР»СЏ РІС‹Р±РѕСЂР°");
         return false;
       }
 
       ListSelectDialog dlg = new ListSelectDialog();
       dlg.Title = title;
-      dlg.ListTitle = "Значение атрибута \"" + attrType.Name + "\"";
+      dlg.ListTitle = "Р—РЅР°С‡РµРЅРёРµ Р°С‚СЂРёР±СѓС‚Р° \"" + attrType.Name + "\"";
       string[] a = new string[attrType.ValueList.Length];
       for (int i = 0; i < attrType.ValueList.Length; i++)
         a[i] = PlantTools.ToString(attrType.ValueList[i], attrType.ValueType);
@@ -795,9 +795,9 @@ namespace Plants
     {
       RadioSelectDialog dlg = new RadioSelectDialog();
       dlg.Title = title;
-      //dlg.ImageKey = "Атрибут";
-      dlg.GroupTitle = "Значение атрибута \"" + attrType.Name + "\"";
-      dlg.Items = new string[] { "&1 - Да", "&0 - Нет" };
+      //dlg.ImageKey = "РђС‚СЂРёР±СѓС‚";
+      dlg.GroupTitle = "Р—РЅР°С‡РµРЅРёРµ Р°С‚СЂРёР±СѓС‚Р° \"" + attrType.Name + "\"";
+      dlg.Items = new string[] { "&1 - Р”Р°", "&0 - РќРµС‚" };
       dlg.SelectedIndex = DataTools.GetBool(value) ? 0 : 1;
       if (dlg.ShowDialog() != DialogResult.OK)
         return false;
@@ -808,10 +808,10 @@ namespace Plants
 
     #endregion
 
-    #region Прочие методы
+    #region РџСЂРѕС‡РёРµ РјРµС‚РѕРґС‹
 
     /// <summary>
-    /// Добавить в GridProducer обычный столбец, связанный с полем данных, для указанного типа данных
+    /// Р”РѕР±Р°РІРёС‚СЊ РІ GridProducer РѕР±С‹С‡РЅС‹Р№ СЃС‚РѕР»Р±РµС†, СЃРІСЏР·Р°РЅРЅС‹Р№ СЃ РїРѕР»РµРј РґР°РЅРЅС‹С…, РґР»СЏ СѓРєР°Р·Р°РЅРЅРѕРіРѕ С‚РёРїР° РґР°РЅРЅС‹С…
     /// </summary>
     public static void AddValueTypeColumn(EFPGridProducer producer, ValueType valueType, string columnName, string headerText)
     {
@@ -844,17 +844,17 @@ namespace Plants
           producer.Columns.AddDateTime(columnName, headerText);
           break;
         default:
-          throw new ArgumentException("Неизвестный тип данных: " + valueType.ToString() + " для столбца \"" + columnName + "\"", "ValueType");
+          throw new ArgumentException("РќРµРёР·РІРµСЃС‚РЅС‹Р№ С‚РёРї РґР°РЅРЅС‹С…: " + valueType.ToString() + " РґР»СЏ СЃС‚РѕР»Р±С†Р° \"" + columnName + "\"", "ValueType");
       }
     }
 
 
 
     /// <summary>
-    /// Возвращает горизонтальное выравнивание по умолчанию для значения заданного типа
+    /// Р’РѕР·РІСЂР°С‰Р°РµС‚ РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅРѕРµ РІС‹СЂР°РІРЅРёРІР°РЅРёРµ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РґР»СЏ Р·РЅР°С‡РµРЅРёСЏ Р·Р°РґР°РЅРЅРѕРіРѕ С‚РёРїР°
     /// </summary>
-    /// <param name="valueType">Тип значения</param>
-    /// <returns>Выравнивание</returns>
+    /// <param name="valueType">РўРёРї Р·РЅР°С‡РµРЅРёСЏ</param>
+    /// <returns>Р’С‹СЂР°РІРЅРёРІР°РЅРёРµ</returns>
     public static HorizontalAlignment GetAlignment(ValueType valueType)
     {
       switch (valueType)
@@ -872,7 +872,7 @@ namespace Plants
 
     #endregion
 
-    #region Статические свойства
+    #region РЎС‚Р°С‚РёС‡РµСЃРєРёРµ СЃРІРѕР№СЃС‚РІР°
 
     public static ProgramDBUI TheUI;
 
@@ -883,7 +883,7 @@ namespace Plants
     //public static ProgramCache Cache;
 
     /// <summary>
-    /// Настройки
+    /// РќР°СЃС‚СЂРѕР№РєРё
     /// </summary>
     public static UserSettings Settings;
 

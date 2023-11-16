@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-// General Information about an assembly is controlled through the following 
+// General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Каталог растений")]
@@ -10,12 +10,12 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Агеев А.В.")]
 [assembly: AssemblyProduct("Каталог растений")]
-[assembly: AssemblyCopyright("Copyright © Агеев А.В., г.Тюмень 2018-2022. Свободное программное обеспечение")]
+[assembly: AssemblyCopyright("Copyright © Агеев А.В., г.Тюмень 2018-2023. Свободное программное обеспечение")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-// Setting ComVisible to false makes the types in this assembly not visible 
-// to COM components.  If you need to access a type in this assembly from 
+// Setting ComVisible to false makes the types in this assembly not visible
+// to COM components.  If you need to access a type in this assembly from
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
@@ -25,8 +25,8 @@ using System.Runtime.InteropServices;
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version
-//      Minor Version 
+//      Minor Version
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.0.0.22")]
+[assembly: AssemblyVersion("1.0.0.23")]

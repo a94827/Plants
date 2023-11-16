@@ -1,4 +1,4 @@
-namespace Plants
+п»їnamespace Plants
 {
   partial class EditRemedyUsage
   {
@@ -55,7 +55,7 @@ namespace Plants
       this.groupBox1.Size = new System.Drawing.Size(423, 59);
       this.groupBox1.TabIndex = 0;
       this.groupBox1.TabStop = false;
-      this.groupBox1.Text = "Способ применения";
+      this.groupBox1.Text = "РЎРїРѕСЃРѕР± РїСЂРёРјРµРЅРµРЅРёСЏ";
       // 
       // label2
       // 
@@ -63,7 +63,7 @@ namespace Plants
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(140, 20);
       this.label2.TabIndex = 0;
-      this.label2.Text = "&Название";
+      this.label2.Text = "&РќР°Р·РІР°РЅРёРµ";
       this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // edName

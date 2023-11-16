@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.Text;
 using FreeLibSet.Data;
@@ -6,68 +6,68 @@ using FreeLibSet.Core;
 
 namespace Plants
 {
-  #region Перечисление AttrValueSourceType
+  #region РџРµСЂРµС‡РёСЃР»РµРЅРёРµ AttrValueSourceType
 
   /// <summary>
-  /// Источник для списка значений атрибутов
+  /// РСЃС‚РѕС‡РЅРёРє РґР»СЏ СЃРїРёСЃРєР° Р·РЅР°С‡РµРЅРёР№ Р°С‚СЂРёР±СѓС‚РѕРІ
   /// </summary>
   [Serializable]
   public enum AttrValueSourceType
   {
     /// <summary>
-    /// Нет источника. Значение вводится вручную.
-    /// Для даты используется календарик
+    /// РќРµС‚ РёСЃС‚РѕС‡РЅРёРєР°. Р—РЅР°С‡РµРЅРёРµ РІРІРѕРґРёС‚СЃСЏ РІСЂСѓС‡РЅСѓСЋ.
+    /// Р”Р»СЏ РґР°С‚С‹ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РєР°Р»РµРЅРґР°СЂРёРє
     /// </summary>
     None = 0,
 
     /// <summary>
-    /// Фиксированный список значений, заданный непосредственно в документе "AttrType"
+    /// Р¤РёРєСЃРёСЂРѕРІР°РЅРЅС‹Р№ СЃРїРёСЃРѕРє Р·РЅР°С‡РµРЅРёР№, Р·Р°РґР°РЅРЅС‹Р№ РЅРµРїРѕСЃСЂРµРґСЃС‚РІРµРЅРЅРѕ РІ РґРѕРєСѓРјРµРЅС‚Рµ "AttrType"
     /// </summary>
     List = 1,
   }
 
   #endregion
 
-  #region Перечисление ValueType
+  #region РџРµСЂРµС‡РёСЃР»РµРЅРёРµ ValueType
 
   /// <summary>
-  /// Тип значения атрибута
+  /// РўРёРї Р·РЅР°С‡РµРЅРёСЏ Р°С‚СЂРёР±СѓС‚Р°
   /// </summary>
   [Serializable]
   public enum ValueType
   {
     /// <summary>
-    /// Целое. По умолчанию - 0
+    /// Р¦РµР»РѕРµ. РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ - 0
     /// </summary>
     Integer = 0,
 
     /// <summary>
-    /// С плавающей точкой. По умолчанию - 0.0
+    /// РЎ РїР»Р°РІР°СЋС‰РµР№ С‚РѕС‡РєРѕР№. РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ - 0.0
     /// </summary>
     Double = 1,
 
     /// <summary>
-    /// Денежное. По умолчанию - 0m
+    /// Р”РµРЅРµР¶РЅРѕРµ. РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ - 0m
     /// </summary>
     Decimal = 2,
 
     /// <summary>
-    /// Логическое. По умолчанию - false
+    /// Р›РѕРіРёС‡РµСЃРєРѕРµ. РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ - false
     /// </summary>
     Boolean = 3,
 
     /// <summary>
-    /// Строковое. По умолчанию - пустая строка
+    /// РЎС‚СЂРѕРєРѕРІРѕРµ. РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ - РїСѓСЃС‚Р°СЏ СЃС‚СЂРѕРєР°
     /// </summary>
     String = 4,
 
     /// <summary>
-    /// Дата (без времени). По умолчанию - значение null
+    /// Р”Р°С‚Р° (Р±РµР· РІСЂРµРјРµРЅРё). РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ - Р·РЅР°С‡РµРЅРёРµ null
     /// </summary>
     Date = 5,
 
     /// <summary>
-    /// Дата и время. По умолчанию - значение null
+    /// Р”Р°С‚Р° Рё РІСЂРµРјСЏ. РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ - Р·РЅР°С‡РµРЅРёРµ null
     /// </summary>
     DateTime = 6,
 
@@ -77,7 +77,7 @@ namespace Plants
 
   #endregion
 
-  #region Перечисление MovementKind
+  #region РџРµСЂРµС‡РёСЃР»РµРЅРёРµ MovementKind
 
   [Serializable]
   public enum MovementKind
@@ -89,73 +89,73 @@ namespace Plants
 
   #endregion
 
-  #region Перечисление ActionKind
+  #region РџРµСЂРµС‡РёСЃР»РµРЅРёРµ ActionKind
 
   [Serializable]
   public enum ActionKind
   {
     /// <summary>
-    /// Другое. Задается в поле ActionName
+    /// Р”СЂСѓРіРѕРµ. Р—Р°РґР°РµС‚СЃСЏ РІ РїРѕР»Рµ ActionName
     /// </summary>
     Other = 0,
 
     /// <summary>
-    /// Посадка
+    /// РџРѕСЃР°РґРєР°
     /// </summary>
     Planting = 1,
 
     /// <summary>
-    /// Пересадка
+    /// РџРµСЂРµСЃР°РґРєР°
     /// </summary>
     Replanting = 2,
 
     /// <summary>
-    /// Перевалка
+    /// РџРµСЂРµРІР°Р»РєР°
     /// </summary>
     Transshipment = 3,
 
     /// <summary>
-    /// Омоложение: срезание верхушки и сушка
+    /// РћРјРѕР»РѕР¶РµРЅРёРµ: СЃСЂРµР·Р°РЅРёРµ РІРµСЂС…СѓС€РєРё Рё СЃСѓС€РєР°
     /// </summary>
     TopCutting = 4,
 
     /// <summary>
-    /// Укоренение
+    /// РЈРєРѕСЂРµРЅРµРЅРёРµ
     /// </summary>
     Rooting = 5,
 
     /// <summary>
-    /// Обработка хим. препаратами
+    /// РћР±СЂР°Р±РѕС‚РєР° С…РёРј. РїСЂРµРїР°СЂР°С‚Р°РјРё
     /// </summary>
     Treatment = 6,
 
     /// <summary>
-    /// Частичная замена грунта
+    /// Р§Р°СЃС‚РёС‡РЅР°СЏ Р·Р°РјРµРЅР° РіСЂСѓРЅС‚Р°
     /// </summary>
     SoilReplace = 7,
 
     /// <summary>
-    /// Обрезка
+    /// РћР±СЂРµР·РєР°
     /// </summary>
     Trimming = 8,
 
     /// <summary>
-    /// Рыхление грунта
+    /// Р С‹С…Р»РµРЅРёРµ РіСЂСѓРЅС‚Р°
     /// </summary>
     LooseSoil = 9,
 
     /// <summary>
-    /// Мытье растения
+    /// РњС‹С‚СЊРµ СЂР°СЃС‚РµРЅРёСЏ
     /// </summary>
     Wash = 10,
 
     /// <summary>
-    /// Допосадка
+    /// Р”РѕРїРѕСЃР°РґРєР°
     /// </summary>
     AddPlant = 11,
 
     /// <summary>
-    /// Отсаживание
+    /// РћС‚СЃР°Р¶РёРІР°РЅРёРµ
     /// </summary>
     RemovePlant = 12,
 
@@ -165,35 +165,35 @@ namespace Plants
 
   #endregion
 
-  #region Перечисление PlantMovementState
+  #region РџРµСЂРµС‡РёСЃР»РµРЅРёРµ PlantMovementState
 
   /// <summary>
-  /// Значение вычисляемого поля "MovementState" в таблице "Plants"
+  /// Р—РЅР°С‡РµРЅРёРµ РІС‹С‡РёСЃР»СЏРµРјРѕРіРѕ РїРѕР»СЏ "MovementState" РІ С‚Р°Р±Р»РёС†Рµ "Plants"
   /// </summary>
   public enum PlantMovementState
   {
     /// <summary>
-    /// Нет перемещений растения (черновая запись)
+    /// РќРµС‚ РїРµСЂРµРјРµС‰РµРЅРёР№ СЂР°СЃС‚РµРЅРёСЏ (С‡РµСЂРЅРѕРІР°СЏ Р·Р°РїРёСЃСЊ)
     /// </summary>
     Draft,
 
     /// <summary>
-    /// Основное состояние - растение где-то расположено
+    /// РћСЃРЅРѕРІРЅРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ - СЂР°СЃС‚РµРЅРёРµ РіРґРµ-С‚Рѕ СЂР°СЃРїРѕР»РѕР¶РµРЅРѕ
     /// </summary>
     Placed,
 
     /// <summary>
-    /// Отдано кому-то
+    /// РћС‚РґР°РЅРѕ РєРѕРјСѓ-С‚Рѕ
     /// </summary>
     Given,
 
     /// <summary>
-    /// Сдохло
+    /// РЎРґРѕС…Р»Рѕ
     /// </summary>
     Dead,
 
     /// <summary>
-    /// Подсажено к другому растению
+    /// РџРѕРґСЃР°Р¶РµРЅРѕ Рє РґСЂСѓРіРѕРјСѓ СЂР°СЃС‚РµРЅРёСЋ
     /// </summary>
     Merged,
   }
@@ -201,18 +201,18 @@ namespace Plants
   #endregion
 
   /// <summary>
-  /// Статические функции клиента и сервера АССОО2, не связанные с выводом текста
+  /// РЎС‚Р°С‚РёС‡РµСЃРєРёРµ С„СѓРЅРєС†РёРё РєР»РёРµРЅС‚Р° Рё СЃРµСЂРІРµСЂР° РђРЎРЎРћРћ2, РЅРµ СЃРІСЏР·Р°РЅРЅС‹Рµ СЃ РІС‹РІРѕРґРѕРј С‚РµРєСЃС‚Р°
   /// </summary>
   public static class PlantTools
   {
-    #region Строки для перечислений
+    #region РЎС‚СЂРѕРєРё РґР»СЏ РїРµСЂРµС‡РёСЃР»РµРЅРёР№
 
     #region MovementKind
 
     public static readonly string[] MovementNames = new string[] { 
-      "Приход",
-      "Перемещение",
-      "Выбытие",
+      "РџСЂРёС…РѕРґ",
+      "РџРµСЂРµРјРµС‰РµРЅРёРµ",
+      "Р’С‹Р±С‹С‚РёРµ",
     };
 
     public static string GetMovementName(MovementKind kind)
@@ -242,19 +242,19 @@ namespace Plants
     #region ActionKind
 
     public static readonly string[] ActionNames = new string[] { 
-      "Другое",
-      "Посадка или укоренение в грунте",
-      "Пересадка",
-      "Перевалка",
-      "Срезание верхушки и сушка",
-      "Укоренение (не в грунте)",
-      "Обработка препаратами",
-      "Частичная замена грунта",
-      "Обрезка",
-      "Рыхление грунта",
-      "Мытье растения",
-      "Допосадка",
-      "Отсаживание"
+      "Р”СЂСѓРіРѕРµ",
+      "РџРѕСЃР°РґРєР° РёР»Рё СѓРєРѕСЂРµРЅРµРЅРёРµ РІ РіСЂСѓРЅС‚Рµ",
+      "РџРµСЂРµСЃР°РґРєР°",
+      "РџРµСЂРµРІР°Р»РєР°",
+      "РЎСЂРµР·Р°РЅРёРµ РІРµСЂС…СѓС€РєРё Рё СЃСѓС€РєР°",
+      "РЈРєРѕСЂРµРЅРµРЅРёРµ (РЅРµ РІ РіСЂСѓРЅС‚Рµ)",
+      "РћР±СЂР°Р±РѕС‚РєР° РїСЂРµРїР°СЂР°С‚Р°РјРё",
+      "Р§Р°СЃС‚РёС‡РЅР°СЏ Р·Р°РјРµРЅР° РіСЂСѓРЅС‚Р°",
+      "РћР±СЂРµР·РєР°",
+      "Р С‹С…Р»РµРЅРёРµ РіСЂСѓРЅС‚Р°",
+      "РњС‹С‚СЊРµ СЂР°СЃС‚РµРЅРёСЏ",
+      "Р”РѕРїРѕСЃР°РґРєР°",
+      "РћС‚СЃР°Р¶РёРІР°РЅРёРµ"
     };
 
     public static string GetActionName(ActionKind kind)
@@ -275,14 +275,14 @@ namespace Plants
           break;
         case ActionKind.Treatment:
           if (!String.IsNullOrEmpty(remedyName))
-            return "Обработка препаратом \"" + remedyName + "\"";
+            return "РћР±СЂР°Р±РѕС‚РєР° РїСЂРµРїР°СЂР°С‚РѕРј \"" + remedyName + "\"";
           break;
       }
       return GetActionName(kind);
     }
 
     /// <summary>
-    /// Значки для действий с растениями
+    /// Р—РЅР°С‡РєРё РґР»СЏ РґРµР№СЃС‚РІРёР№ СЃ СЂР°СЃС‚РµРЅРёСЏРјРё
     /// </summary>
     public static readonly string[] ActionImageKeys = new string[] { 
       "UnknownState", // Other
@@ -310,23 +310,23 @@ namespace Plants
 
     #endregion
 
-    #region Тип значения
+    #region РўРёРї Р·РЅР°С‡РµРЅРёСЏ
 
     public static readonly string[] ValueTypeNames = new string[] { 
-        "Целое число",
-        "Число с плавающей точкой",
-        "Денежный",
-        "Логический",
-        "Строковый",
-        "Дата",
-        "Дата и время",
+        "Р¦РµР»РѕРµ С‡РёСЃР»Рѕ",
+        "Р§РёСЃР»Рѕ СЃ РїР»Р°РІР°СЋС‰РµР№ С‚РѕС‡РєРѕР№",
+        "Р”РµРЅРµР¶РЅС‹Р№",
+        "Р›РѕРіРёС‡РµСЃРєРёР№",
+        "РЎС‚СЂРѕРєРѕРІС‹Р№",
+        "Р”Р°С‚Р°",
+        "Р”Р°С‚Р° Рё РІСЂРµРјСЏ",
     };
 
     /// <summary>
-    /// Текстовое представление для типа хранимого значения, например, "Целое число"
+    /// РўРµРєСЃС‚РѕРІРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ РґР»СЏ С‚РёРїР° С…СЂР°РЅРёРјРѕРіРѕ Р·РЅР°С‡РµРЅРёСЏ, РЅР°РїСЂРёРјРµСЂ, "Р¦РµР»РѕРµ С‡РёСЃР»Рѕ"
     /// </summary>
-    /// <param name="ValueType">Тип значения</param>
-    /// <returns>Текстовое представление</returns>
+    /// <param name="ValueType">РўРёРї Р·РЅР°С‡РµРЅРёСЏ</param>
+    /// <returns>РўРµРєСЃС‚РѕРІРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ</returns>
     public static string GetValueTypeName(ValueType valueType)
     {
       if ((int)valueType >= 0 && (int)valueType < ValueTypeNames.Length)
@@ -336,7 +336,7 @@ namespace Plants
     }
 
     /// <summary>
-    /// Преобразование перечисления ValueType в тип Net framework
+    /// РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РїРµСЂРµС‡РёСЃР»РµРЅРёСЏ ValueType РІ С‚РёРї Net framework
     /// </summary>
     /// <param name="valueType"></param>
     /// <returns></returns>
@@ -352,7 +352,7 @@ namespace Plants
         case ValueType.Date:
         case ValueType.DateTime: return typeof(DateTime);
         default:
-          throw new ArgumentException("Неизвестное значение ValueType=" + valueType.ToString(), "ValueType");
+          throw new ArgumentException("РќРµРёР·РІРµСЃС‚РЅРѕРµ Р·РЅР°С‡РµРЅРёРµ ValueType=" + valueType.ToString(), "ValueType");
       }
     }
 
@@ -368,12 +368,12 @@ namespace Plants
         case ValueType.Date: return null;
         case ValueType.DateTime: return null;
         default:
-          throw new ArgumentException("Неизвестное значение ValueType=" + valueType.ToString());
+          throw new ArgumentException("РќРµРёР·РІРµСЃС‚РЅРѕРµ Р·РЅР°С‡РµРЅРёРµ ValueType=" + valueType.ToString());
       }
     }
 
     /// <summary>
-    /// Возвращает true, если значение Value является значением по умолчанию
+    /// Р’РѕР·РІСЂР°С‰Р°РµС‚ true, РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ Value СЏРІР»СЏРµС‚СЃСЏ Р·РЅР°С‡РµРЅРёРµРј РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
     /// </summary>
     /// <param name="value"></param>
     /// <param name="valueType"></param>
@@ -384,10 +384,10 @@ namespace Plants
     }
 
     /// <summary>
-    /// Возврашает true, если значение имеет допустимый тип
+    /// Р’РѕР·РІСЂР°С€Р°РµС‚ true, РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ РёРјРµРµС‚ РґРѕРїСѓСЃС‚РёРјС‹Р№ С‚РёРї
     /// </summary>
-    /// <param name="value">Значение</param>
-    /// <returns>true, если значение имеет допустимый тип</returns>
+    /// <param name="value">Р—РЅР°С‡РµРЅРёРµ</param>
+    /// <returns>true, РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ РёРјРµРµС‚ РґРѕРїСѓСЃС‚РёРјС‹Р№ С‚РёРї</returns>
     public static bool IsValidValue(object value)
     {
       ValueType ValueType;
@@ -398,7 +398,7 @@ namespace Plants
     {
       if (value == null)
       {
-        valueType = ValueType.Date; // могло бы быть и DateTime
+        valueType = ValueType.Date; // РјРѕРіР»Рѕ Р±С‹ Р±С‹С‚СЊ Рё DateTime
         return true;
       }
 
@@ -446,7 +446,7 @@ namespace Plants
     }
 
     /// <summary>
-    /// Функция сравнения значений
+    /// Р¤СѓРЅРєС†РёСЏ СЃСЂР°РІРЅРµРЅРёСЏ Р·РЅР°С‡РµРЅРёР№
     /// </summary>
     public static int Compare(object value1, object value2, ValueType valueType)
     {
@@ -479,7 +479,7 @@ namespace Plants
               return ((DateTime)value1).CompareTo((DateTime)value2);
           }
         default:
-          throw new ArgumentException("Неизвестный ValueType");
+          throw new ArgumentException("РќРµРёР·РІРµСЃС‚РЅС‹Р№ ValueType");
       }
     }
 
@@ -511,14 +511,14 @@ namespace Plants
 
 #if DEBUG
       if (value1 == null || value2 == null)
-        throw new BugException("Значений null быть не должно");
+        throw new BugException("Р—РЅР°С‡РµРЅРёР№ null Р±С‹С‚СЊ РЅРµ РґРѕР»Р¶РЅРѕ");
 #endif
 
       ValueType vt1, vt2;
       if (!IsValidValue(value1, out vt1))
-        throw new ArgumentException("Значение 1 имеет недопустимый тип " + value1.GetType().ToString(), "Value1");
+        throw new ArgumentException("Р—РЅР°С‡РµРЅРёРµ 1 РёРјРµРµС‚ РЅРµРґРѕРїСѓСЃС‚РёРјС‹Р№ С‚РёРї " + value1.GetType().ToString(), "Value1");
       if (!IsValidValue(value2, out vt2))
-        throw new ArgumentException("Значение 2 имеет недопустимый тип " + value2.GetType().ToString(), "Value2");
+        throw new ArgumentException("Р—РЅР°С‡РµРЅРёРµ 2 РёРјРµРµС‚ РЅРµРґРѕРїСѓСЃС‚РёРјС‹Р№ С‚РёРї " + value2.GetType().ToString(), "Value2");
 
       if (vt1 == ValueType.DateTime || vt2 == ValueType.DateTime)
         return Compare(value1, value2, ValueType.DateTime);
@@ -541,15 +541,15 @@ namespace Plants
       if (vt1 == ValueType.Boolean || vt2 == ValueType.Boolean)
         return Compare(value1, value2, ValueType.Boolean);
 
-      throw new BugException("Необрабатываемый тип значений. ValueType1=" + vt1.ToString() + ", ValueType2=" + vt2.ToString());
+      throw new BugException("РќРµРѕР±СЂР°Р±Р°С‚С‹РІР°РµРјС‹Р№ С‚РёРї Р·РЅР°С‡РµРЅРёР№. ValueType1=" + vt1.ToString() + ", ValueType2=" + vt2.ToString());
     }
 
     /// <summary>
-    /// Возвращает true, если для заданного типа данных можно выполнять суммирование значений
-    /// (Integer, Double и Decimal)
+    /// Р’РѕР·РІСЂР°С‰Р°РµС‚ true, РµСЃР»Рё РґР»СЏ Р·Р°РґР°РЅРЅРѕРіРѕ С‚РёРїР° РґР°РЅРЅС‹С… РјРѕР¶РЅРѕ РІС‹РїРѕР»РЅСЏС‚СЊ СЃСѓРјРјРёСЂРѕРІР°РЅРёРµ Р·РЅР°С‡РµРЅРёР№
+    /// (Integer, Double Рё Decimal)
     /// </summary>
-    /// <param name="valueType">Тип значения</param>
-    /// <returns>true, если можно суммировать значения</returns>
+    /// <param name="valueType">РўРёРї Р·РЅР°С‡РµРЅРёСЏ</param>
+    /// <returns>true, РµСЃР»Рё РјРѕР¶РЅРѕ СЃСѓРјРјРёСЂРѕРІР°С‚СЊ Р·РЅР°С‡РµРЅРёСЏ</returns>
     public static bool IsSummableValueType(ValueType valueType)
     {
       switch (valueType)
@@ -565,11 +565,11 @@ namespace Plants
 
     #endregion
 
-    #region Список значений для атрибута
+    #region РЎРїРёСЃРѕРє Р·РЅР°С‡РµРЅРёР№ РґР»СЏ Р°С‚СЂРёР±СѓС‚Р°
 
     public static readonly string[] AttrValueSourceTypeNames = new string[] { 
-      "Любые значения (ручной ввод)",
-      "Фиксированный список значений",
+      "Р›СЋР±С‹Рµ Р·РЅР°С‡РµРЅРёСЏ (СЂСѓС‡РЅРѕР№ РІРІРѕРґ)",
+      "Р¤РёРєСЃРёСЂРѕРІР°РЅРЅС‹Р№ СЃРїРёСЃРѕРє Р·РЅР°С‡РµРЅРёР№",
     };
 
     public static string GetAttrValueSourceTypeName(AttrValueSourceType sourceType)
@@ -585,11 +585,11 @@ namespace Plants
     #region PlantMovementState
 
     public static readonly string[] PlantMovementStateNames = new string[] { 
-      "Черновик",
-      "Размещено",
-      "Отдано",
-      "Умерло",
-      "Подсажено",
+      "Р§РµСЂРЅРѕРІРёРє",
+      "Р Р°Р·РјРµС‰РµРЅРѕ",
+      "РћС‚РґР°РЅРѕ",
+      "РЈРјРµСЂР»Рѕ",
+      "РџРѕРґСЃР°Р¶РµРЅРѕ",
     };
 
     public static string GetPlantMovementStateName(PlantMovementState state)
@@ -620,29 +620,29 @@ namespace Plants
 
     #endregion
 
-    #region Значение
+    #region Р—РЅР°С‡РµРЅРёРµ
 
     /// <summary>
-    /// Преобразование значение заданного типа в строку.
-    /// Эта версия не позволяет указать формат данных
+    /// РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ Р·РЅР°С‡РµРЅРёРµ Р·Р°РґР°РЅРЅРѕРіРѕ С‚РёРїР° РІ СЃС‚СЂРѕРєСѓ.
+    /// Р­С‚Р° РІРµСЂСЃРёСЏ РЅРµ РїРѕР·РІРѕР»СЏРµС‚ СѓРєР°Р·Р°С‚СЊ С„РѕСЂРјР°С‚ РґР°РЅРЅС‹С…
     /// </summary>
-    /// <param name="value">Значение</param>
-    /// <param name="valueType">Тип данных</param>
-    /// <returns>Строковое представление</returns>
+    /// <param name="value">Р—РЅР°С‡РµРЅРёРµ</param>
+    /// <param name="valueType">РўРёРї РґР°РЅРЅС‹С…</param>
+    /// <returns>РЎС‚СЂРѕРєРѕРІРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ</returns>
     public static string ToString(object value, ValueType valueType)
     {
       return ToString(value, valueType, String.Empty);
     }
 
     /// <summary>
-    /// Преобразование значение заданного типа в строку.
-    /// Для чисел используется разделитель дробной части запятая (зависит от настроек ОС).
-    /// Для преобразования значений в машинно-независимый формат используйте методы класса Accoo2StdConvert.
+    /// РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ Р·РЅР°С‡РµРЅРёРµ Р·Р°РґР°РЅРЅРѕРіРѕ С‚РёРїР° РІ СЃС‚СЂРѕРєСѓ.
+    /// Р”Р»СЏ С‡РёСЃРµР» РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ СЂР°Р·РґРµР»РёС‚РµР»СЊ РґСЂРѕР±РЅРѕР№ С‡Р°СЃС‚Рё Р·Р°РїСЏС‚Р°СЏ (Р·Р°РІРёСЃРёС‚ РѕС‚ РЅР°СЃС‚СЂРѕРµРє РћРЎ).
+    /// Р”Р»СЏ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ Р·РЅР°С‡РµРЅРёР№ РІ РјР°С€РёРЅРЅРѕ-РЅРµР·Р°РІРёСЃРёРјС‹Р№ С„РѕСЂРјР°С‚ РёСЃРїРѕР»СЊР·СѓР№С‚Рµ РјРµС‚РѕРґС‹ РєР»Р°СЃСЃР° Accoo2StdConvert.
     /// </summary>
-    /// <param name="value">Значение</param>
-    /// <param name="valueType">Тип данных</param>
-    /// <param name="format">Формат</param>
-    /// <returns>Строковое представление</returns>
+    /// <param name="value">Р—РЅР°С‡РµРЅРёРµ</param>
+    /// <param name="valueType">РўРёРї РґР°РЅРЅС‹С…</param>
+    /// <param name="format">Р¤РѕСЂРјР°С‚</param>
+    /// <returns>РЎС‚СЂРѕРєРѕРІРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ</returns>
     public static string ToString(object value, ValueType valueType, string format)
     {
       if (value == null)
@@ -689,35 +689,35 @@ namespace Plants
     }
 
     /// <summary>
-    /// Преобразование текста в заданный тип данных.
-    /// Пустая строка преобразуется в значение по умолчанию для заданного типа.
-    /// Если преобразование невозможно, генерируется InvalidCastException.
-    /// Для чисел используется разделитель дробной части запятая (зависит от настроек ОС).
-    /// Для преобразования значений из машинно-независимого формата используйте методы класса Accoo2StdConvert.
+    /// РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ С‚РµРєСЃС‚Р° РІ Р·Р°РґР°РЅРЅС‹Р№ С‚РёРї РґР°РЅРЅС‹С….
+    /// РџСѓСЃС‚Р°СЏ СЃС‚СЂРѕРєР° РїСЂРµРѕР±СЂР°Р·СѓРµС‚СЃСЏ РІ Р·РЅР°С‡РµРЅРёРµ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РґР»СЏ Р·Р°РґР°РЅРЅРѕРіРѕ С‚РёРїР°.
+    /// Р•СЃР»Рё РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РЅРµРІРѕР·РјРѕР¶РЅРѕ, РіРµРЅРµСЂРёСЂСѓРµС‚СЃСЏ InvalidCastException.
+    /// Р”Р»СЏ С‡РёСЃРµР» РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ СЂР°Р·РґРµР»РёС‚РµР»СЊ РґСЂРѕР±РЅРѕР№ С‡Р°СЃС‚Рё Р·Р°РїСЏС‚Р°СЏ (Р·Р°РІРёСЃРёС‚ РѕС‚ РЅР°СЃС‚СЂРѕРµРє РћРЎ).
+    /// Р”Р»СЏ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ Р·РЅР°С‡РµРЅРёР№ РёР· РјР°С€РёРЅРЅРѕ-РЅРµР·Р°РІРёСЃРёРјРѕРіРѕ С„РѕСЂРјР°С‚Р° РёСЃРїРѕР»СЊР·СѓР№С‚Рµ РјРµС‚РѕРґС‹ РєР»Р°СЃСЃР° Accoo2StdConvert.
     /// </summary>
-    /// <param name="text">Преобразуемый текст</param>
-    /// <param name="valueType">Требуемый тип данных</param>
-    /// <returns>Значение требуемого типа</returns>
+    /// <param name="text">РџСЂРµРѕР±СЂР°Р·СѓРµРјС‹Р№ С‚РµРєСЃС‚</param>
+    /// <param name="valueType">РўСЂРµР±СѓРµРјС‹Р№ С‚РёРї РґР°РЅРЅС‹С…</param>
+    /// <returns>Р—РЅР°С‡РµРЅРёРµ С‚СЂРµР±СѓРµРјРѕРіРѕ С‚РёРїР°</returns>
     public static object Parse(string text, ValueType valueType)
     {
       object res;
       if (TryParse(text, valueType, out res))
         return res;
       else
-        throw new InvalidCastException("Строку \"" + text + "\" нельзя преобразовать к типу \"" + PlantTools.GetValueTypeName(valueType) + "\"");
+        throw new InvalidCastException("РЎС‚СЂРѕРєСѓ \"" + text + "\" РЅРµР»СЊР·СЏ РїСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ Рє С‚РёРїСѓ \"" + PlantTools.GetValueTypeName(valueType) + "\"");
     }
 
     /// <summary>
-    /// Преобразование текста в заданный тип данных.
-    /// Пустая строка преобразуется в значение по умолчанию для заданного типа.
-    /// Если преобразование невозможно, возвращается false
-    /// Для чисел используется разделитель дробной части запятая (зависит от настроек ОС).
-    /// Для преобразования значений из машинно-независимого формата используйте методы класса Accoo2StdConvert.
+    /// РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ С‚РµРєСЃС‚Р° РІ Р·Р°РґР°РЅРЅС‹Р№ С‚РёРї РґР°РЅРЅС‹С….
+    /// РџСѓСЃС‚Р°СЏ СЃС‚СЂРѕРєР° РїСЂРµРѕР±СЂР°Р·СѓРµС‚СЃСЏ РІ Р·РЅР°С‡РµРЅРёРµ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РґР»СЏ Р·Р°РґР°РЅРЅРѕРіРѕ С‚РёРїР°.
+    /// Р•СЃР»Рё РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РЅРµРІРѕР·РјРѕР¶РЅРѕ, РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ false
+    /// Р”Р»СЏ С‡РёСЃРµР» РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ СЂР°Р·РґРµР»РёС‚РµР»СЊ РґСЂРѕР±РЅРѕР№ С‡Р°СЃС‚Рё Р·Р°РїСЏС‚Р°СЏ (Р·Р°РІРёСЃРёС‚ РѕС‚ РЅР°СЃС‚СЂРѕРµРє РћРЎ).
+    /// Р”Р»СЏ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ Р·РЅР°С‡РµРЅРёР№ РёР· РјР°С€РёРЅРЅРѕ-РЅРµР·Р°РІРёСЃРёРјРѕРіРѕ С„РѕСЂРјР°С‚Р° РёСЃРїРѕР»СЊР·СѓР№С‚Рµ РјРµС‚РѕРґС‹ РєР»Р°СЃСЃР° Accoo2StdConvert.
     /// </summary>
-    /// <param name="text">Преобразуемый текст</param>
-    /// <param name="valueType">Требуемый тип данных</param>
-    /// <param name="value">Сюда записывается значение требуемого типа или null в случае ошибки</param>
-    /// <returns>true, если преобразование успешно выполнено</returns>
+    /// <param name="text">РџСЂРµРѕР±СЂР°Р·СѓРµРјС‹Р№ С‚РµРєСЃС‚</param>
+    /// <param name="valueType">РўСЂРµР±СѓРµРјС‹Р№ С‚РёРї РґР°РЅРЅС‹С…</param>
+    /// <param name="value">РЎСЋРґР° Р·Р°РїРёСЃС‹РІР°РµС‚СЃСЏ Р·РЅР°С‡РµРЅРёРµ С‚СЂРµР±СѓРµРјРѕРіРѕ С‚РёРїР° РёР»Рё null РІ СЃР»СѓС‡Р°Рµ РѕС€РёР±РєРё</param>
+    /// <returns>true, РµСЃР»Рё РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ СѓСЃРїРµС€РЅРѕ РІС‹РїРѕР»РЅРµРЅРѕ</returns>
     public static bool TryParse(string text, ValueType valueType, out object value)
     {
       if (String.IsNullOrEmpty(text))
@@ -799,26 +799,26 @@ namespace Plants
             return false;
 
         default:
-          throw new ArgumentException("Неизвестный ValueType", "ValueType");
+          throw new ArgumentException("РќРµРёР·РІРµСЃС‚РЅС‹Р№ ValueType", "ValueType");
       }
     }
 
     #endregion
 
-    #region Атрибуты документов
+    #region РђС‚СЂРёР±СѓС‚С‹ РґРѕРєСѓРјРµРЅС‚РѕРІ
 
     /// <summary>
-    /// Максимальная длина текстового значения пользовательского атрибута, задаваемого в поле Value.
-    /// Можно вводить значения любой длины. Они сохраняются в MEMO-поле LongValue
+    /// РњР°РєСЃРёРјР°Р»СЊРЅР°СЏ РґР»РёРЅР° С‚РµРєСЃС‚РѕРІРѕРіРѕ Р·РЅР°С‡РµРЅРёСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРѕРіРѕ Р°С‚СЂРёР±СѓС‚Р°, Р·Р°РґР°РІР°РµРјРѕРіРѕ РІ РїРѕР»Рµ Value.
+    /// РњРѕР¶РЅРѕ РІРІРѕРґРёС‚СЊ Р·РЅР°С‡РµРЅРёСЏ Р»СЋР±РѕР№ РґР»РёРЅС‹. РћРЅРё СЃРѕС…СЂР°РЅСЏСЋС‚СЃСЏ РІ MEMO-РїРѕР»Рµ LongValue
     /// </summary>
     public const int AttrValueShortMaxLength = 30;
 
     /// <summary>
-    /// Проверяет соответствие типа источника значений для атрибута и типа данных
+    /// РџСЂРѕРІРµСЂСЏРµС‚ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРµ С‚РёРїР° РёСЃС‚РѕС‡РЅРёРєР° Р·РЅР°С‡РµРЅРёР№ РґР»СЏ Р°С‚СЂРёР±СѓС‚Р° Рё С‚РёРїР° РґР°РЅРЅС‹С…
     /// </summary>
-    /// <param name="sourceType">Тип источника данных для значений атрибута</param>
-    /// <param name="valueType">Тип данных атрибута</param>
-    /// <returns>true, если типы могут использоваться для одного атрибута</returns>
+    /// <param name="sourceType">РўРёРї РёСЃС‚РѕС‡РЅРёРєР° РґР°РЅРЅС‹С… РґР»СЏ Р·РЅР°С‡РµРЅРёР№ Р°С‚СЂРёР±СѓС‚Р°</param>
+    /// <param name="valueType">РўРёРї РґР°РЅРЅС‹С… Р°С‚СЂРёР±СѓС‚Р°</param>
+    /// <returns>true, РµСЃР»Рё С‚РёРїС‹ РјРѕРіСѓС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ РґР»СЏ РѕРґРЅРѕРіРѕ Р°С‚СЂРёР±СѓС‚Р°</returns>
     public static bool IsValidAttrSourceType(AttrValueSourceType sourceType, ValueType valueType)
     {
       if (sourceType == AttrValueSourceType.None)
@@ -843,14 +843,14 @@ namespace Plants
       }
     }
 
-    #region Методы преобразование значения в/из строкового представления
+    #region РњРµС‚РѕРґС‹ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ Р·РЅР°С‡РµРЅРёСЏ РІ/РёР· СЃС‚СЂРѕРєРѕРІРѕРіРѕ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ
 
     /// <summary>
-    /// Преобразование значения в текстовую строку для хранения в базе данных
+    /// РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ Р·РЅР°С‡РµРЅРёСЏ РІ С‚РµРєСЃС‚РѕРІСѓСЋ СЃС‚СЂРѕРєСѓ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РІ Р±Р°Р·Рµ РґР°РЅРЅС‹С…
     /// </summary>
-    /// <param name="value">Значение</param>
-    /// <param name="valueType">Тип значения</param>
-    /// <returns>Строковое представление</returns>
+    /// <param name="value">Р—РЅР°С‡РµРЅРёРµ</param>
+    /// <param name="valueType">РўРёРї Р·РЅР°С‡РµРЅРёСЏ</param>
+    /// <returns>РЎС‚СЂРѕРєРѕРІРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ</returns>
     public static string ValueToSaveableString(object value, ValueType valueType)
     {
       switch (valueType)
@@ -881,17 +881,17 @@ namespace Plants
             return String.Empty;
 
         default:
-          throw new ArgumentException("Неизвестный ValueType=" + valueType.ToString(), "ValueType");
+          throw new ArgumentException("РќРµРёР·РІРµСЃС‚РЅС‹Р№ ValueType=" + valueType.ToString(), "ValueType");
       }
     }
 
     /// <summary>
-    /// Преобразование значения атрибута, сохраненного в виде текстовой строки в базе данных,
-    /// в значение заданного типа
+    /// РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ Р·РЅР°С‡РµРЅРёСЏ Р°С‚СЂРёР±СѓС‚Р°, СЃРѕС…СЂР°РЅРµРЅРЅРѕРіРѕ РІ РІРёРґРµ С‚РµРєСЃС‚РѕРІРѕР№ СЃС‚СЂРѕРєРё РІ Р±Р°Р·Рµ РґР°РЅРЅС‹С…,
+    /// РІ Р·РЅР°С‡РµРЅРёРµ Р·Р°РґР°РЅРЅРѕРіРѕ С‚РёРїР°
     /// </summary>
-    /// <param name="s">Хранимое строковое значение атрибута</param>
-    /// <param name="valueType">Тип данных атрибута</param>
-    /// <returns>Значение атрибута, приведенное к требуемому типу</returns>
+    /// <param name="s">РҐСЂР°РЅРёРјРѕРµ СЃС‚СЂРѕРєРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ Р°С‚СЂРёР±СѓС‚Р°</param>
+    /// <param name="valueType">РўРёРї РґР°РЅРЅС‹С… Р°С‚СЂРёР±СѓС‚Р°</param>
+    /// <returns>Р—РЅР°С‡РµРЅРёРµ Р°С‚СЂРёР±СѓС‚Р°, РїСЂРёРІРµРґРµРЅРЅРѕРµ Рє С‚СЂРµР±СѓРµРјРѕРјСѓ С‚РёРїСѓ</returns>
     public static object ValueFromSaveableString(string s, ValueType valueType)
     {
       if (String.IsNullOrEmpty(s))
@@ -916,7 +916,7 @@ namespace Plants
           return StdConvert.ToDateTime(s, true);
 
         default:
-          throw new ArgumentException("Неизвестный ValueType=" + valueType.ToString(), "ValueType");
+          throw new ArgumentException("РќРµРёР·РІРµСЃС‚РЅС‹Р№ ValueType=" + valueType.ToString(), "ValueType");
       }
     }
 
@@ -924,26 +924,26 @@ namespace Plants
 
     #endregion
 
-    #region Изображения
+    #region РР·РѕР±СЂР°Р¶РµРЅРёСЏ
 
     /// <summary>
-    /// Размер, в который вписывается миниатюра
+    /// Р Р°Р·РјРµСЂ, РІ РєРѕС‚РѕСЂС‹Р№ РІРїРёСЃС‹РІР°РµС‚СЃСЏ РјРёРЅРёР°С‚СЋСЂР°
     /// </summary>
     public static readonly System.Drawing.Size ThumbnailSize = new System.Drawing.Size(128, 128);
 
     #endregion
 
-    #region Фильтры
+    #region Р¤РёР»СЊС‚СЂС‹
 
     /// <summary>
-    /// Добавляет в список <paramref name="filters"/> фильтр по интервау дат.
-    /// Если бы дата была одним полем, можно было бы использовать обычный DateRangeFilter.
-    /// В программе даты задаются в виде интервала из двух полей Date1 и Date2, 
-    /// требуется более сложный фильтр
+    /// Р”РѕР±Р°РІР»СЏРµС‚ РІ СЃРїРёСЃРѕРє <paramref name="filters"/> С„РёР»СЊС‚СЂ РїРѕ РёРЅС‚РµСЂРІР°Сѓ РґР°С‚.
+    /// Р•СЃР»Рё Р±С‹ РґР°С‚Р° Р±С‹Р»Р° РѕРґРЅРёРј РїРѕР»РµРј, РјРѕР¶РЅРѕ Р±С‹Р»Рѕ Р±С‹ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РѕР±С‹С‡РЅС‹Р№ DateRangeFilter.
+    /// Р’ РїСЂРѕРіСЂР°РјРјРµ РґР°С‚С‹ Р·Р°РґР°СЋС‚СЃСЏ РІ РІРёРґРµ РёРЅС‚РµСЂРІР°Р»Р° РёР· РґРІСѓС… РїРѕР»РµР№ Date1 Рё Date2, 
+    /// С‚СЂРµР±СѓРµС‚СЃСЏ Р±РѕР»РµРµ СЃР»РѕР¶РЅС‹Р№ С„РёР»СЊС‚СЂ
     /// </summary>
-    /// <param name="filters">Список для добавления фильтров</param>
-    /// <param name="firstDate">Начальная дата фильтра</param>
-    /// <param name="lastDate">Конечная дата фильтра</param>
+    /// <param name="filters">РЎРїРёСЃРѕРє РґР»СЏ РґРѕР±Р°РІР»РµРЅРёСЏ С„РёР»СЊС‚СЂРѕРІ</param>
+    /// <param name="firstDate">РќР°С‡Р°Р»СЊРЅР°СЏ РґР°С‚Р° С„РёР»СЊС‚СЂР°</param>
+    /// <param name="lastDate">РљРѕРЅРµС‡РЅР°СЏ РґР°С‚Р° С„РёР»СЊС‚СЂР°</param>
     public static void AddDateRangeFilter(List<DBxFilter> filters, DateTime? firstDate, DateTime? lastDate)
     {
       //if (FirstDate.HasValue)
@@ -960,15 +960,15 @@ namespace Plants
 
     #endregion
 
-    #region Грунты и горшки для действий
+    #region Р“СЂСѓРЅС‚С‹ Рё РіРѕСЂС€РєРё РґР»СЏ РґРµР№СЃС‚РІРёР№
 
     /// <summary>
-    /// Возвращает true, если для действия может быть задан грунт
+    /// Р’РѕР·РІСЂР°С‰Р°РµС‚ true, РµСЃР»Рё РґР»СЏ РґРµР№СЃС‚РІРёСЏ РјРѕР¶РµС‚ Р±С‹С‚СЊ Р·Р°РґР°РЅ РіСЂСѓРЅС‚
     /// </summary>
-    /// <param name="kind">Действие</param>
-    /// <param name="forFinal">True, если запрашивается финальное состояние.
-    /// В этом режиме частичная замена грунта не учитывается SoilReplace</param>
-    /// <returns>true, если грунт применим к действию</returns>
+    /// <param name="kind">Р”РµР№СЃС‚РІРёРµ</param>
+    /// <param name="forFinal">True, РµСЃР»Рё Р·Р°РїСЂР°С€РёРІР°РµС‚СЃСЏ С„РёРЅР°Р»СЊРЅРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ.
+    /// Р’ СЌС‚РѕРј СЂРµР¶РёРјРµ С‡Р°СЃС‚РёС‡РЅР°СЏ Р·Р°РјРµРЅР° РіСЂСѓРЅС‚Р° РЅРµ СѓС‡РёС‚С‹РІР°РµС‚СЃСЏ SoilReplace</param>
+    /// <returns>true, РµСЃР»Рё РіСЂСѓРЅС‚ РїСЂРёРјРµРЅРёРј Рє РґРµР№СЃС‚РІРёСЋ</returns>
     public static bool IsSoilAppliable(ActionKind kind, bool forFinal)
     {
       switch (kind)
@@ -986,12 +986,12 @@ namespace Plants
     }
 
     /// <summary>
-    /// Возвращает true, если для действия может быть задан горшок
+    /// Р’РѕР·РІСЂР°С‰Р°РµС‚ true, РµСЃР»Рё РґР»СЏ РґРµР№СЃС‚РІРёСЏ РјРѕР¶РµС‚ Р±С‹С‚СЊ Р·Р°РґР°РЅ РіРѕСЂС€РѕРє
     /// </summary>
-    /// <param name="kind">Действие</param>
-    /// <param name="forFinal">True, если запрашивается финальное состояние.
-    /// Не учитывается</param>
-    /// <returns>true, если грунт применим к действию</returns>
+    /// <param name="kind">Р”РµР№СЃС‚РІРёРµ</param>
+    /// <param name="forFinal">True, РµСЃР»Рё Р·Р°РїСЂР°С€РёРІР°РµС‚СЃСЏ С„РёРЅР°Р»СЊРЅРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ.
+    /// РќРµ СѓС‡РёС‚С‹РІР°РµС‚СЃСЏ</param>
+    /// <returns>true, РµСЃР»Рё РіСЂСѓРЅС‚ РїСЂРёРјРµРЅРёРј Рє РґРµР№СЃС‚РІРёСЋ</returns>
     public static bool IsPotKindAppliable(ActionKind kind, bool forFinal)
     {
       switch (kind)
@@ -1007,7 +1007,7 @@ namespace Plants
     }
 
     /// <summary>
-    /// Получение массива флажков для вызова IsSoilAppliable()
+    /// РџРѕР»СѓС‡РµРЅРёРµ РјР°СЃСЃРёРІР° С„Р»Р°Р¶РєРѕРІ РґР»СЏ РІС‹Р·РѕРІР° IsSoilAppliable()
     /// </summary>
     public static int[] GetSoilAppliableIntArray()
     {
@@ -1021,7 +1021,7 @@ namespace Plants
     }
 
     /// <summary>
-    /// Получение массива флажков для вызова IsPotKindAppliable()
+    /// РџРѕР»СѓС‡РµРЅРёРµ РјР°СЃСЃРёРІР° С„Р»Р°Р¶РєРѕРІ РґР»СЏ РІС‹Р·РѕРІР° IsPotKindAppliable()
     /// </summary>
     public static int[] GetPotKindAppliableIntArray()
     {
@@ -1039,12 +1039,12 @@ namespace Plants
 
 
   /// <summary>
-  /// Преобразование значения, хранящегося в ячейке в / из хранимого представления.
-  /// Не зависит от настроек операционной системы.
+  /// РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ Р·РЅР°С‡РµРЅРёСЏ, С…СЂР°РЅСЏС‰РµРіРѕСЃСЏ РІ СЏС‡РµР№РєРµ РІ / РёР· С…СЂР°РЅРёРјРѕРіРѕ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ.
+  /// РќРµ Р·Р°РІРёСЃРёС‚ РѕС‚ РЅР°СЃС‚СЂРѕРµРє РѕРїРµСЂР°С†РёРѕРЅРЅРѕР№ СЃРёСЃС‚РµРјС‹.
   /// </summary>
   public static class PlantsStdConvert
   {
-    #region Функции преобразования
+    #region Р¤СѓРЅРєС†РёРё РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ
 
     public static string ToString(object value, ValueType valueType)
     {
@@ -1068,7 +1068,7 @@ namespace Plants
           else
             return string.Empty;
         default:
-          throw new ArgumentException("Неправильный ValueType=" + valueType.ToString(), "ValueType");
+          throw new ArgumentException("РќРµРїСЂР°РІРёР»СЊРЅС‹Р№ ValueType=" + valueType.ToString(), "ValueType");
       }
     }
 
@@ -1117,10 +1117,10 @@ namespace Plants
           }
 
         case ValueType.Decimal:
-          decimal vdс;
-          if (StdConvert.TryParse(text, out vdс))
+          decimal vdСЃ;
+          if (StdConvert.TryParse(text, out vdСЃ))
           {
-            value = vdс;
+            value = vdСЃ;
             return true;
           }
           else
@@ -1160,7 +1160,7 @@ namespace Plants
             return false;
           }
         default:
-          throw new ArgumentException("Неправильный ValueType=" + valueType.ToString(), "ValueType");
+          throw new ArgumentException("РќРµРїСЂР°РІРёР»СЊРЅС‹Р№ ValueType=" + valueType.ToString(), "ValueType");
       }
     }
 

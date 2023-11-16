@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.Text;
 using FreeLibSet.Forms;
@@ -9,16 +9,17 @@ using FreeLibSet.Data;
 using FreeLibSet.Data.Docs;
 using System.ComponentModel;
 using FreeLibSet.Core;
+using FreeLibSet.Config;
 
 namespace Plants
 {
   internal class ReplantingReportParamsForm : EFPReportExtParamsForm
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     public ReplantingReportParamsForm()
     {
-      Text = "Пересадка";
+      Text = "РџРµСЂРµСЃР°РґРєР°";
 
       EFPControlWithToolBar<DataGridView> cwt = new EFPControlWithToolBar<DataGridView>(FormProvider, base.MainPanel);
       _FiltersControlProvider = new EFPGridFilterEditorGridView(cwt);
@@ -27,10 +28,10 @@ namespace Plants
 
     #endregion
 
-    #region Свойства
+    #region РЎРІРѕР№СЃС‚РІР°
 
     /// <summary>
-    /// Провайдер табличного просмотра для таблицы редактирования фильтров.
+    /// РџСЂРѕРІР°Р№РґРµСЂ С‚Р°Р±Р»РёС‡РЅРѕРіРѕ РїСЂРѕСЃРјРѕС‚СЂР° РґР»СЏ С‚Р°Р±Р»РёС†С‹ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ С„РёР»СЊС‚СЂРѕРІ.
     /// </summary>
     public EFPGridFilterEditorGridView FiltersControlProvider { get { return _FiltersControlProvider; } }
     private EFPGridFilterEditorGridView _FiltersControlProvider;
@@ -39,14 +40,14 @@ namespace Plants
   }
 
   /// <summary>
-  /// Фильтры для отчета.
+  /// Р¤РёР»СЊС‚СЂС‹ РґР»СЏ РѕС‚С‡РµС‚Р°.
   /// </summary>
   internal class ReplantingReportFilters : DBxClientFilters
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     /// <summary>
-    /// Создает фильтры
+    /// РЎРѕР·РґР°РµС‚ С„РёР»СЊС‚СЂС‹
     /// </summary>
     public ReplantingReportFilters()
     {
@@ -54,9 +55,9 @@ namespace Plants
       Add(FiltGroup);
 
       FiltPlace = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Places"], "Place");
-      FiltPlace.DisplayName = "Место расположения";
+      FiltPlace.DisplayName = "РњРµСЃС‚Рѕ СЂР°СЃРїРѕР»РѕР¶РµРЅРёСЏ";
       FiltPlace.Nullable = false;
-      FiltPlace.UseSqlFilter = true; // здесь используем вычисляемое поле
+      FiltPlace.UseSqlFilter = true; // Р·РґРµСЃСЊ РёСЃРїРѕР»СЊР·СѓРµРј РІС‹С‡РёСЃР»СЏРµРјРѕРµ РїРѕР»Рµ
       Add(FiltPlace);
 
       SetReadOnly();
@@ -64,7 +65,7 @@ namespace Plants
 
     #endregion
 
-    #region Поля фильтров
+    #region РџРѕР»СЏ С„РёР»СЊС‚СЂРѕРІ
 
     public RefGroupDocGridFilter FiltGroup;
 
@@ -75,7 +76,7 @@ namespace Plants
 
   internal class ReplantingReportParams : EFPReportExtParams
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     public ReplantingReportParams()
     {
@@ -84,17 +85,17 @@ namespace Plants
 
     #endregion
 
-    #region Поля
+    #region РџРѕР»СЏ
 
     public ReplantingReportFilters Filters;
 
     #endregion
 
-    #region Переопределенные методы
+    #region РџРµСЂРµРѕРїСЂРµРґРµР»РµРЅРЅС‹Рµ РјРµС‚РѕРґС‹
 
     protected override void OnInitTitle()
     {
-      base.Title = "Пересадка растений";
+      base.Title = "РџРµСЂРµСЃР°РґРєР° СЂР°СЃС‚РµРЅРёР№";
       Filters.AddFilterInfo(FilterInfo);
     }
 
@@ -103,37 +104,37 @@ namespace Plants
       return new ReplantingReportParamsForm();
     }
 
-    public override EFPReportExtParamsPart UsedParts
+    public override SettingsPart UsedParts
     {
-      get { return EFPReportExtParamsPart.User; }
+      get { return SettingsPart.User; }
     }
 
-    public override void WriteFormValues(EFPReportExtParamsForm form, EFPReportExtParamsPart part)
+    public override void WriteFormValues(EFPReportExtParamsForm form, SettingsPart part)
     {
       ReplantingReportParamsForm form2 = (ReplantingReportParamsForm)form;
       form2.FiltersControlProvider.Filters = Filters;
     }
 
-    public override void ReadFormValues(EFPReportExtParamsForm form, EFPReportExtParamsPart part)
+    public override void ReadFormValues(EFPReportExtParamsForm form, SettingsPart part)
     {
       //ReplantingReportParamsForm form2 = (ReplantingReportParamsForm)form;
     }
 
-    public override void WriteConfig(FreeLibSet.Config.CfgPart cfg, EFPReportExtParamsPart part)
+    public override void WriteConfig(FreeLibSet.Config.CfgPart cfg, SettingsPart part)
     {
       switch (part)
       {
-        case EFPReportExtParamsPart.User:
+        case SettingsPart.User:
           Filters.WriteConfig(cfg);
           break;
       }
     }
 
-    public override void ReadConfig(FreeLibSet.Config.CfgPart cfg, EFPReportExtParamsPart part)
+    public override void ReadConfig(FreeLibSet.Config.CfgPart cfg, SettingsPart part)
     {
       switch (part)
       {
-        case EFPReportExtParamsPart.User:
+        case SettingsPart.User:
           Filters.ReadConfig(cfg);
           break;
       }
@@ -144,7 +145,7 @@ namespace Plants
 
   internal class ReplantingReport : EFPReport
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     public ReplantingReport()
       : base("ReplantingReport")
@@ -159,7 +160,7 @@ namespace Plants
 
     #endregion
 
-    #region Запрос параметров
+    #region Р—Р°РїСЂРѕСЃ РїР°СЂР°РјРµС‚СЂРѕРІ
 
     protected override EFPReportParams CreateParams()
     {
@@ -170,10 +171,10 @@ namespace Plants
 
     #endregion
 
-    #region Построение отчета
+    #region РџРѕСЃС‚СЂРѕРµРЅРёРµ РѕС‚С‡РµС‚Р°
 
     const ActionKind ActionNone = (ActionKind)(-2);
-    const ActionKind ActionAdd = (ActionKind)(-1); // операция "Приход"
+    const ActionKind ActionAdd = (ActionKind)(-1); // РѕРїРµСЂР°С†РёСЏ "РџСЂРёС…РѕРґ"
 
     protected override void BuildReport()
     {
@@ -190,10 +191,10 @@ namespace Plants
 
       DataTools.SetPrimaryKey(resTable, "PlantId");
 
-      #region Таблица растений
+      #region РўР°Р±Р»РёС†Р° СЂР°СЃС‚РµРЅРёР№
 
       DBxFilter sqlFilter = Params.Filters.GetSqlFilter();
-      sqlFilter &= new ValueFilter("MovementState", (int)(PlantMovementState.Placed)); // только существующие
+      sqlFilter &= new ValueFilter("MovementState", (int)(PlantMovementState.Placed)); // С‚РѕР»СЊРєРѕ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёРµ
       if (ProgramDBUI.TheUI.DocProvider.DocTypes.UseDeleted)
         sqlFilter &= DBSDocType.DeletedFalseFilter;
 
@@ -206,7 +207,7 @@ namespace Plants
 
       #endregion
 
-      #region Таблица действий
+      #region РўР°Р±Р»РёС†Р° РґРµР№СЃС‚РІРёР№
 
       sqlFilter = new ValuesFilter("Kind", new int[] { 
         (int)ActionKind.Planting, 
@@ -229,10 +230,10 @@ namespace Plants
         Int32 plantId = DataTools.GetInt(row, "DocId");
         DataRow resRow = resTable.Rows.Find(plantId);
         if (resRow == null)
-          continue; // растение не прошло фильтрацию
+          continue; // СЂР°СЃС‚РµРЅРёРµ РЅРµ РїСЂРѕС€Р»Рѕ С„РёР»СЊС‚СЂР°С†РёСЋ
 
         if (!resRow.IsNull("ActionDate"))
-          continue; // уже была более поздняя операция
+          continue; // СѓР¶Рµ Р±С‹Р»Р° Р±РѕР»РµРµ РїРѕР·РґРЅСЏСЏ РѕРїРµСЂР°С†РёСЏ
 
         resRow["ActionKind"] = row["Kind"];
         resRow["ActionDate"] = row["Date2"];
@@ -247,7 +248,7 @@ namespace Plants
 
       #endregion
 
-      #region Таблица движения
+      #region РўР°Р±Р»РёС†Р° РґРІРёР¶РµРЅРёСЏ
 
       sqlFilter = new ValueFilter("Kind", (int)MovementKind.Add);
       if (ProgramDBUI.TheUI.DocProvider.DocTypes.UseDeleted)
@@ -266,10 +267,10 @@ namespace Plants
         Int32 plantId = DataTools.GetInt(row, "DocId");
         DataRow resRow = resTable.Rows.Find(plantId);
         if (resRow == null)
-          continue; // растение не прошло фильтрацию
+          continue; // СЂР°СЃС‚РµРЅРёРµ РЅРµ РїСЂРѕС€Р»Рѕ С„РёР»СЊС‚СЂР°С†РёСЋ
 
         if (!resRow.IsNull("ActionDate"))
-          continue; // уже была более какая-либо операция
+          continue; // СѓР¶Рµ Р±С‹Р»Р° Р±РѕР»РµРµ РєР°РєР°СЏ-Р»РёР±Рѕ РѕРїРµСЂР°С†РёСЏ
 
         resRow["ActionKind"] = ActionAdd;
         resRow["ActionDate"] = row["Date2"];
@@ -289,30 +290,30 @@ namespace Plants
 
     #endregion
 
-    #region Страница отчета
+    #region РЎС‚СЂР°РЅРёС†Р° РѕС‚С‡РµС‚Р°
 
     EFPReportDBxGridPage _MainPage;
 
     void MainPage_InitGrid(object sender, EventArgs args)
     {
       _MainPage.ControlProvider.Control.AutoGenerateColumns = false;
-      _MainPage.ControlProvider.Columns.AddInt("PlantNumber", true, "№ по каталогу", 3);
+      _MainPage.ControlProvider.Columns.AddInt("PlantNumber", true, "в„– РїРѕ РєР°С‚Р°Р»РѕРіСѓ", 3);
       _MainPage.ControlProvider.Columns.LastAdded.GridColumn.DefaultCellStyle.Format = ProgramDBUI.Settings.NumberMask;
       _MainPage.ControlProvider.Columns.LastAdded.CanIncSearch = true;
-      _MainPage.ControlProvider.Columns.AddText("PlantName", true, "Наименование", 40, 20);
+      _MainPage.ControlProvider.Columns.AddText("PlantName", true, "РќР°РёРјРµРЅРѕРІР°РЅРёРµ", 40, 20);
       _MainPage.ControlProvider.Columns.LastAdded.CanIncSearch = true;
       _MainPage.ControlProvider.Columns.AddImage("ActionImage");
-      _MainPage.ControlProvider.Columns.AddDate("ActionDate", true, "Дата операции");
-      _MainPage.ControlProvider.Columns.AddText("ActionName", false, "Действие", 20, 10);
-      _MainPage.ControlProvider.Columns.AddText("SoilText", true, "Грунт", 20, 10);
-      _MainPage.ControlProvider.Columns.AddText("PotKindText", true, "Горшок", 20, 10);
-      _MainPage.ControlProvider.Columns.AddText("ActionComment", true, "Комментарий к операции", 40, 10);
+      _MainPage.ControlProvider.Columns.AddDate("ActionDate", true, "Р”Р°С‚Р° РѕРїРµСЂР°С†РёРё");
+      _MainPage.ControlProvider.Columns.AddText("ActionName", false, "Р”РµР№СЃС‚РІРёРµ", 20, 10);
+      _MainPage.ControlProvider.Columns.AddText("SoilText", true, "Р“СЂСѓРЅС‚", 20, 10);
+      _MainPage.ControlProvider.Columns.AddText("PotKindText", true, "Р“РѕСЂС€РѕРє", 20, 10);
+      _MainPage.ControlProvider.Columns.AddText("ActionComment", true, "РљРѕРјРјРµРЅС‚Р°СЂРёР№ Рє РѕРїРµСЂР°С†РёРё", 40, 10);
       _MainPage.ControlProvider.DisableOrdering();
 
-      _MainPage.ControlProvider.Orders.Add("PlantNumber,PlantName", "По номеру");
-      _MainPage.ControlProvider.Orders.Add("PlantName,PlantNumber", "По названию");
-      _MainPage.ControlProvider.Orders.Add("ActionDate,PlantNumber,PlantName", "По дате пересадки (по возрастанию", new EFPDataGridViewSortInfo("ActionDate", ListSortDirection.Ascending));
-      _MainPage.ControlProvider.Orders.Add("ActionDate DESC,PlantNumber,PlantName", "По дате пересадки (по убыванию", new EFPDataGridViewSortInfo("ActionDate", ListSortDirection.Descending));
+      _MainPage.ControlProvider.Orders.Add("PlantNumber,PlantName", "РџРѕ РЅРѕРјРµСЂСѓ");
+      _MainPage.ControlProvider.Orders.Add("PlantName,PlantNumber", "РџРѕ РЅР°Р·РІР°РЅРёСЋ");
+      _MainPage.ControlProvider.Orders.Add("ActionDate,PlantNumber,PlantName", "РџРѕ РґР°С‚Рµ РїРµСЂРµСЃР°РґРєРё (РїРѕ РІРѕР·СЂР°СЃС‚Р°РЅРёСЋ", new EFPDataGridViewSortInfo("ActionDate", ListSortDirection.Ascending));
+      _MainPage.ControlProvider.Orders.Add("ActionDate DESC,PlantNumber,PlantName", "РџРѕ РґР°С‚Рµ РїРµСЂРµСЃР°РґРєРё (РїРѕ СѓР±С‹РІР°РЅРёСЋ", new EFPDataGridViewSortInfo("ActionDate", ListSortDirection.Descending));
       _MainPage.ControlProvider.AutoSort = true;
       _MainPage.ControlProvider.CurrentOrderIndex = 2;
 
@@ -344,7 +345,7 @@ namespace Plants
         case "ActionName":
           kind = (ActionKind)DataTools.GetInt(args.DataRow, "ActionKind");
           if (kind == ActionAdd)
-            args.Value = "Поступление";
+            args.Value = "РџРѕСЃС‚СѓРїР»РµРЅРёРµ";
           else if (kind != ActionNone)
             args.Value = PlantTools.GetActionName(kind);
           break;

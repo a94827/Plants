@@ -1,4 +1,4 @@
-namespace Plants
+п»їnamespace Plants
 {
   partial class EditPlantFlowering
   {
@@ -61,7 +61,7 @@ namespace Plants
       this.groupBox3.Size = new System.Drawing.Size(423, 112);
       this.groupBox3.TabIndex = 1;
       this.groupBox3.TabStop = false;
-      this.groupBox3.Text = "Комментари&й";
+      this.groupBox3.Text = "РљРѕРјРјРµРЅС‚Р°СЂРё&Р№";
       // 
       // edComment
       // 
@@ -86,7 +86,7 @@ namespace Plants
       this.groupBox1.Size = new System.Drawing.Size(423, 78);
       this.groupBox1.TabIndex = 0;
       this.groupBox1.TabStop = false;
-      this.groupBox1.Text = "Цветение";
+      this.groupBox1.Text = "Р¦РІРµС‚РµРЅРёРµ";
       // 
       // edCount
       // 
@@ -102,7 +102,7 @@ namespace Plants
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(140, 20);
       this.label1.TabIndex = 2;
-      this.label1.Text = "Количество &цветков";
+      this.label1.Text = "РљРѕР»РёС‡РµСЃС‚РІРѕ &С†РІРµС‚РєРѕРІ";
       this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // cbDate
@@ -120,7 +120,7 @@ namespace Plants
       this.label4.Name = "label4";
       this.label4.Size = new System.Drawing.Size(140, 20);
       this.label4.TabIndex = 0;
-      this.label4.Text = "&Дата";
+      this.label4.Text = "&Р”Р°С‚Р°";
       this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // btnDate99991231

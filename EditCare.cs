@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,7 +12,7 @@ namespace Plants
 {
   internal partial class EditCare : Form
   {
-    #region Конструктор формы
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ С„РѕСЂРјС‹
 
     public EditCare()
     {
@@ -21,7 +21,7 @@ namespace Plants
 
     #endregion
 
-    #region Редактор
+    #region Р РµРґР°РєС‚РѕСЂ
 
     #region InitDocEditForm
 
@@ -38,16 +38,16 @@ namespace Plants
 
     #endregion
 
-    #region Страница 1 (Общие)
+    #region РЎС‚СЂР°РЅРёС†Р° 1 (РћР±С‰РёРµ)
 
     private EFPTextBox efpName;
 
     private void AddPage1(InitDocEditFormEventArgs args)
     {
-      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      DocEditPage page = args.AddPage("РћР±С‰РёРµ", MainPanel1);
       page.ImageKey = "Care";
 
-      //Page.HelpContext = "BuxBase.chm::CompanyEdit.htm#Общие";
+      //Page.HelpContext = "BuxBase.chm::CompanyEdit.htm#РћР±С‰РёРµ";
 
       efpName = new EFPTextBox(page.BaseProvider, edName);
       efpName.CanBeEmpty = false;
@@ -61,7 +61,7 @@ namespace Plants
       efpGroup.CanBeEmpty = true;
       args.AddRef(efpGroup, "GroupId", true);
 
-      #region Комментарий
+      #region РљРѕРјРјРµРЅС‚Р°СЂРёР№
 
       EFPTextBox efpComment = new EFPTextBox(page.BaseProvider, edComment);
       efpComment.CanBeEmpty = true;

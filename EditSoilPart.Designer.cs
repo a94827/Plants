@@ -1,4 +1,4 @@
-namespace Plants
+п»їnamespace Plants
 {
   partial class EditSoilPart
   {
@@ -59,7 +59,7 @@ namespace Plants
       this.groupBox1.Size = new System.Drawing.Size(423, 88);
       this.groupBox1.TabIndex = 0;
       this.groupBox1.TabStop = false;
-      this.groupBox1.Text = "Компонент грунта";
+      this.groupBox1.Text = "РљРѕРјРїРѕРЅРµРЅС‚ РіСЂСѓРЅС‚Р°";
       // 
       // cbSoil
       // 
@@ -76,7 +76,7 @@ namespace Plants
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(140, 20);
       this.label2.TabIndex = 0;
-      this.label2.Text = "&Смешиваемый грунт";
+      this.label2.Text = "&РЎРјРµС€РёРІР°РµРјС‹Р№ РіСЂСѓРЅС‚";
       this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // label1
@@ -85,7 +85,7 @@ namespace Plants
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(140, 20);
       this.label1.TabIndex = 2;
-      this.label1.Text = "&Процент";
+      this.label1.Text = "&РџСЂРѕС†РµРЅС‚";
       this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // edPercent

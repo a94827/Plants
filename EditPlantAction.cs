@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,7 +13,7 @@ namespace Plants
 {
   internal partial class EditPlantAction : Form
   {
-    #region Конструктор формы
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ С„РѕСЂРјС‹
 
     public EditPlantAction()
     {
@@ -22,7 +22,7 @@ namespace Plants
 
     #endregion
 
-    #region Табличный просмотр
+    #region РўР°Р±Р»РёС‡РЅС‹Р№ РїСЂРѕСЃРјРѕС‚СЂ
 
     public static void ImageValueNeeded(object sender, DBxImageValueNeededEventArgs args)
     {
@@ -43,7 +43,7 @@ namespace Plants
           if (remedyId == 0)
             args.Value = PlantTools.GetActionName(kind);
           else
-            args.Value = "Обработка препаратом \"" + ProgramDBUI.TheUI.DocProvider.DBCache["Remedies"].GetString(remedyId, "Name") + "\"";
+            args.Value = "РћР±СЂР°Р±РѕС‚РєР° РїСЂРµРїР°СЂР°С‚РѕРј \"" + ProgramDBUI.TheUI.DocProvider.DBCache["Remedies"].GetString(remedyId, "Name") + "\"";
           break;
         default:
           args.Value = PlantTools.GetActionName(kind);
@@ -53,7 +53,7 @@ namespace Plants
 
     #endregion
 
-    #region Редактор
+    #region Р РµРґР°РєС‚РѕСЂ
 
     public static void InitEditForm(object sender, InitSubDocEditFormEventArgs args)
     {
@@ -63,7 +63,7 @@ namespace Plants
 
     private void AddPage1(InitSubDocEditFormEventArgs args)
     {
-      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      DocEditPage page = args.AddPage("РћР±С‰РёРµ", MainPanel1);
       page.ImageKey = args.Editor.SubDocTypeUI.ImageKey;
 
       cbKind.Items.AddRange(PlantTools.ActionNames);

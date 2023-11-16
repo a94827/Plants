@@ -1,4 +1,4 @@
-namespace Plants
+п»їnamespace Plants
 {
   partial class EditPlantDisease
   {
@@ -61,7 +61,7 @@ namespace Plants
       this.groupBox3.Size = new System.Drawing.Size(423, 167);
       this.groupBox3.TabIndex = 1;
       this.groupBox3.TabStop = false;
-      this.groupBox3.Text = "Комментари&й";
+      this.groupBox3.Text = "РљРѕРјРјРµРЅС‚Р°СЂРё&Р№";
       // 
       // edComment
       // 
@@ -86,7 +86,7 @@ namespace Plants
       this.groupBox1.Size = new System.Drawing.Size(423, 87);
       this.groupBox1.TabIndex = 0;
       this.groupBox1.TabStop = false;
-      this.groupBox1.Text = "Приход / перемещение / выбытие";
+      this.groupBox1.Text = "РџСЂРёС…РѕРґ / РїРµСЂРµРјРµС‰РµРЅРёРµ / РІС‹Р±С‹С‚РёРµ";
       // 
       // cbDate
       // 
@@ -103,7 +103,7 @@ namespace Plants
       this.label4.Name = "label4";
       this.label4.Size = new System.Drawing.Size(140, 20);
       this.label4.TabIndex = 2;
-      this.label4.Text = "&Дата";
+      this.label4.Text = "&Р”Р°С‚Р°";
       this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // cbDisease
@@ -121,7 +121,7 @@ namespace Plants
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(140, 20);
       this.label2.TabIndex = 0;
-      this.label2.Text = "&Заболевание";
+      this.label2.Text = "&Р—Р°Р±РѕР»РµРІР°РЅРёРµ";
       this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // btnDate99991231

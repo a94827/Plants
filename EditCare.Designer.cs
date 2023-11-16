@@ -1,4 +1,4 @@
-namespace Plants
+п»їnamespace Plants
 {
   partial class EditCare
   {
@@ -65,7 +65,7 @@ namespace Plants
       this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
       this.tabPage1.Size = new System.Drawing.Size(584, 340);
       this.tabPage1.TabIndex = 0;
-      this.tabPage1.Text = "Общие";
+      this.tabPage1.Text = "РћР±С‰РёРµ";
       this.tabPage1.UseVisualStyleBackColor = true;
       // 
       // MainPanel1
@@ -87,7 +87,7 @@ namespace Plants
       this.groupBox5.Size = new System.Drawing.Size(578, 234);
       this.groupBox5.TabIndex = 1;
       this.groupBox5.TabStop = false;
-      this.groupBox5.Text = "Комментари&й";
+      this.groupBox5.Text = "РљРѕРјРјРµРЅС‚Р°СЂРё&Р№";
       // 
       // edComment
       // 
@@ -115,7 +115,7 @@ namespace Plants
       this.groupBox1.Size = new System.Drawing.Size(578, 100);
       this.groupBox1.TabIndex = 0;
       this.groupBox1.TabStop = false;
-      this.groupBox1.Text = "Уход за растениями";
+      this.groupBox1.Text = "РЈС…РѕРґ Р·Р° СЂР°СЃС‚РµРЅРёСЏРјРё";
       // 
       // cbParent
       // 
@@ -132,7 +132,7 @@ namespace Plants
       this.label9.Name = "label9";
       this.label9.Size = new System.Drawing.Size(158, 20);
       this.label9.TabIndex = 2;
-      this.label9.Text = "&Родитель";
+      this.label9.Text = "&Р РѕРґРёС‚РµР»СЊ";
       this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // cbGroup
@@ -150,7 +150,7 @@ namespace Plants
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(158, 20);
       this.label2.TabIndex = 4;
-      this.label2.Text = "&Группа";
+      this.label2.Text = "&Р“СЂСѓРїРїР°";
       this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // edName
@@ -168,7 +168,7 @@ namespace Plants
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(158, 20);
       this.label1.TabIndex = 0;
-      this.label1.Text = "&Название";
+      this.label1.Text = "&РќР°Р·РІР°РЅРёРµ";
       this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // EditCare

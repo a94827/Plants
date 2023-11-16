@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,11 +13,11 @@ using FreeLibSet.DependedValues;
 namespace Plants
 {
   /// <summary>
-  /// Диалог "Настройки"
+  /// Р”РёР°Р»РѕРі "РќР°СЃС‚СЂРѕР№РєРё"
   /// </summary>
   internal partial class UserSettingsForm : Form
   {
-    #region Конструктор формы
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ С„РѕСЂРјС‹
 
     public UserSettingsForm()
     {
@@ -26,7 +26,7 @@ namespace Plants
 
       EFPFormProvider efpForm = new EFPFormProvider(this);
 
-      #region Каталог
+      #region РљР°С‚Р°Р»РѕРі
 
       efpNumberDigits = new EFPIntEditBox(efpForm, edNumberDigits);
       efpNumberDigits.Minimum = 1;
@@ -34,33 +34,33 @@ namespace Plants
 
       #endregion
 
-      #region Фото
+      #region Р¤РѕС‚Рѕ
 
       efpPhotoDir = new EFPTextBox(efpForm, edPhotoDir);
       efpPhotoDir.CanBeEmpty = true;
 
       EFPFolderBrowserButton efpBrowse = new EFPFolderBrowserButton(efpPhotoDir, btnBrowsePhotoDir);
-      efpBrowse.Description = "Каталог, где расположены фото. В базе данных хранятся только миниатюры." +
-        "Если каталог не задан, нельзя добавлять и удалять снимки";
+      efpBrowse.Description = "РљР°С‚Р°Р»РѕРі, РіРґРµ СЂР°СЃРїРѕР»РѕР¶РµРЅС‹ С„РѕС‚Рѕ. Р’ Р±Р°Р·Рµ РґР°РЅРЅС‹С… С…СЂР°РЅСЏС‚СЃСЏ С‚РѕР»СЊРєРѕ РјРёРЅРёР°С‚СЋСЂС‹." +
+        "Р•СЃР»Рё РєР°С‚Р°Р»РѕРі РЅРµ Р·Р°РґР°РЅ, РЅРµР»СЊР·СЏ РґРѕР±Р°РІР»СЏС‚СЊ Рё СѓРґР°Р»СЏС‚СЊ СЃРЅРёРјРєРё";
       efpBrowse.ShowNewFolderButton = false;
 
       efpThumbnailSize = new EFPRadioButtons(efpForm, rb16x16);
 
       #endregion
 
-      #region Резервное копирование
+      #region Р РµР·РµСЂРІРЅРѕРµ РєРѕРїРёСЂРѕРІР°РЅРёРµ
 
       efpBackupMode = new EFPListComboBox(efpForm, cbBackupMode);
 
       efpBackupDir = new EFPTextBox(efpForm, edBackupDir);
       efpBackupDir.CanBeEmpty = true;
-      efpBackupDir.ToolTipText = "Папка для размещения резервных копий." + Environment.NewLine + "Если не задана, копии сохраняются в папке программы (" + FileTools.ApplicationBaseDir.Path + ")" + Environment.NewLine +
-        "Можно задать абсолютный путь с помощью кнопки \"Обзор\" или относительный путь от папки программы";
+      efpBackupDir.ToolTipText = "РџР°РїРєР° РґР»СЏ СЂР°Р·РјРµС‰РµРЅРёСЏ СЂРµР·РµСЂРІРЅС‹С… РєРѕРїРёР№." + Environment.NewLine + "Р•СЃР»Рё РЅРµ Р·Р°РґР°РЅР°, РєРѕРїРёРё СЃРѕС…СЂР°РЅСЏСЋС‚СЃСЏ РІ РїР°РїРєРµ РїСЂРѕРіСЂР°РјРјС‹ (" + FileTools.ApplicationBaseDir.Path + ")" + Environment.NewLine +
+        "РњРѕР¶РЅРѕ Р·Р°РґР°С‚СЊ Р°Р±СЃРѕР»СЋС‚РЅС‹Р№ РїСѓС‚СЊ СЃ РїРѕРјРѕС‰СЊСЋ РєРЅРѕРїРєРё \"РћР±Р·РѕСЂ\" РёР»Рё РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅС‹Р№ РїСѓС‚СЊ РѕС‚ РїР°РїРєРё РїСЂРѕРіСЂР°РјРјС‹";
       efpBackupDir.EnabledEx = new DepNot(new DepEqual<int>(efpBackupMode.SelectedIndexEx, (int)UserSettings.BackupModes.None));
 
       EFPFolderBrowserButton efpBrowseBackupDir = new EFPFolderBrowserButton(efpBackupDir, btnBrowseBackupDir);
       efpBrowseBackupDir.ShowNewFolderButton = true;
-      efpBrowseBackupDir.Description = "Папка для размещения резервных копий";
+      efpBrowseBackupDir.Description = "РџР°РїРєР° РґР»СЏ СЂР°Р·РјРµС‰РµРЅРёСЏ СЂРµР·РµСЂРІРЅС‹С… РєРѕРїРёР№";
 
       EFPWindowsExplorerButton efpExploreBackupDir = new EFPWindowsExplorerButton(efpBackupDir, btnExploreBackupDir);
 
@@ -69,22 +69,22 @@ namespace Plants
 
     #endregion
 
-    #region Поля
+    #region РџРѕР»СЏ
 
-    #region Каталог
+    #region РљР°С‚Р°Р»РѕРі
 
     EFPIntEditBox efpNumberDigits;
 
     #endregion
 
-    #region Фото
+    #region Р¤РѕС‚Рѕ
 
     EFPTextBox efpPhotoDir;
     EFPRadioButtons efpThumbnailSize;
 
     #endregion
 
-    #region Резервное копирование
+    #region Р РµР·РµСЂРІРЅРѕРµ РєРѕРїРёСЂРѕРІР°РЅРёРµ
 
     EFPListComboBox efpBackupMode;
     EFPTextBox efpBackupDir;
@@ -93,7 +93,7 @@ namespace Plants
 
     #endregion
 
-    #region Чтение и запись полей
+    #region Р§С‚РµРЅРёРµ Рё Р·Р°РїРёСЃСЊ РїРѕР»РµР№
 
     public void ValueToForm(UserSettings settings)
     {
@@ -119,10 +119,10 @@ namespace Plants
 
     #endregion
 
-    #region Выбранная вкладка
+    #region Р’С‹Р±СЂР°РЅРЅР°СЏ РІРєР»Р°РґРєР°
 
     /// <summary>
-    /// Запоминаем выбранную вкладку между вызовами в пределах сеанса работы
+    /// Р—Р°РїРѕРјРёРЅР°РµРј РІС‹Р±СЂР°РЅРЅСѓСЋ РІРєР»Р°РґРєСѓ РјРµР¶РґСѓ РІС‹Р·РѕРІР°РјРё РІ РїСЂРµРґРµР»Р°С… СЃРµР°РЅСЃР° СЂР°Р±РѕС‚С‹
     /// </summary>
     private static int _LastSelectedPageIndex = 0;
 
@@ -144,11 +144,11 @@ namespace Plants
   public enum ThumbnailSizeCode { Small, Normal, Large, Max }
 
   /// <summary>
-  /// Настройки пользователя
+  /// РќР°СЃС‚СЂРѕР№РєРё РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
   /// </summary>
   public class UserSettings
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     public UserSettings()
     {
@@ -163,13 +163,13 @@ namespace Plants
 
     #endregion
 
-    #region Поля
+    #region РџРѕР»СЏ
 
-    #region Номер по каталогу
+    #region РќРѕРјРµСЂ РїРѕ РєР°С‚Р°Р»РѕРіСѓ
 
     /// <summary>
-    /// Количество знаков в номере по каталогу.
-    /// По умолчанию - 3
+    /// РљРѕР»РёС‡РµСЃС‚РІРѕ Р·РЅР°РєРѕРІ РІ РЅРѕРјРµСЂРµ РїРѕ РєР°С‚Р°Р»РѕРіСѓ.
+    /// РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ - 3
     /// </summary>
     public int NumberDigits
     {
@@ -185,33 +185,33 @@ namespace Plants
     private int _NumberDigits;
 
     /// <summary>
-    /// Мкасимальное значение для NumberDigits
+    /// РњРєР°СЃРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РґР»СЏ NumberDigits
     /// </summary>
     public const int MaxNumberDigits = 5;
 
     /// <summary>
-    /// Маска для форматирования номера по каталогу. По умолчанию - "000"
+    /// РњР°СЃРєР° РґР»СЏ С„РѕСЂРјР°С‚РёСЂРѕРІР°РЅРёСЏ РЅРѕРјРµСЂР° РїРѕ РєР°С‚Р°Р»РѕРіСѓ. РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ - "000"
     /// </summary>
     public string NumberMask { get { return _NumberMask; } }
     private string _NumberMask;
 
     #endregion
 
-    #region Фото
+    #region Р¤РѕС‚Рѕ
 
     /// <summary>
-    /// Каталог с фотографиями.
-    /// Если не задано, то нельзя добавлять/удалять фото
+    /// РљР°С‚Р°Р»РѕРі СЃ С„РѕС‚РѕРіСЂР°С„РёСЏРјРё.
+    /// Р•СЃР»Рё РЅРµ Р·Р°РґР°РЅРѕ, С‚Рѕ РЅРµР»СЊР·СЏ РґРѕР±Р°РІР»СЏС‚СЊ/СѓРґР°Р»СЏС‚СЊ С„РѕС‚Рѕ
     /// </summary>
     public AbsPath PhotoDir;
 
     /// <summary>
-    /// Выбранный размер миниатюр (перечисление)
+    /// Р’С‹Р±СЂР°РЅРЅС‹Р№ СЂР°Р·РјРµСЂ РјРёРЅРёР°С‚СЋСЂ (РїРµСЂРµС‡РёСЃР»РµРЅРёРµ)
     /// </summary>
     public ThumbnailSizeCode ThumbnailSizeCode;
 
     /// <summary>
-    /// Выбранный размер миниатюр (в пикселях)
+    /// Р’С‹Р±СЂР°РЅРЅС‹Р№ СЂР°Р·РјРµСЂ РјРёРЅРёР°С‚СЋСЂ (РІ РїРёРєСЃРµР»СЏС…)
     /// </summary>
     public Size ThumbnailSize
     {
@@ -230,15 +230,15 @@ namespace Plants
 
     #endregion
 
-    #region Резервное копирование
+    #region Р РµР·РµСЂРІРЅРѕРµ РєРѕРїРёСЂРѕРІР°РЅРёРµ
 
     public enum BackupModes { None, AfterEveryRun, EveryDay }
 
     public BackupModes BackupMode;
 
     /// <summary>
-    /// Каталог для резервного копирования.
-    /// Не используем AbsPath, т.к. может быть относительный путь
+    /// РљР°С‚Р°Р»РѕРі РґР»СЏ СЂРµР·РµСЂРІРЅРѕРіРѕ РєРѕРїРёСЂРѕРІР°РЅРёСЏ.
+    /// РќРµ РёСЃРїРѕР»СЊР·СѓРµРј AbsPath, С‚.Рє. РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅС‹Р№ РїСѓС‚СЊ
     /// </summary>
     public string BackupDir;
 
@@ -246,10 +246,10 @@ namespace Plants
 
     #endregion
 
-    #region Чтение / запись
+    #region Р§С‚РµРЅРёРµ / Р·Р°РїРёСЃСЊ
 
     /// <summary>
-    /// Путь к файлу "LocalConfig.xml"
+    /// РџСѓС‚СЊ Рє С„Р°Р№Р»Сѓ "LocalConfig.xml"
     /// </summary>
     public static AbsPath LocalConfigFilePath
     {
@@ -262,11 +262,12 @@ namespace Plants
 
       cfg.SetInt("NumberDigits", NumberDigits);
 
-      cfg.SetString("PhotoDir", PhotoDir.Path);
+      cfg.SetString("PhotoDir" + PlatformSuffix, PhotoDir.Path);
       cfg.SetEnum<ThumbnailSizeCode>("ThumbnailSize", ThumbnailSizeCode);
 
       cfg.SetEnum<BackupModes>("BackupMode", BackupMode);
-      cfg.SetString("BackupDir", BackupDir);
+
+      cfg.SetString("BackupDir" + PlatformSuffix, BackupDir);
 
       cfg.Save();
     }
@@ -281,11 +282,28 @@ namespace Plants
         NumberDigits = x;
 
 
-      PhotoDir = new AbsPath(cfg.GetString("PhotoDir"));
+      PhotoDir = new AbsPath(cfg.GetString("PhotoDir" + PlatformSuffix));
       cfg.GetEnum<ThumbnailSizeCode>("ThumbnailSize", ref ThumbnailSizeCode);
 
       cfg.GetEnum<BackupModes>("BackupMode", ref BackupMode);
-      BackupDir = cfg.GetString("BackupDir");
+      BackupDir = cfg.GetString("BackupDir" + PlatformSuffix);
+    }
+
+    private static string PlatformSuffix
+    {
+      get
+      {
+        switch (Environment.OSVersion.Platform)
+        {
+          case PlatformID.Win32NT:
+          case PlatformID.Win32Windows:
+            return "";
+          case PlatformID.Unix:
+            return "Linux";
+          default:
+            throw new NotImplementedException();
+        }
+      }
     }
 
     #endregion

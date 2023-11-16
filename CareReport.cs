@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,12 +12,13 @@ using FreeLibSet.Forms.Docs;
 using System.Collections;
 using FreeLibSet.Calendar;
 using FreeLibSet.Core;
+using FreeLibSet.Config;
 
 namespace Plants
 {
   internal partial class CareReportParamForm : EFPReportExtParamsTwoPageForm
   {
-    #region Конструктор формы
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ С„РѕСЂРјС‹
 
     public CareReportParamForm()
     {
@@ -33,7 +34,7 @@ namespace Plants
 
     #endregion
 
-    #region Поля
+    #region РџРѕР»СЏ
 
     public EFPMonthDayTextBox efpDay;
 
@@ -44,7 +45,7 @@ namespace Plants
 
   internal class CareReportParams : EFPReportExtParams
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     public CareReportParams()
     {
@@ -55,7 +56,7 @@ namespace Plants
 
     #endregion
 
-    #region Поля
+    #region РџРѕР»СЏ
 
     public MonthDay Day;
 
@@ -69,21 +70,21 @@ namespace Plants
 
     #endregion
 
-    #region Переопределенные методы
+    #region РџРµСЂРµРѕРїСЂРµРґРµР»РµРЅРЅС‹Рµ РјРµС‚РѕРґС‹
 
     protected override void OnInitTitle()
     {
       StringBuilder sb = new StringBuilder();
-      sb.Append("Уход за растениями");
+      sb.Append("РЈС…РѕРґ Р·Р° СЂР°СЃС‚РµРЅРёСЏРјРё");
       if (!Day.IsEmpty)
       {
-        sb.Append(" на ");
+        sb.Append(" РЅР° ");
         sb.Append(Day.ToString());
       }
       base.Title = sb.ToString();
       Filters.AddFilterInfo(FilterInfo);
       if (Filters.PeriodRequired)
-        FilterInfo.Add("Период для фильтров", DateRangeFormatter.Default.ToString(Period, true));
+        FilterInfo.Add("РџРµСЂРёРѕРґ РґР»СЏ С„РёР»СЊС‚СЂРѕРІ", DateRangeFormatter.Default.ToString(Period, true));
     }
 
     public override EFPReportExtParamsForm CreateForm()
@@ -91,20 +92,20 @@ namespace Plants
       return new CareReportParamForm();
     }
 
-    public override EFPReportExtParamsPart UsedParts
+    public override SettingsPart UsedParts
     {
-      get { return EFPReportExtParamsPart.User | EFPReportExtParamsPart.NoHistory; }
+      get { return SettingsPart.User | SettingsPart.NoHistory; }
     }
 
-    public override void WriteFormValues(EFPReportExtParamsForm form, EFPReportExtParamsPart part)
+    public override void WriteFormValues(EFPReportExtParamsForm form, SettingsPart part)
     {
       CareReportParamForm form2 = (CareReportParamForm)form;
       switch (part)
       {
-        case EFPReportExtParamsPart.User:
+        case SettingsPart.User:
           form2.FiltersControlProvider.Filters = Filters;
           break;
-        case EFPReportExtParamsPart.NoHistory:
+        case SettingsPart.NoHistory:
           form2.efpDay.Value = Day;
           form2.efpPeriod.First.Value = FirstDate;
           form2.efpPeriod.Last.Value = LastDate;
@@ -112,12 +113,12 @@ namespace Plants
       }
     }
 
-    public override void ReadFormValues(EFPReportExtParamsForm form, EFPReportExtParamsPart part)
+    public override void ReadFormValues(EFPReportExtParamsForm form, SettingsPart part)
     {
       CareReportParamForm form2 = (CareReportParamForm)form;
       switch (part)
       {
-        case EFPReportExtParamsPart.NoHistory:
+        case SettingsPart.NoHistory:
           Day = form2.efpDay.Value;
           FirstDate = form2.efpPeriod.First.Value;
           LastDate = form2.efpPeriod.Last.Value;
@@ -125,14 +126,14 @@ namespace Plants
       }
     }
 
-    public override void WriteConfig(FreeLibSet.Config.CfgPart cfg, EFPReportExtParamsPart part)
+    public override void WriteConfig(FreeLibSet.Config.CfgPart cfg, SettingsPart part)
     {
       switch (part)
       {
-        case EFPReportExtParamsPart.User:
+        case SettingsPart.User:
           Filters.WriteConfig(cfg);
           break;
-        case EFPReportExtParamsPart.NoHistory:
+        case SettingsPart.NoHistory:
           cfg.SetInt("Day", Day.DayOfYear);
           cfg.SetNullableDate("FirstDate", FirstDate);
           cfg.SetNullableDate("LastDate", LastDate);
@@ -140,14 +141,14 @@ namespace Plants
       }
     }
 
-    public override void ReadConfig(FreeLibSet.Config.CfgPart cfg, EFPReportExtParamsPart part)
+    public override void ReadConfig(FreeLibSet.Config.CfgPart cfg, SettingsPart part)
     {
       switch (part)
       {
-        case EFPReportExtParamsPart.User:
+        case SettingsPart.User:
           Filters.ReadConfig(cfg);
           break;
-        case EFPReportExtParamsPart.NoHistory:
+        case SettingsPart.NoHistory:
           Day = new MonthDay(cfg.GetIntDef("Day", Day.DayOfYear));
           cfg.GetDate("FirstDate", ref FirstDate);
           cfg.GetDate("LastDate", ref LastDate);
@@ -160,7 +161,7 @@ namespace Plants
 
   internal class CareReport : EFPReport
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     public CareReport()
       : base("CareReport")
@@ -175,7 +176,7 @@ namespace Plants
 
     #endregion
 
-    #region Запрос параметров
+    #region Р—Р°РїСЂРѕСЃ РїР°СЂР°РјРµС‚СЂРѕРІ
 
     protected override EFPReportParams CreateParams()
     {
@@ -186,39 +187,39 @@ namespace Plants
 
     #endregion
 
-    #region Построение отчета
+    #region РџРѕСЃС‚СЂРѕРµРЅРёРµ РѕС‚С‡РµС‚Р°
 
     private class RecordSortInfo : IComparable<RecordSortInfo>
     {
-      #region Поля
+      #region РџРѕР»СЏ
 
       /// <summary>
-      /// Идентификатор документа "Care".
-      /// В сортировке не участвует
+      /// РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РґРѕРєСѓРјРµРЅС‚Р° "Care".
+      /// Р’ СЃРѕСЂС‚РёСЂРѕРІРєРµ РЅРµ СѓС‡Р°СЃС‚РІСѓРµС‚
       /// </summary>
       public Int32 CareDocId;
 
       /// <summary>
-      /// Идентификатор поддокумента "CareRecord".
-      /// В сортировке не участвует
+      /// РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕРґРґРѕРєСѓРјРµРЅС‚Р° "CareRecord".
+      /// Р’ СЃРѕСЂС‚РёСЂРѕРІРєРµ РЅРµ СѓС‡Р°СЃС‚РІСѓРµС‚
       /// </summary>
       public Int32 CareRecordId;
 
       /// <summary>
-      /// Период ухода.
-      /// Первичное поле для сортировки
+      /// РџРµСЂРёРѕРґ СѓС…РѕРґР°.
+      /// РџРµСЂРІРёС‡РЅРѕРµ РїРѕР»Рµ РґР»СЏ СЃРѕСЂС‚РёСЂРѕРІРєРё
       /// </summary>
       public MonthDayRange Range;
 
       /// <summary>
-      /// Название периода.
-      /// В сортировке не участвует
+      /// РќР°Р·РІР°РЅРёРµ РїРµСЂРёРѕРґР°.
+      /// Р’ СЃРѕСЂС‚РёСЂРѕРІРєРµ РЅРµ СѓС‡Р°СЃС‚РІСѓРµС‚
       /// </summary>
       public string PeriodName;
 
       /// <summary>
-      /// Индекс документа "Care" в цепочке наследования.
-      /// Вторичное поле для сортировки
+      /// РРЅРґРµРєСЃ РґРѕРєСѓРјРµРЅС‚Р° "Care" РІ С†РµРїРѕС‡РєРµ РЅР°СЃР»РµРґРѕРІР°РЅРёСЏ.
+      /// Р’С‚РѕСЂРёС‡РЅРѕРµ РїРѕР»Рµ РґР»СЏ СЃРѕСЂС‚РёСЂРѕРІРєРё
       /// </summary>
       public int CareDocHieIndex;
 
@@ -255,7 +256,7 @@ namespace Plants
         DBxOrder.FromDataViewSort("Number,Name,Id"));
 
       Params.Filters.PerformAuxFiltering(ref plantTable, Params.FirstDate, Params.LastDate);
-      // Порядок строк правильный
+      // РџРѕСЂСЏРґРѕРє СЃС‚СЂРѕРє РїСЂР°РІРёР»СЊРЅС‹Р№
 
       DBxDocSet careSet = new DBxDocSet(ProgramDBUI.TheUI.DocProvider);
       DBxMultiDocs mCareDocs = careSet["Care"];
@@ -267,18 +268,18 @@ namespace Plants
       resTable.Columns.Add("PlantId", typeof(Int32));
       resTable.Columns.Add("PlantNumber", typeof(int));
       resTable.Columns.Add("PlantName", typeof(string));
-      resTable.Columns.Add("CareId", typeof(Int32)); // к которому относится запись
-      resTable.Columns.Add("CareRecordId", typeof(Int32)); // Id записи
+      resTable.Columns.Add("CareId", typeof(Int32)); // Рє РєРѕС‚РѕСЂРѕРјСѓ РѕС‚РЅРѕСЃРёС‚СЃСЏ Р·Р°РїРёСЃСЊ
+      resTable.Columns.Add("CareRecordId", typeof(Int32)); // Id Р·Р°РїРёСЃРё
       resTable.Columns.Add("PeriodText", typeof(string));
       resTable.Columns.Add("PeriodName", typeof(string));
       resTable.Columns.Add("ItemName", typeof(string));
       resTable.Columns.Add("ItemTextValue", typeof(string));
-      resTable.Columns.Add("PlantOrder", typeof(int)); // Порядок растения в отчете
+      resTable.Columns.Add("PlantOrder", typeof(int)); // РџРѕСЂСЏРґРѕРє СЂР°СЃС‚РµРЅРёСЏ РІ РѕС‚С‡РµС‚Рµ
 
       int plantCount = 0;
       foreach (DataRow plantRow in plantTable.Rows)
       {
-        // Одна строка добавляется, даже если для растения нет ухода
+        // РћРґРЅР° СЃС‚СЂРѕРєР° РґРѕР±Р°РІР»СЏРµС‚СЃСЏ, РґР°Р¶Рµ РµСЃР»Рё РґР»СЏ СЂР°СЃС‚РµРЅРёСЏ РЅРµС‚ СѓС…РѕРґР°
         DataRow resRow1 = resTable.Rows.Add();
         resRow1["PlantId"] = plantRow["Id"];
         resRow1["PlantName"] = plantRow["Name"];
@@ -288,7 +289,7 @@ namespace Plants
 
         DBxSingleDoc[] careDocs = GetCareDocs(mCareDocs, DataTools.GetInt(plantRow, "Care"));
         if (careDocs.Length == 0)
-          continue; // не задана ссылка "Care"
+          continue; // РЅРµ Р·Р°РґР°РЅР° СЃСЃС‹Р»РєР° "Care"
 
         SortedList<RecordSortInfo, CareValues> recList = new SortedList<RecordSortInfo, CareValues>();
 
@@ -318,14 +319,14 @@ namespace Plants
           }
         }
 
-        // Теперь можно перебирать отсортированный список
+        // РўРµРїРµСЂСЊ РјРѕР¶РЅРѕ РїРµСЂРµР±РёСЂР°С‚СЊ РѕС‚СЃРѕСЂС‚РёСЂРѕРІР°РЅРЅС‹Р№ СЃРїРёСЃРѕРє
 
-        // Строки отчета должны быть осортированы по порядку характеристик
+        // РЎС‚СЂРѕРєРё РѕС‚С‡РµС‚Р° РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РѕСЃРѕСЂС‚РёСЂРѕРІР°РЅС‹ РїРѕ РїРѕСЂСЏРґРєСѓ С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРє
         for (int j = 0; j < CareItem.TheList.Count; j++)
         {
           if (Params.Day.IsEmpty)
           {
-            // Добавляем по одной строке, если есть заданное значение
+            // Р”РѕР±Р°РІР»СЏРµРј РїРѕ РѕРґРЅРѕР№ СЃС‚СЂРѕРєРµ, РµСЃР»Рё РµСЃС‚СЊ Р·Р°РґР°РЅРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ
             foreach (KeyValuePair<RecordSortInfo, CareValues> pair in recList)
             {
               if (pair.Value[j] != null)
@@ -334,8 +335,8 @@ namespace Plants
           }
           else
           {
-            // Находим последнюю действующую запись
-            KeyValuePair<RecordSortInfo, CareValues> usedPair = new KeyValuePair<RecordSortInfo, CareValues>(); // неинициализированная структура
+            // РќР°С…РѕРґРёРј РїРѕСЃР»РµРґРЅСЋСЋ РґРµР№СЃС‚РІСѓСЋС‰СѓСЋ Р·Р°РїРёСЃСЊ
+            KeyValuePair<RecordSortInfo, CareValues> usedPair = new KeyValuePair<RecordSortInfo, CareValues>(); // РЅРµРёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅРЅР°СЏ СЃС‚СЂСѓРєС‚СѓСЂР°
             foreach (KeyValuePair<RecordSortInfo, CareValues> pair in recList)
             {
               if (pair.Value[j] != null)
@@ -354,12 +355,12 @@ namespace Plants
     private static readonly DBxSingleDoc[] _EmptyDocs = new DBxSingleDoc[0];
 
     /// <summary>
-    /// Возвращает массив документов об уходе, которые должны быть просмотрены, с учетом иерархии.
-    /// Первым в массиве идет родительский документ, затем дочерний, ... Последним идет документ с идентификатором <paramref name="careId"/>.
-    /// Если <paramref name="careId"/>=0, возвращается пустой массив
+    /// Р’РѕР·РІСЂР°С‰Р°РµС‚ РјР°СЃСЃРёРІ РґРѕРєСѓРјРµРЅС‚РѕРІ РѕР± СѓС…РѕРґРµ, РєРѕС‚РѕСЂС‹Рµ РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РїСЂРѕСЃРјРѕС‚СЂРµРЅС‹, СЃ СѓС‡РµС‚РѕРј РёРµСЂР°СЂС…РёРё.
+    /// РџРµСЂРІС‹Рј РІ РјР°СЃСЃРёРІРµ РёРґРµС‚ СЂРѕРґРёС‚РµР»СЊСЃРєРёР№ РґРѕРєСѓРјРµРЅС‚, Р·Р°С‚РµРј РґРѕС‡РµСЂРЅРёР№, ... РџРѕСЃР»РµРґРЅРёРј РёРґРµС‚ РґРѕРєСѓРјРµРЅС‚ СЃ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂРѕРј <paramref name="careId"/>.
+    /// Р•СЃР»Рё <paramref name="careId"/>=0, РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ РїСѓСЃС‚РѕР№ РјР°СЃСЃРёРІ
     /// </summary>
-    /// <param name="mCareDocs">Документы "Care"</param>
-    /// <param name="careId">Идентификатор записи об уходе, заданной у растения</param>
+    /// <param name="mCareDocs">Р”РѕРєСѓРјРµРЅС‚С‹ "Care"</param>
+    /// <param name="careId">РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ Р·Р°РїРёСЃРё РѕР± СѓС…РѕРґРµ, Р·Р°РґР°РЅРЅРѕР№ Сѓ СЂР°СЃС‚РµРЅРёСЏ</param>
     /// <returns></returns>
     private static DBxSingleDoc[] GetCareDocs(DBxMultiDocs mCareDocs, Int32 careId)
     {
@@ -372,11 +373,11 @@ namespace Plants
       {
         DBxSingleDoc doc;
         if (!mCareDocs.TryGetDocById(careId, out doc))
-          doc = mCareDocs.View(careId); // догружаем недостающего родителя
+          doc = mCareDocs.View(careId); // РґРѕРіСЂСѓР¶Р°РµРј РЅРµРґРѕСЃС‚Р°СЋС‰РµРіРѕ СЂРѕРґРёС‚РµР»СЏ
 
         if (ids.Contains(careId))
         {
-          EFPApp.ErrorMessageBox("Цепочка документов об уходе зациклена для DocId=" + careId + ": " + doc.TextValue);
+          EFPApp.ErrorMessageBox("Р¦РµРїРѕС‡РєР° РґРѕРєСѓРјРµРЅС‚РѕРІ РѕР± СѓС…РѕРґРµ Р·Р°С†РёРєР»РµРЅР° РґР»СЏ DocId=" + careId + ": " + doc.TextValue);
           break;
         }
         ids.Add(careId);
@@ -388,15 +389,15 @@ namespace Plants
     }
 
     /// <summary>
-    /// Заполнение строки отчета.
-    /// Добавляет новую строку или заполняет первую строку для растения
+    /// Р—Р°РїРѕР»РЅРµРЅРёРµ СЃС‚СЂРѕРєРё РѕС‚С‡РµС‚Р°.
+    /// Р”РѕР±Р°РІР»СЏРµС‚ РЅРѕРІСѓСЋ СЃС‚СЂРѕРєСѓ РёР»Рё Р·Р°РїРѕР»РЅСЏРµС‚ РїРµСЂРІСѓСЋ СЃС‚СЂРѕРєСѓ РґР»СЏ СЂР°СЃС‚РµРЅРёСЏ
     /// </summary>
     private void AddReportRow(DataTable resTable, RecordSortInfo sortInfo, CareValues values, int itemIndex)
     {
       DataRow lastRow = resTable.Rows[resTable.Rows.Count - 1];
       DataRow resRow;
       if (lastRow.IsNull("CareId"))
-        resRow = lastRow; // первая строка для растения
+        resRow = lastRow; // РїРµСЂРІР°СЏ СЃС‚СЂРѕРєР° РґР»СЏ СЂР°СЃС‚РµРЅРёСЏ
       else
       {
         resRow = resTable.Rows.Add();
@@ -414,23 +415,23 @@ namespace Plants
 
     #endregion
 
-    #region Страница отчета
+    #region РЎС‚СЂР°РЅРёС†Р° РѕС‚С‡РµС‚Р°
 
     EFPReportDBxGridPage _MainPage;
 
     void MainPage_InitGrid(object sender, EventArgs args)
     {
       _MainPage.ControlProvider.Control.AutoGenerateColumns = false;
-      _MainPage.ControlProvider.Columns.AddInt("PlantNumber", true, "№ по каталогу", 3);
+      _MainPage.ControlProvider.Columns.AddInt("PlantNumber", true, "в„– РїРѕ РєР°С‚Р°Р»РѕРіСѓ", 3);
       _MainPage.ControlProvider.Columns.LastAdded.GridColumn.DefaultCellStyle.Format = ProgramDBUI.Settings.NumberMask;
       _MainPage.ControlProvider.Columns.LastAdded.CanIncSearch = true;
-      _MainPage.ControlProvider.Columns.AddTextFill("PlantName", true, "Наименование", 50, 20);
+      _MainPage.ControlProvider.Columns.AddTextFill("PlantName", true, "РќР°РёРјРµРЅРѕРІР°РЅРёРµ", 50, 20);
       _MainPage.ControlProvider.Columns.LastAdded.CanIncSearch = true;
-      _MainPage.ControlProvider.Columns.AddText("PeriodText", true, "Период записи", DateRangeFormatter.Default.MonthDayRangeShortTextLength, DateRangeFormatter.Default.MonthDayRangeShortTextLength);
+      _MainPage.ControlProvider.Columns.AddText("PeriodText", true, "РџРµСЂРёРѕРґ Р·Р°РїРёСЃРё", DateRangeFormatter.Default.MonthDayRangeShortTextLength, DateRangeFormatter.Default.MonthDayRangeShortTextLength);
       _MainPage.ControlProvider.Columns.LastAdded.TextAlign = HorizontalAlignment.Center;
-      //MainPage.ControlProvider.Columns.AddText("PeriodName", true, "Название периода", 20, 10);
-      _MainPage.ControlProvider.Columns.AddText("ItemName", true, "Параметр", 20, 10);
-      _MainPage.ControlProvider.Columns.AddTextFill("ItemTextValue", true, "Значение", 50, 20);
+      //MainPage.ControlProvider.Columns.AddText("PeriodName", true, "РќР°Р·РІР°РЅРёРµ РїРµСЂРёРѕРґР°", 20, 10);
+      _MainPage.ControlProvider.Columns.AddText("ItemName", true, "РџР°СЂР°РјРµС‚СЂ", 20, 10);
+      _MainPage.ControlProvider.Columns.AddTextFill("ItemTextValue", true, "Р—РЅР°С‡РµРЅРёРµ", 50, 20);
       _MainPage.ControlProvider.DisableOrdering();
 
       _MainPage.ControlProvider.GetRowAttributes += new EFPDataGridViewRowAttributesEventHandler(MainPage_GetRowAttributes);
@@ -470,12 +471,12 @@ namespace Plants
         case "ItemTextValue":
           Int32 careId = DataTools.GetInt(_MainPage.ControlProvider.CurrentDataRow, "CareId");
           if (careId == 0)
-            EFPApp.ShowTempMessage("Выбранная строка не ссылается на документ по уходу за растениями");
+            EFPApp.ShowTempMessage("Р’С‹Р±СЂР°РЅРЅР°СЏ СЃС‚СЂРѕРєР° РЅРµ СЃСЃС‹Р»Р°РµС‚СЃСЏ РЅР° РґРѕРєСѓРјРµРЅС‚ РїРѕ СѓС…РѕРґСѓ Р·Р° СЂР°СЃС‚РµРЅРёСЏРјРё");
           else
             ProgramDBUI.TheUI.DocTypes["Care"].PerformEditing(careId, _MainPage.ControlProvider.State == EFPDataGridViewState.View);
           break;
         default:
-          EFPApp.ShowTempMessage("Нет выбранного столбца");
+          EFPApp.ShowTempMessage("РќРµС‚ РІС‹Р±СЂР°РЅРЅРѕРіРѕ СЃС‚РѕР»Р±С†Р°");
           break;
       }
     }

@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.Text;
 using FreeLibSet.IO;
@@ -12,15 +12,15 @@ using FreeLibSet.Core;
 namespace Plants
 {
   /// <summary>
-  /// Подключение к базе данных
+  /// РџРѕРґРєР»СЋС‡РµРЅРёРµ Рє Р±Р°Р·Рµ РґР°РЅРЅС‹С…
   /// </summary>
   internal class ProgramDB : DisposableObject
   {
-    #region Конструктор и Dispose
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ Рё Dispose
 
     /// <summary>
-    /// Конструктор ничего не делает.
-    /// Инициализация выполняется в методе InitDB()
+    /// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РЅРёС‡РµРіРѕ РЅРµ РґРµР»Р°РµС‚.
+    /// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РІС‹РїРѕР»РЅСЏРµС‚СЃСЏ РІ РјРµС‚РѕРґРµ InitDB()
     /// </summary>
     public ProgramDB()
     {
@@ -50,10 +50,10 @@ namespace Plants
 
     public void InitDB(AbsPath dbDir, ISplash spl)
     {
-      #region Объявление видов документов
+      #region РћР±СЉСЏРІР»РµРЅРёРµ РІРёРґРѕРІ РґРѕРєСѓРјРµРЅС‚РѕРІ
 
       string oldPT = spl.PhaseText;
-      spl.PhaseText = "Объявление видов документов";
+      spl.PhaseText = "РћР±СЉСЏРІР»РµРЅРёРµ РІРёРґРѕРІ РґРѕРєСѓРјРµРЅС‚РѕРІ";
 
       InitDocTypes();
 
@@ -61,32 +61,32 @@ namespace Plants
 
       #endregion
 
-      // вызвано ранее FileTools.ForceDirs(DBDir); // сразу создаем
+      // РІС‹Р·РІР°РЅРѕ СЂР°РЅРµРµ FileTools.ForceDirs(DBDir); // СЃСЂР°Р·Сѓ СЃРѕР·РґР°РµРј
 
-      #region Инициализация DBConnectionHelper
+      #region РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ DBConnectionHelper
 
       InitDBConnectionHelper(dbDir);
 
       #endregion
 
-      #region Создание / обновление баз данных документов
+      #region РЎРѕР·РґР°РЅРёРµ / РѕР±РЅРѕРІР»РµРЅРёРµ Р±Р°Р· РґР°РЅРЅС‹С… РґРѕРєСѓРјРµРЅС‚РѕРІ
 
       _DBConnectionHelper.Splash = spl;
       _GlobalDocData = _DBConnectionHelper.CreateRealDocProviderGlobal();
-      _DBConnectionHelper.Splash = null; // он скоро исчезнет
+      _DBConnectionHelper.Splash = null; // РѕРЅ СЃРєРѕСЂРѕ РёСЃС‡РµР·РЅРµС‚
       if (_DBConnectionHelper.Errors.Count > 0)
       {
-        // Регистрируем сообщения в log-файле
+        // Р РµРіРёСЃС‚СЂРёСЂСѓРµРј СЃРѕРѕР±С‰РµРЅРёСЏ РІ log-С„Р°Р№Р»Рµ
         AbsPath logFilePath = LogoutTools.GetLogFileName("DBChange", String.Empty);
         using (StreamWriter wrt = new StreamWriter(logFilePath.Path, false, LogoutTools.LogEncoding))
         {
-          wrt.WriteLine("Изменение структуры баз данных Plants");
-          wrt.WriteLine("Время: " + DateTime.Now.ToString());
+          wrt.WriteLine("РР·РјРµРЅРµРЅРёРµ СЃС‚СЂСѓРєС‚СѓСЂС‹ Р±Р°Р· РґР°РЅРЅС‹С… Plants");
+          wrt.WriteLine("Р’СЂРµРјСЏ: " + DateTime.Now.ToString());
           DBx[] AllDBx = _GlobalDocData.GetDBs();
-          if (AllDBx.Length > 0) // всегда выполняется
+          if (AllDBx.Length > 0) // РІСЃРµРіРґР° РІС‹РїРѕР»РЅСЏРµС‚СЃСЏ
           {
-            wrt.WriteLine("Версия сервера: " + AllDBx[0].ServerVersionText);
-            wrt.WriteLine("Все базы данных:");
+            wrt.WriteLine("Р’РµСЂСЃРёСЏ СЃРµСЂРІРµСЂР°: " + AllDBx[0].ServerVersionText);
+            wrt.WriteLine("Р’СЃРµ Р±Р°Р·С‹ РґР°РЅРЅС‹С…:");
             for (int i = 0; i < AllDBx.Length; i++)
             {
               wrt.WriteLine((i + 1).ToString() + ". " + AllDBx[i].DisplayName + ". " + AllDBx[i].UnpasswordedConnectionString);
@@ -105,7 +105,7 @@ namespace Plants
 
       #endregion
 
-      #region Права пользователя
+      #region РџСЂР°РІР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
 
       _Source = new DBxRealDocProviderSource(GlobalDocData);
 
@@ -121,17 +121,17 @@ namespace Plants
     }
 
     /// <summary>
-    /// Каталог базы данных
+    /// РљР°С‚Р°Р»РѕРі Р±Р°Р·С‹ РґР°РЅРЅС‹С…
     /// </summary>
     public static AbsPath DBDir { get { return _DBDir; } }
     private static AbsPath _DBDir;
 
     #endregion
 
-    #region Объявление видов документов
+    #region РћР±СЉСЏРІР»РµРЅРёРµ РІРёРґРѕРІ РґРѕРєСѓРјРµРЅС‚РѕРІ
 
     /// <summary>
-    /// Объявления видов документов
+    /// РћР±СЉСЏРІР»РµРЅРёСЏ РІРёРґРѕРІ РґРѕРєСѓРјРµРЅС‚РѕРІ
     /// </summary>
     public DBxDocTypes DocTypes { get { return _DocTypes; } }
     private DBxDocTypes _DocTypes;
@@ -140,34 +140,34 @@ namespace Plants
     {
       _DocTypes = new DBxDocTypes();
 
-      _DocTypes.UseDeleted = true; // окончательное удаление документов
-      _DocTypes.UseVersions = true; // не используем версии документов
-      _DocTypes.UseTime = true; // не запоминаем время
-      _DocTypes.UsersTableName = null; // не авторизуемся
+      _DocTypes.UseDeleted = true; // РѕРєРѕРЅС‡Р°С‚РµР»СЊРЅРѕРµ СѓРґР°Р»РµРЅРёРµ РґРѕРєСѓРјРµРЅС‚РѕРІ
+      _DocTypes.UseVersions = true; // РЅРµ РёСЃРїРѕР»СЊР·СѓРµРј РІРµСЂСЃРёРё РґРѕРєСѓРјРµРЅС‚РѕРІ
+      _DocTypes.UseTime = true; // РЅРµ Р·Р°РїРѕРјРёРЅР°РµРј РІСЂРµРјСЏ
+      _DocTypes.UsersTableName = null; // РЅРµ Р°РІС‚РѕСЂРёР·СѓРµРјСЃСЏ
 
       DBxDocType dt;
       DBxSubDocType sdt;
 
-      #region Каталог
+      #region РљР°С‚Р°Р»РѕРі
 
-      #region Группы
+      #region Р“СЂСѓРїРїС‹
 
       dt = new DBxDocType("PlantGroups");
-      dt.SingularTitle = "Группа растений";
-      dt.PluralTitle = "Группы растений";
+      dt.SingularTitle = "Р“СЂСѓРїРїР° СЂР°СЃС‚РµРЅРёР№";
+      dt.PluralTitle = "Р“СЂСѓРїРїС‹ СЂР°СЃС‚РµРЅРёР№";
       dt.Struct.Columns.AddString("Name", 40, false);
-      dt.Struct.Columns.AddReference("ParentId", "PlantGroups", true); // Построение дерева групп
+      dt.Struct.Columns.AddReference("ParentId", "PlantGroups", true); // РџРѕСЃС‚СЂРѕРµРЅРёРµ РґРµСЂРµРІР° РіСЂСѓРїРї
       dt.TreeParentColumnName = "ParentId";
       dt.DefaultOrder = new DBxOrder("Name");
       _DocTypes.Add(dt);
 
       #endregion
 
-      #region Основной документ
+      #region РћСЃРЅРѕРІРЅРѕР№ РґРѕРєСѓРјРµРЅС‚
 
       dt = new DBxDocType("Plants");
-      dt.PluralTitle = "Растения";
-      dt.SingularTitle = "Растение";
+      dt.PluralTitle = "Р Р°СЃС‚РµРЅРёСЏ";
+      dt.SingularTitle = "Р Р°СЃС‚РµРЅРёРµ";
       dt.Struct.Columns.AddInt16("Number");
       dt.Struct.Columns.AddString("LocalName", 120, true);
       dt.Struct.Columns.AddString("LatinName", 120, true);
@@ -176,12 +176,12 @@ namespace Plants
       dt.Struct.Columns.AddReference("Care", "Care", true); // 04.07.2019
       dt.Struct.Columns.AddMemo("Comment");
 
-      dt.Struct.Columns.AddReference("Photo", "PlantPhotos", true); // изображение для каталога - ссылка на поддокумент
+      dt.Struct.Columns.AddReference("Photo", "PlantPhotos", true); // РёР·РѕР±СЂР°Р¶РµРЅРёРµ РґР»СЏ РєР°С‚Р°Р»РѕРіР° - СЃСЃС‹Р»РєР° РЅР° РїРѕРґРґРѕРєСѓРјРµРЅС‚
 
       dt.Struct.Columns.AddReference("GroupId", "PlantGroups", true);
       dt.GroupRefColumnName = "GroupId";
 
-      #region Вычисляемые поля
+      #region Р’С‹С‡РёСЃР»СЏРµРјС‹Рµ РїРѕР»СЏ
 
       dt.Struct.Columns.AddString("Name", 120, false);
       dt.CalculatedColumns.Add("Name");
@@ -198,25 +198,25 @@ namespace Plants
       dt.Struct.Columns.AddReference("ToPlant", "Plants", true);
       dt.CalculatedColumns.Add("ToPlant");
 
-      // Дата прихода
+      // Р”Р°С‚Р° РїСЂРёС…РѕРґР°
       dt.Struct.Columns.AddDate("AddDate1", true);
       dt.Struct.Columns.AddDate("AddDate2", true);
       dt.CalculatedColumns.Add("AddDate1");
       dt.CalculatedColumns.Add("AddDate2");
 
-      // Дата выбытия
+      // Р”Р°С‚Р° РІС‹Р±С‹С‚РёСЏ
       dt.Struct.Columns.AddDate("RemoveDate1", true);
       dt.Struct.Columns.AddDate("RemoveDate2", true);
       dt.CalculatedColumns.Add("RemoveDate1");
       dt.CalculatedColumns.Add("RemoveDate2");
 
-      // Последнее действие
+      // РџРѕСЃР»РµРґРЅРµРµ РґРµР№СЃС‚РІРёРµ
       dt.Struct.Columns.AddReference("LastPlantAction", "PlantActions", true);
       dt.CalculatedColumns.Add("LastPlantAction");
-      // Последняя пересадка
+      // РџРѕСЃР»РµРґРЅСЏСЏ РїРµСЂРµСЃР°РґРєР°
       dt.Struct.Columns.AddReference("LastPlantReplanting", "PlantActions", true);
       dt.CalculatedColumns.Add("LastPlantReplanting");
-      // Последнее заболевание
+      // РџРѕСЃР»РµРґРЅРµРµ Р·Р°Р±РѕР»РµРІР°РЅРёРµ
       dt.Struct.Columns.AddReference("LastPlantDisease", "PlantDiseases", true);
       dt.CalculatedColumns.Add("LastPlantDisease");
 
@@ -228,7 +228,7 @@ namespace Plants
       dt.Struct.Columns.AddReference("PotKind", "PotKinds", true);
       dt.CalculatedColumns.Add("PotKind");
 
-      dt.Struct.Columns.AddReference("FirstPlannedAction", "PlantPlans", true); // Первое запланированное действие
+      dt.Struct.Columns.AddReference("FirstPlannedAction", "PlantPlans", true); // РџРµСЂРІРѕРµ Р·Р°РїР»Р°РЅРёСЂРѕРІР°РЅРЅРѕРµ РґРµР№СЃС‚РІРёРµ
       dt.CalculatedColumns.Add("FirstPlannedAction");
 
       #endregion
@@ -240,66 +240,66 @@ namespace Plants
 
       #endregion
 
-      #region Фото
+      #region Р¤РѕС‚Рѕ
 
       sdt = new DBxSubDocType("PlantPhotos");
-      sdt.SingularTitle = "Фотография растения";
-      sdt.PluralTitle = "Фотографии растений";
+      sdt.SingularTitle = "Р¤РѕС‚РѕРіСЂР°С„РёСЏ СЂР°СЃС‚РµРЅРёСЏ";
+      sdt.PluralTitle = "Р¤РѕС‚РѕРіСЂР°С„РёРё СЂР°СЃС‚РµРЅРёР№";
 
       sdt.Struct.Columns.AddString("FileName", 80, false);
       sdt.Struct.Columns.AddString("FileMD5", 32, false);
       sdt.BinDataRefs.Add("ThumbnailData");
       //sdt.Struct.Columns.AddBinary("Thumbnail");
-      sdt.Struct.Columns.AddDateTime("ShootingTime", true); // 24.11.2019. Может быть пустым
+      sdt.Struct.Columns.AddDateTime("ShootingTime", true); // 24.11.2019. РњРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј
       sdt.Struct.Columns.AddMemo("Comment");
       sdt.DefaultOrder = new DBxOrder("ShootingTime");
       dt.SubDocs.Add(sdt);
 
       #endregion
 
-      #region Атрибуты
+      #region РђС‚СЂРёР±СѓС‚С‹
 
       sdt = new DBxSubDocType("PlantAttributes");
-      sdt.SingularTitle = "Значения атрибута";
-      sdt.PluralTitle = "Атрибуты";
+      sdt.SingularTitle = "Р—РЅР°С‡РµРЅРёСЏ Р°С‚СЂРёР±СѓС‚Р°";
+      sdt.PluralTitle = "РђС‚СЂРёР±СѓС‚С‹";
       sdt.Struct.Columns.AddReference("AttrType", "AttrTypes", false);
       sdt.Struct.Columns.AddDate("Date", true);
-      sdt.Struct.Columns.AddString("Value", PlantTools.AttrValueShortMaxLength, true); // значение может быть пустым
-      sdt.Struct.Columns.AddMemo("LongValue"); // используется, если не помещается в поле "Значение"
+      sdt.Struct.Columns.AddString("Value", PlantTools.AttrValueShortMaxLength, true); // Р·РЅР°С‡РµРЅРёРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј
+      sdt.Struct.Columns.AddMemo("LongValue"); // РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ, РµСЃР»Рё РЅРµ РїРѕРјРµС‰Р°РµС‚СЃСЏ РІ РїРѕР»Рµ "Р—РЅР°С‡РµРЅРёРµ"
       sdt.Struct.Columns.AddMemo("Comment"); // 06.02.2022
       sdt.DefaultOrder = new DBxOrder("Date");
       dt.SubDocs.Add(sdt);
 
       #endregion
 
-      #region Приход/выбытие
+      #region РџСЂРёС…РѕРґ/РІС‹Р±С‹С‚РёРµ
 
       sdt = new DBxSubDocType("PlantMovement");
-      sdt.SingularTitle = "Движение растения";
-      sdt.PluralTitle = "Движение растений";
+      sdt.SingularTitle = "Р”РІРёР¶РµРЅРёРµ СЂР°СЃС‚РµРЅРёСЏ";
+      sdt.PluralTitle = "Р”РІРёР¶РµРЅРёРµ СЂР°СЃС‚РµРЅРёР№";
 
       sdt.Struct.Columns.AddInt("Kind", DataTools.GetEnumRange(typeof(MovementKind))).Nullable = false;
       sdt.Struct.Columns.AddDate("Date1", false);
       sdt.Struct.Columns.AddDate("Date2", false);
-      sdt.Struct.Columns.AddReference("Contra", "Contras", true); // может быть задано для операций прихода и выбытия
-      sdt.Struct.Columns.AddReference("ForkPlant", "Plants", true); // может быть задано для операций прихода и выбытия
-      sdt.Struct.Columns.AddReference("Place", "Places", true); // должно быть задано для операций прихода и перемещения
-      sdt.Struct.Columns.AddReference("Soil", "Soils", true); // может задававаться для операций прихода
-      sdt.Struct.Columns.AddReference("PotKind", "PotKinds", true); // может задававаться для операций прихода
+      sdt.Struct.Columns.AddReference("Contra", "Contras", true); // РјРѕР¶РµС‚ Р±С‹С‚СЊ Р·Р°РґР°РЅРѕ РґР»СЏ РѕРїРµСЂР°С†РёР№ РїСЂРёС…РѕРґР° Рё РІС‹Р±С‹С‚РёСЏ
+      sdt.Struct.Columns.AddReference("ForkPlant", "Plants", true); // РјРѕР¶РµС‚ Р±С‹С‚СЊ Р·Р°РґР°РЅРѕ РґР»СЏ РѕРїРµСЂР°С†РёР№ РїСЂРёС…РѕРґР° Рё РІС‹Р±С‹С‚РёСЏ
+      sdt.Struct.Columns.AddReference("Place", "Places", true); // РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ Р·Р°РґР°РЅРѕ РґР»СЏ РѕРїРµСЂР°С†РёР№ РїСЂРёС…РѕРґР° Рё РїРµСЂРµРјРµС‰РµРЅРёСЏ
+      sdt.Struct.Columns.AddReference("Soil", "Soils", true); // РјРѕР¶РµС‚ Р·Р°РґР°РІР°РІР°С‚СЊСЃСЏ РґР»СЏ РѕРїРµСЂР°С†РёР№ РїСЂРёС…РѕРґР°
+      sdt.Struct.Columns.AddReference("PotKind", "PotKinds", true); // РјРѕР¶РµС‚ Р·Р°РґР°РІР°РІР°С‚СЊСЃСЏ РґР»СЏ РѕРїРµСЂР°С†РёР№ РїСЂРёС…РѕРґР°
       sdt.Struct.Columns.AddMemo("Comment");
       sdt.DefaultOrder = new DBxOrder("Date1");
       dt.SubDocs.Add(sdt);
 
       #endregion
 
-      #region Действия
+      #region Р”РµР№СЃС‚РІРёСЏ
 
       sdt = new DBxSubDocType("PlantActions");
-      sdt.SingularTitle = "Действие с растением";
-      sdt.PluralTitle = "Действия с растениями";
+      sdt.SingularTitle = "Р”РµР№СЃС‚РІРёРµ СЃ СЂР°СЃС‚РµРЅРёРµРј";
+      sdt.PluralTitle = "Р”РµР№СЃС‚РІРёСЏ СЃ СЂР°СЃС‚РµРЅРёСЏРјРё";
 
       sdt.Struct.Columns.AddInt("Kind", DataTools.GetEnumRange(typeof(ActionKind))).Nullable = false;
-      sdt.Struct.Columns.AddString("ActionName", 30, true); // для типа "Другое"
+      sdt.Struct.Columns.AddString("ActionName", 30, true); // РґР»СЏ С‚РёРїР° "Р”СЂСѓРіРѕРµ"
       sdt.Struct.Columns.AddDate("Date1", false);
       sdt.Struct.Columns.AddDate("Date2", false);
       sdt.Struct.Columns.AddReference("Remedy", "Remedies", true);
@@ -312,11 +312,11 @@ namespace Plants
 
       #endregion
 
-      #region Цветение
+      #region Р¦РІРµС‚РµРЅРёРµ
 
       sdt = new DBxSubDocType("PlantFlowering");
-      sdt.SingularTitle = "Цветение растения";
-      sdt.PluralTitle = "Цветение растений";
+      sdt.SingularTitle = "Р¦РІРµС‚РµРЅРёРµ СЂР°СЃС‚РµРЅРёСЏ";
+      sdt.PluralTitle = "Р¦РІРµС‚РµРЅРёРµ СЂР°СЃС‚РµРЅРёР№";
 
       sdt.Struct.Columns.AddDate("Date1", false);
       sdt.Struct.Columns.AddDate("Date2", false);
@@ -327,11 +327,11 @@ namespace Plants
 
       #endregion
 
-      #region Заболевания
+      #region Р—Р°Р±РѕР»РµРІР°РЅРёСЏ
 
       sdt = new DBxSubDocType("PlantDiseases");
-      sdt.SingularTitle = "Заболевание растения";
-      sdt.PluralTitle = "Заболевания растений";
+      sdt.SingularTitle = "Р—Р°Р±РѕР»РµРІР°РЅРёРµ СЂР°СЃС‚РµРЅРёСЏ";
+      sdt.PluralTitle = "Р—Р°Р±РѕР»РµРІР°РЅРёСЏ СЂР°СЃС‚РµРЅРёР№";
 
       sdt.Struct.Columns.AddReference("Disease", "Diseases", true);
       sdt.Struct.Columns.AddDate("Date1", false);
@@ -342,14 +342,14 @@ namespace Plants
 
       #endregion
 
-      #region Планы
+      #region РџР»Р°РЅС‹
 
       sdt = new DBxSubDocType("PlantPlans");
-      sdt.SingularTitle = "Планируемое действие";
-      sdt.PluralTitle = "Планируемые действия";
+      sdt.SingularTitle = "РџР»Р°РЅРёСЂСѓРµРјРѕРµ РґРµР№СЃС‚РІРёРµ";
+      sdt.PluralTitle = "РџР»Р°РЅРёСЂСѓРµРјС‹Рµ РґРµР№СЃС‚РІРёСЏ";
 
       sdt.Struct.Columns.AddInt("Kind", DataTools.GetEnumRange(typeof(ActionKind))).Nullable = false;
-      sdt.Struct.Columns.AddString("ActionName", 30, true); // для типа "Другое"
+      sdt.Struct.Columns.AddString("ActionName", 30, true); // РґР»СЏ С‚РёРїР° "Р”СЂСѓРіРѕРµ"
       sdt.Struct.Columns.AddDate("Date1", false);
       sdt.Struct.Columns.AddDate("Date2", false);
       sdt.Struct.Columns.AddReference("Remedy", "Remedies", true);
@@ -361,11 +361,11 @@ namespace Plants
 
       #endregion
 
-      #region Виды атрибутов
+      #region Р’РёРґС‹ Р°С‚СЂРёР±СѓС‚РѕРІ
 
       dt = new DBxDocType("AttrTypes");
-      dt.SingularTitle = "Вид атрибута";
-      dt.PluralTitle = "Виды атрибутов";
+      dt.SingularTitle = "Р’РёРґ Р°С‚СЂРёР±СѓС‚Р°";
+      dt.PluralTitle = "Р’РёРґС‹ Р°С‚СЂРёР±СѓС‚РѕРІ";
       dt.Struct.Columns.AddString("Name", 30, false);
       dt.Struct.Columns.AddInt("Type", DataTools.GetEnumRange(typeof(ValueType)));
       dt.Struct.Columns.AddString("Format", 20, true);
@@ -378,26 +378,26 @@ namespace Plants
 
       #endregion
 
-      #region Места
+      #region РњРµСЃС‚Р°
 
-      #region Группы
+      #region Р“СЂСѓРїРїС‹
 
       dt = new DBxDocType("PlaceGroups");
-      dt.SingularTitle = "Группа мест";
-      dt.PluralTitle = "Группы мест";
+      dt.SingularTitle = "Р“СЂСѓРїРїР° РјРµСЃС‚";
+      dt.PluralTitle = "Р“СЂСѓРїРїС‹ РјРµСЃС‚";
       dt.Struct.Columns.AddString("Name", 40, false);
-      dt.Struct.Columns.AddReference("ParentId", "PlaceGroups", true); // Построение дерева групп
+      dt.Struct.Columns.AddReference("ParentId", "PlaceGroups", true); // РџРѕСЃС‚СЂРѕРµРЅРёРµ РґРµСЂРµРІР° РіСЂСѓРїРї
       dt.TreeParentColumnName = "ParentId";
       dt.DefaultOrder = new DBxOrder("Name");
       _DocTypes.Add(dt);
 
       #endregion
 
-      #region Основной документ
+      #region РћСЃРЅРѕРІРЅРѕР№ РґРѕРєСѓРјРµРЅС‚
 
       dt = new DBxDocType("Places");
-      dt.PluralTitle = "Места";
-      dt.SingularTitle = "Место";
+      dt.PluralTitle = "РњРµСЃС‚Р°";
+      dt.SingularTitle = "РњРµСЃС‚Рѕ";
       dt.Struct.Columns.AddString("Name", 250, true);
       dt.Struct.Columns.AddMemo("Comment");
 
@@ -411,28 +411,28 @@ namespace Plants
 
       #endregion
 
-      #region Контрагенты
+      #region РљРѕРЅС‚СЂР°РіРµРЅС‚С‹
 
-      #region Группы
+      #region Р“СЂСѓРїРїС‹
 
       dt = new DBxDocType("ContraGroups");
-      dt.SingularTitle = "Группа контрагентов";
-      dt.PluralTitle = "Группы контрагентов";
+      dt.SingularTitle = "Р“СЂСѓРїРїР° РєРѕРЅС‚СЂР°РіРµРЅС‚РѕРІ";
+      dt.PluralTitle = "Р“СЂСѓРїРїС‹ РєРѕРЅС‚СЂР°РіРµРЅС‚РѕРІ";
       dt.Struct.Columns.AddString("Name", 40, false);
-      dt.Struct.Columns.AddReference("ParentId", "ContraGroups", true); // Построение дерева групп
+      dt.Struct.Columns.AddReference("ParentId", "ContraGroups", true); // РџРѕСЃС‚СЂРѕРµРЅРёРµ РґРµСЂРµРІР° РіСЂСѓРїРї
       dt.TreeParentColumnName = "ParentId";
       dt.DefaultOrder = new DBxOrder("Name");
       _DocTypes.Add(dt);
 
       #endregion
 
-      #region Основной документ
+      #region РћСЃРЅРѕРІРЅРѕР№ РґРѕРєСѓРјРµРЅС‚
 
       dt = new DBxDocType("Contras");
-      dt.PluralTitle = "Контрагенты";
-      dt.SingularTitle = "Контрагент";
+      dt.PluralTitle = "РљРѕРЅС‚СЂР°РіРµРЅС‚С‹";
+      dt.SingularTitle = "РљРѕРЅС‚СЂР°РіРµРЅС‚";
       dt.Struct.Columns.AddString("Name", 250, true);
-      //пока не уверен, что надо dt.Struct.Columns.AddReference("Company", "Companies", true);
+      //РїРѕРєР° РЅРµ СѓРІРµСЂРµРЅ, С‡С‚Рѕ РЅР°РґРѕ dt.Struct.Columns.AddReference("Company", "Companies", true);
       dt.Struct.Columns.AddMemo("Comment");
 
       dt.Struct.Columns.AddReference("GroupId", "ContraGroups", true);
@@ -446,26 +446,26 @@ namespace Plants
 
       #endregion
 
-      #region Виды заболеваний
+      #region Р’РёРґС‹ Р·Р°Р±РѕР»РµРІР°РЅРёР№
 
-      #region Группы
+      #region Р“СЂСѓРїРїС‹
 
       dt = new DBxDocType("DiseaseGroups");
-      dt.SingularTitle = "Группа видов заболеваний";
-      dt.PluralTitle = "Группы видов заболеваний";
+      dt.SingularTitle = "Р“СЂСѓРїРїР° РІРёРґРѕРІ Р·Р°Р±РѕР»РµРІР°РЅРёР№";
+      dt.PluralTitle = "Р“СЂСѓРїРїС‹ РІРёРґРѕРІ Р·Р°Р±РѕР»РµРІР°РЅРёР№";
       dt.Struct.Columns.AddString("Name", 40, false);
-      dt.Struct.Columns.AddReference("ParentId", "DiseaseGroups", true); // Построение дерева групп
+      dt.Struct.Columns.AddReference("ParentId", "DiseaseGroups", true); // РџРѕСЃС‚СЂРѕРµРЅРёРµ РґРµСЂРµРІР° РіСЂСѓРїРї
       dt.TreeParentColumnName = "ParentId";
       dt.DefaultOrder = new DBxOrder("Name");
       _DocTypes.Add(dt);
 
       #endregion
 
-      #region Основной документ
+      #region РћСЃРЅРѕРІРЅРѕР№ РґРѕРєСѓРјРµРЅС‚
 
       dt = new DBxDocType("Diseases");
-      dt.PluralTitle = "Виды заболеваний";
-      dt.SingularTitle = "Вид заболевания";
+      dt.PluralTitle = "Р’РёРґС‹ Р·Р°Р±РѕР»РµРІР°РЅРёР№";
+      dt.SingularTitle = "Р’РёРґ Р·Р°Р±РѕР»РµРІР°РЅРёСЏ";
       dt.Struct.Columns.AddString("Name", 250, true);
       dt.Struct.Columns.AddMemo("Comment");
 
@@ -480,26 +480,26 @@ namespace Plants
 
       #endregion
 
-      #region Препараты
+      #region РџСЂРµРїР°СЂР°С‚С‹
 
-      #region Группы
+      #region Р“СЂСѓРїРїС‹
 
       dt = new DBxDocType("RemedyGroups");
-      dt.SingularTitle = "Группа препаратов";
-      dt.PluralTitle = "Группы препаратов";
+      dt.SingularTitle = "Р“СЂСѓРїРїР° РїСЂРµРїР°СЂР°С‚РѕРІ";
+      dt.PluralTitle = "Р“СЂСѓРїРїС‹ РїСЂРµРїР°СЂР°С‚РѕРІ";
       dt.Struct.Columns.AddString("Name", 40, false);
-      dt.Struct.Columns.AddReference("ParentId", "RemedyGroups", true); // Построение дерева групп
+      dt.Struct.Columns.AddReference("ParentId", "RemedyGroups", true); // РџРѕСЃС‚СЂРѕРµРЅРёРµ РґРµСЂРµРІР° РіСЂСѓРїРї
       dt.TreeParentColumnName = "ParentId";
       dt.DefaultOrder = new DBxOrder("Name");
       _DocTypes.Add(dt);
 
       #endregion
 
-      #region Основной документ
+      #region РћСЃРЅРѕРІРЅРѕР№ РґРѕРєСѓРјРµРЅС‚
 
       dt = new DBxDocType("Remedies");
-      dt.PluralTitle = "Препараты";
-      dt.SingularTitle = "Препарат";
+      dt.PluralTitle = "РџСЂРµРїР°СЂР°С‚С‹";
+      dt.SingularTitle = "РџСЂРµРїР°СЂР°С‚";
       dt.Struct.Columns.AddString("Name", 250, true);
       dt.Struct.Columns.AddReference("Manufacturer", "Companies", true);
       dt.Struct.Columns.AddMemo("Comment");
@@ -513,11 +513,11 @@ namespace Plants
 
       #endregion
 
-      #region Применение
+      #region РџСЂРёРјРµРЅРµРЅРёРµ
 
       sdt = new DBxSubDocType("RemedyUsage");
-      sdt.SingularTitle = "Вариант применения препарата";
-      sdt.PluralTitle = "Варианты применения препаратов";
+      sdt.SingularTitle = "Р’Р°СЂРёР°РЅС‚ РїСЂРёРјРµРЅРµРЅРёСЏ РїСЂРµРїР°СЂР°С‚Р°";
+      sdt.PluralTitle = "Р’Р°СЂРёР°РЅС‚С‹ РїСЂРёРјРµРЅРµРЅРёСЏ РїСЂРµРїР°СЂР°С‚РѕРІ";
 
       sdt.Struct.Columns.AddString("Name", 100, false);
 
@@ -529,26 +529,26 @@ namespace Plants
 
       #endregion
 
-      #region Грунты
+      #region Р“СЂСѓРЅС‚С‹
 
-      #region Группы
+      #region Р“СЂСѓРїРїС‹
 
       dt = new DBxDocType("SoilGroups");
-      dt.SingularTitle = "Группа грунтов";
-      dt.PluralTitle = "Группы грунтов";
+      dt.SingularTitle = "Р“СЂСѓРїРїР° РіСЂСѓРЅС‚РѕРІ";
+      dt.PluralTitle = "Р“СЂСѓРїРїС‹ РіСЂСѓРЅС‚РѕРІ";
       dt.Struct.Columns.AddString("Name", 40, false);
-      dt.Struct.Columns.AddReference("ParentId", "SoilGroups", true); // Построение дерева групп
+      dt.Struct.Columns.AddReference("ParentId", "SoilGroups", true); // РџРѕСЃС‚СЂРѕРµРЅРёРµ РґРµСЂРµРІР° РіСЂСѓРїРї
       dt.TreeParentColumnName = "ParentId";
       dt.DefaultOrder = new DBxOrder("Name");
       _DocTypes.Add(dt);
 
       #endregion
 
-      #region Основной документ
+      #region РћСЃРЅРѕРІРЅРѕР№ РґРѕРєСѓРјРµРЅС‚
 
       dt = new DBxDocType("Soils");
-      dt.PluralTitle = "Грунты";
-      dt.SingularTitle = "Грунт";
+      dt.PluralTitle = "Р“СЂСѓРЅС‚С‹";
+      dt.SingularTitle = "Р“СЂСѓРЅС‚";
       dt.Struct.Columns.AddString("Name", 250, true);
       dt.Struct.Columns.AddReference("Manufacturer", "Companies", true);
       dt.Struct.Columns.AddSingle("pHmin");
@@ -569,45 +569,45 @@ namespace Plants
 
       #endregion
 
-      #region Поддокумент "Компонент грунта"
+      #region РџРѕРґРґРѕРєСѓРјРµРЅС‚ "РљРѕРјРїРѕРЅРµРЅС‚ РіСЂСѓРЅС‚Р°"
 
       sdt = new DBxSubDocType("SoilParts");
-      sdt.PluralTitle = "Компоненты грунта";
-      sdt.SingularTitle = "Компонент грунта";
+      sdt.PluralTitle = "РљРѕРјРїРѕРЅРµРЅС‚С‹ РіСЂСѓРЅС‚Р°";
+      sdt.SingularTitle = "РљРѕРјРїРѕРЅРµРЅС‚ РіСЂСѓРЅС‚Р°";
       sdt.Struct.Columns.AddReference("Soil", "Soils", false);
       sdt.Struct.Columns.AddInt("Percent", 0, 100);
-      sdt.Struct.Columns.AddInt16("Order"); // для сортировки
+      sdt.Struct.Columns.AddInt16("Order"); // РґР»СЏ СЃРѕСЂС‚РёСЂРѕРІРєРё
       dt.SubDocs.Add(sdt);
 
       #endregion
 
       #endregion
 
-      #region Виды цветочных горшков
+      #region Р’РёРґС‹ С†РІРµС‚РѕС‡РЅС‹С… РіРѕСЂС€РєРѕРІ
 
-      #region Группы
+      #region Р“СЂСѓРїРїС‹
 
       dt = new DBxDocType("PotKindGroups");
-      dt.SingularTitle = "Группа видов горшков";
-      dt.PluralTitle = "Группы видов горшков";
+      dt.SingularTitle = "Р“СЂСѓРїРїР° РІРёРґРѕРІ РіРѕСЂС€РєРѕРІ";
+      dt.PluralTitle = "Р“СЂСѓРїРїС‹ РІРёРґРѕРІ РіРѕСЂС€РєРѕРІ";
       dt.Struct.Columns.AddString("Name", 40, false);
-      dt.Struct.Columns.AddReference("ParentId", "SoilGroups", true); // Построение дерева групп
+      dt.Struct.Columns.AddReference("ParentId", "SoilGroups", true); // РџРѕСЃС‚СЂРѕРµРЅРёРµ РґРµСЂРµРІР° РіСЂСѓРїРї
       dt.TreeParentColumnName = "ParentId";
       dt.DefaultOrder = new DBxOrder("Name");
       _DocTypes.Add(dt);
 
       #endregion
 
-      #region Основной документ
+      #region РћСЃРЅРѕРІРЅРѕР№ РґРѕРєСѓРјРµРЅС‚
 
       dt = new DBxDocType("PotKinds");
-      dt.PluralTitle = "Виды горшков";
-      dt.SingularTitle = "Вид горшков";
+      dt.PluralTitle = "Р’РёРґС‹ РіРѕСЂС€РєРѕРІ";
+      dt.SingularTitle = "Р’РёРґ РіРѕСЂС€РєРѕРІ";
       dt.Struct.Columns.AddString("Text", 50, true);
       dt.Struct.Columns.AddReference("Manufacturer", "Companies", true);
-      dt.Struct.Columns.AddInt16("Height"); // в миллиметрах
-      dt.Struct.Columns.AddInt16("Diameter"); // в миллиметрах
-      dt.Struct.Columns.AddSingle("Volume"); // в литрах
+      dt.Struct.Columns.AddInt16("Height"); // РІ РјРёР»Р»РёРјРµС‚СЂР°С…
+      dt.Struct.Columns.AddInt16("Diameter"); // РІ РјРёР»Р»РёРјРµС‚СЂР°С…
+      dt.Struct.Columns.AddSingle("Volume"); // РІ Р»РёС‚СЂР°С…
       dt.Struct.Columns.AddString("Color", 20, true);
 
       dt.Struct.Columns.AddString("Name", 150, true);
@@ -626,28 +626,28 @@ namespace Plants
 
       #endregion
 
-      #region Организации
+      #region РћСЂРіР°РЅРёР·Р°С†РёРё
 
-      #region Группы
+      #region Р“СЂСѓРїРїС‹
 
       dt = new DBxDocType("CompanyGroups");
-      dt.SingularTitle = "Группа организаций";
-      dt.PluralTitle = "Группы организаций";
+      dt.SingularTitle = "Р“СЂСѓРїРїР° РѕСЂРіР°РЅРёР·Р°С†РёР№";
+      dt.PluralTitle = "Р“СЂСѓРїРїС‹ РѕСЂРіР°РЅРёР·Р°С†РёР№";
       dt.Struct.Columns.AddString("Name", 40, false);
-      dt.Struct.Columns.AddReference("ParentId", "SoilGroups", true); // Построение дерева групп
+      dt.Struct.Columns.AddReference("ParentId", "SoilGroups", true); // РџРѕСЃС‚СЂРѕРµРЅРёРµ РґРµСЂРµРІР° РіСЂСѓРїРї
       dt.TreeParentColumnName = "ParentId";
       dt.DefaultOrder = new DBxOrder("Name");
       _DocTypes.Add(dt);
 
       #endregion
 
-      #region Основной документ
+      #region РћСЃРЅРѕРІРЅРѕР№ РґРѕРєСѓРјРµРЅС‚
 
       dt = new DBxDocType("Companies");
-      //dt.PluralTitle = "Организации";
-      //dt.SingularTitle = "Организация";
-      dt.PluralTitle = "Изготовители";
-      dt.SingularTitle = "Изготовитель";
+      //dt.PluralTitle = "РћСЂРіР°РЅРёР·Р°С†РёРё";
+      //dt.SingularTitle = "РћСЂРіР°РЅРёР·Р°С†РёСЏ";
+      dt.PluralTitle = "РР·РіРѕС‚РѕРІРёС‚РµР»Рё";
+      dt.SingularTitle = "РР·РіРѕС‚РѕРІРёС‚РµР»СЊ";
       dt.Struct.Columns.AddString("Name", 250, true);
       dt.Struct.Columns.AddMemo("Comment");
 
@@ -662,19 +662,19 @@ namespace Plants
 
       #endregion
 
-      #region Уход
+      #region РЈС…РѕРґ
 
-      #region Основной документ
+      #region РћСЃРЅРѕРІРЅРѕР№ РґРѕРєСѓРјРµРЅС‚
 
       dt = new DBxDocType("Care");
-      dt.PluralTitle = "Уход за растениями";
-      dt.SingularTitle = "Уход за растениями";
+      dt.PluralTitle = "РЈС…РѕРґ Р·Р° СЂР°СЃС‚РµРЅРёСЏРјРё";
+      dt.SingularTitle = "РЈС…РѕРґ Р·Р° СЂР°СЃС‚РµРЅРёСЏРјРё";
       dt.Struct.Columns.AddString("Name", 250, true);
       dt.Struct.Columns.AddMemo("Comment");
-      dt.Struct.Columns.AddReference("ParentId", "Care", true); // для наследования записей
+      dt.Struct.Columns.AddReference("ParentId", "Care", true); // РґР»СЏ РЅР°СЃР»РµРґРѕРІР°РЅРёСЏ Р·Р°РїРёСЃРµР№
       dt.TreeParentColumnName = "ParentId";
 
-      dt.Struct.Columns.AddReference("GroupId", "PlantGroups", true); // те же группы, что и в каталоге растений
+      dt.Struct.Columns.AddReference("GroupId", "PlantGroups", true); // С‚Рµ Р¶Рµ РіСЂСѓРїРїС‹, С‡С‚Рѕ Рё РІ РєР°С‚Р°Р»РѕРіРµ СЂР°СЃС‚РµРЅРёР№
       dt.GroupRefColumnName = "GroupId";
 
       dt.DefaultOrder = new DBxOrder("Name");
@@ -682,11 +682,11 @@ namespace Plants
 
       #endregion
 
-      #region Запись об уходе
+      #region Р—Р°РїРёСЃСЊ РѕР± СѓС…РѕРґРµ
 
       sdt = new DBxSubDocType("CareRecords");
-      sdt.SingularTitle = "Запись об уходе за растениями";
-      sdt.PluralTitle = "Записи об уходе за растениями";
+      sdt.SingularTitle = "Р—Р°РїРёСЃСЊ РѕР± СѓС…РѕРґРµ Р·Р° СЂР°СЃС‚РµРЅРёСЏРјРё";
+      sdt.PluralTitle = "Р—Р°РїРёСЃРё РѕР± СѓС…РѕРґРµ Р·Р° СЂР°СЃС‚РµРЅРёСЏРјРё";
 
       sdt.Struct.Columns.AddInt("Day1", 0, 365);
       sdt.Struct.Columns.AddInt("Day2", 0, 365);
@@ -703,11 +703,11 @@ namespace Plants
 
       #endregion
 
-      #region Дополнительная инициализация
+      #region Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅР°СЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ
 
       foreach (DBxDocType dt2 in DocTypes)
       {
-        // МЕМО-поля комментариев буферизуются вместе с основной таблицей
+        // РњР•РњРћ-РїРѕР»СЏ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ Р±СѓС„РµСЂРёР·СѓСЋС‚СЃСЏ РІРјРµСЃС‚Рµ СЃ РѕСЃРЅРѕРІРЅРѕР№ С‚Р°Р±Р»РёС†РµР№
 
         if (dt2.Struct.Columns.Contains("Comment"))
           dt2.IndividualCacheColumns["Comment"] = false;
@@ -718,7 +718,7 @@ namespace Plants
 
     #endregion
 
-    #region Обработчики документов на стороне сервера
+    #region РћР±СЂР°Р±РѕС‚С‡РёРєРё РґРѕРєСѓРјРµРЅС‚РѕРІ РЅР° СЃС‚РѕСЂРѕРЅРµ СЃРµСЂРІРµСЂР°
 
     #region AttrTypes
 
@@ -730,7 +730,7 @@ namespace Plants
         case AttrValueSourceType.List:
           break;
         default:
-          args.Doc.Values["ValueList"].SetNull(); // Очищаем список, если он не используется
+          args.Doc.Values["ValueList"].SetNull(); // РћС‡РёС‰Р°РµРј СЃРїРёСЃРѕРє, РµСЃР»Рё РѕРЅ РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ
           break;
       }
     }
@@ -741,12 +741,12 @@ namespace Plants
 
     void Plant_BeforeWrite(object sender, ServerDocTypeBeforeWriteEventArgs args)
     {
-      #region Название
+      #region РќР°Р·РІР°РЅРёРµ
 
       if (!args.Doc.Values["LatinName"].IsNull)
       {
         // 16.09.2019
-        // Если есть и русское и латинское название - выводим оба
+        // Р•СЃР»Рё РµСЃС‚СЊ Рё СЂСѓСЃСЃРєРѕРµ Рё Р»Р°С‚РёРЅСЃРєРѕРµ РЅР°Р·РІР°РЅРёРµ - РІС‹РІРѕРґРёРј РѕР±Р°
         string s = args.Doc.Values["LatinName"].AsString;
         string s2 = args.Doc.Values["LocalName"].AsString;
         if (s2.Length > 0)
@@ -764,7 +764,7 @@ namespace Plants
 
       DataTable table;
 
-      #region Место и контрагенты
+      #region РњРµСЃС‚Рѕ Рё РєРѕРЅС‚СЂР°РіРµРЅС‚С‹
 
       args.Doc.Values["Place"].SetNull();
       args.Doc.Values["FromContra"].SetNull();
@@ -787,7 +787,7 @@ namespace Plants
         DataRow row = table.DefaultView[i].Row;
         MovementKind kind = (MovementKind)(DataTools.GetInt(row, "Kind"));
 
-        #region Место
+        #region РњРµСЃС‚Рѕ
 
         if (!placeFound)
         {
@@ -804,7 +804,7 @@ namespace Plants
 
         #endregion
 
-        #region Контрагент
+        #region РљРѕРЅС‚СЂР°РіРµРЅС‚
 
         Int32 contraId = DataTools.GetInt(row, "Contra");
         Int32 forkPlantId = DataTools.GetInt(row, "ForkPlant");
@@ -826,7 +826,7 @@ namespace Plants
 
         #endregion
 
-        #region Приход
+        #region РџСЂРёС…РѕРґ
 
         if (kind == MovementKind.Add)
         {
@@ -849,7 +849,7 @@ namespace Plants
 
         #endregion
 
-        #region Текущее состояние
+        #region РўРµРєСѓС‰РµРµ СЃРѕСЃС‚РѕСЏРЅРёРµ
 
         if (args.Doc.Values["MovementState"].IsNull)
         {
@@ -878,7 +878,7 @@ namespace Plants
 
       #endregion
 
-      #region Действия
+      #region Р”РµР№СЃС‚РІРёСЏ
 
       table = args.Doc.SubDocs["PlantActions"].CreateSubDocsData();
       table.DefaultView.Sort = "Date1";
@@ -916,7 +916,7 @@ namespace Plants
         DataRow row = table.DefaultView[i].Row;
         DateTime date = DataTools.GetNullableDateTime(row, "Date1").Value;
         if (date < lastAddDate)
-          continue; // перекрыто следующим приходом
+          continue; // РїРµСЂРµРєСЂС‹С‚Рѕ СЃР»РµРґСѓСЋС‰РёРј РїСЂРёС…РѕРґРѕРј
         ActionKind kind = (ActionKind)(DataTools.GetInt(row, "Kind"));
         if (PlantTools.IsSoilAppliable(kind, true))
         {
@@ -934,7 +934,7 @@ namespace Plants
 
       #endregion
 
-      #region Заболевания
+      #region Р—Р°Р±РѕР»РµРІР°РЅРёСЏ
 
       table = args.Doc.SubDocs["PlantDiseases"].CreateSubDocsData();
       table.DefaultView.Sort = "Date1";
@@ -954,7 +954,7 @@ namespace Plants
       args.Doc.Values["Soil"].SetInteger(soilId);
       args.Doc.Values["PotKind"].SetInteger(potKindId);
 
-      #region Запланированные действия
+      #region Р—Р°РїР»Р°РЅРёСЂРѕРІР°РЅРЅС‹Рµ РґРµР№СЃС‚РІРёСЏ
 
       table = args.Doc.SubDocs["PlantPlans"].CreateSubDocsData();
       table.DefaultView.Sort = "Date1";
@@ -1010,7 +1010,7 @@ namespace Plants
         if (sb.Length > 0)
           sb.Append(", ");
         sb.Append(v);
-        sb.Append("л");
+        sb.Append("Р»");
       }
       else
       {
@@ -1021,7 +1021,7 @@ namespace Plants
             sb.Append(", ");
           sb.Append("d=");
           sb.Append(d);
-          sb.Append("мм");
+          sb.Append("РјРј");
         }
 
         int h = args.Doc.Values["Height"].AsInteger;
@@ -1031,7 +1031,7 @@ namespace Plants
             sb.Append(", ");
           sb.Append("h=");
           sb.Append(h);
-          sb.Append("мм");
+          sb.Append("РјРј");
         }
       }
 
@@ -1053,14 +1053,14 @@ namespace Plants
     #region DBConnectionHelper
 
     /// <summary>
-    /// Создатель баз данных
+    /// РЎРѕР·РґР°С‚РµР»СЊ Р±Р°Р· РґР°РЅРЅС‹С…
     /// </summary>
     private DBxDocDBConnectionHelper _DBConnectionHelper;
 
     private DBxDataVersionHandler _DataVersionHandler;
 
     /// <summary>
-    /// Инициализация объекта DBxDocDBConnectionHelper
+    /// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РѕР±СЉРµРєС‚Р° DBxDocDBConnectionHelper
     /// </summary>
     public void InitDBConnectionHelper(AbsPath dbDir)
     {
@@ -1071,10 +1071,10 @@ namespace Plants
       AbsPath filePath = new AbsPath(dbDir, "db.db");
       _DBConnectionHelper.ConnectionString = "Data Source=" + filePath.Path;
 
-      _DBConnectionHelper.CommandTimeout = 0; // бесконечное время выполнение команд
+      _DBConnectionHelper.CommandTimeout = 0; // Р±РµСЃРєРѕРЅРµС‡РЅРѕРµ РІСЂРµРјСЏ РІС‹РїРѕР»РЅРµРЅРёРµ РєРѕРјР°РЅРґ
       _DBConnectionHelper.DocTypes = _DocTypes;
 
-      #region Настройки пользователей (секции конфигурации)
+      #region РќР°СЃС‚СЂРѕР№РєРё РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ (СЃРµРєС†РёРё РєРѕРЅС„РёРіСѓСЂР°С†РёРё)
 
       DBxTableStruct ts = new DBxTableStruct("UserSettings");
       ts.Columns.AddId();
@@ -1082,8 +1082,8 @@ namespace Plants
       ts.Columns.AddString("Category", ConfigSection.MaxCategoryLength, false);
       ts.Columns.AddString("ConfigName", ConfigSection.MaxConfigNameLength, true);
       ts.Columns.AddXmlConfig("Data");
-      ts.Columns.AddDateTime("WriteTime", true); // Дата последней записи
-      //ts.Indices.Add("Пользователь");
+      ts.Columns.AddDateTime("WriteTime", true); // Р”Р°С‚Р° РїРѕСЃР»РµРґРЅРµР№ Р·Р°РїРёСЃРё
+      //ts.Indices.Add("РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ");
       ts.Indexes.Add("Name,Category,ConfigName");
 
       _DBConnectionHelper.MainDBStruct.Tables.Add(ts);
@@ -1096,10 +1096,10 @@ namespace Plants
 
     #endregion
 
-    #region Точки подключения
+    #region РўРѕС‡РєРё РїРѕРґРєР»СЋС‡РµРЅРёСЏ
 
     /// <summary>
-    /// Корневой объект системы документов
+    /// РљРѕСЂРЅРµРІРѕР№ РѕР±СЉРµРєС‚ СЃРёСЃС‚РµРјС‹ РґРѕРєСѓРјРµРЅС‚РѕРІ
     /// </summary>
     public DBxRealDocProviderGlobal GlobalDocData { get { return _GlobalDocData; } }
     private DBxRealDocProviderGlobal _GlobalDocData;
@@ -1108,7 +1108,7 @@ namespace Plants
     private DBxRealDocProviderSource _Source;
 
     /// <summary>
-    /// Основное подключение к базе данных с полным набором прав (для действий, выполняемых программой)
+    /// РћСЃРЅРѕРІРЅРѕРµ РїРѕРґРєР»СЋС‡РµРЅРёРµ Рє Р±Р°Р·Рµ РґР°РЅРЅС‹С… СЃ РїРѕР»РЅС‹Рј РЅР°Р±РѕСЂРѕРј РїСЂР°РІ (РґР»СЏ РґРµР№СЃС‚РІРёР№, РІС‹РїРѕР»РЅСЏРµРјС‹С… РїСЂРѕРіСЂР°РјРјРѕР№)
     /// </summary>
     public DBxEntry MainEntry { get { return _GlobalDocData.MainDBEntry; } }
 
@@ -1119,7 +1119,7 @@ namespace Plants
       return new DBxRealDocProvider(Source, 0, false);
     }
 
-    #region Резервное копирование
+    #region Р РµР·РµСЂРІРЅРѕРµ РєРѕРїРёСЂРѕРІР°РЅРёРµ
 
     public static AbsPath BackupDir
     {
@@ -1145,7 +1145,7 @@ namespace Plants
 
     internal void RemoveOldBackups(ISplash spl)
     {
-      spl.PhaseText = "Поиск старых копий";
+      spl.PhaseText = "РџРѕРёСЃРє СЃС‚Р°СЂС‹С… РєРѕРїРёР№";
 
       string[] aFiles = System.IO.Directory.GetFiles(BackupDir.Path, "????????-??????.7z", SearchOption.TopDirectoryOnly);
       for (int i = 0; i < aFiles.Length; i++)
@@ -1154,7 +1154,7 @@ namespace Plants
         TimeSpan ts = DateTime.Today - dt;
         if (ts.TotalDays > 7)
         {
-          spl.PhaseText = "Удаление " + aFiles[i];
+          spl.PhaseText = "РЈРґР°Р»РµРЅРёРµ " + aFiles[i];
           try
           {
             System.IO.File.Delete(aFiles[i]);

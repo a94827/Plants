@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.Text;
 using FreeLibSet.Data;
@@ -6,30 +6,30 @@ using System.Data;
 using System.Runtime.Serialization;
 using FreeLibSet.Core;
 
-// Для переноса в ExtDBDocs.dll
+// Р”Р»СЏ РїРµСЂРµРЅРѕСЃР° РІ ExtDBDocs.dll
 
 namespace Plants
 {
   /// <summary>
-  /// Обработка таблицы "DataVersion" в базе данных документов.
-  /// Предотвращает присоединение базы данных к чужому приложению.
-  /// Хранит версию данных, предотвращает downgrade программы до несовместимой версии.
+  /// РћР±СЂР°Р±РѕС‚РєР° С‚Р°Р±Р»РёС†С‹ "DataVersion" РІ Р±Р°Р·Рµ РґР°РЅРЅС‹С… РґРѕРєСѓРјРµРЅС‚РѕРІ.
+  /// РџСЂРµРґРѕС‚РІСЂР°С‰Р°РµС‚ РїСЂРёСЃРѕРµРґРёРЅРµРЅРёРµ Р±Р°Р·С‹ РґР°РЅРЅС‹С… Рє С‡СѓР¶РѕРјСѓ РїСЂРёР»РѕР¶РµРЅРёСЋ.
+  /// РҐСЂР°РЅРёС‚ РІРµСЂСЃРёСЋ РґР°РЅРЅС‹С…, РїСЂРµРґРѕС‚РІСЂР°С‰Р°РµС‚ downgrade РїСЂРѕРіСЂР°РјРјС‹ РґРѕ РЅРµСЃРѕРІРјРµСЃС‚РёРјРѕР№ РІРµСЂСЃРёРё.
   /// 
   /// </summary>
   public class DBxDataVersionHandler
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     public DBxDataVersionHandler(Guid appGuid, int currentVersion, int minVersion)
     {
       if (appGuid == Guid.Empty)
-        throw new ArgumentException("Не задан AppGuid", "appGuid");
+        throw new ArgumentException("РќРµ Р·Р°РґР°РЅ AppGuid", "appGuid");
       if (currentVersion < 1)
-        throw new ArgumentException("Версия должна быть не меньше 1", "currentVersion");
+        throw new ArgumentException("Р’РµСЂСЃРёСЏ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ РЅРµ РјРµРЅСЊС€Рµ 1", "currentVersion");
       if (minVersion < 1)
-        throw new ArgumentException("Минимальная версия должна быть не меньше 1", "minVersion");
+        throw new ArgumentException("РњРёРЅРёРјР°Р»СЊРЅР°СЏ РІРµСЂСЃРёСЏ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ РЅРµ РјРµРЅСЊС€Рµ 1", "minVersion");
       if (minVersion > currentVersion)
-        throw new ArgumentException("Минимальная версия не может быть больше основной версии", "minVersion");
+        throw new ArgumentException("РњРёРЅРёРјР°Р»СЊРЅР°СЏ РІРµСЂСЃРёСЏ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ РѕСЃРЅРѕРІРЅРѕР№ РІРµСЂСЃРёРё", "minVersion");
 
       _AppGuid = appGuid;
       _CurrentVersion = currentVersion;
@@ -38,7 +38,7 @@ namespace Plants
 
     #endregion
 
-    #region Свойства
+    #region РЎРІРѕР№СЃС‚РІР°
 
     public Guid AppGuid { get { return _AppGuid; } }
     private Guid _AppGuid;
@@ -51,12 +51,12 @@ namespace Plants
 
     #endregion
 
-    #region Объявление структуры таблицы
+    #region РћР±СЉСЏРІР»РµРЅРёРµ СЃС‚СЂСѓРєС‚СѓСЂС‹ С‚Р°Р±Р»РёС†С‹
 
     public DBxTableStruct AddTableStruct(DBxStruct dbStruct)
     {
       DBxTableStruct ts = new DBxTableStruct("DataVersion");
-      ts.Columns.AddId(); // не используется
+      ts.Columns.AddId(); // РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ
       ts.Columns.AddString("AppGUID", 36, false);
       ts.Columns.AddString("DataGUID", 36, false);
       ts.Columns.AddInt("CurrentVersion", 1, Int32.MaxValue);
@@ -67,7 +67,7 @@ namespace Plants
 
     #endregion
 
-    #region Инициализация
+    #region РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ
 
     public Guid DataGuid { get { return _DataGuid; } }
     private Guid _DataGuid;
@@ -80,29 +80,29 @@ namespace Plants
       DataTable table = con.FillSelect("DataVersion");
       if (table.Rows.Count == 0)
       {
-        // Первый запуск
+        // РџРµСЂРІС‹Р№ Р·Р°РїСѓСЃРє
 
         _DataGuid = Guid.NewGuid();
         con.AddRecord("DataVersion", new DBxColumns("AppGUID,DataGUID,CurrentVersion,MinVersion"),
           new object[] { AppGuid.ToString(), _DataGuid.ToString(), CurrentVersion, MinVersion });
       }
       else if (table.Rows.Count > 1)
-        throw new DBxDataVersionHandlerException("Таблица DataVersion содержит недопустимое число строк: " + table.Rows.Count.ToString());
+        throw new DBxDataVersionHandlerException("РўР°Р±Р»РёС†Р° DataVersion СЃРѕРґРµСЂР¶РёС‚ РЅРµРґРѕРїСѓСЃС‚РёРјРѕРµ С‡РёСЃР»Рѕ СЃС‚СЂРѕРє: " + table.Rows.Count.ToString());
       else
       {
-        // Проверяем версию
+        // РџСЂРѕРІРµСЂСЏРµРј РІРµСЂСЃРёСЋ
 
         DataRow row = table.Rows[0];
         Guid oldAppGuid = new Guid(DataTools.GetString(row, "AppGUID"));
         if (oldAppGuid != AppGuid)
-          throw new DBxDataVersionHandlerException("База данных предназначена для работы с другой программой");
+          throw new DBxDataVersionHandlerException("Р‘Р°Р·Р° РґР°РЅРЅС‹С… РїСЂРµРґРЅР°Р·РЅР°С‡РµРЅР° РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ РґСЂСѓРіРѕР№ РїСЂРѕРіСЂР°РјРјРѕР№");
 
         _DataGuid = new Guid(DataTools.GetString(row, "DataGUID"));
         _PrevVersion = DataTools.GetInt(row, "CurrentVersion");
 
         int oldMinVersion = DataTools.GetInt(row, "MinVersion");
         if (CurrentVersion < oldMinVersion)
-          throw new DBxDataVersionHandlerException("База данных была обновлена в более новой версии программы. Откат до текущей версии невозможен");
+          throw new DBxDataVersionHandlerException("Р‘Р°Р·Р° РґР°РЅРЅС‹С… Р±С‹Р»Р° РѕР±РЅРѕРІР»РµРЅР° РІ Р±РѕР»РµРµ РЅРѕРІРѕР№ РІРµСЂСЃРёРё РїСЂРѕРіСЂР°РјРјС‹. РћС‚РєР°С‚ РґРѕ С‚РµРєСѓС‰РµР№ РІРµСЂСЃРёРё РЅРµРІРѕР·РјРѕР¶РµРЅ");
 
         if (CurrentVersion != _PrevVersion)
         {
@@ -119,7 +119,7 @@ namespace Plants
   [Serializable]
   public class DBxDataVersionHandlerException : ApplicationException
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     public DBxDataVersionHandlerException(string message)
       : base(message)
@@ -127,7 +127,7 @@ namespace Plants
     }
 
     /// <summary>
-    /// Эта версия конструктора нужна для правильной десериализации
+    /// Р­С‚Р° РІРµСЂСЃРёСЏ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР° РЅСѓР¶РЅР° РґР»СЏ РїСЂР°РІРёР»СЊРЅРѕР№ РґРµСЃРµСЂРёР°Р»РёР·Р°С†РёРё
     /// </summary>
     protected DBxDataVersionHandlerException(SerializationInfo info, StreamingContext context)
       : base(info, context)

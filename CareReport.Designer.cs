@@ -1,4 +1,4 @@
-namespace Plants
+п»їnamespace Plants
 {
   partial class CareReportParamForm
   {
@@ -55,7 +55,7 @@ namespace Plants
       this.groupBox2.Size = new System.Drawing.Size(618, 64);
       this.groupBox2.TabIndex = 0;
       this.groupBox2.TabStop = false;
-      this.groupBox2.Text = "Дата для ухода";
+      this.groupBox2.Text = "Р”Р°С‚Р° РґР»СЏ СѓС…РѕРґР°";
       // 
       // infoLabel1
       // 
@@ -64,7 +64,7 @@ namespace Plants
       this.infoLabel1.Name = "infoLabel1";
       this.infoLabel1.Size = new System.Drawing.Size(361, 45);
       this.infoLabel1.TabIndex = 2;
-      this.infoLabel1.Text = "Если пусто, то будут выведены данные по уходу за весь год";
+      this.infoLabel1.Text = "Р•СЃР»Рё РїСѓСЃС‚Рѕ, С‚Рѕ Р±СѓРґСѓС‚ РІС‹РІРµРґРµРЅС‹ РґР°РЅРЅС‹Рµ РїРѕ СѓС…РѕРґСѓ Р·Р° РІРµСЃСЊ РіРѕРґ";
       // 
       // edDay
       // 
@@ -79,7 +79,7 @@ namespace Plants
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(100, 23);
       this.label1.TabIndex = 0;
-      this.label1.Text = "День и месяц";
+      this.label1.Text = "Р”РµРЅСЊ Рё РјРµСЃСЏС†";
       this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // grpPeriod
@@ -91,7 +91,7 @@ namespace Plants
       this.grpPeriod.Size = new System.Drawing.Size(618, 69);
       this.grpPeriod.TabIndex = 1;
       this.grpPeriod.TabStop = false;
-      this.grpPeriod.Text = "Период для фильтров";
+      this.grpPeriod.Text = "РџРµСЂРёРѕРґ РґР»СЏ С„РёР»СЊС‚СЂРѕРІ";
       // 
       // edPeriod
       // 
@@ -106,7 +106,7 @@ namespace Plants
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(632, 452);
       this.Name = "CareReportParamForm";
-      this.Text = "Создание списка правил ухода за растениями";
+      this.Text = "РЎРѕР·РґР°РЅРёРµ СЃРїРёСЃРєР° РїСЂР°РІРёР» СѓС…РѕРґР° Р·Р° СЂР°СЃС‚РµРЅРёСЏРјРё";
       this.MainTabPage.ResumeLayout(false);
       this.groupBox2.ResumeLayout(false);
       this.groupBox2.PerformLayout();

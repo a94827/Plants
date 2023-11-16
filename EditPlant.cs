@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -22,7 +22,7 @@ namespace Plants
 {
   public partial class EditPlant : Form
   {
-    #region Конструктор формы
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ С„РѕСЂРјС‹
 
     public EditPlant()
     {
@@ -31,9 +31,9 @@ namespace Plants
 
     #endregion
 
-    #region Табличный просмотр документов
+    #region РўР°Р±Р»РёС‡РЅС‹Р№ РїСЂРѕСЃРјРѕС‚СЂ РґРѕРєСѓРјРµРЅС‚РѕРІ
 
-    #region Значок
+    #region Р—РЅР°С‡РѕРє
 
     public static void ImageValueNeeded(object sender, DBxImageValueNeededEventArgs args)
     {
@@ -51,7 +51,7 @@ namespace Plants
 
     #endregion
 
-    #region Вычисляемые столбцы
+    #region Р’С‹С‡РёСЃР»СЏРµРјС‹Рµ СЃС‚РѕР»Р±С†С‹
 
     public static void ContraNameColumnValueNeeded(object sender, EFPGridProducerValueNeededEventArgs args)
     {
@@ -97,7 +97,7 @@ namespace Plants
 
     public static void FirstPlannedActionImageColumnValueNeeded(object sender, EFPGridProducerValueNeededEventArgs args)
     {
-      // TODO: Хорошо бы еще и раскрашивать просроченные действия
+      // TODO: РҐРѕСЂРѕС€Рѕ Р±С‹ РµС‰Рµ Рё СЂР°СЃРєСЂР°С€РёРІР°С‚СЊ РїСЂРѕСЃСЂРѕС‡РµРЅРЅС‹Рµ РґРµР№СЃС‚РІРёСЏ
 
       DateTime? date1 = args.GetNullableDateTime("FirstPlannedAction.Date1");
       DateTime? date2 = args.GetNullableDateTime("FirstPlannedAction.Date2");
@@ -111,7 +111,7 @@ namespace Plants
           args.Value = EFPApp.MainImages.Images[PlantTools.GetActionImageKey(kind)];
       }
       else if (date1.HasValue || date2.HasValue)
-        args.Value = EFPApp.MainImages.Images["Error"]; // ошибка - не может такого быть
+        args.Value = EFPApp.MainImages.Images["Error"]; // РѕС€РёР±РєР° - РЅРµ РјРѕР¶РµС‚ С‚Р°РєРѕРіРѕ Р±С‹С‚СЊ
       else
         args.Value = EFPApp.MainImages.Images["EmptyImage"];
     }
@@ -138,83 +138,85 @@ namespace Plants
     #endregion
 
     /// <summary>
-    /// Дополнительная инициализация табличного просмотра справочника документов для
-    /// добавления команды локального меню
+    /// Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅР°СЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ С‚Р°Р±Р»РёС‡РЅРѕРіРѕ РїСЂРѕСЃРјРѕС‚СЂР° СЃРїСЂР°РІРѕС‡РЅРёРєР° РґРѕРєСѓРјРµРЅС‚РѕРІ РґР»СЏ
+    /// РґРѕР±Р°РІР»РµРЅРёСЏ РєРѕРјР°РЅРґС‹ Р»РѕРєР°Р»СЊРЅРѕРіРѕ РјРµРЅСЋ
     /// </summary>
     public static void InitView(object sender, InitEFPDBxViewEventArgs args)
     {
       EFPDataGridView controlProvider = (EFPDataGridView)(args.ControlProvider);
       //((EFPDataGridView)(Args.ControlProvider)).Control.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+
+      // TODO: РЎРѕР±С‹С‚РёРµ RowHeightInfoNeeded РЅРµ РІС‹Р·С‹РІР°РµС‚СЃСЏ РІ Mono.
       controlProvider.Control.RowHeightInfoNeeded += PlantThumbnailColumn.RowHeightInfoNeeded;
 
       controlProvider.Idle += new EventHandler(ControlProvider_Idle);
 
-      #region Фильтры
+      #region Р¤РёР»СЊС‚СЂС‹
 
       NullNotNullGridFilter filtHasNumber = new NullNotNullGridFilter("Number", typeof(int));
-      filtHasNumber.DisplayName = "Номер по каталогу";
-      filtHasNumber.FilterTextNull = "Нет";
-      filtHasNumber.FilterTextNotNull = "Есть";
+      filtHasNumber.DisplayName = "РќРѕРјРµСЂ РїРѕ РєР°С‚Р°Р»РѕРіСѓ";
+      filtHasNumber.FilterTextNull = "РќРµС‚";
+      filtHasNumber.FilterTextNotNull = "Р•СЃС‚СЊ";
       args.ControlProvider.Filters.Add(filtHasNumber);
 
       NullNotNullGridFilter filtHasPhoto = new NullNotNullGridFilter("Photo", typeof(Int32));
-      filtHasPhoto.DisplayName = "Фото";
-      filtHasPhoto.FilterTextNull = "Нет";
-      filtHasPhoto.FilterTextNotNull = "Есть";
+      filtHasPhoto.DisplayName = "Р¤РѕС‚Рѕ";
+      filtHasPhoto.FilterTextNull = "РќРµС‚";
+      filtHasPhoto.FilterTextNotNull = "Р•СЃС‚СЊ";
       args.ControlProvider.Filters.Add(filtHasPhoto);
 
       EnumGridFilter filtState = new EnumGridFilter("MovementState", PlantTools.PlantMovementStateNames);
-      filtState.DisplayName = "Состояние";
+      filtState.DisplayName = "РЎРѕСЃС‚РѕСЏРЅРёРµ";
       filtState.ImageKeys = PlantTools.PlantMovementStateImageKeys;
       args.ControlProvider.Filters.Add(filtState);
 
       RefDocGridFilterSet filtPlace = new RefDocGridFilterSet(ProgramDBUI.TheUI.DocTypes["Places"], "Place");
-      filtPlace.DisplayName = "Текущее место расположения";
+      filtPlace.DisplayName = "РўРµРєСѓС‰РµРµ РјРµСЃС‚Рѕ СЂР°СЃРїРѕР»РѕР¶РµРЅРёСЏ";
       filtPlace.Nullable = true;
       args.ControlProvider.Filters.Add(filtPlace);
 
       EnumGridFilter filtLastAction = new EnumGridFilter("LastActionKind", PlantTools.ActionNames);
-      filtLastAction.DisplayName = "Последнее действие";
+      filtLastAction.DisplayName = "РџРѕСЃР»РµРґРЅРµРµ РґРµР№СЃС‚РІРёРµ";
       filtLastAction.ImageKeys = PlantTools.ActionImageKeys;
       args.ControlProvider.Filters.Add(filtLastAction);
 
       RefDocGridFilterSet filtFromContra = new RefDocGridFilterSet(ProgramDBUI.TheUI.DocTypes["Contras"], "FromContra");
-      filtFromContra.DisplayName = "От кого получено";
+      filtFromContra.DisplayName = "РћС‚ РєРѕРіРѕ РїРѕР»СѓС‡РµРЅРѕ";
       filtFromContra.Nullable = true;
       args.ControlProvider.Filters.Add(filtFromContra);
 
       RefDocGridFilterSet filtToContra = new RefDocGridFilterSet(ProgramDBUI.TheUI.DocTypes["Contras"], "ToContra");
-      filtToContra.DisplayName = "Кому передано";
+      filtToContra.DisplayName = "РљРѕРјСѓ РїРµСЂРµРґР°РЅРѕ";
       filtToContra.Nullable = true;
       args.ControlProvider.Filters.Add(filtToContra);
 
       RefDocGridFilterSet filtSoil = new RefDocGridFilterSet(ProgramDBUI.TheUI.DocTypes["Soils"], "Soil");
-      filtSoil.DisplayName = "Грунт";
+      filtSoil.DisplayName = "Р“СЂСѓРЅС‚";
       filtSoil.Nullable = true;
       args.ControlProvider.Filters.Add(filtSoil);
 
       RefDocGridFilterSet filtPotKind = new RefDocGridFilterSet(ProgramDBUI.TheUI.DocTypes["PotKinds"], "PotKind");
-      filtPotKind.DisplayName = "Горшок";
+      filtPotKind.DisplayName = "Р“РѕСЂС€РѕРє";
       filtPotKind.Nullable = true;
       args.ControlProvider.Filters.Add(filtPotKind);
 
       RefDocGridFilter filtManufacturer = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Companies"], "Manufacturer");
-      filtManufacturer.DisplayName = "Изготовитель";
+      filtManufacturer.DisplayName = "РР·РіРѕС‚РѕРІРёС‚РµР»СЊ";
       filtManufacturer.Nullable = true;
       args.ControlProvider.Filters.Add(filtManufacturer);
 
       RefDocGridFilter filtCare = new RefDocGridFilter(ProgramDBUI.TheUI.DocTypes["Care"], "Care");
-      filtCare.DisplayName = "Уход";
+      filtCare.DisplayName = "РЈС…РѕРґ";
       filtCare.Nullable = true;
       args.ControlProvider.Filters.Add(filtCare);
 
       #endregion
 
-      #region Локальное меню
+      #region Р›РѕРєР°Р»СЊРЅРѕРµ РјРµРЅСЋ
 
       EFPCommandItem ci;
       ci = new EFPCommandItem("Edit", "AttrTable");
-      ci.MenuText = "Таблица атрибутов";
+      ci.MenuText = "РўР°Р±Р»РёС†Р° Р°С‚СЂРёР±СѓС‚РѕРІ";
       ci.ImageKey = "AttributeTable";
       ci.GroupBegin = true;
       ci.GroupEnd = true;
@@ -245,12 +247,12 @@ namespace Plants
       }
       catch (Exception e)
       {
-        LogoutTools.LogoutException(e, "Ошибка Plants EFPDataGridView.Idle");
+        LogoutTools.LogoutException(e, "РћС€РёР±РєР° Plants EFPDataGridView.Idle");
       }
     }
 
 
-    #region Команды локального меню
+    #region РљРѕРјР°РЅРґС‹ Р»РѕРєР°Р»СЊРЅРѕРіРѕ РјРµРЅСЋ
 
     static void ciRB_AttrTable_Click(object sender, EventArgs args)
     {
@@ -272,7 +274,7 @@ namespace Plants
 
       if (ProgramDBUI.Settings.PhotoDir.IsEmpty)
       {
-        EFPApp.ErrorMessageBox("Каталог со снимками не указан");
+        EFPApp.ErrorMessageBox("РљР°С‚Р°Р»РѕРі СЃРѕ СЃРЅРёРјРєР°РјРё РЅРµ СѓРєР°Р·Р°РЅ");
         args.Cancel = true;
         return;
       }
@@ -287,7 +289,7 @@ namespace Plants
       string fileName = controlProvider.DocTypeUI.TableCache.GetString(controlProvider.CurrentId, "Photo.FileName");
       if (String.IsNullOrEmpty(fileName))
       {
-        EFPApp.ErrorMessageBox("Для выбранного растения не задано изображение");
+        EFPApp.ErrorMessageBox("Р”Р»СЏ РІС‹Р±СЂР°РЅРЅРѕРіРѕ СЂР°СЃС‚РµРЅРёСЏ РЅРµ Р·Р°РґР°РЅРѕ РёР·РѕР±СЂР°Р¶РµРЅРёРµ");
         args.Cancel = true;
         return;
       }
@@ -295,7 +297,7 @@ namespace Plants
       AbsPath path = new AbsPath(ProgramDBUI.Settings.PhotoDir, fileName);
       if (!EFPApp.FileExists(path))
       {
-        EFPApp.ErrorMessageBox("Файл не найден: " + path.ToString());
+        EFPApp.ErrorMessageBox("Р¤Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ: " + path.ToString());
         args.Cancel = true;
         return;
       }
@@ -306,7 +308,7 @@ namespace Plants
 
     #endregion
 
-    #region Редактор документа
+    #region Р РµРґР°РєС‚РѕСЂ РґРѕРєСѓРјРµРЅС‚Р°
 
     public static void BeforeEditDoc(object sender, BeforeDocEditEventArgs args)
     {
@@ -320,7 +322,7 @@ namespace Plants
             Int32 subDocId = args.Editor.MainValues["Photo"].AsInteger;
             if (subDocId == 0)
             {
-              EFPApp.ShowTempMessage("Нет фото растения");
+              EFPApp.ShowTempMessage("РќРµС‚ С„РѕС‚Рѕ СЂР°СЃС‚РµРЅРёСЏ");
               return;
             }
             DBxSubDoc sd = args.Editor.Documents[0][0].SubDocs["PlantPhotos"].GetSubDocById(subDocId);
@@ -340,15 +342,15 @@ namespace Plants
       {
         form.AddPage2(args);
         args.AddSubDocsPage("PlantAttributes");
-        args.AddSubDocsPage("PlantMovement").Title = "Движение";
-        args.AddSubDocsPage("PlantActions").Title = "Действия";
-        args.AddSubDocsPage("PlantFlowering").Title = "Цветение";
-        args.AddSubDocsPage("PlantDiseases").Title = "Заболевания";
-        args.AddSubDocsPage("PlantPlans").Title = "План";
+        args.AddSubDocsPage("PlantMovement").Title = "Р”РІРёР¶РµРЅРёРµ";
+        args.AddSubDocsPage("PlantActions").Title = "Р”РµР№СЃС‚РІРёСЏ";
+        args.AddSubDocsPage("PlantFlowering").Title = "Р¦РІРµС‚РµРЅРёРµ";
+        args.AddSubDocsPage("PlantDiseases").Title = "Р—Р°Р±РѕР»РµРІР°РЅРёСЏ";
+        args.AddSubDocsPage("PlantPlans").Title = "РџР»Р°РЅ";
       }
     }
 
-    #region Общие
+    #region РћР±С‰РёРµ
 
     EFPTextBox efpLocalName, efpLatinName, efpDescrName;
 
@@ -356,7 +358,7 @@ namespace Plants
 
     private void AddPage1(InitDocEditFormEventArgs args)
     {
-      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      DocEditPage page = args.AddPage("РћР±С‰РёРµ", MainPanel1);
       page.ImageKey = "Properties";
 
       efpLocalName = new EFPTextBox(page.BaseProvider, edLocalName);
@@ -416,7 +418,7 @@ namespace Plants
       if (args.ValidateState == UIValidateState.Error)
         return;
       if (efpLocalName.Text.Length + efpLatinName.Text.Length + efpDescrName.Text.Length == 0)
-        args.SetError("Какое-либо из названий должно быт заполнено");
+        args.SetError("РљР°РєРѕРµ-Р»РёР±Рѕ РёР· РЅР°Р·РІР°РЅРёР№ РґРѕР»Р¶РЅРѕ Р±С‹С‚ Р·Р°РїРѕР»РЅРµРЅРѕ");
     }
 
     void efpNumber_Validating(object sender, UIValidatingEventArgs args)
@@ -424,15 +426,15 @@ namespace Plants
       if (args.ValidateState != UIValidateState.Ok)
         return;
       if (efpNumber.Value == 0)
-        args.SetWarning("Номер по каталогу не задан");
+        args.SetWarning("РќРѕРјРµСЂ РїРѕ РєР°С‚Р°Р»РѕРіСѓ РЅРµ Р·Р°РґР°РЅ");
     }
 
     #endregion
 
-    #region Фото
+    #region Р¤РѕС‚Рѕ
 
     /// <summary>
-    /// Идентификатор поддокумента фото, которое будет использоваться в каталог
+    /// РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕРґРґРѕРєСѓРјРµРЅС‚Р° С„РѕС‚Рѕ, РєРѕС‚РѕСЂРѕРµ Р±СѓРґРµС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ РІ РєР°С‚Р°Р»РѕРі
     /// </summary>
     private Int32 _MainPhotoSubDocId;
 
@@ -442,7 +444,7 @@ namespace Plants
       args.Editor.BeforeWrite += new DocEditCancelEventHandler(Editor_BeforeWrite);
       args.Editor.AfterWrite += new DocEditEventHandler(Editor_AfterWrite);
 
-      DocEditPage page = args.AddPage("Фото", MainPanel2);
+      DocEditPage page = args.AddPage("Р¤РѕС‚Рѕ", MainPanel2);
       page.ImageKey = "Picture";
 
       EFPControlWithToolBar<DataGridView> cwt = new EFPControlWithToolBar<DataGridView>(page.BaseProvider, MainPanel2);
@@ -450,11 +452,11 @@ namespace Plants
       sdgPhotos.GridProducerPostInit += new EventHandler(sdgPhotos_GridProducerPostInit);
 
       if (ProgramDBUI.Settings.PhotoDir.IsEmpty)
-        sdgPhotos.CanView = false; // нельзя просматривать снимки
+        sdgPhotos.CanView = false; // РЅРµР»СЊР·СЏ РїСЂРѕСЃРјР°С‚СЂРёРІР°С‚СЊ СЃРЅРёРјРєРё
 
       EFPCommandItem ci;
       ci = new EFPCommandItem("Edit", "SelectDefault");
-      ci.MenuText = "Выбрать изображение для каталога";
+      ci.MenuText = "Р’С‹Р±СЂР°С‚СЊ РёР·РѕР±СЂР°Р¶РµРЅРёРµ РґР»СЏ РєР°С‚Р°Р»РѕРіР°";
       ci.ImageKey = "Ok";
       ci.ShortCut = Keys.F4;
       ci.Click += new EventHandler(ciSelectDefault_Click);
@@ -494,7 +496,7 @@ namespace Plants
             return;
           }
         }
-        // Берем первое изображение
+        // Р‘РµСЂРµРј РїРµСЂРІРѕРµ РёР·РѕР±СЂР°Р¶РµРЅРёРµ
         _MainPhotoSubDocId = DataTools.GetInt(table.DefaultView[0].Row, "Id");
         args.Editor.Documents[0].Values["Photo"].SetInteger(_MainPhotoSubDocId);
       }
@@ -502,7 +504,7 @@ namespace Plants
 
     void Editor_AfterWrite(object sender, DocEditEventArgs args)
     {
-      // Нужно после нажатия кнопки "Запись", если основным было сделано новое фото
+      // РќСѓР¶РЅРѕ РїРѕСЃР»Рµ РЅР°Р¶Р°С‚РёСЏ РєРЅРѕРїРєРё "Р—Р°РїРёСЃСЊ", РµСЃР»Рё РѕСЃРЅРѕРІРЅС‹Рј Р±С‹Р»Рѕ СЃРґРµР»Р°РЅРѕ РЅРѕРІРѕРµ С„РѕС‚Рѕ
       _MainPhotoSubDocId = args.Editor.Documents[0].Values["Photo"].AsInteger;
     }
 
@@ -514,7 +516,7 @@ namespace Plants
         return;
 
       _MainPhotoSubDocId = sdgPhotos.CurrentId;
-      sdgPhotos.Control.InvalidateColumn(0); // требуется перерисовка значков всех строк
+      sdgPhotos.Control.InvalidateColumn(0); // С‚СЂРµР±СѓРµС‚СЃСЏ РїРµСЂРµСЂРёСЃРѕРІРєР° Р·РЅР°С‡РєРѕРІ РІСЃРµС… СЃС‚СЂРѕРє
       sdgPhotos.MainEditor.SubDocsChangeInfo.Changed = true;
     }
 
@@ -527,12 +529,12 @@ namespace Plants
     //    Args.ColorType = EFPDataGridViewColorType.Total1; 
     //}
 
-    // Не работает, т.к. после этого вызывается обработчик SubDocTypeUI.ControlProvider_GetCellAttributes
+    // РќРµ СЂР°Р±РѕС‚Р°РµС‚, С‚.Рє. РїРѕСЃР»Рµ СЌС‚РѕРіРѕ РІС‹Р·С‹РІР°РµС‚СЃСЏ РѕР±СЂР°Р±РѕС‚С‡РёРє SubDocTypeUI.ControlProvider_GetCellAttributes
     void sdgPhotos_GetCellAttributes(object sender, EFPDataGridViewCellAttributesEventArgs args)
     {
       if (args.DataRow == null)
         return;
-      if (args.ColumnIndex == 0) // значок
+      if (args.ColumnIndex == 0) // Р·РЅР°С‡РѕРє
       {
         Int32 id = DataTools.GetInt(args.DataRow, "Id");
         if (id == _MainPhotoSubDocId)
@@ -544,7 +546,7 @@ namespace Plants
 
     #endregion
 
-    #region Табличный просмотр поддокументов "Фото"
+    #region РўР°Р±Р»РёС‡РЅС‹Р№ РїСЂРѕСЃРјРѕС‚СЂ РїРѕРґРґРѕРєСѓРјРµРЅС‚РѕРІ "Р¤РѕС‚Рѕ"
 
     public static void SubDocPhoto_InitView(object sender, InitEFPDBxViewEventArgs args)
     {
@@ -565,7 +567,7 @@ namespace Plants
 
     #endregion
 
-    #region Редактор документа "Фото"
+    #region Р РµРґР°РєС‚РѕСЂ РґРѕРєСѓРјРµРЅС‚Р° "Р¤РѕС‚Рѕ"
 
     public static void SubDocPhoto_BeforeEdit(object sender, BeforeSubDocEditEventArgs args)
     {
@@ -581,12 +583,12 @@ namespace Plants
           }
           catch (Exception e)
           {
-            EFPApp.ShowException(e, "Ошибка добавления фото");
+            EFPApp.ShowException(e, "РћС€РёР±РєР° РґРѕР±Р°РІР»РµРЅРёСЏ С„РѕС‚Рѕ");
             args.Cancel = true;
           }
           break;
         case EFPDataGridViewState.Edit:
-          // TODO: Определять, что текущий столбец - "Comment", иначе показывать изображение
+          // TODO: РћРїСЂРµРґРµР»СЏС‚СЊ, С‡С‚Рѕ С‚РµРєСѓС‰РёР№ СЃС‚РѕР»Р±РµС† - "Comment", РёРЅР°С‡Рµ РїРѕРєР°Р·С‹РІР°С‚СЊ РёР·РѕР±СЂР°Р¶РµРЅРёРµ
           SubDocPhoto_EditComment(args);
           break;
 
@@ -603,8 +605,8 @@ namespace Plants
       DBxSubDoc subDoc = args.Editor.SubDocs[0];
 
       MultiLineTextInputDialog dlg = new MultiLineTextInputDialog();
-      dlg.Title = "Комментарий";
-      dlg.Prompt = "Комментарий к снимку " + subDoc.Values["FileName"].AsString;
+      dlg.Title = "РљРѕРјРјРµРЅС‚Р°СЂРёР№";
+      dlg.Prompt = "РљРѕРјРјРµРЅС‚Р°СЂРёР№ Рє СЃРЅРёРјРєСѓ " + subDoc.Values["FileName"].AsString;
       dlg.Text = subDoc.Values["Comment"].AsString;
       dlg.CanBeEmpty = true;
       if (dlg.ShowDialog() != DialogResult.OK)
@@ -619,7 +621,7 @@ namespace Plants
     {
       OpenFileDialog dlg = new OpenFileDialog();
       dlg.InitialDirectory = ProgramDBUI.Settings.PhotoDir.Path;
-      dlg.Filter = "Фотографии JPEG|*.jpg;*.jpeg";
+      dlg.Filter = "Р¤РѕС‚РѕРіСЂР°С„РёРё JPEG|*.jpg;*.jpeg";
       dlg.Multiselect = true; // 22.09.2019
       if (dlg.ShowDialog() != DialogResult.OK)
         return false;
@@ -628,7 +630,7 @@ namespace Plants
         AbsPath path = new AbsPath(dlg.FileNames[i]);
         if (path.ParentDir != ProgramDBUI.Settings.PhotoDir)
         {
-          EFPApp.ErrorMessageBox("Файл должен располагаться в каталоге \"" + ProgramDBUI.Settings.PhotoDir.Path + "\"");
+          EFPApp.ErrorMessageBox("Р¤Р°Р№Р» РґРѕР»Р¶РµРЅ СЂР°СЃРїРѕР»Р°РіР°С‚СЊСЃСЏ РІ РєР°С‚Р°Р»РѕРіРµ \"" + ProgramDBUI.Settings.PhotoDir.Path + "\"");
           return false;
         }
 
@@ -654,7 +656,7 @@ namespace Plants
               }
             }
 
-            // См. документацию GDI+
+            // РЎРј. РґРѕРєСѓРјРµРЅС‚Р°С†РёСЋ GDI+
             // https://docs.microsoft.com/ru-ru/windows/desktop/gdiplus/-gdiplus-constant-property-item-descriptions
             const int PropertyTagDateTime = 0x0132;
 
@@ -663,8 +665,8 @@ namespace Plants
             {
               string s = Encoding.ASCII.GetString(pi.Value);
               //                                 01234567890123456789
-              // 20-символьная строка в формате "ГГГГ:ММ:ДД ЧЧ:ММ:СС"+'\0'
-              // Разделители - двоеточие
+              // 20-СЃРёРјРІРѕР»СЊРЅР°СЏ СЃС‚СЂРѕРєР° РІ С„РѕСЂРјР°С‚Рµ "Р“Р“Р“Р“:РњРњ:Р”Р” Р§Р§:РњРњ:РЎРЎ"+'\0'
+              // Р Р°Р·РґРµР»РёС‚РµР»Рё - РґРІРѕРµС‚РѕС‡РёРµ
               if (s.Length == 20)
               {
                 s = s.Substring(0, 4) + s.Substring(5, 2) + s.Substring(8, 2) +
@@ -684,11 +686,11 @@ namespace Plants
     }
 
     /// <summary>
-    /// Получает значение свойства из jpeg-файла
-    /// Исключения перехватываются и возвращается null
+    /// РџРѕР»СѓС‡Р°РµС‚ Р·РЅР°С‡РµРЅРёРµ СЃРІРѕР№СЃС‚РІР° РёР· jpeg-С„Р°Р№Р»Р°
+    /// РСЃРєР»СЋС‡РµРЅРёСЏ РїРµСЂРµС…РІР°С‚С‹РІР°СЋС‚СЃСЏ Рё РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ null
     /// </summary>
-    /// <param name="image">Загруженный файл</param>
-    /// <param name="propId">Идентификатор свойства</param>
+    /// <param name="image">Р—Р°РіСЂСѓР¶РµРЅРЅС‹Р№ С„Р°Р№Р»</param>
+    /// <param name="propId">РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃРІРѕР№СЃС‚РІР°</param>
     /// <returns>PropertyItem</returns>
     [DebuggerStepThrough]
     public static PropertyItem GetPropertyItem(Image image, int propId)
@@ -704,17 +706,17 @@ namespace Plants
     }
 
     /// <summary>
-    /// Вращение изображения.
-    /// Можно было бы вращать исходное изображение, а потом сделать Thumbnail, но это будет медленнее,
-    /// так как исходное изображение может быть большим.
-    /// Выгоднее вертеть миниатюру.
-    /// Нельзя хранить неповернутые миниатюры, так как у них не сохраняются атрибуты исходного файла (EXIF).
+    /// Р’СЂР°С‰РµРЅРёРµ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ.
+    /// РњРѕР¶РЅРѕ Р±С‹Р»Рѕ Р±С‹ РІСЂР°С‰Р°С‚СЊ РёСЃС…РѕРґРЅРѕРµ РёР·РѕР±СЂР°Р¶РµРЅРёРµ, Р° РїРѕС‚РѕРј СЃРґРµР»Р°С‚СЊ Thumbnail, РЅРѕ СЌС‚Рѕ Р±СѓРґРµС‚ РјРµРґР»РµРЅРЅРµРµ,
+    /// С‚Р°Рє РєР°Рє РёСЃС…РѕРґРЅРѕРµ РёР·РѕР±СЂР°Р¶РµРЅРёРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ Р±РѕР»СЊС€РёРј.
+    /// Р’С‹РіРѕРґРЅРµРµ РІРµСЂС‚РµС‚СЊ РјРёРЅРёР°С‚СЋСЂСѓ.
+    /// РќРµР»СЊР·СЏ С…СЂР°РЅРёС‚СЊ РЅРµРїРѕРІРµСЂРЅСѓС‚С‹Рµ РјРёРЅРёР°С‚СЋСЂС‹, С‚Р°Рє РєР°Рє Сѓ РЅРёС… РЅРµ СЃРѕС…СЂР°РЅСЏСЋС‚СЃСЏ Р°С‚СЂРёР±СѓС‚С‹ РёСЃС…РѕРґРЅРѕРіРѕ С„Р°Р№Р»Р° (EXIF).
     /// </summary>
-    /// <param name="Thumbnail">Миниатюра</param>
-    /// <param name="img">Исходное изображение для извлечения свойств</param>
+    /// <param name="Thumbnail">РњРёРЅРёР°С‚СЋСЂР°</param>
+    /// <param name="img">РСЃС…РѕРґРЅРѕРµ РёР·РѕР±СЂР°Р¶РµРЅРёРµ РґР»СЏ РёР·РІР»РµС‡РµРЅРёСЏ СЃРІРѕР№СЃС‚РІ</param>
     public static void RotateThumbnail(Bitmap thumbnail, Image img)
     {
-      // См. документацию GDI+
+      // РЎРј. РґРѕРєСѓРјРµРЅС‚Р°С†РёСЋ GDI+
       // https://docs.microsoft.com/ru-ru/windows/desktop/gdiplus/-gdiplus-constant-property-item-descriptions
       const int PropertyTagOrientation = 0x0112;
 
@@ -724,7 +726,7 @@ namespace Plants
 
       int v = pi.Value[0];
 
-      // Взято из:
+      // Р’Р·СЏС‚Рѕ РёР·:
       // https://stackoverrun.com/ru/q/11817698
       switch (v)
       {
@@ -741,24 +743,24 @@ namespace Plants
 
     #endregion
 
-    #region Просмотр фото
+    #region РџСЂРѕСЃРјРѕС‚СЂ С„РѕС‚Рѕ
 
     /// <summary>
-    /// Открывает на просмотр файл фото
+    /// РћС‚РєСЂС‹РІР°РµС‚ РЅР° РїСЂРѕСЃРјРѕС‚СЂ С„Р°Р№Р» С„РѕС‚Рѕ
     /// </summary>
-    /// <param name="fileName">Имя файла с расширением но без пути</param>
+    /// <param name="fileName">РРјСЏ С„Р°Р№Р»Р° СЃ СЂР°СЃС€РёСЂРµРЅРёРµРј РЅРѕ Р±РµР· РїСѓС‚Рё</param>
     public static void ViewFile(string fileName)
     {
       if (ProgramDBUI.Settings.PhotoDir.IsEmpty)
       {
-        EFPApp.ErrorMessageBox("Каталог со снимками не указан");
+        EFPApp.ErrorMessageBox("РљР°С‚Р°Р»РѕРі СЃРѕ СЃРЅРёРјРєР°РјРё РЅРµ СѓРєР°Р·Р°РЅ");
         return;
       }
 
       AbsPath path = new AbsPath(ProgramDBUI.Settings.PhotoDir, fileName);
       if (!EFPApp.FileExists(path))
       {
-        EFPApp.ErrorMessageBox("Файл не найден: " + path.ToString());
+        EFPApp.ErrorMessageBox("Р¤Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ: " + path.ToString());
         return;
       }
 
@@ -777,7 +779,7 @@ namespace Plants
 
       if (ProgramDBUI.Settings.PhotoDir.IsEmpty)
       {
-        EFPApp.ErrorMessageBox("Каталог со снимками не указан");
+        EFPApp.ErrorMessageBox("РљР°С‚Р°Р»РѕРі СЃРѕ СЃРЅРёРјРєР°РјРё РЅРµ СѓРєР°Р·Р°РЅ");
         args.Cancel = true;
         return;
       }
@@ -792,7 +794,7 @@ namespace Plants
       AbsPath path = new AbsPath(ProgramDBUI.Settings.PhotoDir, fileName);
       if (!EFPApp.FileExists(path))
       {
-        EFPApp.ErrorMessageBox("Файл не найден: " + path.ToString());
+        EFPApp.ErrorMessageBox("Р¤Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ: " + path.ToString());
         args.Cancel = true;
         return;
       }
@@ -804,17 +806,17 @@ namespace Plants
 
 
   /// <summary>
-  /// Столбец изображения "Thumbnail" для поля "Photo" (в документе) или поля "Id" (в поддокументе)
+  /// РЎС‚РѕР»Р±РµС† РёР·РѕР±СЂР°Р¶РµРЅРёСЏ "Thumbnail" РґР»СЏ РїРѕР»СЏ "Photo" (РІ РґРѕРєСѓРјРµРЅС‚Рµ) РёР»Рё РїРѕР»СЏ "Id" (РІ РїРѕРґРґРѕРєСѓРјРµРЅС‚Рµ)
   /// </summary>
   public class PlantThumbnailColumn : EFPGridProducerImageColumn, ICacheFactory<PlantThumbnailColumn.ImageInfo>
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     public PlantThumbnailColumn(bool isSubDoc)
       : base("Thumbnail", new string[1] { isSubDoc ? "Id" : "Photo" })
     {
       _IsSubDoc = isSubDoc;
-      base.HeaderText = "Фото";
+      base.HeaderText = "Р¤РѕС‚Рѕ";
       base.Resizable = false;
     }
 
@@ -824,7 +826,7 @@ namespace Plants
 
     #endregion
 
-    #region Переопределенные методы
+    #region РџРµСЂРµРѕРїСЂРµРґРµР»РµРЅРЅС‹Рµ РјРµС‚РѕРґС‹
 
     public override void ApplyConfig(DataGridViewColumn gridColumn, EFPDataGridViewConfigColumn config, EFPDataGridView controlProvider)
     {
@@ -857,7 +859,7 @@ namespace Plants
       if (id == 0)
       {
         args.Value = EFPApp.MainImages.Images["EmptyImage"];
-        args.ToolTipText = "Нет изображения";
+        args.ToolTipText = "РќРµС‚ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ";
         return;
       }
       else if (id < 0)
@@ -887,15 +889,15 @@ namespace Plants
             args.Value = ii.Image;
           else
           {
-            args.ToolTipText = "Имя файла: " + ii.FileName;
+            args.ToolTipText = "РРјСЏ С„Р°Р№Р»Р°: " + ii.FileName;
             if (ii.ShootingTime.HasValue)
-              args.ToolTipText += ", дата снимка: " + ii.ShootingTime.Value.ToString("g");
+              args.ToolTipText += ", РґР°С‚Р° СЃРЅРёРјРєР°: " + ii.ShootingTime.Value.ToString("g");
           }
         }
         catch (Exception e) // 24.11.2019
         {
           args.Value = EFPApp.MainImages.Images["Error"];
-          args.ToolTipText = "Ошибка. " + e.Message;
+          args.ToolTipText = "РћС€РёР±РєР°. " + e.Message;
         }
       }
     }
@@ -917,11 +919,11 @@ namespace Plants
 
     #endregion
 
-    #region Класс ImageInfo
+    #region РљР»Р°СЃСЃ ImageInfo
 
     private class ImageInfo
     {
-      #region Поля
+      #region РџРѕР»СЏ
 
       public Image Image;
 
@@ -940,7 +942,7 @@ namespace Plants
     {
       Int32 Id = Int32.Parse(keys[0]);
 
-      // Размер можно не проверять
+      // Р Р°Р·РјРµСЂ РјРѕР¶РЅРѕ РЅРµ РїСЂРѕРІРµСЂСЏС‚СЊ
 
       byte[] b = ProgramDBUI.TheUI.DocProvider.GetBinData("PlantPhotos", Id, "ThumbnailData");
       ImageInfo ii = new ImageInfo();
@@ -952,7 +954,7 @@ namespace Plants
 
     #endregion
 
-    #region Высота строки
+    #region Р’С‹СЃРѕС‚Р° СЃС‚СЂРѕРєРё
 
     public static void RowHeightInfoNeeded(object sender, DataGridViewRowHeightInfoNeededEventArgs args)
     {

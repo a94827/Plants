@@ -1,4 +1,4 @@
-namespace Plants
+п»їnamespace Plants
 {
   partial class EditPlantPlan
   {
@@ -64,7 +64,7 @@ namespace Plants
       this.groupBox3.Size = new System.Drawing.Size(497, 105);
       this.groupBox3.TabIndex = 1;
       this.groupBox3.TabStop = false;
-      this.groupBox3.Text = "Комментари&й";
+      this.groupBox3.Text = "РљРѕРјРјРµРЅС‚Р°СЂРё&Р№";
       // 
       // edComment
       // 
@@ -92,7 +92,7 @@ namespace Plants
       this.groupBox1.Size = new System.Drawing.Size(497, 152);
       this.groupBox1.TabIndex = 0;
       this.groupBox1.TabStop = false;
-      this.groupBox1.Text = "Планимруемое действие";
+      this.groupBox1.Text = "РџР»Р°РЅРёРјСЂСѓРµРјРѕРµ РґРµР№СЃС‚РІРёРµ";
       // 
       // cbRemedy
       // 
@@ -109,7 +109,7 @@ namespace Plants
       this.label3.Name = "label3";
       this.label3.Size = new System.Drawing.Size(140, 21);
       this.label3.TabIndex = 4;
-      this.label3.Text = "&Препарат";
+      this.label3.Text = "&РџСЂРµРїР°СЂР°С‚";
       this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // edActionName
@@ -127,7 +127,7 @@ namespace Plants
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(140, 21);
       this.label2.TabIndex = 2;
-      this.label2.Text = "Д&ругое";
+      this.label2.Text = "Р”&СЂСѓРіРѕРµ";
       this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // cbDate
@@ -145,7 +145,7 @@ namespace Plants
       this.label4.Name = "label4";
       this.label4.Size = new System.Drawing.Size(140, 20);
       this.label4.TabIndex = 6;
-      this.label4.Text = "&Дата";
+      this.label4.Text = "&Р”Р°С‚Р°";
       this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // cbKind
@@ -164,7 +164,7 @@ namespace Plants
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(140, 21);
       this.label1.TabIndex = 0;
-      this.label1.Text = "Д&ействие";
+      this.label1.Text = "Р”&РµР№СЃС‚РІРёРµ";
       this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // EditPlantPlan

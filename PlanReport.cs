@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,12 +11,13 @@ using FreeLibSet.Data.Docs;
 using FreeLibSet.Forms.Docs;
 using FreeLibSet.Calendar;
 using FreeLibSet.Core;
+using FreeLibSet.Config;
 
 namespace Plants
 {
   internal partial class PlanReportParamForm : EFPReportExtParamsTwoPageForm
   {
-    #region Конструктор формы
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ С„РѕСЂРјС‹
 
     public PlanReportParamForm()
     {
@@ -29,7 +30,7 @@ namespace Plants
 
     #endregion
 
-    #region Поля
+    #region РџРѕР»СЏ
 
     public EFPDateRangeBox efpPeriod;
 
@@ -38,7 +39,7 @@ namespace Plants
 
   internal class PlanReportParams : EFPReportExtParams
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     public PlanReportParams()
     {
@@ -47,7 +48,7 @@ namespace Plants
 
     #endregion
 
-    #region Поля
+    #region РџРѕР»СЏ
 
     public DateTime? FirstDate;
 
@@ -57,11 +58,11 @@ namespace Plants
 
     #endregion
 
-    #region Переопределенные методы
+    #region РџРµСЂРµРѕРїСЂРµРґРµР»РµРЅРЅС‹Рµ РјРµС‚РѕРґС‹
 
     protected override void OnInitTitle()
     {
-      base.Title = "Планируемые действия - " + DateRangeFormatter.Default.ToString(FirstDate, LastDate, true);
+      base.Title = "РџР»Р°РЅРёСЂСѓРµРјС‹Рµ РґРµР№СЃС‚РІРёСЏ - " + DateRangeFormatter.Default.ToString(FirstDate, LastDate, true);
       Filters.AddFilterInfo(FilterInfo);
     }
 
@@ -70,12 +71,12 @@ namespace Plants
       return new PlanReportParamForm();
     }
 
-    public override EFPReportExtParamsPart UsedParts
+    public override SettingsPart UsedParts
     {
-      get { return EFPReportExtParamsPart.User | EFPReportExtParamsPart.NoHistory; }
+      get { return SettingsPart.User | SettingsPart.NoHistory; }
     }
 
-    public override void WriteFormValues(EFPReportExtParamsForm form, EFPReportExtParamsPart part)
+    public override void WriteFormValues(EFPReportExtParamsForm form, SettingsPart part)
     {
       PlanReportParamForm form2 = (PlanReportParamForm)form;
       form2.efpPeriod.First.NValue = FirstDate;
@@ -83,35 +84,35 @@ namespace Plants
       form2.FiltersControlProvider.Filters = Filters;
     }
 
-    public override void ReadFormValues(EFPReportExtParamsForm form, EFPReportExtParamsPart part)
+    public override void ReadFormValues(EFPReportExtParamsForm form, SettingsPart part)
     {
       PlanReportParamForm form2 = (PlanReportParamForm)form;
       FirstDate = form2.efpPeriod.First.NValue;
       LastDate = form2.efpPeriod.Last.NValue;
     }
 
-    public override void WriteConfig(FreeLibSet.Config.CfgPart cfg, EFPReportExtParamsPart part)
+    public override void WriteConfig(FreeLibSet.Config.CfgPart cfg, SettingsPart part)
     {
       switch (part)
       {
-        case EFPReportExtParamsPart.User:
+        case SettingsPart.User:
           Filters.WriteConfig(cfg);
           break;
-        case EFPReportExtParamsPart.NoHistory:
+        case SettingsPart.NoHistory:
           cfg.SetNullableDate("FirstDate", FirstDate);
           cfg.SetNullableDate("LastDate", LastDate);
           break;
       }
     }
 
-    public override void ReadConfig(FreeLibSet.Config.CfgPart cfg, EFPReportExtParamsPart part)
+    public override void ReadConfig(FreeLibSet.Config.CfgPart cfg, SettingsPart part)
     {
       switch (part)
       {
-        case EFPReportExtParamsPart.User:
+        case SettingsPart.User:
           Filters.ReadConfig(cfg);
           break;
-        case EFPReportExtParamsPart.NoHistory:
+        case SettingsPart.NoHistory:
           FirstDate = cfg.GetNullableDate("FirstDate");
           LastDate = cfg.GetNullableDate("LastDate");
           break;
@@ -123,7 +124,7 @@ namespace Plants
 
   internal class PlanReport : EFPReport
   {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
     public PlanReport()
       : base("PlanReport")
@@ -138,7 +139,7 @@ namespace Plants
 
     #endregion
 
-    #region Запрос параметров
+    #region Р—Р°РїСЂРѕСЃ РїР°СЂР°РјРµС‚СЂРѕРІ
 
     protected override EFPReportParams CreateParams()
     {
@@ -149,7 +150,7 @@ namespace Plants
 
     #endregion
 
-    #region Построение отчета
+    #region РџРѕСЃС‚СЂРѕРµРЅРёРµ РѕС‚С‡РµС‚Р°
 
     protected override void BuildReport()
     {
@@ -189,7 +190,7 @@ namespace Plants
 
     #endregion
 
-    #region Страница отчета
+    #region РЎС‚СЂР°РЅРёС†Р° РѕС‚С‡РµС‚Р°
 
     EFPReportDBxGridPage _MainPage;
 
@@ -197,15 +198,15 @@ namespace Plants
     {
       _MainPage.ControlProvider.Control.AutoGenerateColumns = false;
       _MainPage.ControlProvider.Columns.AddImage("ActionImage");
-      _MainPage.ControlProvider.Columns.AddText("Period", false, "Период", 15, 10);
-      _MainPage.ControlProvider.Columns.AddText("ActionText", false, "Действие", 30, 10);
+      _MainPage.ControlProvider.Columns.AddText("Period", false, "РџРµСЂРёРѕРґ", 15, 10);
+      _MainPage.ControlProvider.Columns.AddText("ActionText", false, "Р”РµР№СЃС‚РІРёРµ", 30, 10);
 
-      _MainPage.ControlProvider.Columns.AddText("DocId.Number", true, "№ по каталогу", 3, 3);
+      _MainPage.ControlProvider.Columns.AddText("DocId.Number", true, "в„– РїРѕ РєР°С‚Р°Р»РѕРіСѓ", 3, 3);
       //MainPage.ControlProvider.Columns.LastAdded.Format = PlantTools.NumberMask ;
       _MainPage.ControlProvider.Columns.LastAdded.CanIncSearch = true;
       _MainPage.ControlProvider.Columns.LastAdded.TextAlign = HorizontalAlignment.Center;
 
-      _MainPage.ControlProvider.Columns.AddTextFill("DocId.Name", true, "Название или описание", 100, 15);
+      _MainPage.ControlProvider.Columns.AddTextFill("DocId.Name", true, "РќР°Р·РІР°РЅРёРµ РёР»Рё РѕРїРёСЃР°РЅРёРµ", 100, 15);
       _MainPage.ControlProvider.Columns.LastAdded.CanIncSearch = true;
       _MainPage.ControlProvider.DisableOrdering();
 
@@ -247,7 +248,7 @@ namespace Plants
     {
       Int32[] docIds = DataTools.GetIdsFromColumn(_MainPage.ControlProvider.SelectedDataRows, "DocId");
       if (docIds.Length == 0)
-        EFPApp.ShowTempMessage("Нет выбранных растений");
+        EFPApp.ShowTempMessage("РќРµС‚ РІС‹Р±СЂР°РЅРЅС‹С… СЂР°СЃС‚РµРЅРёР№");
       ProgramDBUI.TheUI.DocTypes["Plants"].PerformEditing(docIds, _MainPage.ControlProvider.State, false);
     }
 
@@ -258,7 +259,7 @@ namespace Plants
 
     #endregion
 
-    #region Показ при запуске программы
+    #region РџРѕРєР°Р· РїСЂРё Р·Р°РїСѓСЃРєРµ РїСЂРѕРіСЂР°РјРјС‹
 
     public static void ShowOnStart()
     {

@@ -1,4 +1,4 @@
-namespace Plants
+п»їnamespace Plants
 {
   partial class EditCareRecord
   {
@@ -63,7 +63,7 @@ namespace Plants
       this.groupBox2.Size = new System.Drawing.Size(592, 310);
       this.groupBox2.TabIndex = 1;
       this.groupBox2.TabStop = false;
-      this.groupBox2.Text = "Параметры ухода";
+      this.groupBox2.Text = "РџР°СЂР°РјРµС‚СЂС‹ СѓС…РѕРґР°";
       // 
       // grItems
       // 
@@ -88,7 +88,7 @@ namespace Plants
       this.groupBox1.Size = new System.Drawing.Size(592, 56);
       this.groupBox1.TabIndex = 0;
       this.groupBox1.TabStop = false;
-      this.groupBox1.Text = "Запись";
+      this.groupBox1.Text = "Р—Р°РїРёСЃСЊ";
       // 
       // edDay2
       // 
@@ -103,7 +103,7 @@ namespace Plants
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(38, 18);
       this.label2.TabIndex = 2;
-      this.label2.Text = "&По";
+      this.label2.Text = "&РџРѕ";
       this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // edDay1
@@ -119,7 +119,7 @@ namespace Plants
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(38, 18);
       this.label1.TabIndex = 0;
-      this.label1.Text = "&С";
+      this.label1.Text = "&РЎ";
       this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // edName
@@ -137,7 +137,7 @@ namespace Plants
       this.label3.Name = "label3";
       this.label3.Size = new System.Drawing.Size(80, 20);
       this.label3.TabIndex = 4;
-      this.label3.Text = "&Название";
+      this.label3.Text = "&РќР°Р·РІР°РЅРёРµ";
       this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // EditCareRecord

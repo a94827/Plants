@@ -1,4 +1,4 @@
-namespace Plants
+п»їnamespace Plants
 {
   partial class EditPlantCare
   {
@@ -74,7 +74,7 @@ namespace Plants
       this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
       this.tabPage1.Size = new System.Drawing.Size(584, 338);
       this.tabPage1.TabIndex = 0;
-      this.tabPage1.Text = "Общие";
+      this.tabPage1.Text = "РћР±С‰РёРµ";
       this.tabPage1.UseVisualStyleBackColor = true;
       // 
       // MainPanel1
@@ -98,7 +98,7 @@ namespace Plants
       this.groupBox5.Size = new System.Drawing.Size(578, 263);
       this.groupBox5.TabIndex = 2;
       this.groupBox5.TabStop = false;
-      this.groupBox5.Text = "Комментари&й";
+      this.groupBox5.Text = "РљРѕРјРјРµРЅС‚Р°СЂРё&Р№";
       // 
       // edComment
       // 
@@ -123,7 +123,7 @@ namespace Plants
       this.groupBox1.Size = new System.Drawing.Size(578, 69);
       this.groupBox1.TabIndex = 0;
       this.groupBox1.TabStop = false;
-      this.groupBox1.Text = "Параметры записи";
+      this.groupBox1.Text = "РџР°СЂР°РјРµС‚СЂС‹ Р·Р°РїРёСЃРё";
       // 
       // cbSetStartDay
       // 
@@ -132,7 +132,7 @@ namespace Plants
       this.cbSetStartDay.Name = "cbSetStartDay";
       this.cbSetStartDay.Size = new System.Drawing.Size(142, 21);
       this.cbSetStartDay.TabIndex = 2;
-      this.cbSetStartDay.Text = "Начало действия";
+      this.cbSetStartDay.Text = "РќР°С‡Р°Р»Рѕ РґРµР№СЃС‚РІРёСЏ";
       this.cbSetStartDay.UseVisualStyleBackColor = true;
       // 
       // edStartDay
@@ -151,7 +151,7 @@ namespace Plants
       this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
       this.tabPage2.Size = new System.Drawing.Size(584, 338);
       this.tabPage2.TabIndex = 1;
-      this.tabPage2.Text = "Температура";
+      this.tabPage2.Text = "РўРµРјРїРµСЂР°С‚СѓСЂР°";
       this.tabPage2.UseVisualStyleBackColor = true;
       // 
       // MainPanel2
@@ -175,7 +175,7 @@ namespace Plants
       this.groupBox2.Size = new System.Drawing.Size(578, 75);
       this.groupBox2.TabIndex = 1;
       this.groupBox2.TabStop = false;
-      this.groupBox2.Text = "Диапазон допустимых значений";
+      this.groupBox2.Text = "Р”РёР°РїР°Р·РѕРЅ РґРѕРїСѓСЃС‚РёРјС‹С… Р·РЅР°С‡РµРЅРёР№";
       // 
       // edTMax
       // 
@@ -192,7 +192,7 @@ namespace Plants
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(87, 22);
       this.label2.TabIndex = 2;
-      this.label2.Text = "до";
+      this.label2.Text = "РґРѕ";
       this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // edTMin
@@ -210,7 +210,7 @@ namespace Plants
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(87, 22);
       this.label1.TabIndex = 0;
-      this.label1.Text = "от";
+      this.label1.Text = "РѕС‚";
       this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // EditPlantCare

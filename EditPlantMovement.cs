@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,7 +14,7 @@ namespace Plants
 {
   internal partial class EditPlantMovement : Form
   {
-    #region Конструктор формы
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ С„РѕСЂРјС‹
 
     public EditPlantMovement()
     {
@@ -23,7 +23,7 @@ namespace Plants
 
     #endregion
 
-    #region Табличный просмотр
+    #region РўР°Р±Р»РёС‡РЅС‹Р№ РїСЂРѕСЃРјРѕС‚СЂ
 
     public static void ImageValueNeeded(object sender, DBxImageValueNeededEventArgs args)
     {
@@ -33,7 +33,7 @@ namespace Plants
 
     #endregion
 
-    #region Редактор
+    #region Р РµРґР°РєС‚РѕСЂ
 
     public static void InitEditForm(object sender, InitSubDocEditFormEventArgs args)
     {
@@ -45,7 +45,7 @@ namespace Plants
 
     private void AddPage1(InitSubDocEditFormEventArgs args)
     {
-      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      DocEditPage page = args.AddPage("РћР±С‰РёРµ", MainPanel1);
       page.ImageKey = args.Editor.SubDocTypeUI.ImageKey;
 
       cbKind.Items.AddRange(PlantTools.MovementNames);
@@ -104,7 +104,7 @@ namespace Plants
       if (args.ValidateState == UIValidateState.Error)
         return;
       if (efpContra.DocId != 0 && efpForkPlant.DocId != 0)
-        args.SetError("Нельзя одновременно заполнять поля \"От кого / кому\" и \"Отсажено / подсажено\"");
+        args.SetError("РќРµР»СЊР·СЏ РѕРґРЅРѕРІСЂРµРјРµРЅРЅРѕ Р·Р°РїРѕР»РЅСЏС‚СЊ РїРѕР»СЏ \"РћС‚ РєРѕРіРѕ / РєРѕРјСѓ\" Рё \"РћС‚СЃР°Р¶РµРЅРѕ / РїРѕРґСЃР°Р¶РµРЅРѕ\"");
     }
 
     #endregion

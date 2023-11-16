@@ -1,4 +1,4 @@
-namespace Plants
+п»їnamespace Plants
 {
   partial class EditPlant
   {
@@ -87,7 +87,7 @@ namespace Plants
       this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
       this.tabPage1.Size = new System.Drawing.Size(616, 336);
       this.tabPage1.TabIndex = 0;
-      this.tabPage1.Text = "Общие";
+      this.tabPage1.Text = "РћР±С‰РёРµ";
       this.tabPage1.UseVisualStyleBackColor = true;
       // 
       // MainPanel1
@@ -110,7 +110,7 @@ namespace Plants
       this.groupBox3.Size = new System.Drawing.Size(610, 87);
       this.groupBox3.TabIndex = 3;
       this.groupBox3.TabStop = false;
-      this.groupBox3.Text = "Комментари&й";
+      this.groupBox3.Text = "РљРѕРјРјРµРЅС‚Р°СЂРё&Р№";
       // 
       // edComment
       // 
@@ -134,7 +134,7 @@ namespace Plants
       this.groupBox2.Size = new System.Drawing.Size(610, 80);
       this.groupBox2.TabIndex = 2;
       this.groupBox2.TabStop = false;
-      this.groupBox2.Text = "Каталог";
+      this.groupBox2.Text = "РљР°С‚Р°Р»РѕРі";
       // 
       // cbGroup
       // 
@@ -151,7 +151,7 @@ namespace Plants
       this.label5.Name = "label5";
       this.label5.Size = new System.Drawing.Size(121, 20);
       this.label5.TabIndex = 3;
-      this.label5.Text = "&Группа";
+      this.label5.Text = "&Р“СЂСѓРїРїР°";
       this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // edNumber
@@ -169,7 +169,7 @@ namespace Plants
       this.label4.Name = "label4";
       this.label4.Size = new System.Drawing.Size(121, 20);
       this.label4.TabIndex = 1;
-      this.label4.Text = "&Номер";
+      this.label4.Text = "&РќРѕРјРµСЂ";
       this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // groupBox1
@@ -190,7 +190,7 @@ namespace Plants
       this.groupBox1.Size = new System.Drawing.Size(610, 163);
       this.groupBox1.TabIndex = 1;
       this.groupBox1.TabStop = false;
-      this.groupBox1.Text = "Наименование";
+      this.groupBox1.Text = "РќР°РёРјРµРЅРѕРІР°РЅРёРµ";
       // 
       // cbManufacturer
       // 
@@ -207,7 +207,7 @@ namespace Plants
       this.label7.Name = "label7";
       this.label7.Size = new System.Drawing.Size(124, 20);
       this.label7.TabIndex = 6;
-      this.label7.Text = "&Изготовитель";
+      this.label7.Text = "&РР·РіРѕС‚РѕРІРёС‚РµР»СЊ";
       this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // edDescrName
@@ -225,7 +225,7 @@ namespace Plants
       this.label3.Name = "label3";
       this.label3.Size = new System.Drawing.Size(121, 20);
       this.label3.TabIndex = 4;
-      this.label3.Text = "Оп&исательное";
+      this.label3.Text = "РћРї&РёСЃР°С‚РµР»СЊРЅРѕРµ";
       this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // edLatinName
@@ -243,7 +243,7 @@ namespace Plants
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(121, 20);
       this.label2.TabIndex = 2;
-      this.label2.Text = "&Латинское";
+      this.label2.Text = "&Р›Р°С‚РёРЅСЃРєРѕРµ";
       this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // edLocalName
@@ -261,7 +261,7 @@ namespace Plants
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(121, 20);
       this.label1.TabIndex = 0;
-      this.label1.Text = "&Русское";
+      this.label1.Text = "&Р СѓСЃСЃРєРѕРµ";
       this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // tabPage2
@@ -271,7 +271,7 @@ namespace Plants
       this.tabPage2.Name = "tabPage2";
       this.tabPage2.Size = new System.Drawing.Size(616, 336);
       this.tabPage2.TabIndex = 1;
-      this.tabPage2.Text = "Фото";
+      this.tabPage2.Text = "Р¤РѕС‚Рѕ";
       this.tabPage2.UseVisualStyleBackColor = true;
       // 
       // MainPanel2
@@ -288,7 +288,7 @@ namespace Plants
       this.tabPage3.Name = "tabPage3";
       this.tabPage3.Size = new System.Drawing.Size(616, 336);
       this.tabPage3.TabIndex = 2;
-      this.tabPage3.Text = "Атрибуты";
+      this.tabPage3.Text = "РђС‚СЂРёР±СѓС‚С‹";
       this.tabPage3.UseVisualStyleBackColor = true;
       // 
       // tabPage4
@@ -297,7 +297,7 @@ namespace Plants
       this.tabPage4.Name = "tabPage4";
       this.tabPage4.Size = new System.Drawing.Size(616, 336);
       this.tabPage4.TabIndex = 3;
-      this.tabPage4.Text = "Приход / выбытие";
+      this.tabPage4.Text = "РџСЂРёС…РѕРґ / РІС‹Р±С‹С‚РёРµ";
       this.tabPage4.UseVisualStyleBackColor = true;
       // 
       // tabPage5
@@ -306,7 +306,7 @@ namespace Plants
       this.tabPage5.Name = "tabPage5";
       this.tabPage5.Size = new System.Drawing.Size(616, 336);
       this.tabPage5.TabIndex = 4;
-      this.tabPage5.Text = "Действия";
+      this.tabPage5.Text = "Р”РµР№СЃС‚РІРёСЏ";
       this.tabPage5.UseVisualStyleBackColor = true;
       // 
       // tabPage6
@@ -315,7 +315,7 @@ namespace Plants
       this.tabPage6.Name = "tabPage6";
       this.tabPage6.Size = new System.Drawing.Size(616, 336);
       this.tabPage6.TabIndex = 5;
-      this.tabPage6.Text = "Цветение";
+      this.tabPage6.Text = "Р¦РІРµС‚РµРЅРёРµ";
       this.tabPage6.UseVisualStyleBackColor = true;
       // 
       // cbCare
@@ -333,7 +333,7 @@ namespace Plants
       this.label6.Name = "label6";
       this.label6.Size = new System.Drawing.Size(124, 20);
       this.label6.TabIndex = 8;
-      this.label6.Text = "&Уход";
+      this.label6.Text = "&РЈС…РѕРґ";
       this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // EditPlant

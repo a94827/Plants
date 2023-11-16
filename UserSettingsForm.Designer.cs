@@ -1,4 +1,4 @@
-namespace Plants
+п»їnamespace Plants
 {
   partial class UserSettingsForm
   {
@@ -79,7 +79,7 @@ namespace Plants
       this.btnCancel.Name = "btnCancel";
       this.btnCancel.Size = new System.Drawing.Size(88, 24);
       this.btnCancel.TabIndex = 1;
-      this.btnCancel.Text = "Отмена";
+      this.btnCancel.Text = "РћС‚РјРµРЅР°";
       this.btnCancel.UseVisualStyleBackColor = true;
       // 
       // btnOk
@@ -89,7 +89,7 @@ namespace Plants
       this.btnOk.Name = "btnOk";
       this.btnOk.Size = new System.Drawing.Size(88, 24);
       this.btnOk.TabIndex = 0;
-      this.btnOk.Text = "О&К";
+      this.btnOk.Text = "Рћ&Рљ";
       this.btnOk.UseVisualStyleBackColor = true;
       // 
       // TheTabControl
@@ -114,7 +114,7 @@ namespace Plants
       this.tpPlants.Padding = new System.Windows.Forms.Padding(3);
       this.tpPlants.Size = new System.Drawing.Size(616, 196);
       this.tpPlants.TabIndex = 2;
-      this.tpPlants.Text = "Каталог";
+      this.tpPlants.Text = "РљР°С‚Р°Р»РѕРі";
       this.tpPlants.UseVisualStyleBackColor = true;
       // 
       // edNumberDigits
@@ -132,7 +132,7 @@ namespace Plants
       this.label4.Name = "label4";
       this.label4.Size = new System.Drawing.Size(255, 19);
       this.label4.TabIndex = 0;
-      this.label4.Text = "Количество знаков в номере по каталогу";
+      this.label4.Text = "РљРѕР»РёС‡РµСЃС‚РІРѕ Р·РЅР°РєРѕРІ РІ РЅРѕРјРµСЂРµ РїРѕ РєР°С‚Р°Р»РѕРіСѓ";
       this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // tpPhoto
@@ -146,7 +146,7 @@ namespace Plants
       this.tpPhoto.Padding = new System.Windows.Forms.Padding(3);
       this.tpPhoto.Size = new System.Drawing.Size(616, 196);
       this.tpPhoto.TabIndex = 0;
-      this.tpPhoto.Text = "Фото";
+      this.tpPhoto.Text = "Р¤РѕС‚Рѕ";
       this.tpPhoto.UseVisualStyleBackColor = true;
       // 
       // groupBox1
@@ -160,7 +160,7 @@ namespace Plants
       this.groupBox1.Size = new System.Drawing.Size(200, 118);
       this.groupBox1.TabIndex = 3;
       this.groupBox1.TabStop = false;
-      this.groupBox1.Text = "Размеры миниатюр в списке";
+      this.groupBox1.Text = "Р Р°Р·РјРµСЂС‹ РјРёРЅРёР°С‚СЋСЂ РІ СЃРїРёСЃРєРµ";
       // 
       // rb128x128
       // 
@@ -213,7 +213,7 @@ namespace Plants
       this.btnBrowsePhotoDir.Name = "btnBrowsePhotoDir";
       this.btnBrowsePhotoDir.Size = new System.Drawing.Size(88, 24);
       this.btnBrowsePhotoDir.TabIndex = 2;
-      this.btnBrowsePhotoDir.Text = "Обзор";
+      this.btnBrowsePhotoDir.Text = "РћР±Р·РѕСЂ";
       this.btnBrowsePhotoDir.UseVisualStyleBackColor = true;
       // 
       // edPhotoDir
@@ -232,7 +232,7 @@ namespace Plants
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(136, 13);
       this.label1.TabIndex = 0;
-      this.label1.Text = "Каталог с фотографиями";
+      this.label1.Text = "РљР°С‚Р°Р»РѕРі СЃ С„РѕС‚РѕРіСЂР°С„РёСЏРјРё";
       // 
       // tpBackup
       // 
@@ -242,7 +242,7 @@ namespace Plants
       this.tpBackup.Padding = new System.Windows.Forms.Padding(3);
       this.tpBackup.Size = new System.Drawing.Size(616, 196);
       this.tpBackup.TabIndex = 1;
-      this.tpBackup.Text = "Резервное копирование";
+      this.tpBackup.Text = "Р РµР·РµСЂРІРЅРѕРµ РєРѕРїРёСЂРѕРІР°РЅРёРµ";
       this.tpBackup.UseVisualStyleBackColor = true;
       // 
       // groupBox2
@@ -259,7 +259,7 @@ namespace Plants
       this.groupBox2.Size = new System.Drawing.Size(610, 122);
       this.groupBox2.TabIndex = 0;
       this.groupBox2.TabStop = false;
-      this.groupBox2.Text = "Параметры резервного копирования";
+      this.groupBox2.Text = "РџР°СЂР°РјРµС‚СЂС‹ СЂРµР·РµСЂРІРЅРѕРіРѕ РєРѕРїРёСЂРѕРІР°РЅРёСЏ";
       // 
       // btnExploreBackupDir
       // 
@@ -268,7 +268,7 @@ namespace Plants
       this.btnExploreBackupDir.Name = "btnExploreBackupDir";
       this.btnExploreBackupDir.Size = new System.Drawing.Size(132, 24);
       this.btnExploreBackupDir.TabIndex = 5;
-      this.btnExploreBackupDir.Text = "Проводник";
+      this.btnExploreBackupDir.Text = "РџСЂРѕРІРѕРґРЅРёРє";
       this.btnExploreBackupDir.UseVisualStyleBackColor = true;
       // 
       // btnBrowseBackupDir
@@ -278,7 +278,7 @@ namespace Plants
       this.btnBrowseBackupDir.Name = "btnBrowseBackupDir";
       this.btnBrowseBackupDir.Size = new System.Drawing.Size(88, 24);
       this.btnBrowseBackupDir.TabIndex = 4;
-      this.btnBrowseBackupDir.Text = "Обзор";
+      this.btnBrowseBackupDir.Text = "РћР±Р·РѕСЂ";
       this.btnBrowseBackupDir.UseVisualStyleBackColor = true;
       // 
       // edBackupDir
@@ -296,7 +296,7 @@ namespace Plants
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(81, 21);
       this.label2.TabIndex = 2;
-      this.label2.Text = "Каталог";
+      this.label2.Text = "РљР°С‚Р°Р»РѕРі";
       this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // cbBackupMode
@@ -306,9 +306,9 @@ namespace Plants
       this.cbBackupMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
       this.cbBackupMode.FormattingEnabled = true;
       this.cbBackupMode.Items.AddRange(new object[] {
-            "Не делать",
-            "При каждом завершении работы программы",
-            "Один раз в день"});
+            "РќРµ РґРµР»Р°С‚СЊ",
+            "РџСЂРё РєР°Р¶РґРѕРј Р·Р°РІРµСЂС€РµРЅРёРё СЂР°Р±РѕС‚С‹ РїСЂРѕРіСЂР°РјРјС‹",
+            "РћРґРёРЅ СЂР°Р· РІ РґРµРЅСЊ"});
       this.cbBackupMode.Location = new System.Drawing.Point(93, 28);
       this.cbBackupMode.Name = "cbBackupMode";
       this.cbBackupMode.Size = new System.Drawing.Size(501, 21);
@@ -320,7 +320,7 @@ namespace Plants
       this.label3.Name = "label3";
       this.label3.Size = new System.Drawing.Size(81, 21);
       this.label3.TabIndex = 0;
-      this.label3.Text = "Ре&жим";
+      this.label3.Text = "Р Рµ&Р¶РёРј";
       this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // label5
@@ -329,7 +329,7 @@ namespace Plants
       this.label5.Name = "label5";
       this.label5.Size = new System.Drawing.Size(174, 19);
       this.label5.TabIndex = 2;
-      this.label5.Text = "(требуется перезапуск)";
+      this.label5.Text = "(С‚СЂРµР±СѓРµС‚СЃСЏ РїРµСЂРµР·Р°РїСѓСЃРє)";
       this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       this.label5.UseMnemonic = false;
       // 
@@ -343,7 +343,7 @@ namespace Plants
       this.Controls.Add(this.TheTabControl);
       this.Controls.Add(this.panel1);
       this.Name = "UserSettingsForm";
-      this.Text = "Настройки";
+      this.Text = "РќР°СЃС‚СЂРѕР№РєРё";
       this.panel1.ResumeLayout(false);
       this.TheTabControl.ResumeLayout(false);
       this.tpPlants.ResumeLayout(false);

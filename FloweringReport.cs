@@ -223,9 +223,11 @@ namespace Plants
         object[] a = ProgramDBUI.TheUI.DocTypes["Plants"].TableCache.GetValues(plantId, new DBxColumns("Number,Name"));
         ghMain.Columns.AddInt("FlowerCount" + plantId.ToString(), true, "№" + DataTools.GetInt(a[0]).ToString(ProgramDBUI.Settings.NumberMask) +
           Environment.NewLine + DataTools.GetString(a[1]), 4);
+        ghMain.Columns.LastAdded.Summable = true;
       }
       ghMain.Columns.AddInt("Total", true, "Всего", 4);
       ghMain.Columns.LastAdded.ColorType = EFPDataGridViewColorType.Total1;
+      ghMain.Columns.LastAdded.Summable = true;
 
       ghMain.FrozenColumns = 1;
       ghMain.DisableOrdering();

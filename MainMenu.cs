@@ -17,6 +17,8 @@ namespace Plants
 
     public static void Init()
     {
+      EFPAppCommandItemHelpers helpers = new EFPAppCommandItemHelpers();
+
       EFPAppToolBarCommandItems SpeedPanelStandard = EFPApp.ToolBars.Add("Standard", "Стандартная");
 
       EFPCommandItem ci;
@@ -25,9 +27,7 @@ namespace Plants
 
       EFPCommandItem menuFile = EFPApp.CommandItems.Add(EFPAppStdCommandItems.MenuFile, null);
 
-      ci = EFPApp.CommandItems.Add(EFPAppStdCommandItems.Exit, menuFile);
-      ci.Click += new EventHandler(EFPApp.CommandItems.Exit_Click);
-      ci.GroupBegin = true;
+      helpers.AddExit(menuFile);
 
       #endregion
 
@@ -83,8 +83,6 @@ namespace Plants
       #region Вид
 
       EFPCommandItem menuView = EFPApp.CommandItems.Add(EFPAppStdCommandItems.MenuView, null);
-
-      EFPAppCommandItemHelpers helpers = new EFPAppCommandItemHelpers();
 
       helpers.AddViewMenuCommands(menuView);
 

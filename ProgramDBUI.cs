@@ -276,6 +276,7 @@ namespace Plants
       sdt.GridProducer.Columns.AddUserText("Date", "Date1,Date2", DateRangeColumn_ValueNeeded, "Дата", 15, 10)
         .SizeGroup = "ShortDateRange"; // 31.12.2022
       sdt.GridProducer.Columns.AddInt("FlowerCount", "Количество цветков", 3);
+      sdt.GridProducer.Columns.LastAdded.Summable = true;
       sdt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
 
       sdt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
@@ -561,6 +562,7 @@ namespace Plants
       sdt.GridProducer.Columns.AddText("Soil.Name", "Компонент", 20, 10);
       sdt.GridProducer.Columns.LastAdded.CanIncSearch = true;
       sdt.GridProducer.Columns.AddInt("Percent", "%", 3);
+      sdt.GridProducer.Columns.LastAdded.Summable = true;
 
       sdt.GridProducer.NewDefaultConfig(false);
       sdt.GridProducer.DefaultConfig.Columns.AddFill("Soil.Name", 100);
@@ -823,16 +825,19 @@ namespace Plants
         case ValueType.Integer:
           producer.Columns.AddInt(columnName, headerText, 5);
           producer.Columns.LastAdded.TextAlign = HorizontalAlignment.Right;
+          producer.Columns.LastAdded.Summable = true;
           break;
         case ValueType.Double:
           producer.Columns.AddText(columnName, headerText, 10, 5);
           producer.Columns.LastAdded.SizeGroup = "Double";
           producer.Columns.LastAdded.TextAlign = HorizontalAlignment.Right;
+          producer.Columns.LastAdded.Summable = true;
           break;
         case ValueType.Decimal:
           producer.Columns.AddText(columnName, headerText, 10, 5);
           producer.Columns.LastAdded.SizeGroup = "Decimal";
           producer.Columns.LastAdded.TextAlign = HorizontalAlignment.Right;
+          producer.Columns.LastAdded.Summable = true;
           break;
         case ValueType.Boolean:
           producer.Columns.AddBool(columnName, headerText);

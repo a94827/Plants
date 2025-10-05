@@ -12,6 +12,7 @@ using FreeLibSet.Data.Docs;
 using FreeLibSet.Collections;
 using FreeLibSet.UICore;
 using FreeLibSet.Core;
+using FreeLibSet.Data;
 
 namespace Plants
 {
@@ -38,18 +39,18 @@ namespace Plants
 
     private void AddPage1(InitSubDocEditFormEventArgs args)
     {
-      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      ExtEditPage page = args.AddPage("Общие", MainPanel1);
       page.ImageKey = args.Editor.SubDocTypeUI.ImageKey;
 
       efpDay1 = new EFPMonthDayTextBox(page.BaseProvider, edDay1);
       efpDay1.DisplayName = "Начало периода";
       efpDay1.CanBeEmpty = true;
-      args.AddInt(efpDay1, "Day1", false);
+      args.AddInteger(efpDay1, "Day1", false);
 
       efpDay2 = new EFPMonthDayTextBox(page.BaseProvider, edDay2);
       efpDay2.DisplayName = "Конец периода";
       efpDay2.CanBeEmpty = true;
-      args.AddInt(efpDay2, "Day2", false);
+      args.AddInteger(efpDay2, "Day2", false);
 
       EFPTextBox efpName = new EFPTextBox(page.BaseProvider, edName);
       args.AddText(efpName, "Name", false);
@@ -66,7 +67,7 @@ namespace Plants
 
       EFPCareGridView ghItems = new EFPCareGridView(page.BaseProvider, grItems);
       CareDocEditItem deiItems = new CareDocEditItem(args.Values, ghItems);
-      args.AddDocEditItem(deiItems);
+      args.AddEditItem(deiItems);
     }
 
     void efpDay_Validating(object sender, UIValidatingEventArgs args)
@@ -83,11 +84,11 @@ namespace Plants
 
     #region Переходник для таблицы значений
 
-    public class CareDocEditItem : IDocEditItem
+    public class CareDocEditItem : IUIExtEditItem
     {
       #region Конструктор
 
-      public CareDocEditItem(IDBxDocValues docValues, EFPCareGridView controlProvider)
+      public CareDocEditItem(IDBxExtValues docValues, EFPCareGridView controlProvider)
       {
         _DocValues = docValues;
         _ControlProvider = controlProvider;
@@ -107,8 +108,8 @@ namespace Plants
 
       #region Свойства
 
-      public IDBxDocValues DocValues { get { return _DocValues; } }
-      private IDBxDocValues _DocValues;
+      public IDBxExtValues DocValues { get { return _DocValues; } }
+      private IDBxExtValues _DocValues;
 
       public EFPCareGridView ControlProvider { get { return _ControlProvider; } }
       private EFPCareGridView _ControlProvider;
@@ -203,14 +204,14 @@ namespace Plants
       UsedItems = CareItem.TheList;
     }
 
-    protected override void OnGetRowAttributes(EFPDataGridViewRowAttributesEventArgs args)
+    protected override void OnRowInfoNeeded(EFPDataGridViewRowInfoEventArgs args)
     {
       if ((_GroupIndexes[args.RowIndex] % 2) == 0)
-        args.ColorType = EFPDataGridViewColorType.Alter;
-      base.OnGetRowAttributes(args);
+        args.ColorType = UIDataViewColorType.Alter;
+      base.OnRowInfoNeeded(args);
     }
 
-    protected override void OnGetCellAttributes(EFPDataGridViewCellAttributesEventArgs args)
+    protected override void OnCellInfoNeeded(EFPDataGridViewCellInfoEventArgs args)
     {
       if (args.ColumnIndex == 0)
       {
@@ -219,7 +220,7 @@ namespace Plants
         else
           args.Value = EFPApp.MainImages.Images["Item"];
       }
-      base.OnGetCellAttributes(args);
+      base.OnCellInfoNeeded(args);
     }
 
     #endregion
@@ -297,7 +298,7 @@ namespace Plants
     {
       switch (State)
       {
-        case EFPDataGridViewState.Edit:
+        case UIDataState.Edit:
           if (!CheckSingleRow())
             return true;
           object v = Values[CurrentRowIndex];
@@ -305,7 +306,7 @@ namespace Plants
             return true;
           Values[CurrentRowIndex] = v;
           break;
-        case EFPDataGridViewState.Delete:
+        case UIDataState.Delete:
           int[] ris = SelectedRowIndices;
           for (int i = 0; i < ris.Length; i++)
             Values[ris[i]] = null;

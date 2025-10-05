@@ -13,6 +13,7 @@ using System.Collections;
 using FreeLibSet.Calendar;
 using FreeLibSet.Core;
 using FreeLibSet.Config;
+using FreeLibSet.UICore;
 
 namespace Plants
 {
@@ -134,7 +135,7 @@ namespace Plants
           Filters.WriteConfig(cfg);
           break;
         case SettingsPart.NoHistory:
-          cfg.SetInt("Day", Day.DayOfYear);
+          cfg.SetInt32("Day", Day.DayOfYear);
           cfg.SetNullableDate("FirstDate", FirstDate);
           cfg.SetNullableDate("LastDate", LastDate);
           break;
@@ -149,7 +150,7 @@ namespace Plants
           Filters.ReadConfig(cfg);
           break;
         case SettingsPart.NoHistory:
-          Day = new MonthDay(cfg.GetIntDef("Day", Day.DayOfYear));
+          Day = new MonthDay(cfg.GetInt32Def("Day", Day.DayOfYear));
           cfg.GetDate("FirstDate", ref FirstDate);
           cfg.GetDate("LastDate", ref LastDate);
           break;
@@ -260,8 +261,8 @@ namespace Plants
 
       DBxDocSet careSet = new DBxDocSet(ProgramDBUI.TheUI.DocProvider);
       DBxMultiDocs mCareDocs = careSet["Care"];
-      Int32[] careIds = DataTools.GetIdsFromColumn(plantTable, "Care");
-      if (careIds.Length > 0)
+      IIdSet<Int32> careIds = IdTools.GetIdsFromColumn<Int32>(plantTable, "Care");
+      if (careIds.Count> 0)
         mCareDocs.View(careIds);
 
       DataTable resTable = new DataTable();
@@ -287,7 +288,7 @@ namespace Plants
         plantCount++;
         resRow1["PlantOrder"] = plantCount;
 
-        DBxSingleDoc[] careDocs = GetCareDocs(mCareDocs, DataTools.GetInt(plantRow, "Care"));
+        DBxSingleDoc[] careDocs = GetCareDocs(mCareDocs, DataTools.GetInt32(plantRow, "Care"));
         if (careDocs.Length == 0)
           continue; // не задана ссылка "Care"
 
@@ -297,8 +298,8 @@ namespace Plants
         {
           foreach (DBxSubDoc subDoc in careDocs[i].SubDocs["CareRecords"])
           {
-            MonthDay md1 = new MonthDay(subDoc.Values["Day1"].AsInteger);
-            MonthDay md2 = new MonthDay(subDoc.Values["Day2"].AsInteger);
+            MonthDay md1 = new MonthDay(subDoc.Values["Day1"].AsInt32);
+            MonthDay md2 = new MonthDay(subDoc.Values["Day2"].AsInt32);
             MonthDayRange thisRange = new MonthDayRange(md1, md2);
             if ((!Params.Day.IsEmpty) && (!thisRange.IsEmpty))
             {
@@ -368,7 +369,7 @@ namespace Plants
         return _EmptyDocs;
 
       List<DBxSingleDoc> lst = new List<DBxSingleDoc>();
-      IdList ids = new IdList();
+      IdList<Int32> ids = new IdList<Int32>();
       while (careId != 0)
       {
         DBxSingleDoc doc;
@@ -382,7 +383,7 @@ namespace Plants
         }
         ids.Add(careId);
         lst.Insert(0, doc);
-        careId = doc.Values["ParentId"].AsInteger;
+        careId = doc.Values["ParentId"].AsInt32;
       }
 
       return lst.ToArray();
@@ -422,7 +423,7 @@ namespace Plants
     void MainPage_InitGrid(object sender, EventArgs args)
     {
       _MainPage.ControlProvider.Control.AutoGenerateColumns = false;
-      _MainPage.ControlProvider.Columns.AddInt("PlantNumber", true, "№ по каталогу", 3);
+      _MainPage.ControlProvider.Columns.AddInteger("PlantNumber", true, "№ по каталогу", 3);
       _MainPage.ControlProvider.Columns.LastAdded.GridColumn.DefaultCellStyle.Format = ProgramDBUI.Settings.NumberMask;
       _MainPage.ControlProvider.Columns.LastAdded.CanIncSearch = true;
       _MainPage.ControlProvider.Columns.AddTextFill("PlantName", true, "Наименование", 50, 20);
@@ -434,7 +435,7 @@ namespace Plants
       _MainPage.ControlProvider.Columns.AddTextFill("ItemTextValue", true, "Значение", 50, 20);
       _MainPage.ControlProvider.DisableOrdering();
 
-      _MainPage.ControlProvider.GetRowAttributes += new EFPDataGridViewRowAttributesEventHandler(MainPage_GetRowAttributes);
+      _MainPage.ControlProvider.RowInfoNeeded += MainPage_RowInfoNeeded;
 
       _MainPage.ControlProvider.ReadOnly = false;
       _MainPage.ControlProvider.CanInsert = false;
@@ -445,12 +446,12 @@ namespace Plants
       _MainPage.ControlProvider.GetDocSel += new EFPDBxGridViewDocSelEventHandler(MainPage_GetDocSel);
     }
 
-    void MainPage_GetRowAttributes(object sender, EFPDataGridViewRowAttributesEventArgs args)
+    void MainPage_RowInfoNeeded(object sender, EFPDataGridViewRowInfoEventArgs args)
     {
-      int plantOrder = DataTools.GetInt(args.DataRow, "PlantOrder");
+      int plantOrder = DataTools.GetInt32(args.DataRow, "PlantOrder");
       if ((plantOrder % 2) == 0)
-        args.ColorType = EFPDataGridViewColorType.Alter;
-      if (DataTools.GetInt(args.DataRow, "CareId") == 0)
+        args.ColorType = UIDataViewColorType.Alter;
+      if (DataTools.GetInt32(args.DataRow, "CareId") == 0)
         args.Grayed = true;
     }
 
@@ -462,18 +463,18 @@ namespace Plants
       {
         case "PlantNumber":
         case "PlantName":
-          Int32 plantId = DataTools.GetInt(_MainPage.ControlProvider.CurrentDataRow, "PlantId");
-          ProgramDBUI.TheUI.DocTypes["Plants"].PerformEditing(plantId, _MainPage.ControlProvider.State == EFPDataGridViewState.View);
+          Int32 plantId = DataTools.GetInt32(_MainPage.ControlProvider.CurrentDataRow, "PlantId");
+          ProgramDBUI.TheUI.DocTypes["Plants"].PerformEditing(plantId, _MainPage.ControlProvider.State == UIDataState.View);
           break;
         case "PeriodText":
         case "PeriodName":
         case "ItemName":
         case "ItemTextValue":
-          Int32 careId = DataTools.GetInt(_MainPage.ControlProvider.CurrentDataRow, "CareId");
+          Int32 careId = DataTools.GetInt32(_MainPage.ControlProvider.CurrentDataRow, "CareId");
           if (careId == 0)
             EFPApp.ShowTempMessage("Выбранная строка не ссылается на документ по уходу за растениями");
           else
-            ProgramDBUI.TheUI.DocTypes["Care"].PerformEditing(careId, _MainPage.ControlProvider.State == EFPDataGridViewState.View);
+            ProgramDBUI.TheUI.DocTypes["Care"].PerformEditing(careId, _MainPage.ControlProvider.State == UIDataState.View);
           break;
         default:
           EFPApp.ShowTempMessage("Нет выбранного столбца");

@@ -10,6 +10,8 @@ using FreeLibSet.Data.Docs;
 using System.ComponentModel;
 using FreeLibSet.Core;
 using FreeLibSet.Config;
+using FreeLibSet.Forms.Data;
+using FreeLibSet.UICore;
 
 namespace Plants
 {
@@ -42,7 +44,7 @@ namespace Plants
   /// <summary>
   /// Фильтры для отчета.
   /// </summary>
-  internal class ReplantingReportFilters : DBxClientFilters
+  internal class ReplantingReportFilters : EFPDBxGridFilters
   {
     #region Конструктор
 
@@ -209,7 +211,7 @@ namespace Plants
 
       #region Таблица действий
 
-      sqlFilter = new ValuesFilter("Kind", new int[] { 
+      sqlFilter = new ValueInListFilter("Kind", new int[] { 
         (int)ActionKind.Planting, 
         (int)ActionKind.Replanting,
         (int)ActionKind.Transshipment,
@@ -227,7 +229,7 @@ namespace Plants
 
       foreach (DataRow row in actionTable.Rows)
       {
-        Int32 plantId = DataTools.GetInt(row, "DocId");
+        Int32 plantId = DataTools.GetInt32(row, "DocId");
         DataRow resRow = resTable.Rows.Find(plantId);
         if (resRow == null)
           continue; // растение не прошло фильтрацию
@@ -237,10 +239,10 @@ namespace Plants
 
         resRow["ActionKind"] = row["Kind"];
         resRow["ActionDate"] = row["Date2"];
-        Int32 SoilId = DataTools.GetInt(row, "Soil");
+        Int32 SoilId = DataTools.GetInt32(row, "Soil");
         if (SoilId != 0)
           resRow["SoilText"] = ProgramDBUI.TheUI.DocTypes["Soils"].GetTextValue(SoilId);
-        Int32 PotKindId = DataTools.GetInt(row, "PotKind");
+        Int32 PotKindId = DataTools.GetInt32(row, "PotKind");
         if (PotKindId != 0)
           resRow["PotKindText"] = ProgramDBUI.TheUI.DocTypes["PotKinds"].GetTextValue(PotKindId);
         resRow["ActionComment"] = row["Comment"];
@@ -264,7 +266,7 @@ namespace Plants
 
       foreach (DataRow row in movementTable.Rows)
       {
-        Int32 plantId = DataTools.GetInt(row, "DocId");
+        Int32 plantId = DataTools.GetInt32(row, "DocId");
         DataRow resRow = resTable.Rows.Find(plantId);
         if (resRow == null)
           continue; // растение не прошло фильтрацию
@@ -274,10 +276,10 @@ namespace Plants
 
         resRow["ActionKind"] = ActionAdd;
         resRow["ActionDate"] = row["Date2"];
-        Int32 soilId = DataTools.GetInt(row, "Soil");
+        Int32 soilId = DataTools.GetInt32(row, "Soil");
         if (soilId != 0)
           resRow["SoilText"] = ProgramDBUI.TheUI.DocTypes["Soils"].GetTextValue(soilId);
-        Int32 potKindId = DataTools.GetInt(row, "PotKind");
+        Int32 potKindId = DataTools.GetInt32(row, "PotKind");
         if (potKindId != 0)
           resRow["PotKindText"] = ProgramDBUI.TheUI.DocTypes["PotKinds"].GetTextValue(potKindId);
         resRow["ActionComment"] = row["Comment"];
@@ -297,7 +299,7 @@ namespace Plants
     void MainPage_InitGrid(object sender, EventArgs args)
     {
       _MainPage.ControlProvider.Control.AutoGenerateColumns = false;
-      _MainPage.ControlProvider.Columns.AddInt("PlantNumber", true, "№ по каталогу", 3);
+      _MainPage.ControlProvider.Columns.AddInteger("PlantNumber", true, "№ по каталогу", 3);
       _MainPage.ControlProvider.Columns.LastAdded.GridColumn.DefaultCellStyle.Format = ProgramDBUI.Settings.NumberMask;
       _MainPage.ControlProvider.Columns.LastAdded.CanIncSearch = true;
       _MainPage.ControlProvider.Columns.AddText("PlantName", true, "Наименование", 40, 20);
@@ -317,7 +319,7 @@ namespace Plants
       _MainPage.ControlProvider.AutoSort = true;
       _MainPage.ControlProvider.CurrentOrderIndex = 2;
 
-      _MainPage.ControlProvider.GetCellAttributes += new EFPDataGridViewCellAttributesEventHandler(MainPage_GetCellAttributes);
+      _MainPage.ControlProvider.CellInfoNeeded += MainPage_CellInfoNeeded;
 
       _MainPage.ControlProvider.ReadOnly = false;
       _MainPage.ControlProvider.CanInsert = false;
@@ -328,13 +330,13 @@ namespace Plants
       _MainPage.ControlProvider.GetDocSel += new EFPDBxGridViewDocSelEventHandler(MainPage_GetDocSel);
     }
 
-    private static void MainPage_GetCellAttributes(object sender, EFPDataGridViewCellAttributesEventArgs args)
+    private static void MainPage_CellInfoNeeded(object sender, EFPDataGridViewCellInfoEventArgs args)
     {
       ActionKind kind;
       switch (args.ColumnName)
       {
         case "ActionImage":
-          kind = (ActionKind)DataTools.GetInt(args.DataRow, "ActionKind");
+          kind = DataTools.GetEnum<ActionKind>(args.DataRow, "ActionKind");
           if (kind == ActionNone)
             args.Value = EFPApp.MainImages.Images["EmptyImage"];
           else if (kind == ActionAdd)
@@ -343,7 +345,7 @@ namespace Plants
             args.Value = EFPApp.MainImages.Images[PlantTools.GetActionImageKey(kind)];
           break;
         case "ActionName":
-          kind = (ActionKind)DataTools.GetInt(args.DataRow, "ActionKind");
+          kind = DataTools.GetEnum<ActionKind>(args.DataRow, "ActionKind");
           if (kind == ActionAdd)
             args.Value = "Поступление";
           else if (kind != ActionNone)
@@ -356,8 +358,8 @@ namespace Plants
     {
       if (!_MainPage.ControlProvider.CheckSingleRow())
         return;
-      Int32 plantId = DataTools.GetInt(_MainPage.ControlProvider.CurrentDataRow, "PlantId");
-      ProgramDBUI.TheUI.DocTypes["Plants"].PerformEditing(plantId, _MainPage.ControlProvider.State == EFPDataGridViewState.View);
+      Int32 plantId = DataTools.GetInt32(_MainPage.ControlProvider.CurrentDataRow, "PlantId");
+      ProgramDBUI.TheUI.DocTypes["Plants"].PerformEditing(plantId, _MainPage.ControlProvider.State == UIDataState.View);
     }
 
     void MainPage_GetDocSel(object sender, EFPDBxGridViewDocSelEventArgs args)

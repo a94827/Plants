@@ -7,6 +7,8 @@ using FreeLibSet.Data;
 using FreeLibSet.Data.Docs;
 using FreeLibSet.Core;
 using FreeLibSet.Collections;
+using FreeLibSet.Forms;
+using FreeLibSet.Forms.Data;
 
 namespace Plants
 {
@@ -14,7 +16,7 @@ namespace Plants
   /// Фильтры для отчетов.
   /// Так как программа не разделяется на клиент и сервер, достаточно только фильтров клиента, а класса, производного от DBxCommonFilters не требуется.
   /// </summary>
-  internal class PlantReportFilters : DBxClientFilters
+  internal class PlantReportFilters : EFPDBxGridFilters
   {
     #region Конструктор
 
@@ -53,7 +55,7 @@ namespace Plants
 
       if (ufidx.Contains("NumberRange"))
       {
-        FiltNumberRange = new IntRangeGridFilter(columnNamePrefix + "Number");
+        FiltNumberRange = new Int32RangeGridFilter(columnNamePrefix + "Number");
         FiltNumberRange.Code = "NumberRange";
         FiltNumberRange.DisplayName = "Диапазон номеров по каталогу";
         FiltNumberRange.Minimum = 1;
@@ -72,7 +74,7 @@ namespace Plants
 
       if (ufidx.Contains("HasAdd"))
       {
-        FiltHasAdd = new BoolValueGridFilter("HasAdd");
+        FiltHasAdd = new BooleanValueGridFilter("HasAdd");
         FiltHasAdd.DisplayName = "Есть приход";
         FiltHasAdd.UseSqlFilter = false;
         FiltHasAdd.FilterTextTrue = "Был приход растения в выбранный период";
@@ -82,7 +84,7 @@ namespace Plants
 
       if (ufidx.Contains("HasRemove"))
       {
-        FiltHasRemove = new BoolValueGridFilter("HasRemove");
+        FiltHasRemove = new BooleanValueGridFilter("HasRemove");
         FiltHasRemove.DisplayName = "Есть выбытие";
         FiltHasRemove.UseSqlFilter = false;
         FiltHasRemove.FilterTextTrue = "Было выбытие растения в выбранный период";
@@ -175,11 +177,11 @@ namespace Plants
     /// </summary>
     NullNotNullGridFilter FiltHasNumber;
 
-    IntRangeGridFilter FiltNumberRange;
+    Int32RangeGridFilter FiltNumberRange;
 
     RefDocGridFilter FiltPlace;
 
-    BoolValueGridFilter FiltHasAdd, FiltHasRemove;
+    BooleanValueGridFilter FiltHasAdd, FiltHasRemove;
 
     RefDocGridFilter FiltFromContra, FiltToContra;
 
@@ -367,7 +369,7 @@ namespace Plants
       bool delFlag = false;
       for (int i = table.Rows.Count - 1; i >= 0; i--)
       {
-        Int32 id = DataTools.GetInt(table.Rows[i][pId]);
+        Int32 id = DataTools.GetInt32(table.Rows[i][pId]);
         if (!TestPlantFilter(id, firstDate, lastDate))
         {
           table.Rows[i].Delete();
@@ -462,8 +464,8 @@ namespace Plants
       Int32 lastPlaceId = 0;
       foreach (DataRowView drv in dv)
       {
-        MovementKind kind = (MovementKind)DataTools.GetInt(drv.Row, "Kind");
-        Int32 placeId = DataTools.GetInt(drv.Row, "Place");
+        MovementKind kind = (MovementKind)DataTools.GetInt32(drv.Row, "Kind");
+        Int32 placeId = DataTools.GetInt32(drv.Row, "Place");
         DateTime dt1 = DataTools.GetDateTime(drv.Row, "Date1");
 
         if (dt1 > firstDate && lastPlaceId != 0 && FiltPlace.TestValue(lastPlaceId))
@@ -485,9 +487,9 @@ namespace Plants
       bool lastInPlace = false;
       foreach (DataRowView drv in dv)
       {
-        MovementKind kind = (MovementKind)DataTools.GetInt(drv.Row, "Kind");
+        MovementKind kind = (MovementKind)DataTools.GetInt32(drv.Row, "Kind");
         DateTime dt1 = DataTools.GetDateTime(drv.Row, "Date1");
-        Int32 placeId = DataTools.GetInt(drv.Row, "Place");
+        Int32 placeId = DataTools.GetInt32(drv.Row, "Place");
         bool inPlace = true;
         if (IsSet(FiltPlace))
           inPlace = FiltPlace.TestValue(placeId);
@@ -518,9 +520,9 @@ namespace Plants
       bool lastInPlace = false;
       foreach (DataRowView drv in dv)
       {
-        MovementKind kind = (MovementKind)DataTools.GetInt(drv.Row, "Kind");
+        MovementKind kind = DataTools.GetEnum<MovementKind>(drv.Row, "Kind");
         DateTime dt1 = DataTools.GetDateTime(drv.Row, "Date1");
-        Int32 placeId = DataTools.GetInt(drv.Row, "Place");
+        Int32 placeId = DataTools.GetInt32(drv.Row, "Place");
         bool inPlace = true;
         if (IsSet(FiltPlace))
           inPlace = FiltPlace.TestValue(placeId);
@@ -555,8 +557,8 @@ namespace Plants
         DateTime dt1 = DataTools.GetDateTime(drv.Row, "Date1");
         if (dt1 < firstDate)
           continue;
-        MovementKind kind = (MovementKind)DataTools.GetInt(drv.Row, "Kind");
-        Int32 contraId = DataTools.GetInt(drv.Row, "Contra");
+        MovementKind kind = DataTools.GetEnum<MovementKind>(drv.Row, "Kind");
+        Int32 contraId = DataTools.GetInt32(drv.Row, "Contra");
 
         switch (kind)
         {
@@ -587,7 +589,7 @@ namespace Plants
         DateTime dt1 = DataTools.GetDateTime(drv.Row, "Date1");
         if (dt1 < firstDate)
           continue;
-        ActionKind kind = (ActionKind)DataTools.GetInt(drv.Row, "Kind");
+        ActionKind kind = DataTools.GetEnum<ActionKind>(drv.Row, "Kind");
         if (FiltAction.TestValue((int)kind))
           return true;
       }
@@ -601,8 +603,8 @@ namespace Plants
         DateTime dt1 = DataTools.GetDateTime(drv.Row, "Date1");
         if (dt1 < firstDate)
           continue;
-        ActionKind kind = (ActionKind)DataTools.GetInt(drv.Row, "Kind");
-        Int32 remedyId = DataTools.GetInt(drv.Row, "Remedy");
+        ActionKind kind = DataTools.GetEnum<ActionKind>(drv.Row, "Kind");
+        Int32 remedyId = DataTools.GetInt32(drv.Row, "Remedy");
         if (kind == ActionKind.Treatment)
         {
           if (FiltRemedy.TestValue(remedyId))
@@ -619,7 +621,7 @@ namespace Plants
         DateTime dt1 = DataTools.GetDateTime(drv.Row, "Date1");
         if (dt1 < firstDate)
           continue;
-        Int32 diseaseId = DataTools.GetInt(drv.Row, "Disease");
+        Int32 diseaseId = DataTools.GetInt32(drv.Row, "Disease");
         if (FiltDisease.TestValue(diseaseId))
           return true;
       }
@@ -633,7 +635,7 @@ namespace Plants
       _TempTableSoilAndPotKind.Rows.Clear();
       foreach (DataRowView drv in dvMovement)
       {
-        MovementKind kind = (MovementKind)DataTools.GetInt(drv.Row, "Kind");
+        MovementKind kind = DataTools.GetEnum<MovementKind>(drv.Row, "Kind");
         if (kind == MovementKind.Add)
         {
           DataRow tempRow = _TempTableSoilAndPotKind.Rows.Add(drv.Row["Date1"], drv.Row["Date2"]);
@@ -642,7 +644,7 @@ namespace Plants
       }
       foreach (DataRowView drv in dvActions)
       {
-        ActionKind kind = (ActionKind)DataTools.GetInt(drv.Row, "Kind");
+        ActionKind kind = DataTools.GetEnum<ActionKind>(drv.Row, "Kind");
         switch (gridFilter.ColumnName)
         {
           case "Soil":
@@ -673,7 +675,7 @@ namespace Plants
 
       foreach (DataRowView drv in _TempTableSoilAndPotKind.DefaultView)
       {
-        Int32 id = DataTools.GetInt(drv.Row, gridFilter.ColumnName);
+        Int32 id = DataTools.GetInt32(drv.Row, gridFilter.ColumnName);
         DateTime dt1 = DataTools.GetDateTime(drv.Row, "Date1");
         if (dt1 >= firstDate)
         {

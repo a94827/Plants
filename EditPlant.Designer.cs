@@ -36,7 +36,7 @@
       this.groupBox2 = new System.Windows.Forms.GroupBox();
       this.cbGroup = new FreeLibSet.Controls.UserSelComboBox();
       this.label5 = new System.Windows.Forms.Label();
-      this.edNumber = new FreeLibSet.Controls.IntEditBox();
+      this.edNumber = new FreeLibSet.Controls.Int32EditBox();
       this.label4 = new System.Windows.Forms.Label();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
       this.cbManufacturer = new FreeLibSet.Controls.UserSelComboBox();
@@ -369,7 +369,7 @@
     private System.Windows.Forms.TabPage tabPage6;
     private System.Windows.Forms.GroupBox groupBox3;
     private System.Windows.Forms.GroupBox groupBox2;
-    private FreeLibSet.Controls.IntEditBox edNumber;
+    private FreeLibSet.Controls.Int32EditBox edNumber;
     private System.Windows.Forms.Label label4;
     private System.Windows.Forms.GroupBox groupBox1;
     private System.Windows.Forms.TextBox edDescrName;

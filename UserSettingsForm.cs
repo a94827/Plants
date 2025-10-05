@@ -260,7 +260,7 @@ namespace Plants
     {
       XmlCfgFile cfg = new XmlCfgFile(LocalConfigFilePath);
 
-      cfg.SetInt("NumberDigits", NumberDigits);
+      cfg.SetInt32("NumberDigits", NumberDigits);
 
       cfg.SetString("PhotoDir" + PlatformSuffix, PhotoDir.Path);
       cfg.SetEnum<ThumbnailSizeCode>("ThumbnailSize", ThumbnailSizeCode);
@@ -277,7 +277,7 @@ namespace Plants
 
       XmlCfgFile cfg = new XmlCfgFile(LocalConfigFilePath);
 
-      int x = cfg.GetInt("NumberDigits");
+      int x = cfg.GetInt32("NumberDigits");
       if (x >= 1 && x <= MaxNumberDigits)
         NumberDigits = x;
 

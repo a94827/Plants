@@ -12,6 +12,7 @@ using FreeLibSet.Data;
 using FreeLibSet.Data.Docs;
 using FreeLibSet.Core;
 using FreeLibSet.Config;
+using FreeLibSet.UICore;
 
 namespace Plants
 {
@@ -170,7 +171,7 @@ namespace Plants
 
       // Идентификаторы растений
       table1.DefaultView.Sort = "DocId.Number"; // по номеру в каталоге
-      IdList plantIds = IdList.FromColumn(table1.DefaultView, "DocId");
+      IIdSet<Int32> plantIds = IdTools.GetIdsFromColumn<Int32>(table1.DefaultView, "DocId");
 
       DataTable mainTable = new DataTable();
       mainTable.Columns.Add("Date1", typeof(DateTime));
@@ -185,10 +186,10 @@ namespace Plants
       {
         DataRow mainRow = DataTools.FindOrAddPrimaryKeyRow(mainTable, new object[] { srcRow["Date1"], srcRow["Date2"] });
         Int32 plantId = (Int32)(srcRow["DocId"]);
-        int flowerCount = DataTools.GetInt(srcRow, "FlowerCount");
+        int flowerCount = DataTools.GetInt32(srcRow, "FlowerCount");
         if (flowerCount == 0)
           flowerCount = 1;
-        DataTools.IncInt(mainRow, "FlowerCount" + plantId.ToString(), flowerCount);
+        DataTools.IncInt32(mainRow, "FlowerCount" + plantId.ToString(), flowerCount);
       }
 
       #region Итоги
@@ -197,7 +198,7 @@ namespace Plants
       {
         int cnt = 0;
         foreach (Int32 PlantId in plantIds)
-          cnt += DataTools.GetInt(mainRow, "FlowerCount" + PlantId.ToString());
+          cnt += DataTools.GetInt32(mainRow, "FlowerCount" + PlantId.ToString());
         mainRow["Total"] = cnt;
       }
 
@@ -205,8 +206,8 @@ namespace Plants
       totalRow["Date1"] = DateTime.MaxValue;
       totalRow["Date2"] = DateTime.MaxValue;
       foreach (Int32 PlantId in plantIds)
-        DataTools.SumInt(totalRow, "FlowerCount" + PlantId.ToString());
-      DataTools.SumInt(totalRow, "Total");
+        DataTools.SumInt32(totalRow, "FlowerCount" + PlantId.ToString());
+      DataTools.SumInt32(totalRow, "Total");
       mainTable.Rows.Add(totalRow);
 
       #endregion
@@ -221,18 +222,18 @@ namespace Plants
       foreach (Int32 plantId in plantIds)
       {
         object[] a = ProgramDBUI.TheUI.DocTypes["Plants"].TableCache.GetValues(plantId, new DBxColumns("Number,Name"));
-        ghMain.Columns.AddInt("FlowerCount" + plantId.ToString(), true, "№" + DataTools.GetInt(a[0]).ToString(ProgramDBUI.Settings.NumberMask) +
+        ghMain.Columns.AddInteger("FlowerCount" + plantId.ToString(), true, "№" + DataTools.GetInt32(a[0]).ToString(ProgramDBUI.Settings.NumberMask) +
           Environment.NewLine + DataTools.GetString(a[1]), 4);
         ghMain.Columns.LastAdded.Summable = true;
       }
-      ghMain.Columns.AddInt("Total", true, "Всего", 4);
-      ghMain.Columns.LastAdded.ColorType = EFPDataGridViewColorType.Total1;
+      ghMain.Columns.AddInteger("Total", true, "Всего", 4);
+      ghMain.Columns.LastAdded.ColorType = UIDataViewColorType.Total1;
       ghMain.Columns.LastAdded.Summable = true;
 
       ghMain.FrozenColumns = 1;
       ghMain.DisableOrdering();
-      ghMain.GetRowAttributes += new EFPDataGridViewRowAttributesEventHandler(ghMain_GetRowAttributes);
-      ghMain.GetCellAttributes += new EFPDataGridViewCellAttributesEventHandler(ghMain_GetCellAttributes);
+      ghMain.RowInfoNeeded += ghMain_RowInfoNeeded;
+      ghMain.CellInfoNeeded += ghMain_CellInfoNeeded;
 
       ghMain.Control.MultiSelect = true;
 
@@ -254,14 +255,14 @@ namespace Plants
 
     EFPReportVarGridPage _MainPage;
 
-    void ghMain_GetRowAttributes(object sender, EFPDataGridViewRowAttributesEventArgs args)
+    void ghMain_RowInfoNeeded(object sender, EFPDataGridViewRowInfoEventArgs args)
     {
       DateTime date1 = DataTools.GetNullableDateTime(args.DataRow, "Date1").Value;
       if (date1 == DateTime.MaxValue)
-        args.ColorType = EFPDataGridViewColorType.TotalRow;
+        args.ColorType = UIDataViewColorType.TotalRow;
     }
 
-    void ghMain_GetCellAttributes(object sender, EFPDataGridViewCellAttributesEventArgs args)
+    void ghMain_CellInfoNeeded(object sender, EFPDataGridViewCellInfoEventArgs args)
     {
       if (args.ColumnName == "Date")
       {
@@ -294,7 +295,7 @@ namespace Plants
     void ghMain_EditData(object sender, EventArgs args)
     {
       EFPDataGridViewColumn[] cols = _MainPage.ControlProvider.SelectedColumns;
-      IdList plantIds = new IdList();
+      IdList<Int32> plantIds = new IdList<Int32>();
       for (int i = 0; i < cols.Length; i++)
       {
         if (cols[i].Name.StartsWith("FlowerCount"))

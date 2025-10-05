@@ -210,7 +210,7 @@ namespace Plants
       _MainPage.ControlProvider.Columns.LastAdded.CanIncSearch = true;
       _MainPage.ControlProvider.DisableOrdering();
 
-      _MainPage.ControlProvider.GetCellAttributes += new EFPDataGridViewCellAttributesEventHandler(MainPage_GetCellAttributes);
+      _MainPage.ControlProvider.CellInfoNeeded += MainPage_CellInfoNeeded;
 
       _MainPage.ControlProvider.ReadOnly = false;
       _MainPage.ControlProvider.Control.ReadOnly = true;
@@ -221,7 +221,7 @@ namespace Plants
       _MainPage.ControlProvider.GetDocSel += new EFPDBxGridViewDocSelEventHandler(MainPage_GetDocSel);
     }
 
-    void MainPage_GetCellAttributes(object sender, EFPDataGridViewCellAttributesEventArgs args)
+    void MainPage_CellInfoNeeded(object sender, EFPDataGridViewCellInfoEventArgs args)
     {
       ActionKind kind;
       switch (args.ColumnName)
@@ -232,11 +232,11 @@ namespace Plants
           args.Value = DateRangeFormatter.Default.ToString(dt1, dt2, false);
           break;
         case "ActionImage":
-          kind = (ActionKind)DataTools.GetInt(args.DataRow, "Kind");
+          kind = DataTools.GetEnum<ActionKind>(args.DataRow, "Kind");
           args.Value = EFPApp.MainImages.Images[PlantTools.GetActionImageKey(kind)];
           break;
         case "ActionText":
-          kind = (ActionKind)DataTools.GetInt(args.DataRow, "Kind");
+          kind = DataTools.GetEnum<ActionKind>(args.DataRow, "Kind");
           args.Value = PlantTools.GetActionName(kind,
             DataTools.GetString(args.DataRow, "ActionName"),
             DataTools.GetString(args.DataRow, "Remedy.Name"));
@@ -246,10 +246,11 @@ namespace Plants
 
     void MainPage_EditData(object sender, EventArgs args)
     {
-      Int32[] docIds = DataTools.GetIdsFromColumn(_MainPage.ControlProvider.SelectedDataRows, "DocId");
-      if (docIds.Length == 0)
+      IIdSet<Int32> docIds = IdTools.GetIdsFromColumn<Int32>(_MainPage.ControlProvider.SelectedDataRows, "DocId");
+      if (docIds.Count == 0)
         EFPApp.ShowTempMessage("Нет выбранных растений");
-      ProgramDBUI.TheUI.DocTypes["Plants"].PerformEditing(docIds, _MainPage.ControlProvider.State, false);
+      else 
+        ProgramDBUI.TheUI.DocTypes["Plants"].PerformEditing(docIds.ToArray(), _MainPage.ControlProvider.State, false);
     }
 
     void MainPage_GetDocSel(object sender, EFPDBxGridViewDocSelEventArgs args)

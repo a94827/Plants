@@ -44,7 +44,7 @@ namespace Plants
 
     private static void Plants_Handler(object sender, DBxTextValueNeededEventArgs args)
     {
-      int number = args.GetInt("Number");
+      int number = args.GetInt32("Number");
       if (number == 0)
         args.Text.Append("б/н");
       else
@@ -55,7 +55,7 @@ namespace Plants
 
     private static void PlantMovement_Handler(object sender, DBxTextValueNeededEventArgs args)
     {
-      MovementKind kind = (MovementKind)(args.GetInt("Kind"));
+      MovementKind kind = (MovementKind)(args.GetInt32("Kind"));
       DateTime? date1 = args.GetNullableDateTime("Date1");
       DateTime? date2 = args.GetNullableDateTime("Date2");
       args.Text.Append(PlantTools.GetMovementName(kind));
@@ -65,7 +65,7 @@ namespace Plants
 
     private static void PlantActions_Handler(object sender, DBxTextValueNeededEventArgs args)
     {
-      ActionKind kind = (ActionKind)(args.GetInt("Kind"));
+      ActionKind kind = (ActionKind)(args.GetInt32("Kind"));
       string otherActionName=args.GetString("ActionName");
       string remedyName = args.GetString("Remedy.Name");
       args.Text.Append(PlantTools.GetActionName(kind, otherActionName, remedyName));
@@ -94,7 +94,7 @@ namespace Plants
 
     private static void PlantPlans_Handler(object sender, DBxTextValueNeededEventArgs args)
     {
-      ActionKind kind = (ActionKind)(args.GetInt("Kind"));
+      ActionKind kind = (ActionKind)(args.GetInt32("Kind"));
       DateTime? date1 = args.GetNullableDateTime("Date1");
       DateTime? date2 = args.GetNullableDateTime("Date2");
       args.Text.Append(PlantTools.GetActionName(kind));
@@ -104,8 +104,8 @@ namespace Plants
 
     private static void CareRecords_Handler(object sender, DBxTextValueNeededEventArgs args)
     {
-      MonthDay md1 = new MonthDay(args.GetInt("Day1"));
-      MonthDay md2 = new MonthDay(args.GetInt("Day2"));
+      MonthDay md1 = new MonthDay(args.GetInt32("Day1"));
+      MonthDay md2 = new MonthDay(args.GetInt32("Day2"));
       if (md1.IsEmpty || md2.IsEmpty)
         args.Text.Append("Основная запись");
       else

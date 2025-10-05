@@ -9,6 +9,7 @@ using FreeLibSet.Forms.Docs;
 using FreeLibSet.Forms;
 using FreeLibSet.DependedValues;
 using FreeLibSet.UICore;
+using FreeLibSet.Forms.Data;
 
 namespace Plants
 {
@@ -27,7 +28,7 @@ namespace Plants
 
     public static void ImageValueNeeded(object sender, DBxImageValueNeededEventArgs args)
     {
-      MovementKind kind = (MovementKind)(args.GetInt("Kind"));
+      MovementKind kind = args.GetEnum<MovementKind>("Kind");
       args.ImageKey = PlantTools.GetMovementImageKey(kind);
     }
 
@@ -45,33 +46,36 @@ namespace Plants
 
     private void AddPage1(InitSubDocEditFormEventArgs args)
     {
-      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      ExtEditPage page = args.AddPage("Общие", MainPanel1);
       page.ImageKey = args.Editor.SubDocTypeUI.ImageKey;
+
+      // Редактируются разные типы перемещения?
+      bool isDiffKind = args.Values["Kind"].Grayed;
 
       cbKind.Items.AddRange(PlantTools.MovementNames);
       EFPListComboBox efpKind = new EFPListComboBox(page.BaseProvider, cbKind);
       new ListControlImagePainter(cbKind, PlantTools.MovementImageKeys);
-      args.AddInt(efpKind, "Kind", false);
+      args.AddInt32(efpKind, "Kind", !isDiffKind);
 
       EFPDocComboBox efpPlace = new EFPDocComboBox(page.BaseProvider, cbPlace, ProgramDBUI.TheUI.DocTypes["Places"]);
       efpPlace.CanBeEmpty = false;
-      DocValueDocComboBox dvPlace = args.AddRef(efpPlace, "Place", false);
+      ExtValueDocComboBox dvPlace = args.AddRef(efpPlace, "Place", !isDiffKind);
       dvPlace.UserEnabledEx = new DepInArray<int>(efpKind.SelectedIndexEx, new int[]{
         (int)MovementKind.Add, (int)MovementKind.Move});
-      dvPlace.UserDisabledMode = DocValueUserDisabledMode.KeepOriginalIfGrayed;
+      dvPlace.UserDisabledMode = ExtValueUserDisabledMode.KeepOriginalIfGrayed;
 
       efpContra = new EFPDocComboBox(page.BaseProvider, cbContra, ProgramDBUI.TheUI.DocTypes["Contras"]);
       efpContra.CanBeEmpty = true;
-      DocValueDocComboBox dvContra = args.AddRef(efpContra, "Contra", false);
+      ExtValueDocComboBox dvContra = args.AddRef(efpContra, "Contra", !isDiffKind);
       dvContra.UserEnabledEx = new DepInArray<int>(efpKind.SelectedIndexEx, new int[]{
         (int)MovementKind.Add, (int)MovementKind.Remove});
-      dvContra.UserDisabledMode = DocValueUserDisabledMode.KeepOriginalIfGrayed;
+      dvContra.UserDisabledMode = ExtValueUserDisabledMode.KeepOriginalIfGrayed;
 
       efpForkPlant = new EFPDocComboBox(page.BaseProvider, cbForkPlant, ProgramDBUI.TheUI.DocTypes["Plants"]);
       efpForkPlant.CanBeEmpty = true;
-      DocValueDocComboBox dvForkPlant = args.AddRef(efpForkPlant, "ForkPlant", false);
+      ExtValueDocComboBox dvForkPlant = args.AddRef(efpForkPlant, "ForkPlant", !isDiffKind);
       dvForkPlant.UserEnabledEx = dvContra.UserEnabledEx;
-      dvForkPlant.UserDisabledMode = DocValueUserDisabledMode.KeepOriginalIfGrayed;
+      dvForkPlant.UserDisabledMode = ExtValueUserDisabledMode.KeepOriginalIfGrayed;
 
       efpContra.Validating += new UIValidatingEventHandler(efpContraAndForkPlant_Validating);
       efpForkPlant.Validating += new UIValidatingEventHandler(efpContraAndForkPlant_Validating);
@@ -80,19 +84,19 @@ namespace Plants
 
       EFPDocComboBox efpSoil = new EFPDocComboBox(page.BaseProvider, cbSoil, ProgramDBUI.TheUI.DocTypes["Soils"]);
       efpSoil.CanBeEmpty = true;
-      DocValueDocComboBox dvSoil = args.AddRef(efpSoil, "Soil", false);
+      ExtValueDocComboBox dvSoil = args.AddRef(efpSoil, "Soil", !isDiffKind);
       dvSoil.UserEnabledEx = new DepEqual<int>(efpKind.SelectedIndexEx, (int)MovementKind.Add);
-      dvSoil.UserDisabledMode = DocValueUserDisabledMode.KeepOriginalIfGrayed;
+      dvSoil.UserDisabledMode = ExtValueUserDisabledMode.KeepOriginalIfGrayed;
 
       EFPDocComboBox efpPotKind = new EFPDocComboBox(page.BaseProvider, cbPotKind, ProgramDBUI.TheUI.DocTypes["PotKinds"]);
       efpPotKind.CanBeEmpty = true;
-      DocValueDocComboBox dvPotKind = args.AddRef(efpPotKind, "PotKind", false);
+      ExtValueDocComboBox dvPotKind = args.AddRef(efpPotKind, "PotKind", !isDiffKind);
       dvPotKind.UserEnabledEx = new DepEqual<int>(efpKind.SelectedIndexEx, (int)MovementKind.Add);
-      dvPotKind.UserDisabledMode = DocValueUserDisabledMode.KeepOriginalIfGrayed;
+      dvPotKind.UserDisabledMode = ExtValueUserDisabledMode.KeepOriginalIfGrayed;
 
       EFPDateOrRangeBox efpDate = new EFPDateOrRangeBox(page.BaseProvider, cbDate);
       efpDate.CanBeEmpty = false;
-      args.AddDate(efpDate, "Date1", "Date2", false);
+      args.AddDate(efpDate, "Date1", "Date2", true);
 
       EFPTextBox efpComment = new EFPTextBox(page.BaseProvider, edComment);
       efpComment.CanBeEmpty = true;

@@ -44,9 +44,9 @@ namespace Plants
     // Тип для ItemValue зависит от класса.
     // Значение null означает незаполненное значение
 
-    public abstract object GetItemValue(IDBxDocValues docValues);
+    public abstract object GetItemValue(IDBxExtValues docValues);
 
-    public abstract void SetItemValue(IDBxDocValues docValues, object itemValue);
+    public abstract void SetItemValue(IDBxExtValues docValues, object itemValue);
 
     public abstract void AddColumns(DBxTableStruct.ColumnCollection columns);
 
@@ -246,7 +246,7 @@ namespace Plants
 
     #region Переопределенные методы
 
-    public override object GetItemValue(IDBxDocValues docValues)
+    public override object GetItemValue(IDBxExtValues docValues)
     {
       string s = docValues[Code].AsString;
       if (s.Length == 0)
@@ -255,7 +255,7 @@ namespace Plants
         return s;
     }
 
-    public override void SetItemValue(IDBxDocValues docValues, object itemValue)
+    public override void SetItemValue(IDBxExtValues docValues, object itemValue)
     {
       string s = itemValue as string;
       docValues[Code].SetString(s);
@@ -333,7 +333,7 @@ namespace Plants
       columns.AddString(Code, maxLen, true);
     }
 
-    public override object GetItemValue(IDBxDocValues docValues)
+    public override object GetItemValue(IDBxExtValues docValues)
     {
       string enumCode = docValues[Code].AsString;
       if (enumCode.Length == 0)
@@ -342,7 +342,7 @@ namespace Plants
         return enumCode;
     }
 
-    public override void SetItemValue(IDBxDocValues docValues, object itemValue)
+    public override void SetItemValue(IDBxExtValues docValues, object itemValue)
     {
       docValues[Code].SetString((string)itemValue);
     }
@@ -414,18 +414,18 @@ namespace Plants
 
     public override void AddColumns(DBxTableStruct.ColumnCollection columns)
     {
-      columns.AddInt(Code, Minimum, Maximum);
+      columns.AddInteger(Code, Minimum, Maximum, true);
     }
 
-    public override object GetItemValue(IDBxDocValues docValues)
+    public override object GetItemValue(IDBxExtValues docValues)
     {
       if (docValues[Code].IsNull)
         return null;
       else
-        return docValues[Code].AsInteger;
+        return docValues[Code].AsInt32;
     }
 
-    public override void SetItemValue(IDBxDocValues docValues, object itemValue)
+    public override void SetItemValue(IDBxExtValues docValues, object itemValue)
     {
       if (itemValue == null)
         docValues[Code].SetNull();
@@ -449,7 +449,7 @@ namespace Plants
 
     public override bool Edit(ref object itemValue)
     {
-      IntInputDialog dlg = new IntInputDialog();
+      Int32InputDialog dlg = new Int32InputDialog();
       dlg.Title = Name;
       if (!String.IsNullOrEmpty(MeasureUnit))
         dlg.Title += ", " + MeasureUnit;
@@ -545,19 +545,19 @@ namespace Plants
 
     public override void AddColumns(DBxTableStruct.ColumnCollection columns)
     {
-      columns.AddInt(ColumnName1, Minimum, Maximum);
-      columns.AddInt(ColumnName2, Minimum, Maximum);
+      columns.AddInteger(ColumnName1, Minimum, Maximum, true);
+      columns.AddInteger(ColumnName2, Minimum, Maximum, true);
     }
 
-    public override object GetItemValue(IDBxDocValues docValues)
+    public override object GetItemValue(IDBxExtValues docValues)
     {
       if (docValues[ColumnName1].IsNull || docValues[ColumnName2].IsNull)
         return null;
       else
-        return new Range(docValues[ColumnName1].AsInteger, docValues[ColumnName2].AsInteger);
+        return new Range(docValues[ColumnName1].AsInt32, docValues[ColumnName2].AsInt32);
     }
 
-    public override void SetItemValue(IDBxDocValues docValues, object itemValue)
+    public override void SetItemValue(IDBxExtValues docValues, object itemValue)
     {
       if (itemValue == null)
       {
@@ -588,7 +588,7 @@ namespace Plants
 
     public override bool Edit(ref object itemValue)
     {
-      IntRangeDialog dlg = new IntRangeDialog();
+      Int32RangeDialog dlg = new Int32RangeDialog();
       dlg.Title = Name;
       if (!String.IsNullOrEmpty(MeasureUnit))
         dlg.Title += ", " + MeasureUnit;
@@ -821,28 +821,28 @@ namespace Plants
 
     #region Переопределенные методы
 
-    public override object GetItemValue(IDBxDocValues docValues)
+    public override object GetItemValue(IDBxExtValues docValues)
     {
-      int v = docValues[Code].AsInteger;
+      int v = docValues[Code].AsInt32;
       if (v == 0)
         return null;
       else
         return v;
     }
 
-    public override void SetItemValue(IDBxDocValues docValues, object itemValue)
+    public override void SetItemValue(IDBxExtValues docValues, object itemValue)
     {
       docValues[Code].SetValue(itemValue);
     }
 
     public override void AddColumns(DBxTableStruct.ColumnCollection columns)
     {
-      columns.AddInt(Code);
+      columns.AddInt32(Code, true);
     }
 
     public override string GetTextValue(object itemValue)
     {
-      int v = DataTools.GetInt(itemValue);
+      int v = DataTools.GetInt32(itemValue);
       if (v == 0)
         return String.Empty;
 
@@ -862,7 +862,7 @@ namespace Plants
 
     public override bool Edit(ref object itemValue)
     {
-      int v = DataTools.GetInt(itemValue);
+      int v = DataTools.GetInt32(itemValue);
 
       ListSelectDialog dlg = new ListSelectDialog();
       dlg.Title = Name;
@@ -976,13 +976,13 @@ namespace Plants
 
     #region Чтение и запись
 
-    public void Read(IDBxDocValues docValues)
+    public void Read(IDBxExtValues docValues)
     {
       for (int i = 0; i < Items.Count; i++)
         this[i] = Items[i].GetItemValue(docValues);
     }
 
-    public void Write(IDBxDocValues docValues)
+    public void Write(IDBxExtValues docValues)
     {
       for (int i = 0; i < Items.Count; i++)
         Items[i].SetItemValue(docValues, this[i]);

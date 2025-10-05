@@ -11,6 +11,8 @@ using FreeLibSet.DependedValues;
 using FreeLibSet.Data.Docs;
 using FreeLibSet.UICore;
 using FreeLibSet.Core;
+using FreeLibSet.Data;
+using FreeLibSet.Forms.Data;
 
 namespace Plants
 {
@@ -62,7 +64,7 @@ namespace Plants
 
     private void AddPage1(InitDocEditFormEventArgs args)
     {
-      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      ExtEditPage page = args.AddPage("Общие", MainPanel1);
       page.ImageKey = "AttributeType";
 
       efpName = new EFPTextBox(page.BaseProvider, edName);
@@ -71,13 +73,13 @@ namespace Plants
 
       cbValueType.Items.AddRange(PlantTools.ValueTypeNames);
       efpValueType = new EFPListComboBox(page.BaseProvider, cbValueType);
-      args.AddInt(efpValueType, "Type", true);
+      args.AddInt32(efpValueType, "Type", true);
 
 
       efpFormat = new EFPTextBox(page.BaseProvider, edFormat);
       efpFormat.CanBeEmpty = true;
       efpFormat.ToolTipText = "Формат стровокого значения. \"0\"-обязательная цифра, \"#\"-необязательная цифра";
-      DocValueTextBox dvFormat=args.AddText(efpFormat, "Format", false);
+      ExtValueTextBox dvFormat=args.AddText(efpFormat, "Format", false);
       dvFormat.UserEnabledEx = new DepEqual<int>(efpValueType.SelectedIndexEx, (int)ValueType.String);
 
       #region Комментарий
@@ -103,11 +105,11 @@ namespace Plants
     private EFPDataGridView efpVLTable;
     private EFPTextBox efpVLText;
 
-    private class DocValueVL : IDocEditItem
+    private class DocValueVL : IUIExtEditItem
     {
       #region Конструктор
 
-      public DocValueVL(EditAttrType owner, DBxDocValue value)
+      public DocValueVL(EditAttrType owner, DBxExtValue value)
       {
         _Owner = owner;
         _Value = value;
@@ -116,7 +118,7 @@ namespace Plants
       }
 
       private EditAttrType _Owner;
-      private DBxDocValue _Value;
+      private DBxExtValue _Value;
 
       #endregion
 
@@ -135,7 +137,7 @@ namespace Plants
           _Owner._StoreValues.Clear();
           if (!String.IsNullOrEmpty(s))
           {
-            string[] a = s.Split(DataTools.CRLFSeparators, // независимо от операционной системы
+            string[] a = s.Split(StringTools.CRLFSeparators, // независимо от операционной системы
               StringSplitOptions.None);
             for (int i = 0; i < a.Length; i++)
               _Owner._StoreValues.Rows.Add(a[i]);
@@ -176,7 +178,7 @@ namespace Plants
           _Value.SetNull();
       }
 
-      DepChangeInfo IDocEditItem.ChangeInfo { get { return _ChangeInfo; } }
+      DepChangeInfo IUIExtEditItem.ChangeInfo { get { return _ChangeInfo; } }
       public DepChangeInfoValueItem ChangeInfo { get { return _ChangeInfo; } }
       private DepChangeInfoValueItem _ChangeInfo;
 
@@ -189,12 +191,12 @@ namespace Plants
 
     private void AddPage2(InitDocEditFormEventArgs args)
     {
-      DocEditPage page = args.AddPage("Значения", MainPanel2);
+      ExtEditPage page = args.AddPage("Значения", MainPanel2);
       page.ImageKey = "Table";
 
       cbValueSourceType.Items.AddRange(PlantTools.AttrValueSourceTypeNames);
       efpValueSourceType = new EFPListComboBox(page.BaseProvider, cbValueSourceType);
-      args.AddInt(efpValueSourceType, "Source", false);
+      args.AddInt32(efpValueSourceType, "Source", false);
       efpValueSourceType.Validating += new UIValidatingEventHandler(efpValueSourceType_Validating);
 
 
@@ -211,7 +213,7 @@ namespace Plants
       efpVLTable.CanView = false;
       efpVLTable.Columns.AddTextFill("Value", false, String.Empty, 100, 10);
       efpVLTable.DisableOrdering();
-      efpVLTable.GetCellAttributes += new EFPDataGridViewCellAttributesEventHandler(efpVLTable_GetCellAttributes);
+      efpVLTable.CellInfoNeeded += efpVLTable_CellInfoNeeded;
       efpVLTable.Control.CellValuePushed += new DataGridViewCellValueEventHandler(efpVLTable_CellValuePushed);
       grVLTable.VirtualMode = true;
       efpVLTable.UseRowImages = false;
@@ -231,7 +233,7 @@ namespace Plants
       tcVLView.SelectedIndex = _LastTCVLViewSelectedIndex;
       tcVLView.SelectedIndexChanged += new EventHandler(tcVLView_SelectedIndexChanged);
 
-      args.AddDocEditItem(new DocValueVL(this, args.Values["ValueList"]));
+      args.AddEditItem(new DocValueVL(this, args.Values["ValueList"]));
 
       args.Editor.BeforeWrite += new DocEditCancelEventHandler(Editor_BeforeWrite2);
     }
@@ -325,7 +327,7 @@ namespace Plants
       grVLTable.Columns[0].HeaderText = PlantTools.GetValueTypeName(vt);
     }
 
-    void efpVLTable_GetCellAttributes(object sender, EFPDataGridViewCellAttributesEventArgs args)
+    void efpVLTable_CellInfoNeeded(object sender, EFPDataGridViewCellInfoEventArgs args)
     {
       if (args.DataRow == null)
         return;
@@ -343,7 +345,7 @@ namespace Plants
         else
         {
           args.Value = args.DataRow[0].ToString();
-          args.ColorType = EFPDataGridViewColorType.Error;
+          args.ColorType = UIDataViewColorType.Error;
         }
       }
     }

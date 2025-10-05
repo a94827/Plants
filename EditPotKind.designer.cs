@@ -41,9 +41,9 @@
       this.edVolume = new FreeLibSet.Controls.SingleEditBox();
       this.label5 = new System.Windows.Forms.Label();
       this.groupBox2 = new System.Windows.Forms.GroupBox();
-      this.edH = new FreeLibSet.Controls.IntEditBox();
+      this.edH = new FreeLibSet.Controls.Int32EditBox();
       this.label4 = new System.Windows.Forms.Label();
-      this.edD = new FreeLibSet.Controls.IntEditBox();
+      this.edD = new FreeLibSet.Controls.Int32EditBox();
       this.label3 = new System.Windows.Forms.Label();
       this.cbGroup = new FreeLibSet.Controls.UserSelComboBox();
       this.label2 = new System.Windows.Forms.Label();
@@ -305,9 +305,9 @@
     private FreeLibSet.Controls.SingleEditBox edVolume;
     private System.Windows.Forms.Label label5;
     private System.Windows.Forms.GroupBox groupBox2;
-    private FreeLibSet.Controls.IntEditBox edH;
+    private FreeLibSet.Controls.Int32EditBox edH;
     private System.Windows.Forms.Label label4;
-    private FreeLibSet.Controls.IntEditBox edD;
+    private FreeLibSet.Controls.Int32EditBox edD;
     private System.Windows.Forms.Label label3;
     private FreeLibSet.Controls.UserSelComboBox cbManufacturer;
     private System.Windows.Forms.Label label7;

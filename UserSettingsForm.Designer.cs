@@ -33,7 +33,7 @@
       this.btnOk = new System.Windows.Forms.Button();
       this.TheTabControl = new System.Windows.Forms.TabControl();
       this.tpPlants = new System.Windows.Forms.TabPage();
-      this.edNumberDigits = new FreeLibSet.Controls.IntEditBox();
+      this.edNumberDigits = new FreeLibSet.Controls.Int32EditBox();
       this.label4 = new System.Windows.Forms.Label();
       this.tpPhoto = new System.Windows.Forms.TabPage();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -382,7 +382,7 @@
     private System.Windows.Forms.Label label3;
     private System.Windows.Forms.Button btnExploreBackupDir;
     private System.Windows.Forms.TabPage tpPlants;
-    private FreeLibSet.Controls.IntEditBox edNumberDigits;
+    private FreeLibSet.Controls.Int32EditBox edNumberDigits;
     private System.Windows.Forms.Label label4;
     private System.Windows.Forms.Label label5;
   }

@@ -63,7 +63,7 @@ namespace Plants
 
     private void AddPage1(InitDocEditFormEventArgs args)
     {
-      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      ExtEditPage page = args.AddPage("Общие", MainPanel1);
       page.ImageKey = "Remedy";
 
       efpName = new EFPTextBox(page.BaseProvider, edName);

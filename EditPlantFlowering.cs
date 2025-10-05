@@ -32,7 +32,7 @@ namespace Plants
     {
       DateTime dt1 = args.GetDateTime(0);
       DateTime dt2 = args.GetDateTime(1);
-      if (DataTools.DateInRange(DateTime.Today, dt1, dt2))
+      if (TimeTools.DateInRange(DateTime.Today, dt1, dt2))
         args.ImageKey = "Play"; // 31.12.2022
     }
 
@@ -52,7 +52,7 @@ namespace Plants
 
     private void AddPage1(InitSubDocEditFormEventArgs args)
     {
-      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      ExtEditPage page = args.AddPage("Общие", MainPanel1);
       page.ImageKey = args.Editor.SubDocTypeUI.ImageKey;
 
       efpDate = new EFPDateOrRangeBox(page.BaseProvider, cbDate);
@@ -64,13 +64,13 @@ namespace Plants
       efpDate99991231.DisplayName = "Бесконечное время";
       efpDate99991231.ToolTipText = "Устанавливает конечную дату диапазона " + DateRangeFormatter.Default.ToString(DateRange.Whole.LastDate, false);
       //efpDate99991231.EnabledEx = new DepAnd(efpDate.EditableEx, new DepNot(new DepEqual<DateTime>(efpDate.LastDateEx, DateRange.Whole.LastDate)));
-      efpDate99991231.EnabledEx = new DepExpr3<bool, bool, bool, DateTime>(efpDate.EditableEx, efpDate.IsNotEmptyEx, efpDate.LastDateEx, CalcDate99991231Enabled);
+      efpDate99991231.EnabledEx = new DepExpr3<bool, bool, bool, DateTime>(efpDate.EditableEx, efpDate.IsNotEmptyEx, efpDate.LastValueEx, CalcDate99991231Enabled);
       efpDate99991231.Click += new EventHandler(efpDate99991231_Click);
 
       EFPIntEditBox efpCount = new EFPIntEditBox(page.BaseProvider, edCount);
       efpCount.Minimum = 0; // если много цветков, которые неохота считать
       efpCount.Maximum = 100;
-      args.AddInt(efpCount, "FlowerCount", true);
+      args.AddInt32(efpCount, "FlowerCount", true);
 
       EFPTextBox efpComment = new EFPTextBox(page.BaseProvider, edComment);
       efpComment.CanBeEmpty = true;

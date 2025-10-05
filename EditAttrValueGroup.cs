@@ -10,6 +10,7 @@ using FreeLibSet.Forms.Docs;
 using FreeLibSet.Data.Docs;
 using FreeLibSet.Core;
 using FreeLibSet.UICore;
+using FreeLibSet.Data;
 
 namespace Plants
 {
@@ -89,9 +90,9 @@ namespace Plants
 
     private static int _LastAction = 0;
 
-    public static bool PerformEdit(DocTypeUI docTypeUI, Int32[] docIds, Int32 attrTypeId)
+    public static bool PerformEdit(DocTypeUI docTypeUI, IIdSet<Int32> docIds, Int32 attrTypeId)
     {
-      if (docIds.Length == 0)
+      if (docIds.Count == 0)
       {
         EFPApp.ErrorMessageBox("Документы не выбраны");
         return false;
@@ -115,17 +116,17 @@ namespace Plants
 
           form.lblDocTypeName.ImageList = EFPApp.MainImages.ImageList;
           form.lblDocTypeName.ImageAlign = ContentAlignment.MiddleRight;
-          if (docIds.Length == 1)
+          if (docIds.Count == 1)
           {
             form.lblDocTypeName.Text = docTypeUI.DocType.SingularTitle;
-            form.lblDocTypeName.Image = docTypeUI.GetImageValue(docIds[0]);
-            form.lblDocInfo.Text = docTypeUI.GetTextValue(docIds[0]);
+            form.lblDocTypeName.Image = docTypeUI.GetImageValue(docIds.SingleId);
+            form.lblDocInfo.Text = docTypeUI.GetTextValue(docIds.SingleId);
           }
           else
           {
             form.lblDocTypeName.Text = docTypeUI.DocType.PluralTitle;
             form.lblDocTypeName.ImageKey = docTypeUI.ImageKey;
-            form.lblDocInfo.Text = docIds.Length.ToString() + " документа(ов)";
+            form.lblDocInfo.Text = docIds.Count.ToString() + " документа(ов)";
           }
 
           #endregion
@@ -218,7 +219,7 @@ namespace Plants
         {
           // Заменяем поддокумент
 
-          Int32 subDocId = DataTools.GetInt(table.DefaultView[p].Row, "Id");
+          Int32 subDocId = DataTools.GetInt32(table.DefaultView[p].Row, "Id");
           DBxSubDoc subDoc = subDocs.GetSubDocById(subDocId);
           if (subDoc.Values["Value"].AsString != sValue1 || subDoc.Values["LongValue"].AsString != sValue2)
           {
@@ -232,7 +233,7 @@ namespace Plants
           // Добавляем поддокумент
 
           DBxSubDoc subDoc = doc.SubDocs[subDocs.SubDocType.Name].Insert();
-          subDoc.Values["AttrType"].SetInteger(attrTypeId);
+          subDoc.Values["AttrType"].SetInt32(attrTypeId);
           subDoc.Values["Date"].SetNullableDateTime(date);
           subDoc.Values["Value"].SetString(sValue1);
           subDoc.Values["LongValue"].SetString(sValue2);
@@ -247,7 +248,7 @@ namespace Plants
       DBxMultiSubDocs subDocs = mDocs.SubDocs["PlantAttributes"];
       for (int i = subDocs.SubDocCount - 1; i >= 0; i--)
       {
-        if (subDocs[i].Values["AttrType"].AsInteger == attrTypeId &&
+        if (subDocs[i].Values["AttrType"].AsInt32 == attrTypeId &&
           subDocs[i].Values["Date"].AsNullableDateTime == date)
         {
           subDocs[i].Delete();

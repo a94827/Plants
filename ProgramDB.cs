@@ -168,7 +168,7 @@ namespace Plants
       dt = new DBxDocType("Plants");
       dt.PluralTitle = "Растения";
       dt.SingularTitle = "Растение";
-      dt.Struct.Columns.AddInt16("Number");
+      dt.Struct.Columns.AddInt16("Number", true);
       dt.Struct.Columns.AddString("LocalName", 120, true);
       dt.Struct.Columns.AddString("LatinName", 120, true);
       dt.Struct.Columns.AddString("Description", 120, true);
@@ -220,7 +220,7 @@ namespace Plants
       dt.Struct.Columns.AddReference("LastPlantDisease", "PlantDiseases", true);
       dt.CalculatedColumns.Add("LastPlantDisease");
 
-      dt.Struct.Columns.AddInt("MovementState", DataTools.GetEnumRange(typeof(PlantMovementState))).Nullable = true;
+      dt.Struct.Columns.AddInteger("MovementState", DataTools.GetEnumRange(typeof(PlantMovementState)), true);
       dt.CalculatedColumns.Add("MovementState");
 
       dt.Struct.Columns.AddReference("Soil", "Soils", true);
@@ -278,7 +278,7 @@ namespace Plants
       sdt.SingularTitle = "Движение растения";
       sdt.PluralTitle = "Движение растений";
 
-      sdt.Struct.Columns.AddInt("Kind", DataTools.GetEnumRange(typeof(MovementKind))).Nullable = false;
+      sdt.Struct.Columns.AddInteger("Kind", DataTools.GetEnumRange(typeof(MovementKind)), false);
       sdt.Struct.Columns.AddDate("Date1", false);
       sdt.Struct.Columns.AddDate("Date2", false);
       sdt.Struct.Columns.AddReference("Contra", "Contras", true); // может быть задано для операций прихода и выбытия
@@ -298,7 +298,7 @@ namespace Plants
       sdt.SingularTitle = "Действие с растением";
       sdt.PluralTitle = "Действия с растениями";
 
-      sdt.Struct.Columns.AddInt("Kind", DataTools.GetEnumRange(typeof(ActionKind))).Nullable = false;
+      sdt.Struct.Columns.AddInteger("Kind", DataTools.GetEnumRange(typeof(ActionKind)), false);
       sdt.Struct.Columns.AddString("ActionName", 30, true); // для типа "Другое"
       sdt.Struct.Columns.AddDate("Date1", false);
       sdt.Struct.Columns.AddDate("Date2", false);
@@ -320,7 +320,7 @@ namespace Plants
 
       sdt.Struct.Columns.AddDate("Date1", false);
       sdt.Struct.Columns.AddDate("Date2", false);
-      sdt.Struct.Columns.AddInt16("FlowerCount");
+      sdt.Struct.Columns.AddInt16("FlowerCount", true);
       sdt.Struct.Columns.AddMemo("Comment");
       sdt.DefaultOrder = new DBxOrder("Date1");
       dt.SubDocs.Add(sdt);
@@ -348,7 +348,7 @@ namespace Plants
       sdt.SingularTitle = "Планируемое действие";
       sdt.PluralTitle = "Планируемые действия";
 
-      sdt.Struct.Columns.AddInt("Kind", DataTools.GetEnumRange(typeof(ActionKind))).Nullable = false;
+      sdt.Struct.Columns.AddInteger("Kind", DataTools.GetEnumRange(typeof(ActionKind)), false);
       sdt.Struct.Columns.AddString("ActionName", 30, true); // для типа "Другое"
       sdt.Struct.Columns.AddDate("Date1", false);
       sdt.Struct.Columns.AddDate("Date2", false);
@@ -367,9 +367,9 @@ namespace Plants
       dt.SingularTitle = "Вид атрибута";
       dt.PluralTitle = "Виды атрибутов";
       dt.Struct.Columns.AddString("Name", 30, false);
-      dt.Struct.Columns.AddInt("Type", DataTools.GetEnumRange(typeof(ValueType)));
+      dt.Struct.Columns.AddInteger("Type", DataTools.GetEnumRange(typeof(ValueType)), true);
       dt.Struct.Columns.AddString("Format", 20, true);
-      dt.Struct.Columns.AddInt("Source", DataTools.GetEnumRange(typeof(AttrValueSourceType)));
+      dt.Struct.Columns.AddInteger("Source", DataTools.GetEnumRange(typeof(AttrValueSourceType)), true);
       dt.Struct.Columns.AddMemo("ValueList");
       dt.Struct.Columns.AddMemo("Comment");
       dt.DefaultOrder = new DBxOrder("Name");
@@ -551,11 +551,11 @@ namespace Plants
       dt.SingularTitle = "Грунт";
       dt.Struct.Columns.AddString("Name", 250, true);
       dt.Struct.Columns.AddReference("Manufacturer", "Companies", true);
-      dt.Struct.Columns.AddSingle("pHmin");
-      dt.Struct.Columns.AddSingle("pHmax");
+      dt.Struct.Columns.AddSingle("pHmin", true);
+      dt.Struct.Columns.AddSingle("pHmax", true);
       dt.Struct.Columns.AddMemo("Comment");
       dt.Struct.Columns.AddMemo("Contents");
-      dt.Struct.Columns.AddInt("PartCount");
+      dt.Struct.Columns.AddInt16("PartCount", true);
       dt.CalculatedColumns.Add("Contents");
       dt.CalculatedColumns.Add("PartCount");
       dt.BeforeWrite += new ServerDocTypeBeforeWriteEventHandler(Soil_BeforeWrite);
@@ -575,8 +575,8 @@ namespace Plants
       sdt.PluralTitle = "Компоненты грунта";
       sdt.SingularTitle = "Компонент грунта";
       sdt.Struct.Columns.AddReference("Soil", "Soils", false);
-      sdt.Struct.Columns.AddInt("Percent", 0, 100);
-      sdt.Struct.Columns.AddInt16("Order"); // для сортировки
+      sdt.Struct.Columns.AddInteger("Percent", 0, 100, true);
+      sdt.Struct.Columns.AddInt16("Order", true); // для сортировки
       dt.SubDocs.Add(sdt);
 
       #endregion
@@ -605,9 +605,9 @@ namespace Plants
       dt.SingularTitle = "Вид горшков";
       dt.Struct.Columns.AddString("Text", 50, true);
       dt.Struct.Columns.AddReference("Manufacturer", "Companies", true);
-      dt.Struct.Columns.AddInt16("Height"); // в миллиметрах
-      dt.Struct.Columns.AddInt16("Diameter"); // в миллиметрах
-      dt.Struct.Columns.AddSingle("Volume"); // в литрах
+      dt.Struct.Columns.AddInt16("Height", true); // в миллиметрах
+      dt.Struct.Columns.AddInt16("Diameter", true); // в миллиметрах
+      dt.Struct.Columns.AddSingle("Volume", true); // в литрах
       dt.Struct.Columns.AddString("Color", 20, true);
 
       dt.Struct.Columns.AddString("Name", 150, true);
@@ -688,8 +688,8 @@ namespace Plants
       sdt.SingularTitle = "Запись об уходе за растениями";
       sdt.PluralTitle = "Записи об уходе за растениями";
 
-      sdt.Struct.Columns.AddInt("Day1", 0, 365);
-      sdt.Struct.Columns.AddInt("Day2", 0, 365);
+      sdt.Struct.Columns.AddInteger("Day1", 0, 365, true);
+      sdt.Struct.Columns.AddInteger("Day2", 0, 365, true);
       sdt.Struct.Columns.AddString("Name", 50, true);
 
       foreach (CareItem Item in CareItem.TheList)
@@ -724,7 +724,7 @@ namespace Plants
 
     void AttrType_BeforeWrite(object sender, ServerDocTypeBeforeWriteEventArgs args)
     {
-      AttrValueSourceType sourceType = (AttrValueSourceType)(args.Doc.Values["Source"].AsInteger);
+      AttrValueSourceType sourceType = (AttrValueSourceType)(args.Doc.Values["Source"].AsInt32);
       switch (sourceType)
       {
         case AttrValueSourceType.List:
@@ -773,6 +773,11 @@ namespace Plants
       args.Doc.Values["ToPlant"].SetNull();
       args.Doc.Values["FromPlant"].SetNull();
       args.Doc.Values["MovementState"].SetNull();
+      args.Doc.Values["AddDate1"].SetNull(); // 04.10.2025
+      args.Doc.Values["AddDate2"].SetNull();
+      args.Doc.Values["RemoveDate1"].SetNull();
+      args.Doc.Values["RemoveDate2"].SetNull();
+
       table = args.Doc.SubDocs["PlantMovement"].CreateSubDocsData();
       table.DefaultView.Sort = "Date1";
       bool placeFound = false;
@@ -785,7 +790,7 @@ namespace Plants
       for (int i = table.DefaultView.Count - 1; i >= 0; i--)
       {
         DataRow row = table.DefaultView[i].Row;
-        MovementKind kind = (MovementKind)(DataTools.GetInt(row, "Kind"));
+        MovementKind kind = (MovementKind)(DataTools.GetInt32(row, "Kind"));
 
         #region Место
 
@@ -795,8 +800,8 @@ namespace Plants
           {
             case MovementKind.Add:
             case MovementKind.Move:
-              Int32 placeId = DataTools.GetInt(row, "Place");
-              args.Doc.Values["Place"].SetInteger(placeId);
+              Int32 placeId = DataTools.GetInt32(row, "Place");
+              args.Doc.Values["Place"].SetInt32(placeId);
               placeFound = true;
               break;
           }
@@ -806,21 +811,21 @@ namespace Plants
 
         #region Контрагент
 
-        Int32 contraId = DataTools.GetInt(row, "Contra");
-        Int32 forkPlantId = DataTools.GetInt(row, "ForkPlant");
+        Int32 contraId = DataTools.GetInt32(row, "Contra");
+        Int32 forkPlantId = DataTools.GetInt32(row, "ForkPlant");
         switch (kind)
         {
           case MovementKind.Add:
             if (args.Doc.Values["FromContra"].IsNull && args.Doc.Values["FromPlant"].IsNull)
             {
-              args.Doc.Values["FromContra"].SetInteger(contraId);
-              args.Doc.Values["FromPlant"].SetInteger(forkPlantId);
+              args.Doc.Values["FromContra"].SetInt32(contraId);
+              args.Doc.Values["FromPlant"].SetInt32(forkPlantId);
             }
             break;
 
           case MovementKind.Remove:
-            args.Doc.Values["ToContra"].SetInteger(contraId);
-            args.Doc.Values["ToPlant"].SetInteger(forkPlantId);
+            args.Doc.Values["ToContra"].SetInt32(contraId);
+            args.Doc.Values["ToPlant"].SetInt32(forkPlantId);
             break;
         }
 
@@ -836,8 +841,8 @@ namespace Plants
           if (lastAddDate == DateTime.MinValue)
           {
             lastAddDate = DataTools.GetNullableDateTime(row, "Date1").Value;
-            soilId = DataTools.GetInt(row, "Soil");
-            potKindId = DataTools.GetInt(row, "PotKind");
+            soilId = DataTools.GetInt32(row, "Soil");
+            potKindId = DataTools.GetInt32(row, "PotKind");
           }
         }
         if (kind == MovementKind.Remove && (!removeDateFound))
@@ -857,18 +862,18 @@ namespace Plants
           {
             case MovementKind.Add:
             case MovementKind.Move:
-              args.Doc.Values["MovementState"].SetInteger((int)PlantMovementState.Placed);
+              args.Doc.Values["MovementState"].SetInt32((int)PlantMovementState.Placed);
               break;
             case MovementKind.Remove:
               if (contraId == 0)
               {
                 if (forkPlantId == 0)
-                  args.Doc.Values["MovementState"].SetInteger((int)PlantMovementState.Dead);
+                  args.Doc.Values["MovementState"].SetInt32((int)PlantMovementState.Dead);
                 else
-                  args.Doc.Values["MovementState"].SetInteger((int)PlantMovementState.Merged);
+                  args.Doc.Values["MovementState"].SetInt32((int)PlantMovementState.Merged);
               }
               else
-                args.Doc.Values["MovementState"].SetInteger((int)PlantMovementState.Given);
+                args.Doc.Values["MovementState"].SetInt32((int)PlantMovementState.Given);
               break;
           }
         }
@@ -890,7 +895,7 @@ namespace Plants
       for (int i = table.DefaultView.Count - 1; i >= 0; i--)
       {
         DataRow row = table.DefaultView[i].Row;
-        ActionKind kind = (ActionKind)(DataTools.GetInt(row, "Kind"));
+        ActionKind kind = DataTools.GetEnum<ActionKind>(row, "Kind");
         switch (kind)
         {
           case ActionKind.Planting:
@@ -899,7 +904,7 @@ namespace Plants
           case ActionKind.SoilReplace:
             if (!transshipmentFound)
             {
-              args.Doc.Values["LastPlantReplanting"].SetInteger(DataTools.GetInt(row, "Id"));
+              args.Doc.Values["LastPlantReplanting"].SetInt32(DataTools.GetInt32(row, "Id"));
               transshipmentFound = true;
             }
             break;
@@ -907,7 +912,7 @@ namespace Plants
 
         if (i == table.DefaultView.Count - 1)
         {
-          args.Doc.Values["LastPlantAction"].SetInteger(DataTools.GetInt(row, "Id"));
+          args.Doc.Values["LastPlantAction"].SetInt32(DataTools.GetInt32(row, "Id"));
         }
       }
 
@@ -917,16 +922,16 @@ namespace Plants
         DateTime date = DataTools.GetNullableDateTime(row, "Date1").Value;
         if (date < lastAddDate)
           continue; // перекрыто следующим приходом
-        ActionKind kind = (ActionKind)(DataTools.GetInt(row, "Kind"));
+        ActionKind kind = DataTools.GetEnum<ActionKind>(row, "Kind");
         if (PlantTools.IsSoilAppliable(kind, true))
         {
-          Int32 thisSoilId = DataTools.GetInt(row, "Soil");
+          Int32 thisSoilId = DataTools.GetInt32(row, "Soil");
           if (thisSoilId != 0)
             soilId = thisSoilId;
         }
         if (PlantTools.IsPotKindAppliable(kind, true))
         {
-          Int32 thisPotKindId = DataTools.GetInt(row, "PotKind");
+          Int32 thisPotKindId = DataTools.GetInt32(row, "PotKind");
           if (thisPotKindId != 0)
             potKindId = thisPotKindId;
         }
@@ -942,7 +947,7 @@ namespace Plants
       if (table.DefaultView.Count > 0)
       {
         DataRow row = table.DefaultView[table.DefaultView.Count - 1].Row;
-        args.Doc.Values["LastPlantDisease"].SetInteger(DataTools.GetInt(row, "Id"));
+        args.Doc.Values["LastPlantDisease"].SetInt32(DataTools.GetInt32(row, "Id"));
       }
       else
       {
@@ -951,8 +956,8 @@ namespace Plants
 
       #endregion
 
-      args.Doc.Values["Soil"].SetInteger(soilId);
-      args.Doc.Values["PotKind"].SetInteger(potKindId);
+      args.Doc.Values["Soil"].SetInt32(soilId);
+      args.Doc.Values["PotKind"].SetInt32(potKindId);
 
       #region Запланированные действия
 
@@ -961,7 +966,7 @@ namespace Plants
       if (table.DefaultView.Count == 0)
         args.Doc.Values["FirstPlannedAction"].SetNull();
       else
-        args.Doc.Values["FirstPlannedAction"].SetInteger((Int32)(table.DefaultView[0]["Id"]));
+        args.Doc.Values["FirstPlannedAction"].SetInt32((Int32)(table.DefaultView[0]["Id"]));
 
       #endregion
     }
@@ -985,14 +990,14 @@ namespace Plants
         for (int i = 0; i < a.Length; i++)
         {
           DataRow row = table.DefaultView[i].Row;
-          Int32 soilId = DataTools.GetInt(row, "Soil");
+          Int32 soilId = DataTools.GetInt32(row, "Soil");
           a[i] = args.DBCache["Soils"].GetString(soilId, "Name");
-          int prc = DataTools.GetInt(row, "Percent");
+          int prc = DataTools.GetInt32(row, "Percent");
           if (prc > 0)
             a[i] += " " + prc.ToString() + "%";
         }
         args.Doc.Values["Contents"].SetString(String.Join(", ", a));
-        args.Doc.Values["PartCount"].SetInteger(a.Length);
+        args.Doc.Values["PartCount"].SetInt32(a.Length);
       }
     }
 
@@ -1014,7 +1019,7 @@ namespace Plants
       }
       else
       {
-        int d = args.Doc.Values["Diameter"].AsInteger;
+        int d = args.Doc.Values["Diameter"].AsInt32;
         if (d > 0)
         {
           if (sb.Length > 0)
@@ -1024,7 +1029,7 @@ namespace Plants
           sb.Append("мм");
         }
 
-        int h = args.Doc.Values["Height"].AsInteger;
+        int h = args.Doc.Values["Height"].AsInt32;
         if (h > 0)
         {
           if (sb.Length > 0)
@@ -1077,7 +1082,7 @@ namespace Plants
       #region Настройки пользователей (секции конфигурации)
 
       DBxTableStruct ts = new DBxTableStruct("UserSettings");
-      ts.Columns.AddId();
+      ts.Columns.AddInt32("Id", false);
       ts.Columns.AddString("Name", ConfigSection.MaxSectionNameLength, false);
       ts.Columns.AddString("Category", ConfigSection.MaxCategoryLength, false);
       ts.Columns.AddString("ConfigName", ConfigSection.MaxConfigNameLength, true);

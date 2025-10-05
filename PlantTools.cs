@@ -453,13 +453,13 @@ namespace Plants
       switch (valueType)
       {
         case ValueType.Integer:
-          return DataTools.GetInt(value1).CompareTo(DataTools.GetInt(value2));
+          return DataTools.GetInt32(value1).CompareTo(DataTools.GetInt32(value2));
         case ValueType.Double:
           return DataTools.GetDouble(value1).CompareTo(DataTools.GetDouble(value2));
         case ValueType.Decimal:
           return DataTools.GetDecimal(value1).CompareTo(DataTools.GetDecimal(value2));
         case ValueType.Boolean:
-          return DataTools.GetBool(value1).CompareTo(DataTools.GetBool(value2));
+          return DataTools.GetBoolean(value1).CompareTo(DataTools.GetBoolean(value2));
         case ValueType.String:
           return DataTools.GetString(value1).CompareTo(DataTools.GetString(value2));
         case ValueType.Date:
@@ -858,13 +858,13 @@ namespace Plants
         case ValueType.String:
           return DataTools.GetString(value);
         case ValueType.Integer:
-          return StdConvert.ToString(DataTools.GetInt(value));
+          return StdConvert.ToString(DataTools.GetInt32(value));
         case ValueType.Double:
           return StdConvert.ToString(DataTools.GetDouble(value));
         case ValueType.Decimal:
           return StdConvert.ToString(DataTools.GetDecimal(value));
         case ValueType.Boolean:
-          return DataTools.GetBool(value) ? "1" : "0";
+          return DataTools.GetBoolean(value) ? "1" : "0";
 
         case ValueType.Date:
           DateTime? dt1 = DataTools.GetNullableDateTime(value);
@@ -908,7 +908,7 @@ namespace Plants
         case ValueType.Decimal:
           return StdConvert.ToDecimal(s);
         case ValueType.Boolean:
-          return DataTools.GetBool(s);
+          return DataTools.GetBoolean(s);
 
         case ValueType.Date:
           return StdConvert.ToDateTime(s, false);
@@ -1051,13 +1051,13 @@ namespace Plants
       switch (valueType)
       {
         case ValueType.Integer:
-          return StdConvert.ToString(DataTools.GetInt(value));
+          return StdConvert.ToString(DataTools.GetInt32(value));
         case ValueType.Double:
           return StdConvert.ToString(DataTools.GetDouble(value));
         case ValueType.Decimal:
           return StdConvert.ToString(DataTools.GetDecimal(value));
         case ValueType.Boolean:
-          return DataTools.GetBool(value) ? "1" : "0";
+          return DataTools.GetBoolean(value) ? "1" : "0";
         case ValueType.String:
           return DataTools.GetString(value);
         case ValueType.Date:
@@ -1084,7 +1084,7 @@ namespace Plants
       {
         case ValueType.Integer:
           int vi;
-          if (StdConvert.TryParse(text, out vi))
+          if (StdConvert.TryParseInt32(text, out vi))
           {
             value = vi;
             return true;
@@ -1092,7 +1092,7 @@ namespace Plants
           else
           {
             decimal vdc2;
-            if (StdConvert.TryParse(text, out vdc2))
+            if (StdConvert.TryParseDecimal(text, out vdc2))
             {
               vi = (int)Math.Round(vdc2, 0, MidpointRounding.AwayFromZero);
               value = vi;
@@ -1105,7 +1105,7 @@ namespace Plants
 
         case ValueType.Double:
           double vd;
-          if (StdConvert.TryParse(text, out vd))
+          if (StdConvert.TryParseDouble(text, out vd))
           {
             value = vd;
             return true;
@@ -1118,7 +1118,7 @@ namespace Plants
 
         case ValueType.Decimal:
           decimal vdс;
-          if (StdConvert.TryParse(text, out vdс))
+          if (StdConvert.TryParseDecimal(text, out vdс))
           {
             value = vdс;
             return true;
@@ -1131,7 +1131,7 @@ namespace Plants
 
         case ValueType.Boolean:
           int vb;
-          if (StdConvert.TryParse(text, out vb))
+          if (StdConvert.TryParseInt32(text, out vb))
           {
             value = vb != 0;
             return true;
@@ -1149,7 +1149,7 @@ namespace Plants
         case ValueType.Date:
         case ValueType.DateTime:
           DateTime dt;
-          if (StdConvert.TryParse(text, out dt, valueType == ValueType.DateTime))
+          if (StdConvert.TryParseDateTime(text, out dt, valueType == ValueType.DateTime))
           {
             value = dt;
             return true;

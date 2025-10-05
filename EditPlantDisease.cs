@@ -35,7 +35,7 @@ namespace Plants
 
     private void AddPage1(InitSubDocEditFormEventArgs args)
     {
-      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      ExtEditPage page = args.AddPage("Общие", MainPanel1);
       page.ImageKey = args.Editor.SubDocTypeUI.ImageKey;
 
       EFPDocComboBox efpDisease = new EFPDocComboBox(page.BaseProvider, cbDisease, ProgramDBUI.TheUI.DocTypes["Diseases"]);
@@ -51,7 +51,7 @@ namespace Plants
       efpDate99991231.DisplayName = "Бесконечное время";
       efpDate99991231.ToolTipText = "Устанавливает конечную дату диапазона " + DateRangeFormatter.Default.ToString(DateRange.Whole.LastDate, false);
       //efpDate99991231.EnabledEx = new DepAnd(efpDate.EditableEx, new DepNot(new DepEqual<DateTime>(efpDate.LastDateEx, DateRange.Whole.LastDate)));
-      efpDate99991231.EnabledEx = new DepExpr3<bool, bool, bool, DateTime>(efpDate.EditableEx, efpDate.IsNotEmptyEx, efpDate.LastDateEx, CalcDate99991231Enabled);
+      efpDate99991231.EnabledEx = new DepExpr3<bool, bool, bool, DateTime>(efpDate.EditableEx, efpDate.IsNotEmptyEx, efpDate.LastValueEx, CalcDate99991231Enabled);
       efpDate99991231.Click += new EventHandler(efpDate99991231_Click);
 
       EFPTextBox efpComment = new EFPTextBox(page.BaseProvider, edComment);

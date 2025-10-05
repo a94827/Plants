@@ -56,11 +56,11 @@ namespace Plants
     public DBxTableStruct AddTableStruct(DBxStruct dbStruct)
     {
       DBxTableStruct ts = new DBxTableStruct("DataVersion");
-      ts.Columns.AddId(); // не используется
+      ts.Columns.AddInt32("Id", false); // не используется
       ts.Columns.AddString("AppGUID", 36, false);
       ts.Columns.AddString("DataGUID", 36, false);
-      ts.Columns.AddInt("CurrentVersion", 1, Int32.MaxValue);
-      ts.Columns.AddInt("MinVersion", 1, Int32.MaxValue);
+      ts.Columns.AddInteger("CurrentVersion", 1, Int32.MaxValue, true);
+      ts.Columns.AddInteger("MinVersion", 1, Int32.MaxValue, true);
       dbStruct.Tables.Add(ts);
       return ts;
     }
@@ -98,16 +98,16 @@ namespace Plants
           throw new DBxDataVersionHandlerException("База данных предназначена для работы с другой программой");
 
         _DataGuid = new Guid(DataTools.GetString(row, "DataGUID"));
-        _PrevVersion = DataTools.GetInt(row, "CurrentVersion");
+        _PrevVersion = DataTools.GetInt32(row, "CurrentVersion");
 
-        int oldMinVersion = DataTools.GetInt(row, "MinVersion");
+        int oldMinVersion = DataTools.GetInt32(row, "MinVersion");
         if (CurrentVersion < oldMinVersion)
           throw new DBxDataVersionHandlerException("База данных была обновлена в более новой версии программы. Откат до текущей версии невозможен");
 
         if (CurrentVersion != _PrevVersion)
         {
-          Int32 dummyId = DataTools.GetInt(row, "Id");
-          con.SetValues("DataVersion", dummyId, new DBxColumns("CurrentVesrion,MinVersion"),
+          Int32 dummyId = DataTools.GetInt32(row, "Id");
+          con.SetValuesById("DataVersion", dummyId, new DBxColumns("CurrentVesrion,MinVersion"),
             new object[] { CurrentVersion, MinVersion });
         }
       }

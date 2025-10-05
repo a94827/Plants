@@ -33,7 +33,7 @@
       this.cbSoil = new FreeLibSet.Controls.UserSelComboBox();
       this.label2 = new System.Windows.Forms.Label();
       this.label1 = new System.Windows.Forms.Label();
-      this.edPercent = new FreeLibSet.Controls.IntEditBox();
+      this.edPercent = new FreeLibSet.Controls.Int32EditBox();
       this.MainPanel1.SuspendLayout();
       this.groupBox1.SuspendLayout();
       this.SuspendLayout();
@@ -115,7 +115,7 @@
     private System.Windows.Forms.GroupBox groupBox1;
     private FreeLibSet.Controls.UserSelComboBox cbSoil;
     private System.Windows.Forms.Label label2;
-    private FreeLibSet.Controls.IntEditBox edPercent;
+    private FreeLibSet.Controls.Int32EditBox edPercent;
     private System.Windows.Forms.Label label1;
   }
 }

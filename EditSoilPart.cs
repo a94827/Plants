@@ -32,7 +32,7 @@ namespace Plants
 
     private void AddPage1(InitSubDocEditFormEventArgs args)
     {
-      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      ExtEditPage page = args.AddPage("Общие", MainPanel1);
       page.ImageKey = args.Editor.SubDocTypeUI.ImageKey;
 
       EFPDocComboBox efpSoil = new EFPDocComboBox(page.BaseProvider, cbSoil, ProgramDBUI.TheUI.DocTypes["Soils"]);
@@ -42,7 +42,7 @@ namespace Plants
       EFPIntEditBox efpPercent = new EFPIntEditBox(page.BaseProvider, edPercent);
       efpPercent.Minimum = 0;
       efpPercent.Maximum = 100;
-      args.AddInt(efpPercent, "Percent", false);
+      args.AddInt32(efpPercent, "Percent", false);
     }
 
     #endregion

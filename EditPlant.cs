@@ -17,6 +17,8 @@ using FreeLibSet.Logging;
 using FreeLibSet.UICore;
 using FreeLibSet.Core;
 using FreeLibSet.Drawing;
+using FreeLibSet.Forms.Data;
+using FreeLibSet.Data;
 
 namespace Plants
 {
@@ -37,14 +39,14 @@ namespace Plants
 
     public static void ImageValueNeeded(object sender, DBxImageValueNeededEventArgs args)
     {
-      PlantMovementState movementState = (PlantMovementState)(args.GetInt("MovementState"));
+      PlantMovementState movementState = args.GetEnum<PlantMovementState>("MovementState");
       args.ImageKey = PlantTools.GetPlantMovementStateImageKey(movementState);
       if (movementState != PlantMovementState.Placed)
         args.Grayed = true;
       switch (movementState)
       {
         case PlantMovementState.Draft:
-          args.ColorType = EFPDataGridViewColorType.Special;
+          args.ColorType = UIDataViewColorType.Special;
           break;
       }
     }
@@ -57,28 +59,28 @@ namespace Plants
     {
       Int32 id;
 
-      id = args.GetInt("ToContra");
+      id = args.GetInt32("ToContra");
       if (id != 0)
       {
         args.Value = ProgramDBUI.TheUI.DocTypes["Contras"].GetTextValue(id);
         return;
       }
 
-      id = args.GetInt("ToPlant");
+      id = args.GetInt32("ToPlant");
       if (id != 0)
       {
         args.Value = ProgramDBUI.TheUI.DocTypes["Plants"].GetTextValue(id);
         return;
       }
 
-      id = args.GetInt("FromContra");
+      id = args.GetInt32("FromContra");
       if (id != 0)
       {
         args.Value = ProgramDBUI.TheUI.DocTypes["Contras"].GetTextValue(id);
         return;
       }
 
-      id = args.GetInt("FromPlant");
+      id = args.GetInt32("FromPlant");
       if (id != 0)
       {
         args.Value = ProgramDBUI.TheUI.DocTypes["Plants"].GetTextValue(id);
@@ -88,7 +90,7 @@ namespace Plants
 
     public static void FirstPlannedActionTextColumnValueNeeded(object sender, EFPGridProducerValueNeededEventArgs args)
     {
-      ActionKind kind = (ActionKind)(args.GetInt("FirstPlannedAction.Kind"));
+      ActionKind kind = args.GetEnum<ActionKind>("FirstPlannedAction.Kind");
       if (kind == ActionKind.Other)
         args.Value = args.GetString("FirstPlannedAction.ActionName");
       else
@@ -101,7 +103,7 @@ namespace Plants
 
       DateTime? date1 = args.GetNullableDateTime("FirstPlannedAction.Date1");
       DateTime? date2 = args.GetNullableDateTime("FirstPlannedAction.Date2");
-      ActionKind kind = (ActionKind)(args.GetInt("FirstPlannedAction.Kind"));
+      ActionKind kind = (ActionKind)(args.GetInt32("FirstPlannedAction.Kind"));
 
       if (date1.HasValue && date2.HasValue)
       {
@@ -123,11 +125,11 @@ namespace Plants
       switch (state)
       {
         case PlantMovementState.Placed:
-          Int32 placeId = args.GetInt("Place");
+          Int32 placeId = args.GetInt32("Place");
           s += " - " + ProgramDBUI.TheUI.DocTypes["Places"].GetTextValue(placeId);
           break;
         case PlantMovementState.Given:
-          Int32 contraId = args.GetInt("ToContra");
+          Int32 contraId = args.GetInt32("ToContra");
           s += " - " + ProgramDBUI.TheUI.DocTypes["Contras"].GetTextValue(contraId);
           break;
       }
@@ -175,10 +177,46 @@ namespace Plants
       filtPlace.Nullable = true;
       args.ControlProvider.Filters.Add(filtPlace);
 
+      DateRangeCrossGridFilter filtAddDate = new DateRangeCrossGridFilter("AddDate1", "AddDate2");
+      filtAddDate.Code="AddDate";
+      filtAddDate.DisplayName="Дата поступления";
+      filtAddDate.Nullable = true;
+      filtAddDate.NullRangeIsNothing = true;
+      filtAddDate.FilterTextNotNull = "Дата задана";
+      filtAddDate.FilterTextNull = "Поступление не задано";
+      args.ControlProvider.Filters.Add(filtAddDate);
+
       EnumGridFilter filtLastAction = new EnumGridFilter("LastActionKind", PlantTools.ActionNames);
       filtLastAction.DisplayName = "Последнее действие";
       filtLastAction.ImageKeys = PlantTools.ActionImageKeys;
       args.ControlProvider.Filters.Add(filtLastAction);
+
+      DateRangeCrossGridFilter filtLastPlantingActionDate = new DateRangeCrossGridFilter("LastPlantAction.Date1", "LastPlantAction.Date2");
+      filtLastPlantingActionDate.Code = "LastPlantActionDate";
+      filtLastPlantingActionDate.DisplayName = "Дата последнего действия";
+      filtLastPlantingActionDate.Nullable = true;
+      filtLastPlantingActionDate.NullRangeIsNothing = true;
+      filtLastPlantingActionDate.FilterTextNotNull = "Дата задана";
+      filtLastPlantingActionDate.FilterTextNull = "Нет действий";
+      args.ControlProvider.Filters.Add(filtLastPlantingActionDate);
+
+      DateRangeCrossGridFilter filtReplantingDate = new DateRangeCrossGridFilter("LastPlantReplanting.Date1", "LastPlantReplanting.Date2");
+      filtReplantingDate.Code = "LastPlantReplantingDate";
+      filtReplantingDate.DisplayName = "Дата пересадки";
+      filtReplantingDate.Nullable = true;
+      filtReplantingDate.NullRangeIsNothing = true;
+      filtReplantingDate.FilterTextNotNull = "Дата задана";
+      filtReplantingDate.FilterTextNull = "Не было пересадки";
+      args.ControlProvider.Filters.Add(filtReplantingDate);
+
+      DateRangeCrossGridFilter filtRemoveDate = new DateRangeCrossGridFilter("RemoveDate1", "RemoveDate2");
+      filtRemoveDate.Code = "RemoveDate";
+      filtRemoveDate.DisplayName = "Дата выбытия";
+      filtRemoveDate.Nullable = true;
+      filtRemoveDate.NullRangeIsNothing = true;
+      filtRemoveDate.FilterTextNotNull = "Дата задана";
+      filtRemoveDate.FilterTextNull = "Не было выбытия";
+      args.ControlProvider.Filters.Add(filtRemoveDate);
 
       RefDocGridFilterSet filtFromContra = new RefDocGridFilterSet(ProgramDBUI.TheUI.DocTypes["Contras"], "FromContra");
       filtFromContra.DisplayName = "От кого получено";
@@ -258,7 +296,7 @@ namespace Plants
     {
       EFPCommandItem ci = (EFPCommandItem)sender;
       IEFPDocView controlProvider = (IEFPDocView)(ci.Tag);
-      Int32[] docIds = controlProvider.SelectedIds;
+      IIdSet<Int32> docIds = controlProvider.SelectedIds;
 
       AttrTableViewForm form = new AttrTableViewForm(docIds);
       EFPApp.ShowFormOrDialog(form);
@@ -314,12 +352,12 @@ namespace Plants
     {
       switch (args.Editor.State)
       {
-        case EFPDataGridViewState.Edit:
-        case EFPDataGridViewState.View:
+        case UIDataState.Edit:
+        case UIDataState.View:
           if (args.CurrentColumnName == "Thumbnail" && (!args.Editor.MultiDocMode))
           {
             args.Cancel = true;
-            Int32 subDocId = args.Editor.MainValues["Photo"].AsInteger;
+            Int32 subDocId = args.Editor.MainValues["Photo"].AsInt32;
             if (subDocId == 0)
             {
               EFPApp.ShowTempMessage("Нет фото растения");
@@ -342,8 +380,11 @@ namespace Plants
       {
         form.AddPage2(args);
         args.AddSubDocsPage("PlantAttributes");
-        args.AddSubDocsPage("PlantMovement").Title = "Движение";
-        args.AddSubDocsPage("PlantActions").Title = "Действия";
+      }
+      args.AddSubDocsPage("PlantMovement").Title = "Движение";
+      args.AddSubDocsPage("PlantActions").Title = "Действия";
+      if (!args.Editor.MultiDocMode)
+      {
         args.AddSubDocsPage("PlantFlowering").Title = "Цветение";
         args.AddSubDocsPage("PlantDiseases").Title = "Заболевания";
         args.AddSubDocsPage("PlantPlans").Title = "План";
@@ -358,7 +399,7 @@ namespace Plants
 
     private void AddPage1(InitDocEditFormEventArgs args)
     {
-      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      ExtEditPage page = args.AddPage("Общие", MainPanel1);
       page.ImageKey = "Properties";
 
       efpLocalName = new EFPTextBox(page.BaseProvider, edLocalName);
@@ -395,7 +436,7 @@ namespace Plants
       efpNumber.Validating += new UIValidatingEventHandler(efpNumber_Validating);
       efpNumber.Minimum = 0;
       efpNumber.Maximum = Int16.MaxValue;
-      args.AddInt(efpNumber, "Number", false);
+      args.AddInt32(efpNumber, "Number", false);
 
       EFPDocComboBox efpGroup = new EFPDocComboBox(page.BaseProvider, cbGroup, ProgramDBUI.TheUI.DocTypes["PlantGroups"]);
       efpGroup.CanBeEmpty = true;
@@ -444,7 +485,7 @@ namespace Plants
       args.Editor.BeforeWrite += new DocEditCancelEventHandler(Editor_BeforeWrite);
       args.Editor.AfterWrite += new DocEditEventHandler(Editor_AfterWrite);
 
-      DocEditPage page = args.AddPage("Фото", MainPanel2);
+      ExtEditPage page = args.AddPage("Фото", MainPanel2);
       page.ImageKey = "Picture";
 
       EFPControlWithToolBar<DataGridView> cwt = new EFPControlWithToolBar<DataGridView>(page.BaseProvider, MainPanel2);
@@ -471,13 +512,13 @@ namespace Plants
     {
       EFPSubDocGridView sdgPhotos = (EFPSubDocGridView)sender;
       //sdgPhotos.GetRowAttributes += new EFPDataGridViewRowAttributesEventHandler(sdgPhotos_GetRowAttributes);
-      sdgPhotos.GetCellAttributes += new EFPDataGridViewCellAttributesEventHandler(sdgPhotos_GetCellAttributes);
+      sdgPhotos.CellInfoNeeded += sdgPhotos_CellInfoNeeded;
 
     }
 
     void Editor_AfterReadValues(object sender, DocEditEventArgs args)
     {
-      _MainPhotoSubDocId = args.Editor.Documents[0].Values["Photo"].AsInteger;
+      _MainPhotoSubDocId = args.Editor.Documents[0].Values["Photo"].AsInt32;
     }
 
     void Editor_BeforeWrite(object sender, DocEditCancelEventArgs args)
@@ -490,22 +531,22 @@ namespace Plants
         table.DefaultView.Sort = "ShootingTime";
         foreach (DataRowView drv in table.DefaultView)
         {
-          if (DataTools.GetInt(drv.Row, "Id") == _MainPhotoSubDocId)
+          if (DataTools.GetInt32(drv.Row, "Id") == _MainPhotoSubDocId)
           {
-            args.Editor.Documents[0].Values["Photo"].SetInteger(_MainPhotoSubDocId);
+            args.Editor.Documents[0].Values["Photo"].SetInt32(_MainPhotoSubDocId);
             return;
           }
         }
         // Берем первое изображение
-        _MainPhotoSubDocId = DataTools.GetInt(table.DefaultView[0].Row, "Id");
-        args.Editor.Documents[0].Values["Photo"].SetInteger(_MainPhotoSubDocId);
+        _MainPhotoSubDocId = DataTools.GetInt32(table.DefaultView[0].Row, "Id");
+        args.Editor.Documents[0].Values["Photo"].SetInt32(_MainPhotoSubDocId);
       }
     }
 
     void Editor_AfterWrite(object sender, DocEditEventArgs args)
     {
       // Нужно после нажатия кнопки "Запись", если основным было сделано новое фото
-      _MainPhotoSubDocId = args.Editor.Documents[0].Values["Photo"].AsInteger;
+      _MainPhotoSubDocId = args.Editor.Documents[0].Values["Photo"].AsInt32;
     }
 
     void ciSelectDefault_Click(object sender, EventArgs args)
@@ -530,13 +571,13 @@ namespace Plants
     //}
 
     // Не работает, т.к. после этого вызывается обработчик SubDocTypeUI.ControlProvider_GetCellAttributes
-    void sdgPhotos_GetCellAttributes(object sender, EFPDataGridViewCellAttributesEventArgs args)
+    void sdgPhotos_CellInfoNeeded(object sender, EFPDataGridViewCellInfoEventArgs args)
     {
       if (args.DataRow == null)
         return;
       if (args.ColumnIndex == 0) // значок
       {
-        Int32 id = DataTools.GetInt(args.DataRow, "Id");
+        Int32 id = DataTools.GetInt32(args.DataRow, "Id");
         if (id == _MainPhotoSubDocId)
           args.Value = EFPApp.MainImages.Images["Ok"];
       }
@@ -574,7 +615,7 @@ namespace Plants
       args.ShowEditor = false;
       switch (args.Editor.State)
       {
-        case EFPDataGridViewState.Insert:
+        case UIDataState.Insert:
           try
           {
             args.Cancel = true;
@@ -587,12 +628,12 @@ namespace Plants
             args.Cancel = true;
           }
           break;
-        case EFPDataGridViewState.Edit:
+        case UIDataState.Edit:
           // TODO: Определять, что текущий столбец - "Comment", иначе показывать изображение
           SubDocPhoto_EditComment(args);
           break;
 
-        case EFPDataGridViewState.View:
+        case UIDataState.View:
           DBxSubDoc subDoc = args.Editor.SubDocs[0];
           ViewFile(subDoc.Values["FileName"].AsString);
           args.Cancel = true;
@@ -639,7 +680,7 @@ namespace Plants
         subDoc.Values["FileName"].SetString(path.FileName);
         using (FileStream fs = new FileStream(path.Path, FileMode.Open, FileAccess.Read, FileShare.Read))
         {
-          string md5 = FileTools.MD5Sum(fs);
+          string md5 = MD5Tools.MD5Sum(fs);
           subDoc.Values["FileMD5"].SetString(md5);
           fs.Position = 0;
           using (Image img = Image.FromStream(fs))
@@ -828,7 +869,7 @@ namespace Plants
 
     #region Переопределенные методы
 
-    public override void ApplyConfig(DataGridViewColumn gridColumn, EFPDataGridViewConfigColumn config, EFPDataGridView controlProvider)
+    public override void ApplyConfig(DataGridViewColumn gridColumn, EFPDataViewConfigColumn config, EFPDataGridView controlProvider)
     {
       base.ApplyConfig(gridColumn, config, controlProvider);
       if (_IsSubDoc)
@@ -855,7 +896,7 @@ namespace Plants
 
     protected override void OnValueNeeded(EFPGridProducerValueNeededEventArgs args)
     {
-      Int32 id = args.GetInt(0);
+      Int32 id = args.GetInt32(0);
       if (id == 0)
       {
         args.Value = EFPApp.MainImages.Images["EmptyImage"];

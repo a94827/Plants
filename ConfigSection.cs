@@ -397,7 +397,7 @@ namespace Plants
       {
         using (DBxCon con = new DBxCon(_DB.MainEntry))
         {
-          return DataTools.GetString(con.GetValue("UserSettings", cfgSectId, "Data"));
+          return DataTools.GetString(con.GetValueById("UserSettings", cfgSectId, "Data"));
         }
       }
 
@@ -448,7 +448,7 @@ namespace Plants
       }
       else
       {
-        con.SetValues("UserSettings", cfgSectId, new DBxColumns("Data,WriteTime"), new object[] { value, DateTime.Now });
+        con.SetValuesById("UserSettings", cfgSectId, new DBxColumns("Data,WriteTime"), new object[] { value, DateTime.Now });
         return false;
       }
     }
@@ -543,7 +543,7 @@ namespace Plants
 
       int p = userTable.DefaultView.Find(searchKeys);
       if (p >= 0)
-        return DataTools.GetInt(userTable.DefaultView[p].Row, "Id");
+        return DataTools.GetInt32(userTable.DefaultView[p].Row, "Id");
       else
         return 0;
     }

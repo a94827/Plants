@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using FreeLibSet.Forms.Docs;
 using FreeLibSet.Forms;
 using FreeLibSet.DependedValues;
+using FreeLibSet.Forms.Data;
 
 namespace Plants
 {
@@ -26,7 +27,7 @@ namespace Plants
 
     public static void ImageValueNeeded(object sender, DBxImageValueNeededEventArgs args)
     {
-      ActionKind kind = (ActionKind)(args.GetInt("Kind"));
+      ActionKind kind = args.GetEnum<ActionKind>("Kind");
       args.ImageKey = PlantTools.GetActionImageKey(kind);
     }
 
@@ -39,7 +40,7 @@ namespace Plants
           args.Value = args.GetString("ActionName");
           break;
         case ActionKind.Treatment:
-          Int32 RemedyId = args.GetInt("Remedy");
+          Int32 RemedyId = args.GetInt32("Remedy");
           if (RemedyId == 0)
             args.Value = PlantTools.GetActionName(kind);
           else
@@ -63,25 +64,25 @@ namespace Plants
 
     private void AddPage1(InitSubDocEditFormEventArgs args)
     {
-      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      ExtEditPage page = args.AddPage("Общие", MainPanel1);
       page.ImageKey = args.Editor.SubDocTypeUI.ImageKey;
 
       cbKind.Items.AddRange(PlantTools.ActionNames);
       EFPListComboBox efpKind = new EFPListComboBox(page.BaseProvider, cbKind);
       new ListControlImagePainter(cbKind, PlantTools.ActionImageKeys);
-      args.AddInt(efpKind, "Kind", false);
+      args.AddInt32(efpKind, "Kind", false);
 
       EFPTextBox efpActionName = new EFPTextBox(page.BaseProvider, edActionName);
       efpActionName.CanBeEmpty = false;
-      DocValueTextBox dvActionName = args.AddText(efpActionName, "ActionName", false);
+      ExtValueTextBox dvActionName = args.AddText(efpActionName, "ActionName", false);
       dvActionName.UserEnabledEx = new DepEqual<int>(efpKind.SelectedIndexEx, (int)(ActionKind.Other));
-      dvActionName.UserDisabledMode = DocValueUserDisabledMode.KeepOriginalIfGrayed;
+      dvActionName.UserDisabledMode = ExtValueUserDisabledMode.KeepOriginalIfGrayed;
 
       EFPDocComboBox efpRemedy = new EFPDocComboBox(page.BaseProvider, cbRemedy, ProgramDBUI.TheUI.DocTypes["Remedies"]);
       efpRemedy.CanBeEmpty = false;
-      DocValueDocComboBox dvRemedy = args.AddRef(efpRemedy, "Remedy", false);
+      ExtValueDocComboBox dvRemedy = args.AddRef(efpRemedy, "Remedy", false);
       dvRemedy.UserEnabledEx = new DepEqual<int>(efpKind.SelectedIndexEx, (int)(ActionKind.Treatment));
-      dvRemedy.UserDisabledMode = DocValueUserDisabledMode.KeepOriginalIfGrayed;
+      dvRemedy.UserDisabledMode = ExtValueUserDisabledMode.KeepOriginalIfGrayed;
 
       EFPDateOrRangeBox efpDate = new EFPDateOrRangeBox(page.BaseProvider, cbDate);
       efpDate.CanBeEmpty = false;

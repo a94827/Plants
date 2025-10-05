@@ -32,7 +32,7 @@
       this.groupBox3 = new System.Windows.Forms.GroupBox();
       this.edComment = new System.Windows.Forms.TextBox();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
-      this.edCount = new FreeLibSet.Controls.IntEditBox();
+      this.edCount = new FreeLibSet.Controls.Int32EditBox();
       this.label1 = new System.Windows.Forms.Label();
       this.cbDate = new FreeLibSet.Controls.UserMaskedComboBox();
       this.label4 = new System.Windows.Forms.Label();
@@ -154,7 +154,7 @@
     private System.Windows.Forms.TextBox edComment;
     private FreeLibSet.Controls.UserMaskedComboBox cbDate;
     private System.Windows.Forms.Label label4;
-    private FreeLibSet.Controls.IntEditBox edCount;
+    private FreeLibSet.Controls.Int32EditBox edCount;
     private System.Windows.Forms.Label label1;
     private System.Windows.Forms.Button btnDate99991231;
   }

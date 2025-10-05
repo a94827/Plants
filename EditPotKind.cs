@@ -65,7 +65,7 @@ namespace Plants
 
     private void AddPage1(InitDocEditFormEventArgs args)
     {
-      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      ExtEditPage page = args.AddPage("Общие", MainPanel1);
       page.ImageKey = "PotKind";
 
       efpText = new EFPTextBox(page.BaseProvider, edText);
@@ -73,10 +73,10 @@ namespace Plants
       args.AddText(efpText, "Text", true);
 
       efpD = new EFPIntEditBox(page.BaseProvider, edD);
-      args.AddInt(efpD, "Diameter", false);
+      args.AddInt32(efpD, "Diameter", false);
 
       efpH = new EFPIntEditBox(page.BaseProvider, edH);
-      args.AddInt(efpH, "Height", false);
+      args.AddInt32(efpH, "Height", false);
 
       efpVolume = new EFPSingleEditBox(page.BaseProvider, edVolume);
       args.AddSingle(efpVolume, "Volume", false);

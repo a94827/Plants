@@ -11,6 +11,8 @@ using FreeLibSet.DependedValues;
 using FreeLibSet.Data.Docs;
 using FreeLibSet.Controls;
 using FreeLibSet.UICore;
+using FreeLibSet.Forms.Data;
+using FreeLibSet.Data;
 
 namespace Plants
 {
@@ -46,7 +48,7 @@ namespace Plants
       string s = args.GetString("Value");
       if (s.Length == 0)
         s = args.GetString("LongValue");
-      Int32 attrTypeId = args.GetInt("AttrType");
+      Int32 attrTypeId = args.GetInt32("AttrType");
       if (ProgramDBUI.TheUI.DocProvider.IsRealDocId(attrTypeId))
       {
         AttrTypeDoc attrType = new AttrTypeDoc(attrTypeId);
@@ -59,7 +61,7 @@ namespace Plants
 
     public static void ImageValueNeeded(object sender, DBxImageValueNeededEventArgs args)
     {
-      Int32 attrTypeId = args.GetInt("AttrType");
+      Int32 attrTypeId = args.GetInt32("AttrType");
       if (attrTypeId == 0)
         return; // не бывает
 
@@ -74,7 +76,7 @@ namespace Plants
       string errorText;
       if (!attrType.TestValue(v, out errorText))
       {
-        args.ColorType = EFPDataGridViewColorType.Warning;
+        args.ColorType = UIDataViewColorType.Warning;
         args.ToolTipText = errorText;
       }
     }
@@ -108,7 +110,7 @@ namespace Plants
 
     private void AddPage1(InitSubDocEditFormEventArgs args)
     {
-      DocEditPage page = args.AddPage("Общие", MainPanel1);
+      ExtEditPage page = args.AddPage("Общие", MainPanel1);
       page.ImageKey = "Атрибут";
 
       efpAttrType = new EFPDocComboBox(page.BaseProvider, cbAttrType, ProgramDBUI.TheUI.DocTypes["AttrTypes"]);
@@ -122,7 +124,7 @@ namespace Plants
       efpValue = new EFPAttrValueComboBox(page.BaseProvider, edValue);
       efpValue.ControlLabelText = true;
       DocValueAnyValueBox dvValue = new DocValueAnyValueBox(args.Values["Value"], args.Values["LongValue"], efpValue, false);
-      args.AddDocEditItem(dvValue);
+      args.AddEditItem(dvValue);
 
       efpAttrType.DocIdEx.ValueChanged += new EventHandler(efpAttrType_ValueChanged);
 
@@ -371,11 +373,11 @@ namespace Plants
   /// <summary>
   /// Переходник для EFPAccoo2ValueBox на текстовое поле
   /// </summary>
-  public class DocValueAnyValueBox : TwoDocValueControl<string, string, EFPAnyValueBox>
+  public class DocValueAnyValueBox : TwoExtValueControl<string, string, EFPAnyValueBox>
   {
     #region Конструктор
 
-    public DocValueAnyValueBox(DBxDocValue shortDocValue, DBxDocValue longDocValue, EFPAnyValueBox controlProvider, bool canMultiEdit)
+    public DocValueAnyValueBox(DBxExtValue shortDocValue, DBxExtValue longDocValue, EFPAnyValueBox controlProvider, bool canMultiEdit)
       : base(shortDocValue, longDocValue, controlProvider, true, canMultiEdit)
     {
       DepExpr1<string, object> f1 = new DepExpr1<string, object>(controlProvider.ValueEx, CalcF1);
@@ -422,8 +424,8 @@ namespace Plants
 
     protected override void ValueToControl()
     {
-      string s1 = DocValue1.AsString; // короткое значение
-      string s2 = DocValue2.AsString; // длинное значение
+      string s1 = ExtValue1.AsString; // короткое значение
+      string s2 = ExtValue2.AsString; // длинное значение
       if (String.IsNullOrEmpty(s2))
         ControlProvider.Value = PlantTools.ValueFromSaveableString(s1, ControlProvider.ValueType);
       else
@@ -435,18 +437,18 @@ namespace Plants
       string s = PlantTools.ValueToSaveableString(ControlProvider.Value, ControlProvider.ValueType);
       if (String.IsNullOrEmpty(s))
       {
-        DocValue1.SetNull();
-        DocValue2.SetNull();
+        ExtValue1.SetNull();
+        ExtValue2.SetNull();
       }
       else if (s.Length <= PlantTools.AttrValueShortMaxLength)
       {
-        DocValue1.SetString(s);
-        DocValue2.SetNull();
+        ExtValue1.SetString(s);
+        ExtValue2.SetNull();
       }
       else
       {
-        DocValue1.SetNull();
-        DocValue2.SetString(s);
+        ExtValue1.SetNull();
+        ExtValue2.SetString(s);
       }
     }
 

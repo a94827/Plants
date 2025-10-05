@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Каталог растений")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Plants")]
+[assembly: AssemblyDescription("Каталог растений")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Агеев А.В.")]
 [assembly: AssemblyProduct("Каталог растений")]
-[assembly: AssemblyCopyright("Copyright © Агеев А.В., г.Тюмень 2018-2024. Свободное программное обеспечение")]
+[assembly: AssemblyCopyright("Copyright © Агеев А.В., г.Тюмень 2018-2025. Свободное программное обеспечение")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -29,4 +29,4 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.0.0.25")]
+[assembly: AssemblyVersion("1.0.0.29")]

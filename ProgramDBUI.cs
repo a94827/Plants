@@ -76,6 +76,7 @@ namespace Plants
         .SizeGroup = "ShortDateRange"; // 31.12.2022
       dt.GridProducer.Columns.LastAdded.TextAlign = HorizontalAlignment.Center;
       dt.GridProducer.Columns.LastAdded.EmptyValue = String.Empty; // а не "все даты"
+
       dt.GridProducer.Columns.AddText("ToContra.Name", "Кому передано", 15, 10);
       dt.GridProducer.Columns.AddRefDocText("ToPlant", DocTypes["Plants"], "Подсажено к растению", 15, 10);
 
@@ -154,7 +155,7 @@ namespace Plants
       sdt.GridProducer.Columns.AddText("Comment", "Комментарий", 20, 7);
       sdt.InitView += new InitEFPDBxViewEventHandler(EditPlant.SubDocPhoto_InitView);
 
-      sdt.GridProducer.DefaultConfig = new EFPDataGridViewConfig();
+      sdt.GridProducer.DefaultConfig = new EFPDataViewConfig();
       sdt.GridProducer.DefaultConfig.Columns.Add("Thumbnail");
       sdt.GridProducer.DefaultConfig.Columns.Add("FileName");
       sdt.GridProducer.DefaultConfig.Columns.Add("ShootingTime");
@@ -209,7 +210,7 @@ namespace Plants
 
       sdt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
 
-      sdt.GridProducer.DefaultConfig = new EFPDataGridViewConfig();
+      sdt.GridProducer.DefaultConfig = new EFPDataViewConfig();
       sdt.GridProducer.DefaultConfig.Columns.Add("Date");
       sdt.GridProducer.DefaultConfig.Columns.AddFill("KindText_Text", 40);
       sdt.GridProducer.DefaultConfig.Columns.AddFill("Place.Name", 30);
@@ -220,6 +221,8 @@ namespace Plants
         new DBxImageValueNeededEventHandler(EditPlantMovement.ImageValueNeeded));
 
       sdt.CanInsertCopy = true;
+      sdt.CanMultiEdit = true;
+      sdt.CanMultiInsert = true;
       sdt.InitEditForm += new InitSubDocEditFormEventHandler(EditPlantMovement.InitEditForm);
       sdt.Columns["Date1"].NewMode = ColumnNewMode.Saved;
       sdt.Columns["Date2"].NewMode = ColumnNewMode.Saved;
@@ -247,7 +250,7 @@ namespace Plants
 
       sdt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
 
-      sdt.GridProducer.DefaultConfig = new EFPDataGridViewConfig();
+      sdt.GridProducer.DefaultConfig = new EFPDataViewConfig();
       sdt.GridProducer.DefaultConfig.Columns.AddFill("ActionText");
       sdt.GridProducer.DefaultConfig.Columns.Add("Date");
       sdt.GridProducer.DefaultConfig.ToolTips.Add("Comment");
@@ -257,6 +260,8 @@ namespace Plants
         new DBxImageValueNeededEventHandler(EditPlantAction.ImageValueNeeded));
 
       sdt.CanInsertCopy = true;
+      sdt.CanMultiEdit = true;
+      sdt.CanMultiInsert = true;
       sdt.InitEditForm += new InitSubDocEditFormEventHandler(EditPlantAction.InitEditForm);
       sdt.Columns["Date1"].NewMode = ColumnNewMode.Saved;
       sdt.Columns["Date2"].NewMode = ColumnNewMode.Saved;
@@ -275,13 +280,13 @@ namespace Plants
       //sdt.GridProducer.Columns.AddDateRange("Date", "Date1", "Date2", "Дата", false, 15, 10);
       sdt.GridProducer.Columns.AddUserText("Date", "Date1,Date2", DateRangeColumn_ValueNeeded, "Дата", 15, 10)
         .SizeGroup = "ShortDateRange"; // 31.12.2022
-      sdt.GridProducer.Columns.AddInt("FlowerCount", "Количество цветков", 3);
+      sdt.GridProducer.Columns.AddInteger("FlowerCount", "Количество цветков", 3);
       sdt.GridProducer.Columns.LastAdded.Summable = true;
       sdt.GridProducer.Columns.AddText("Comment", "Комментарий", 30, 10);
 
       sdt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
 
-      sdt.GridProducer.DefaultConfig = new EFPDataGridViewConfig();
+      sdt.GridProducer.DefaultConfig = new EFPDataViewConfig();
       sdt.GridProducer.DefaultConfig.Columns.Add("Date");
       sdt.GridProducer.DefaultConfig.Columns.Add("FlowerCount");
       sdt.GridProducer.DefaultConfig.ToolTips.Add("Comment");
@@ -308,7 +313,7 @@ namespace Plants
 
       sdt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
 
-      sdt.GridProducer.DefaultConfig = new EFPDataGridViewConfig();
+      sdt.GridProducer.DefaultConfig = new EFPDataViewConfig();
       sdt.GridProducer.DefaultConfig.Columns.AddFill("Disease.Name");
       sdt.GridProducer.DefaultConfig.Columns.Add("Date");
       sdt.GridProducer.DefaultConfig.ToolTips.Add("Comment");
@@ -337,7 +342,7 @@ namespace Plants
 
       sdt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
 
-      sdt.GridProducer.DefaultConfig = new EFPDataGridViewConfig();
+      sdt.GridProducer.DefaultConfig = new EFPDataViewConfig();
       sdt.GridProducer.DefaultConfig.Columns.AddFill("ActionText");
       sdt.GridProducer.DefaultConfig.Columns.Add("Date");
       sdt.GridProducer.DefaultConfig.ToolTips.Add("Comment");
@@ -504,7 +509,7 @@ namespace Plants
       sdt.GridProducer.Columns.AddText("Name", "Название", 40, 15);
       sdt.GridProducer.Columns.LastAdded.CanIncSearch = true;
 
-      sdt.GridProducer.DefaultConfig = new EFPDataGridViewConfig();
+      sdt.GridProducer.DefaultConfig = new EFPDataViewConfig();
       sdt.GridProducer.DefaultConfig.Columns.AddFill("Name");
 
       sdt.ImageKey = "Item";
@@ -527,7 +532,7 @@ namespace Plants
 
       dt.GridProducer.Columns.AddText("Manufacturer.Name", "Изготовитель", 20, 5);
 
-      dt.GridProducer.Columns.AddInt("PartCount", "Количество компонентов", 2);
+      dt.GridProducer.Columns.AddInteger("PartCount", "Количество компонентов", 2);
       dt.GridProducer.Columns.AddText("Contents", "Состав", 50, 10);
       dt.GridProducer.Columns.AddUserText("pHtext", "pHmin,pHmax",
         new EFPGridProducerValueNeededEventHandler(EditSoil.pHcolumnValueNeeded),
@@ -561,7 +566,7 @@ namespace Plants
       sdt = dt.SubDocTypes["SoilParts"];
       sdt.GridProducer.Columns.AddText("Soil.Name", "Компонент", 20, 10);
       sdt.GridProducer.Columns.LastAdded.CanIncSearch = true;
-      sdt.GridProducer.Columns.AddInt("Percent", "%", 3);
+      sdt.GridProducer.Columns.AddInteger("Percent", "%", 3);
       sdt.GridProducer.Columns.LastAdded.Summable = true;
 
       sdt.GridProducer.NewDefaultConfig(false);
@@ -587,9 +592,9 @@ namespace Plants
       dt.GridProducer.Columns.AddText("Text", "Текстовая часть", 20, 15);
       dt.GridProducer.Columns.LastAdded.CanIncSearch = true;
 
-      dt.GridProducer.Columns.AddInt("Diameter", "d, мм", 3);
+      dt.GridProducer.Columns.AddInteger("Diameter", "d, мм", 3);
       dt.GridProducer.Columns.LastAdded.SizeGroup = "SizeMM";
-      dt.GridProducer.Columns.AddInt("Height", "H, мм", 3);
+      dt.GridProducer.Columns.AddInteger("Height", "H, мм", 3);
       dt.GridProducer.Columns.LastAdded.SizeGroup = "SizeMM";
 
       dt.GridProducer.Columns.AddFixedPoint("Volume", "Объем, л", 5, 2, "VolumeL");
@@ -695,7 +700,7 @@ namespace Plants
 
       //sdt.GridProducer.ToolTips.AddText("Comment", String.Empty).DisplayName = "Комментарий (если задан)";
 
-      sdt.GridProducer.DefaultConfig = new EFPDataGridViewConfig();
+      sdt.GridProducer.DefaultConfig = new EFPDataViewConfig();
       sdt.GridProducer.DefaultConfig.Columns.Add("PeriodText");
       sdt.GridProducer.DefaultConfig.Columns.AddFill("Name", 100);
       //sdt.GridProducer.DefaultConfig.ToolTips.Add("Comment");
@@ -800,7 +805,7 @@ namespace Plants
       //dlg.ImageKey = "Атрибут";
       dlg.GroupTitle = "Значение атрибута \"" + attrType.Name + "\"";
       dlg.Items = new string[] { "&1 - Да", "&0 - Нет" };
-      dlg.SelectedIndex = DataTools.GetBool(value) ? 0 : 1;
+      dlg.SelectedIndex = DataTools.GetBoolean(value) ? 0 : 1;
       if (dlg.ShowDialog() != DialogResult.OK)
         return false;
 
@@ -823,7 +828,7 @@ namespace Plants
           producer.Columns.AddText(columnName, headerText, 10, 5);
           break;
         case ValueType.Integer:
-          producer.Columns.AddInt(columnName, headerText, 5);
+          producer.Columns.AddInteger(columnName, headerText, 5);
           producer.Columns.LastAdded.TextAlign = HorizontalAlignment.Right;
           producer.Columns.LastAdded.Summable = true;
           break;
@@ -840,7 +845,7 @@ namespace Plants
           producer.Columns.LastAdded.Summable = true;
           break;
         case ValueType.Boolean:
-          producer.Columns.AddBool(columnName, headerText);
+          producer.Columns.AddCheckBox(columnName, headerText);
           break;
         case ValueType.Date:
           producer.Columns.AddDate(columnName, headerText);

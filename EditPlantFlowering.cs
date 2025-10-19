@@ -67,7 +67,7 @@ namespace Plants
       efpDate99991231.EnabledEx = new DepExpr3<bool, bool, bool, DateTime>(efpDate.EditableEx, efpDate.IsNotEmptyEx, efpDate.LastValueEx, CalcDate99991231Enabled);
       efpDate99991231.Click += new EventHandler(efpDate99991231_Click);
 
-      EFPIntEditBox efpCount = new EFPIntEditBox(page.BaseProvider, edCount);
+      EFPInt32EditBox efpCount = new EFPInt32EditBox(page.BaseProvider, edCount);
       efpCount.Minimum = 0; // если много цветков, которые неохота считать
       efpCount.Maximum = 100;
       args.AddInt32(efpCount, "FlowerCount", true);

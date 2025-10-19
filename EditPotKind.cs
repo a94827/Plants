@@ -59,7 +59,7 @@ namespace Plants
 
     private EFPTextBox efpText, efpColor;
 
-    private EFPIntEditBox efpD, efpH;
+    private EFPInt32EditBox efpD, efpH;
 
     private EFPSingleEditBox efpVolume;
 
@@ -72,10 +72,10 @@ namespace Plants
       efpText.CanBeEmpty = true;
       args.AddText(efpText, "Text", true);
 
-      efpD = new EFPIntEditBox(page.BaseProvider, edD);
+      efpD = new EFPInt32EditBox(page.BaseProvider, edD);
       args.AddInt32(efpD, "Diameter", false);
 
-      efpH = new EFPIntEditBox(page.BaseProvider, edH);
+      efpH = new EFPInt32EditBox(page.BaseProvider, edH);
       args.AddInt32(efpH, "Height", false);
 
       efpVolume = new EFPSingleEditBox(page.BaseProvider, edVolume);

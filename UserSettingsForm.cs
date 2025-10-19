@@ -28,7 +28,7 @@ namespace Plants
 
       #region Каталог
 
-      efpNumberDigits = new EFPIntEditBox(efpForm, edNumberDigits);
+      efpNumberDigits = new EFPInt32EditBox(efpForm, edNumberDigits);
       efpNumberDigits.Minimum = 1;
       efpNumberDigits.Maximum = UserSettings.MaxNumberDigits;
 
@@ -73,7 +73,7 @@ namespace Plants
 
     #region Каталог
 
-    EFPIntEditBox efpNumberDigits;
+    EFPInt32EditBox efpNumberDigits;
 
     #endregion
 

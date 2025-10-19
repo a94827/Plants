@@ -395,7 +395,7 @@ namespace Plants
 
     EFPTextBox efpLocalName, efpLatinName, efpDescrName;
 
-    EFPIntEditBox efpNumber;
+    EFPInt32EditBox efpNumber;
 
     private void AddPage1(InitDocEditFormEventArgs args)
     {
@@ -432,7 +432,7 @@ namespace Plants
       efpCare.CanBeEmpty = true;
       args.AddRef(efpCare, "Care", true);
 
-      efpNumber = new EFPIntEditBox(page.BaseProvider, edNumber);
+      efpNumber = new EFPInt32EditBox(page.BaseProvider, edNumber);
       efpNumber.Validating += new UIValidatingEventHandler(efpNumber_Validating);
       efpNumber.Minimum = 0;
       efpNumber.Maximum = Int16.MaxValue;

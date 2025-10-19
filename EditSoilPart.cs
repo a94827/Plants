@@ -39,7 +39,7 @@ namespace Plants
       efpSoil.CanBeEmpty = false;
       args.AddRef(efpSoil, "Soil", false);
 
-      EFPIntEditBox efpPercent = new EFPIntEditBox(page.BaseProvider, edPercent);
+      EFPInt32EditBox efpPercent = new EFPInt32EditBox(page.BaseProvider, edPercent);
       efpPercent.Minimum = 0;
       efpPercent.Maximum = 100;
       args.AddInt32(efpPercent, "Percent", false);
